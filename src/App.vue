@@ -1,0 +1,114 @@
+<template>
+    <div id="app">
+        <div id="toolbar"> <!-- Toolbar -->
+            <div id="toolbar_inner"> <!-- Toolbar-Inner -->
+                <div id="logo"> <!-- Logo/Drawer link -->
+                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon_logo" />
+                </div>
+                <span class="mdl-layout-title" id="toolbar-title">Pulse</span>
+            </div>  <!-- End Toolbar-Inner -->
+        </div> <!-- End Toolbar-->
+        
+		<div id="wrapper"> <!-- Content Wrapper -->
+            <div id="side-menu"> <!-- Side Menu -->
+                <app-sidebar v-mdl></app-sidebar>
+            </div> <!-- End Side Menu -->
+			<div id="content"> <!-- Content Area -->
+				<router-view></router-view>
+			</div> <!-- End Content Area -->
+		</div> <!-- End Content Wrapper -->
+    </div>
+</template>
+
+<script>
+
+import AppSidebar from '@/components/Sidebar.vue'
+
+export default {
+    name: 'app',
+    components: {
+        AppSidebar
+    }
+}
+</script>
+
+<style lang="scss">
+	body {
+		margin: auto;
+		margin-left: 0;
+		color: #202020;
+		background-color: #f3f3f3;
+		font-family: "Open Sans", "Helvetica", Arial, sans-serif;
+		font-size: 14px;
+		padding: 0 !important;
+		margin-bottom: 0 !important;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		font-smooth: always;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	#toolbar {
+		height: 43px;
+		top: 0;
+		position: fixed;
+		z-index: 4;
+		width: 100%;
+		border-bottom: solid 1px #ca2100;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+		background-color: #f7f7f7;
+		border-color: #e3e3e3;
+
+		#toolbar_inner {
+			max-width: 950px;
+			height: 100%;
+
+			#logo {
+				float: left;
+				margin-left: 20px;
+				padding-top: 9px;
+
+				#logo-image:hover {
+					cursor: pointer;
+				}
+
+				.icon_logo {
+					background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
+					margin-top: 2px;
+					width: 25px;
+					height: 25px;
+				}
+
+				.icon_logo_dark {
+					background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
+					margin-top: 2px;
+					width: 25px;
+					height: 25px;
+				}
+
+			}
+
+			.mdl-layout-title {
+				float: left;
+				margin-left: 15px;
+				margin-top: 12px;
+				color: #666666;
+			}
+		}
+	}
+	
+	#wrapper {
+		#content {
+			transition: ease-in-out margin-left 0.5s;
+			max-width: 950px;
+			min-height: 380px;
+			margin-top: 43px;
+			margin-left: 0px;
+			vertical-align: top;
+		}
+	}
+
+</style>
