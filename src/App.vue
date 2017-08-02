@@ -106,7 +106,7 @@ export default {
 			max-width: 950px;
 			min-height: 380px;
 			margin-top: 43px;
-			margin-left: 0px;
+			margin-left: 269px; /* TODO, should be dynamic */
 			vertical-align: top;
 		}
 	}

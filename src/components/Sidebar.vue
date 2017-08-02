@@ -44,6 +44,7 @@ export default {
         transition: ease-in-out margin-left 0.5s;
         float: left;
         width: 250px;
+        height:100vh;
         position: fixed;
         overflow-x: hidden;
         overflow-y: hidden;
@@ -60,23 +61,62 @@ export default {
             padding-bottom: 30px;
         }
 	
-        #drawer-link li{
-			font-size: 14px;
-			line-height: 26px;
-			list-style: none;
-			cursor: pointer;
-			margin-bottom: 2px;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			overflow: hidden;
+        #drawer-links {
+            margin: 0;
+            padding: 0;
+            padding-left: 12px;
+            padding-top: 24px;
+            margin-bottom: 21px;
 
-            .link-card {
-				display: block;
-				min-height: 26px;
-				width: 100%;
-				cursor: pointer;
-				background-color: #f3f3f3;
-				padding: 7px 0;               
+            li {
+                font-size: 14px;
+                line-height: 26px;
+                list-style: none;
+                cursor: pointer;
+                margin-bottom: 2px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+
+                .link-card {
+                    display: block;
+                    min-height: 26px;
+                    width: 100%;
+                    cursor: pointer;
+                    background-color: #f3f3f3;
+                    padding: 7px 0;
+
+                    img {
+                        margin-left: 3px;
+                        margin-top: -4px;
+                        margin-right: 18px;
+                    }
+                }
+
+                .icon_conversations {
+                    background: url(../assets/images/vector/inbox.svg) 0 0 no-repeat;
+                    width: 24px;
+                    height: 24px;
+                }
+
+                .icon_archive {
+                    background: url(../assets/images/vector/archive.svg) 0 0 no-repeat;
+                    width: 24px;
+                    height: 24px;
+                }
+                
+                .icon_scheduled_messages {
+                    background: url(../assets/images/vector/scheduled_messages.svg) 0 0 no-repeat;
+                    width: 24px;
+                    height: 24px;
+                }
+                
+                .icon_blacklist {
+                    background: url(../assets/images/vector/blacklist.svg) 0 0 no-repeat;
+                    width: 24px;
+                    height: 24px;
+                }
+
             }
         }
     }   
