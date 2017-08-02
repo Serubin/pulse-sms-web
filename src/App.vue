@@ -2,8 +2,8 @@
     <div id="app">
         <div id="toolbar"> <!-- Toolbar -->
             <div id="toolbar_inner"> <!-- Toolbar-Inner -->
-                <div id="logo"> <!-- Logo/Drawer link -->
-                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon_logo" />
+                <div id="logo" v-on:click="toggleSidebar"> <!-- Logo/Drawer link -->
+                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" v-bind:class="icon_class" />
                 </div>
                 <span class="mdl-layout-title" id="toolbar-title">Pulse</span>
             </div>  <!-- End Toolbar-Inner -->
@@ -26,6 +26,22 @@ import AppSidebar from '@/components/Sidebar.vue'
 
 export default {
     name: 'app',
+    methods: {
+        toggleSidebar () {
+            return true;
+        }
+    },
+    computed: {
+        full_theme () {
+            return true;
+        },
+        icon_class () {
+            return {
+                'icon_logo': this.full_theme,
+                'icon_menu_toggle': !this.full_theme
+            }
+        }
+    },
     components: {
         AppSidebar
     }
