@@ -33,6 +33,9 @@ export default {
 </script>
 
 <style lang="scss">
+    
+    @import "./assets/scss/_vars.scss";
+
 	body {
 		margin: auto;
 		margin-left: 0;
@@ -106,8 +109,14 @@ export default {
 			max-width: 950px;
 			min-height: 380px;
 			margin-top: 43px;
-			margin-left: 269px; /* TODO, should be dynamic */
-			vertical-align: top;
+			margin-left: $sidebar_margin; /* TODO, should be dynamic */
+            vertical-align: top;
+
+            @media (max-width: $mini_width) {
+                & {
+                    margin-left: 0px;
+                }
+            }
 		}
 	}
 
