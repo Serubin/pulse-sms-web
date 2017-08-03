@@ -13,7 +13,7 @@
             <div id="side-menu"> <!-- Side Menu -->
                 <app-sidebar v-mdl></app-sidebar>
             </div> <!-- End Side Menu -->
-			<div id="content"> <!-- Content Area -->
+            <div id="content"> <!-- Content Area -->
 				<router-view></router-view>
 			</div> <!-- End Content Area -->
 		</div> <!-- End Content Wrapper -->
@@ -26,15 +26,37 @@ import AppSidebar from '@/components/Sidebar.vue'
 
 export default {
     name: 'app',
+
+    mounted () { // Add window event listener
+        window.addEventListener('resize', this.handleResize)
+    },
+
+    beforeDestroy () { // Remove event listeners
+        window.removeEventListener('resize', this.handleResize)
+    },
+
+    data () {
+        return {
+            full_theme: true,
+        }
+    },
     methods: {
         toggleSidebar () {
             return true;
+        },
+
+        handleResize () { // Handle resize. Toggles full/mini theme
+            var width = document.documentElement.clientWidth;
+
+            if (width > 750)
+                this.full_theme = true;
+            else
+                this.full_theme = false;
+
         }
     },
+
     computed: {
-        full_theme () {
-            return true;
-        },
         icon_class () {
             return {
                 'icon_logo': this.full_theme,
@@ -103,6 +125,19 @@ export default {
 
 				.icon_logo_dark {
 					background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
+					margin-top: 2px;
+					width: 25px;
+					height: 25px;
+                }
+				.icon_menu_toggle {
+					background: url(assets/images/vector/menu_toggle.svg) 0 0 no-repeat;
+					margin-top: 2px;
+					width: 25px;
+					height: 25px;
+				}
+
+				.icon_menu_toggle_dark {
+					background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
 					margin-top: 2px;
 					width: 25px;
 					height: 25px;
