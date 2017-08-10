@@ -1,39 +1,59 @@
 <template>
-    <div id="sidebar">
-        <div id="drawer-holder">
-            <ul id="drawer-links">
-                <li id="conversations-link">
-                    <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                        <img src="../assets/images/holder.gif" width="24" height="24" class="icon_conversations">
-                    Conversations
-                    </div>
-                </li>
-                <li id="archive-link">
-                    <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                        <img src="../assets/images/holder.gif" width="24" height="24" class="icon_archive">
-                        Archive
-                    </div>
-                </li>
-                <li id="scheduled_messages_link">
-                    <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                        <img src="../assets/images/holder.gif" width="24" height="24" class="icon_scheduled_messages">
-                        Scheduled Messages
-                    </div>
-                </li>
-                <li id="blacklist_link">
-                    <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                        <img src="../assets/images/holder.gif" width="24" height="24" class="icon_blacklist">
-                        Blacklist
-                    </div>
-                </li>
-            </ul>
-        </div>
+    <div> <!-- sidebar-outer-holder -->
+        <div id="sidebar" v-bind:style="marginLeft"> <!-- Sidebar-internal -->
+            <div id="drawer-holder">
+                <ul id="drawer-links">
+                    <li id="conversations-link" @click="close_drawer">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_conversations">
+                        Conversations
+                        </div>
+                    </li>
+                    <li id="archive-link" @click="close_drawer">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_archive">
+                            Archive
+                        </div>
+                    </li>
+                    <li id="scheduled_messages_link" @click="close_drawer">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_scheduled_messages">
+                            Scheduled Messages
+                        </div>
+                    </li>
+                    <li id="blacklist_link" @click="close_drawer">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_blacklist">
+                            Blacklist
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- End sidebar-internal -->
+        <transition name="fade">
+            <div v-if="!full_theme && open" id="sidebar-overlay" @click="close_drawer"></div>
+        </transition>
     </div>
 </template>
 
 <script>
 export default {
     name: 'app-sidebar',
+    props: ['open', 'full_theme'],
+    methods: {
+        close_drawer() {
+            if(!this.full_theme)
+                this.$emit('update:sidebar_open', false)
+        }
+    },
+    computed: {
+        marginLeft () {
+            if(this.open)
+                return "margin-left: 0px;";
+            else
+                return "margin-left: -269px;";
+        },
+    }
 }
 </script>
 
@@ -53,7 +73,7 @@ export default {
         z-index: 3;
         border-right: 1px solid #f1f1f1;
         background-color: #f3f3f3;
-
+        
         &:hover {
             overflow-y: auto;
         }
@@ -128,4 +148,27 @@ export default {
             }
         }
     }   
+
+    #sidebar-overlay {
+        opacity: 0.2;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: black;
+
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter {
+        opacity: 0.2
+    }
+    .fade-leave-to {
+        opacity: 0
+    }
+
 </style>

@@ -2,8 +2,8 @@
     <div id="app">
         <div id="toolbar"> <!-- Toolbar -->
             <div id="toolbar_inner"> <!-- Toolbar-Inner -->
-                <div id="logo" v-on:click="toggleSidebar"> <!-- Logo/Drawer link -->
-                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" v-bind:class="icon_class" />
+                <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
+                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
                 </div>
                 <span class="mdl-layout-title" id="toolbar-title">Pulse</span>
             </div>  <!-- End Toolbar-Inner -->
@@ -11,7 +11,7 @@
         
 		<div id="wrapper"> <!-- Content Wrapper -->
             <div id="side-menu"> <!-- Side Menu -->
-                <app-sidebar v-mdl></app-sidebar>
+                <app-sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" ></app-sidebar>
             </div> <!-- End Side Menu -->
             <div id="content"> <!-- Content Area -->
 				<router-view></router-view>
@@ -29,6 +29,7 @@ export default {
 
     mounted () { // Add window event listener
         window.addEventListener('resize', this.handleResize)
+        this.handleResize();
     },
 
     beforeDestroy () { // Remove event listeners
@@ -37,21 +38,26 @@ export default {
 
     data () {
         return {
+            sidebar_open: true,
             full_theme: true,
         }
     },
     methods: {
         toggleSidebar () {
-            return true;
+            if(!this.full_theme)
+                this.sidebar_open = !this.sidebar_open;
         },
 
         handleResize () { // Handle resize. Toggles full/mini theme
             var width = document.documentElement.clientWidth;
 
-            if (width > 750)
+            if (width > 750) {
+                this.sidebar_open = true;
                 this.full_theme = true;
-            else
+            } else {
+                this.sidebar_open = false;
                 this.full_theme = false;
+            }
 
         }
     },
@@ -62,7 +68,7 @@ export default {
                 'icon_logo': this.full_theme,
                 'icon_menu_toggle': !this.full_theme
             }
-        }
+        },
     },
     components: {
         AppSidebar
