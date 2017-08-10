@@ -30,6 +30,7 @@
                 </ul>
             </div>
         </div> <!-- End sidebar-internal -->
+
         <transition name="fade">
             <div v-if="!full_theme && open" id="sidebar-overlay" @click="close_drawer"></div>
         </transition>
@@ -120,7 +121,7 @@ export default {
                         margin-right: 18px;
                     }
                 }
-
+                /* Icons */
                 .icon_conversations {
                     background: url(../assets/images/vector/inbox.svg) 0 0 no-repeat;
                     width: 24px;
@@ -148,7 +149,7 @@ export default {
             }
         }
     }   
-
+    /* Click catcher - Overlay */
     #sidebar-overlay {
         opacity: 0.2;
         z-index: 2;
@@ -161,14 +162,12 @@ export default {
 
     }
 
+    /* Opacity fade **/
     .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s
+        transition: opacity .5s;
     }
-    .fade-enter {
-        opacity: 0.2
-    }
-    .fade-leave-to {
-        opacity: 0
+    .fade-enter, .fade-leave-to {
+        opacity: 0 !important;
     }
 
 </style>
