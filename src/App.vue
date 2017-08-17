@@ -11,7 +11,8 @@
         
 		<div id="wrapper"> <!-- Content Wrapper -->
             <div id="side-menu"> <!-- Side Menu -->
-                <app-sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" ></app-sidebar>
+                <sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" >
+                </sidebar>
             </div> <!-- End Side Menu -->
             <div id="content"> <!-- Content Area -->
 				<router-view></router-view>
@@ -22,7 +23,7 @@
 
 <script>
 
-import AppSidebar from '@/components/Sidebar.vue'
+import Sidebar from '@/components/Sidebar.vue'
 
 export default {
     name: 'app',
@@ -36,27 +37,21 @@ export default {
         window.removeEventListener('resize', this.handleResize)
     },
 
-    data () {
-        return {
-            sidebar_open: true,
-            full_theme: true,
-        }
-    },
     methods: {
         toggleSidebar () {
             if(!this.full_theme)
-                this.sidebar_open = !this.sidebar_open;
+                this.$store.dispatch('sidebar_open', !this.sidebar_open);
         },
 
         handleResize () { // Handle resize. Toggles full/mini theme
             var width = document.documentElement.clientWidth;
 
             if (width > 750) {
-                this.sidebar_open = true;
-                this.full_theme = true;
+                this.$store.dispatch('sidebar_open', true);
+                this.$store.dispatch('full_theme', true);
             } else {
-                this.sidebar_open = false;
-                this.full_theme = false;
+                this.$store.dispatch('sidebar_open', false);
+                this.$store.dispatch('full_theme', false);
             }
 
         }
@@ -69,9 +64,15 @@ export default {
                 'icon_menu_toggle': !this.full_theme
             }
         },
+        sidebar_open () { // Sidebar_open state
+            return this.$store.state.sidebar_open;
+        },
+        full_theme () { // Full_theme state
+            return this.$store.state.full_theme;
+        }
     },
     components: {
-        AppSidebar
+        Sidebar,
     }
 }
 </script>

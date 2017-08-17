@@ -38,15 +38,18 @@
 </template>
 
 <script>
+
+import ConversationItem from '@/components/ConversationItem.vue'
+
 export default {
-    name: 'app-sidebar',
-    props: ['open', 'full_theme'],
+    name: 'sidebar',
     methods: {
         close_drawer() {
             if(!this.full_theme)
-                this.$emit('update:sidebar_open', false)
+                this.$store.dispatch('sidebar_open', false);
         }
     },
+
     computed: {
         marginLeft () {
             if(this.open)
@@ -54,6 +57,16 @@ export default {
             else
                 return "margin-left: -269px;";
         },
+        open () { // Sidebar_open state
+            return this.$store.state.sidebar_open;
+        },
+        full_theme () { // Full_theme state
+            return this.$store.state.full_theme;
+        }
+    },
+
+    components: {
+        ConversationItem
     }
 }
 </script>
