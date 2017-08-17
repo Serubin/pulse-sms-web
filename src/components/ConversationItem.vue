@@ -1,14 +1,14 @@
 <template>
-    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl>
+    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small, unread: unread }" :id="conversation_id" :data-timestamp="timestamp" v-mdl>
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" height="24" width="24">
             <circle cx="12" cy="12" r="12" shape-rendering="auto" fill="rgba(224,63,251,1)"></circle>
-            <text style="text-anchor: middle;font-size: 16px;fill: #fff;font-weight: 300;" x="12" y="17.5">{{ name.split('')[0].toUpperCase() }} </text>
+            <text style="text-anchor: middle;font-size: 16px;fill: #fff;font-weight: 300;" x="12" y="17.5">{{ title.split('')[0].toUpperCase() }} </text>
         </svg>
 
         <!-- Conversation Item content -->
         <p class="conversation-text conversation-text-small">
-            <span class="conversation-title mdl-card__supporting-text conversation-title-small">{{ name }}</span>
+            <span class="conversation-title mdl-card__supporting-text conversation-title-small">{{ title }}</span>
             <br>
             <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small">{{ snippet }}</span>
         </p>
@@ -16,10 +16,20 @@
 </template>
 
 <script>
+
+import Utils from '@/util.js'
+
 export default {
     name: 'conversation-item',
-    props: [ 'small', 'data' ]
-
+    props: [ 'conversation_id', 'timestamp',  'title', 'snippet', 'unread', 'color', 'small'],
+    data () {
+        return {
+            // Empty
+        }
+    },
+    computed: {
+        // Empty
+    },
 }
 </script>
 
@@ -47,7 +57,10 @@ export default {
             height: 52px;
             margin-right: 16px;
             overflow: hidden;
-
+        
+            &:unread {
+                font-weight: bold;
+            }
             .conversation-title {
                 color: black;
                 font-size: 16px;
