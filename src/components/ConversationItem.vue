@@ -17,8 +17,6 @@
 
 <script>
 
-import Utils from '@/util.js'
-
 export default {
     name: 'conversation-item',
     props: [ 'conversation_id', 'timestamp',  'title', 'snippet', 'unread', 'color', 'small'],

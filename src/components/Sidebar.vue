@@ -29,6 +29,7 @@
                     </li>
                 </ul>
                 <!--               <conversations small="true"></convesations> -->
+                <slot></slot>
             </div>
         </div> <!-- End sidebar-internal -->
 

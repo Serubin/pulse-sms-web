@@ -12,6 +12,7 @@
 		<div id="wrapper"> <!-- Content Wrapper -->
             <div id="side-menu"> <!-- Side Menu -->
                 <sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" >
+                    <conversations></conversations>
                 </sidebar>
             </div> <!-- End Side Menu -->
             <div id="content"> <!-- Content Area -->
@@ -23,14 +24,30 @@
 
 <script>
 
+import '@/lib/sjcl.js'
+import '@/lib/hmacsha1.js'
 import Sidebar from '@/components/Sidebar.vue'
+import Conversations from '@/components/Conversations.vue'
 
 export default {
     name: 'app',
 
+    beforeCreate () {
+        if(this.$store.state.account_id != '') {
+            // Setup key
+            var combinedKey = this.$store.state.account_id + ":" + this.$store.state.hash + "\n"
+            var key = sjcl.misc.pbkdf2(combinedKey, this.$store.state.salt, 10000, 256, hmacSHA1)
+
+            this.$store.dispatch('aes', new sjcl.cipher.aes(key)); // Store aes
+            sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
+        }
+    },
+
     mounted () { // Add window event listener
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
+
+        
     },
 
     beforeDestroy () { // Remove event listeners
@@ -73,6 +90,7 @@ export default {
     },
     components: {
         Sidebar,
+        Conversations
     }
 }
 </script>
