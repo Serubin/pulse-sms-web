@@ -25,6 +25,7 @@
 
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
+import Crypto from '@/crypto.js'
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations.vue'
 
