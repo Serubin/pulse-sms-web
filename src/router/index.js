@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Conversations from '@/components/Conversations.vue'
 
 Vue.use(Router)
 
@@ -8,8 +8,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'Hello',
-            component: Hello
+            name: 'conversations-list',
+            component: Conversations
         }
     ]
 })
