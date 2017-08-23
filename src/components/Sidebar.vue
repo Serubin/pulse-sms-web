@@ -28,20 +28,26 @@
                         </div>
                     </li>
                 </ul>
-                <!--               <conversations small="true"></convesations> -->
-                <slot></slot>
+                
+                <!-- If route is not conversation list -->
+                <conversations v-if="route != 'conversations-list'" small="true"></conversations>
+                <!-- End if -->
+
             </div>
         </div> <!-- End sidebar-internal -->
-
+        
+        <!-- If not full_theme and side bar is open -->
         <transition name="fade">
             <div v-if="!full_theme && open" id="sidebar-overlay" @click="close_drawer"></div>
         </transition>
+        <!-- End if -->
+
     </div>
 </template>
 
 <script>
 
-import ConversationItem from '@/components/ConversationItem.vue'
+import Conversations from '@/components/Conversations.vue'
 
 export default {
     name: 'sidebar',
@@ -64,11 +70,14 @@ export default {
         },
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
+        },
+        route () {
+            return this.$router.currentRoute.name
         }
     },
 
     components: {
-        ConversationItem
+        Conversations
     }
 }
 </script>

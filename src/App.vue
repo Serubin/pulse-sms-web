@@ -12,7 +12,6 @@
 		<div id="wrapper"> <!-- Content Wrapper -->
             <div id="side-menu"> <!-- Side Menu -->
                 <sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" >
-                    <conversations></conversations>
                 </sidebar>
             </div> <!-- End Side Menu -->
             <div id="content"> <!-- Content Area -->
