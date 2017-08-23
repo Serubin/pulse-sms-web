@@ -33,14 +33,12 @@ export default {
     name: 'app',
 
     beforeCreate () {
-        if(this.$store.state.account_id != '') {
-            // Setup key
-            var combinedKey = this.$store.state.account_id + ":" + this.$store.state.hash + "\n"
-            var key = sjcl.misc.pbkdf2(combinedKey, this.$store.state.salt, 10000, 256, hmacSHA1)
 
-            this.$store.dispatch('aes', new sjcl.cipher.aes(key)); // Store aes
-            sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
-        }
+        if(this.$store.state.account_id != '') 
+            Crypto.setupAes();
+        else
+            return //TODO Redirect to login
+
     },
 
     mounted () { // Add window event listener

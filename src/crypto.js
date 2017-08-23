@@ -5,6 +5,16 @@ import store from '@/store'
 import Util from '@/utils/util.js'
 
 export default class Crypto {
+
+    static setupAes() {
+        // Setup key
+        var combinedKey = store.state.account_id + ":" + store.state.hash + "\n"
+        var key = sjcl.misc.pbkdf2(combinedKey, store.state.salt, 10000, 256, hmacSHA1)
+
+        store.dispatch('aes', new sjcl.cipher.aes(key)); // Store aes
+        sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
+    }
+
     //TODO make - not static?
     static decryptConversation (convo) {
         // Removes miliiseconds from timestamp
