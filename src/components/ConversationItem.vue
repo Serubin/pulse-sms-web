@@ -1,9 +1,9 @@
 <template>
     <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small, unread: unread }" :id="conversation_id" :data-timestamp="timestamp" v-mdl>
         <!-- Contact image -->
-        <svg class="contact-img contact-img-small" height="24" width="24">
-            <circle cx="12" cy="12" r="12" shape-rendering="auto" fill="rgba(224,63,251,1)"></circle>
-            <text style="text-anchor: middle;font-size: 16px;fill: #fff;font-weight: 300;" x="12" y="17.5">{{ title.split('')[0].toUpperCase() }} </text>
+        <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
+            <circle :cx="circleSize" :cy="circleSize" :r="circleSize" shape-rendering="auto" :fill="realColor"></circle>
+            <text :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ title.split('')[0].toUpperCase() }} </text>
         </svg>
 
         <!-- Conversation Item content -->
@@ -17,6 +17,8 @@
 
 <script>
 
+import Util from '@/utils/util.js'
+
 export default {
     name: 'conversation-item',
     props: [ 'conversation_id', 'timestamp',  'title', 'snippet', 'unread', 'color', 'small'],
@@ -26,7 +28,34 @@ export default {
         }
     },
     computed: {
-        // Empty
+        realColor () {
+
+            if (typeof this.color === "number")
+                return Util.colorToRGB(this.color)
+            else
+                return this.color
+        },
+
+        iconSize () {
+            if (this.small)
+                return 24
+            else
+                return 48
+        },
+
+        circleSize () {
+            if (this.small)
+                return 12
+            else
+                return 24
+        },
+
+        textLocation () {
+            if (this.small)
+                return { x: 12, y: 17.5, size: 16}
+            else
+                return { x: 24, y: 34, size: 30}
+        }
     },
 }
 </script>
@@ -41,6 +70,7 @@ export default {
             min-height: 80px;
             width: 100%;
             cursor: pointer;
+            border-bottom: 1px solid #f3f3f3;
         }
 
         .contact-img {
