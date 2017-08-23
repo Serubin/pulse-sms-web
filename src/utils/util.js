@@ -1,5 +1,5 @@
 export default class Util {
-    static toColor (num) {
+    static colorToRGB (num) {
         num >>>= 0;
 
         var b = num & 0xFF,
