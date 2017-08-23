@@ -11,6 +11,7 @@ import ConversationItem from '@/components/ConversationItem.vue'
 
 export default {
     name: 'conversations',
+    props: ['small'],
 
     mounted () {
         this.updateConversations();
@@ -21,14 +22,13 @@ export default {
             Querier.fetchConversations('index_unarchived')
                 .then(response => {
                     this.conversations = response;
-                }).catch(response => console.log(response));
+                });
         }
     },
 
     data () {
         return {
             conversations: [],
-            small: true,
         }
     },
 
