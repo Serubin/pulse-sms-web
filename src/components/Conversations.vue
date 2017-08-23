@@ -1,7 +1,7 @@
 <template>
     <div id="conversation-list">
         <spinner v-if="conversations.length == 0"></spinner>
-        <conversation-item v-for="conversation in conversations" :key="conversation.device_id" :conversation_id="conversation.device_id" :timestamp="conversation.timestamp" :title="conversation.title" :snippet="conversation.snippet" :unread="conversation.read" :color="conversation.color" :small="small"></conversation-item>
+        <conversation-item v-for="conversation in conversations" :key="conversation.device_id" :conversation_id="conversation.device_id" :timestamp="conversation.timestamp" :title="conversation.title" :snippet="conversation.snippet" :read="conversation.read" :color="conversation.color" :small="small"></conversation-item>
     </div>
 </template>
 

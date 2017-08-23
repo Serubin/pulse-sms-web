@@ -1,5 +1,5 @@
 <template>
-    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small, unread: unread }" :id="conversation_id" :data-timestamp="timestamp" v-mdl>
+    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" shape-rendering="auto" :fill="realColor"></circle>
@@ -7,7 +7,7 @@
         </svg>
 
         <!-- Conversation Item content -->
-        <p class="conversation-text conversation-text-small">
+        <p class="conversation-text conversation-text-small" :class="{ unread: !read }">
             <span class="conversation-title mdl-card__supporting-text conversation-title-small">{{ title }}</span>
             <br>
             <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small">{{ snippet }}</span>
@@ -21,10 +21,17 @@ import Util from '@/utils/util.js'
 
 export default {
     name: 'conversation-item',
-    props: [ 'conversation_id', 'timestamp',  'title', 'snippet', 'unread', 'color', 'small'],
+    props: [ 'conversation_id', 'timestamp',  'title', 'snippet', 'read', 'color', 'small'],
     data () {
         return {
             // Empty
+        }
+    },
+    methods: {
+        routeToThread () {
+            this.$router.push({ 
+                name: 'thread', params: { id: this.conversation_id }
+            })
         }
     },
     computed: {
@@ -86,7 +93,7 @@ export default {
             margin-right: 16px;
             overflow: hidden;
         
-            &:unread {
+            &.unread {
                 font-weight: bold;
             }
             .conversation-title {
