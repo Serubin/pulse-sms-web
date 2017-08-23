@@ -17,7 +17,6 @@ export default {
     .spinner {
         margin: auto;
         width: 48px;
-        margin-top: 100px;
     }
 
 </style>

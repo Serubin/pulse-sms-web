@@ -92,6 +92,7 @@ export default {
         float: left;
         width: 250px;
         height:100vh;
+        padding-top: 50px;
         position: fixed;
         overflow-x: hidden;
         overflow-y: hidden;

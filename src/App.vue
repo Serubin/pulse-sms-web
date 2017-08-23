@@ -178,11 +178,12 @@ export default {
 	}
 	
 	#wrapper {
-		#content {
+        #content {
+            display: inline-block;
 			transition: ease-in-out margin-left 0.5s;
 			max-width: 950px;
 			min-height: 380px;
-			margin-top: 43px;
+			margin-top: 56px;
 			margin-left: $sidebar_margin; /* TODO, should be dynamic */
             vertical-align: top;
 
