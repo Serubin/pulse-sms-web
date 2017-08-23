@@ -1,15 +1,23 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
+
+import Hello from '@/components/Hello.vue'
 import Conversations from '@/components/Conversations.vue'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export default new Router({
+export default new VueRouter({
+    mode: "history",
     routes: [
         {
-            path: '/',
+            path: '/:index',
             name: 'conversations-list',
             component: Conversations
+        },
+        {
+            path: '/thread/:id',
+            name: 'thread',
+            component: Hello
         }
     ]
 })

@@ -16,12 +16,20 @@ export default {
     props: ['small'],
 
     mounted () {
+
         this.updateConversations();
     },
 
     methods: {
         updateConversations () {
-            Querier.fetchConversations('index_unarchived')
+
+            // Get index from url/params
+            var param_index = this.$route.params.index;
+            this.index = "index_" 
+                + (param_index == null ? "unarchived" : param_index);
+
+            // Start query
+            Querier.fetchConversations(this.index)
                 .then(response => {
                     this.conversations = response;
                 });
@@ -30,10 +38,15 @@ export default {
 
     data () {
         return {
+            index: 'index_unarchived',
             conversations: [],
         }
     },
-
+    watch: {
+        '$route' () { // Update index on route change
+            this.updateConversations() 
+        }
+    },
     components: {
         ConversationItem,
         Spinner

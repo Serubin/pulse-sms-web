@@ -3,39 +3,41 @@
         <div id="sidebar" v-bind:style="marginLeft"> <!-- Sidebar-internal -->
             <div id="drawer-holder">
                 <ul id="drawer-links">
-                    <li id="conversations-link" @click="close_drawer">
+                    <li id="conversations-link" @click="routeTo('conversations')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon_conversations">
                         Conversations
                         </div>
                     </li>
-                    <li id="archive-link" @click="close_drawer">
+                    <li id="archive-link" @click="routeTo('archive')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon_archive">
                             Archive
                         </div>
                     </li>
-                    <li id="scheduled_messages_link" @click="close_drawer">
+                    <li id="scheduled-messages-link" @click="routeTo">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon_scheduled_messages">
                             Scheduled Messages
                         </div>
                     </li>
-                    <li id="blacklist_link" @click="close_drawer">
+                    <li id="blacklist-link" @click="routeTo">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon_blacklist">
                             Blacklist
                         </div>
                     </li>
                 </ul>
-                
                 <!-- If route is not conversation list -->
-                <conversations v-if="route != 'conversations-list'" small="true"></conversations>
+                
+                <transition name="slide-left">
+                    <conversations v-if="$route.name != 'conversations-list'" small="true"></conversations>
+                </transition>
                 <!-- End if -->
-
+                
             </div>
         </div> <!-- End sidebar-internal -->
-        
+
         <!-- If not full_theme and side bar is open -->
         <transition name="fade">
             <div v-if="!full_theme && open" id="sidebar-overlay" @click="close_drawer"></div>
@@ -51,7 +53,21 @@ import Conversations from '@/components/Conversations.vue'
 
 export default {
     name: 'sidebar',
+    data () {
+        return {
+            links: {
+                'conversations': { name: 'conversations-list', params: {index: null}},
+                'archive': { name: 'conversations-list', params: {index: 'archived'}}
+            }
+        }
+    },
+
     methods: {
+        routeTo (link) {
+            this.close_drawer()
+            this.$router.push(this.links[link])
+        },
+
         close_drawer() {
             if(!this.full_theme)
                 this.$store.dispatch('sidebar_open', false);
@@ -71,9 +87,6 @@ export default {
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
         },
-        route () {
-            return this.$router.currentRoute.name
-        }
     },
 
     components: {
@@ -82,7 +95,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../assets/scss/_vars.scss";
 
@@ -195,4 +207,12 @@ export default {
         opacity: 0 !important;
     }
 
+    /* Slide fade */
+    .slide-left-enter-active, .slide-left-leave-active {
+        transition: all .3s ease;
+    }
+    .slide-left-enter, .slide-left-leave-to {
+        transform: translateX(-$sidebar_margin);
+        opacity: 0;
+    }
 </style>
