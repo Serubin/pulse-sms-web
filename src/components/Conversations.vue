@@ -1,6 +1,6 @@
 <template>
     <div id="conversation-list">
-        <spinner v-if="conversations.length == 0"></spinner>
+        <spinner class="spinner" v-if="conversations.length == 0"></spinner>
         <conversation-item v-for="conversation in conversations" :key="conversation.device_id" :conversation_id="conversation.device_id" :timestamp="conversation.timestamp" :title="conversation.title" :snippet="conversation.snippet" :read="conversation.read" :color="conversation.color" :small="small"></conversation-item>
     </div>
 </template>
@@ -57,8 +57,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../assets/scss/_vars.scss";
-    
+       
     #conversation-list {
+        width: 100%;
         margin-top: 36px !important;
+
+        .spinner {
+            margin-top: 100px;
+        }
     }
 </style>

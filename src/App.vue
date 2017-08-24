@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div id="toolbar"> <!-- Toolbar -->
-            <div id="toolbar_inner"> <!-- Toolbar-Inner -->
+            <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
                 </div>
@@ -9,7 +9,7 @@
             </div>  <!-- End Toolbar-Inner -->
         </div> <!-- End Toolbar-->
         
-		<div id="wrapper"> <!-- Content Wrapper -->
+		<div id="wrapper" :style="{ marginLeft: margin + 'px'}"> <!-- Content Wrapper -->
             <div id="side-menu"> <!-- Side Menu -->
                 <sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" >
                 </sidebar>
@@ -54,6 +54,12 @@ export default {
         window.removeEventListener('resize', this.handleResize)
     },
 
+    data () {
+        return {
+            margin: 0,
+        }
+    },
+
     methods: {
         toggleSidebar () {
             if(!this.full_theme)
@@ -61,7 +67,9 @@ export default {
         },
 
         handleResize () { // Handle resize. Toggles full/mini theme
+            var MAIN_CONTENT_SIZE = 950;
             var width = document.documentElement.clientWidth;
+            var margin = 0;
 
             if (width > 750) {
                 this.$store.dispatch('sidebar_open', true);
@@ -71,6 +79,12 @@ export default {
                 this.$store.dispatch('full_theme', false);
             }
 
+            // Handles left side offset
+            if (width > MAIN_CONTENT_SIZE) {
+                margin = (width - MAIN_CONTENT_SIZE) / 2;
+            }
+
+            this.margin = margin
         }
     },
 
@@ -130,7 +144,8 @@ export default {
 
 		#toolbar_inner {
 			max-width: 950px;
-			height: 100%;
+            height: 100%;
+            transition: ease-in-out margin-left 0.3s;
 
 			#logo {
 				float: left;
@@ -179,15 +194,18 @@ export default {
 		}
 	}
 	
-	#wrapper {
+    #wrapper {
+        transition: ease-in-out margin-left 0.3s;
+
         #content {
-			transition: ease-in-out margin-left 0.5s;
+			transition: ease-in-out margin-left 0.3s;
 			max-width: 950px;
 			min-height: 380px;
 			margin-left: $sidebar_margin; /* TODO, should be dynamic */
             vertical-align: top;
 
             .mdl-layout__content {
+                width: 100%;
                 height: 100%;
                 position: relative;
 
