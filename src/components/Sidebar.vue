@@ -99,7 +99,6 @@ export default {
     @import "../assets/scss/_vars.scss";
 
     #sidebar {
-        box-shadow: rgba(0, 0, 0, 0.15) 8px -10px 2px -6px;
         transition: ease-in-out margin-left 0.5s;
         float: left;
         width: 250px;

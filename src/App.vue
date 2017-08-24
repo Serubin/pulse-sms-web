@@ -15,7 +15,9 @@
                 </sidebar>
             </div> <!-- End Side Menu -->
             <div id="content"> <!-- Content Area -->
-				<router-view></router-view>
+                <main class="mdl-layout__content">
+                    <router-view class="page-content" ></router-view>
+                </main>
 			</div> <!-- End Content Area -->
 		</div> <!-- End Content Wrapper -->
     </div>
@@ -179,13 +181,46 @@ export default {
 	
 	#wrapper {
         #content {
-            display: inline-block;
 			transition: ease-in-out margin-left 0.5s;
 			max-width: 950px;
 			min-height: 380px;
-			margin-top: 56px;
 			margin-left: $sidebar_margin; /* TODO, should be dynamic */
             vertical-align: top;
+
+            .mdl-layout__content {
+                height: 100%;
+                position: relative;
+
+                @media (min-width: $mini_width) {
+                    & {
+                        max-width: 650px;
+                    }
+                }
+
+                .page-content {
+                    bottom: 0;
+                    margin: auto;
+                    margin-bottom: 54px;
+                    margin-top: 54px;
+                    padding-top: 16px;
+                    padding-bottom: 16px;
+                    overflow: hidden;
+
+                    @media screen and (min-width: 720px) {
+                        & {
+                            max-width: 720px;
+                            padding: 16px;
+                        }
+                    }
+
+                    @media screen and (min-width: 600px) {
+                        & {
+                            max-width: 600px;
+                            padding: 16px;
+                        }
+                    }
+                }
+            }
 
             @media (max-width: $mini_width) {
                 & {
