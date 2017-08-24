@@ -10,6 +10,10 @@ export default new VueRouter({
     mode: "history",
     routes: [
         {
+            path: '/',
+            redirect: { name: 'conversations-list'}
+        },
+        {
             path: '/:index',
             name: 'conversations-list',
             component: Conversations
