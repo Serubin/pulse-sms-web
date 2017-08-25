@@ -99,7 +99,7 @@ export default {
     @import "../assets/scss/_vars.scss";
 
     #sidebar {
-        transition: ease-in-out margin-left 0.5s;
+        transition: ease-in-out margin-left 0.3s;
         float: left;
         width: 250px;
         height:100vh;
