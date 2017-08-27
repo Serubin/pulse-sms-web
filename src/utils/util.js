@@ -1,5 +1,11 @@
 export default class Util {
-    static colorToRGB (num) {
+    /**
+     * Expand color to full RGBA string
+     * 
+     * @param raw rgba value
+     * @return RGBA string
+     */
+    static expandColor (num) {
         num >>>= 0;
 
         var b = num & 0xFF,

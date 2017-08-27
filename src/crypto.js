@@ -35,8 +35,8 @@ export default class Crypto {
         try { 
             convo.title = Crypto.decrypt(convo.title);
 
-            convo.snippet = Crypto.decrypt(convo.snippet)
-            convo.snippet = Util.entityEncode(convo.snippet)
+            convo.snippet = Crypto.decrypt(convo.snippet);
+            convo.snippet = Util.entityEncode(convo.snippet);
         } catch (err) {
             return null
         }
@@ -47,6 +47,8 @@ export default class Crypto {
         } catch (err) {
             convo.phone_numbers = "";
         }
+
+        convo.color = Util.expandColor(convo.color);
 
         return convo;
     }

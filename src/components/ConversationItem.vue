@@ -2,7 +2,7 @@
     <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small, 'mdl-shadow--2dp': !small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
-            <circle :cx="circleSize" :cy="circleSize" :r="circleSize" shape-rendering="auto" :fill="realColor"></circle>
+            <circle :cx="circleSize" :cy="circleSize" :r="circleSize" shape-rendering="auto" :fill="color"></circle>
             <text :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ title.split('')[0].toUpperCase() }} </text>
         </svg>
 
@@ -35,14 +35,6 @@ export default {
         }
     },
     computed: {
-        realColor () {
-
-            if (typeof this.color === "number")
-                return Util.colorToRGB(this.color)
-            else
-                return this.color
-        },
-
         iconSize () {
             if (this.small)
                 return 24
