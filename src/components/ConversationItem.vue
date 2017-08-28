@@ -21,10 +21,15 @@ import Util from '@/utils/util.js'
 
 export default {
     name: 'conversation-item',
-    props: [ 'conversation_id', 'timestamp',  'title', 'snippet', 'read', 'color', 'small'],
+    props: [ 'conversationData', 'small'],
     data () {
         return {
-            // Empty
+            conversation_id: this.conversationData.device_id,
+            title: this.conversationData.title,
+            snippet: this.conversationData.snippet,
+            read: this.conversationData.read,
+            color: this.conversationData.color,
+            timestamp: this.conversationData.timestamp,
         }
     },
     methods: {
