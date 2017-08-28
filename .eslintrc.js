@@ -17,7 +17,7 @@ module.exports = {
   ],
   // add your custom rules here
   'rules': {
-    'indent': ["error", 4],
+    'indent': ["error", 4, {"SwitchCase": 1}],
     'no-undef': 0,
     'no-unused-vars': 0,
     'no-console': 0,
