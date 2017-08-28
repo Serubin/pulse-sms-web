@@ -42,11 +42,13 @@ export default {
             conversations: [],
         }
     },
-    watch: {
+
+    watch: { // Watch for routing changes
         '$route' () { // Update index on route change
             this.updateConversations() 
         }
     },
+
     components: {
         ConversationItem,
         Spinner

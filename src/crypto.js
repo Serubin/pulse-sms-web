@@ -53,6 +53,14 @@ export default class Crypto {
         return convo;
     }
 
+    /**
+     * decryptMessage
+     *
+     * Decryptes message object
+     * @param convo - message object
+     * @return decrypted message
+     */
+
     static decryptMessage (message) {
         // Removes miliiseconds from timestamp
         message.timestamp = message.timestamp / 1000 >> 0; // Remove ms
@@ -60,12 +68,12 @@ export default class Crypto {
 
         // Decrypt
         try {
-            message.mime_type = decrypt(message.mime_type);
+            message.mime_type = Crypto.decrypt(message.mime_type);
 
-            message.data = decrypt(message.data)
-            message.data = entityEncode(message.data); // encode message
+            message.data = Crypto.decrypt(message.data)
+            message.data = Util.entityEncode(message.data); // encode message
 
-            message.message_from = decrypt(message.message_from);
+            message.message_from = Crypto.decrypt(message.message_from);
         } catch (err) {
             return null
         }
