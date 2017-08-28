@@ -154,7 +154,7 @@ export default {
 		#toolbar_inner {
 			max-width: 950px;
             height: 100%;
-            transition: ease-in-out margin-left 0.3s;
+            transition: ease-in-out margin-left $anim-time;
 
 			#logo {
 				float: left;
@@ -204,12 +204,12 @@ export default {
 	}
 	
     #wrapper {
-        transition: ease-in-out margin-left 0.3s;
+        transition: ease-in-out margin-left $anim-time;
 
     }
 
     #content {
-        transition: ease-in-out margin-left 0.3s;
+        transition: ease-in-out margin-left $anim-time;
         max-width: 950px;
         min-height: 380px;
         margin-left: $sidebar_margin; /* TODO, should be dynamic */
