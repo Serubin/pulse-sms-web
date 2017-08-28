@@ -1,6 +1,8 @@
 <template>
     <div id="app">
-        <div id="toolbar"> <!-- Toolbar -->
+
+        <!-- Toolbar -->
+        <div id="toolbar"> 
             <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
@@ -8,17 +10,23 @@
                 <span class="mdl-layout-title" id="toolbar-title">Pulse</span>
             </div>  <!-- End Toolbar-Inner -->
         </div> <!-- End Toolbar-->
-        
-		<div id="wrapper" :style="{ marginLeft: margin + 'px'}"> <!-- Content Wrapper -->
-            <div id="side-menu"> <!-- Side Menu -->
+
+        <!-- Content Wrapper -->
+        <div id="wrapper" :style="{ marginLeft: margin + 'px'}"> 
+
+            <!-- Side Menu -->
+            <div id="side-menu">
                 <sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" >
                 </sidebar>
             </div> <!-- End Side Menu -->
-            <div id="content"> <!-- Content Area -->
+
+            <!-- Content Area -->
+            <div id="content"> 
                 <main class="mdl-layout__content">
-                    <router-view class="page-content" ></router-view>
+                    <router-view></router-view>
                 </main>
-			</div> <!-- End Content Area -->
+            </div> <!-- End Content Area -->
+
 		</div> <!-- End Content Wrapper -->
     </div>
 </template>
@@ -197,55 +205,57 @@ export default {
     #wrapper {
         transition: ease-in-out margin-left 0.3s;
 
-        #content {
-			transition: ease-in-out margin-left 0.3s;
-			max-width: 950px;
-			min-height: 380px;
-			margin-left: $sidebar_margin; /* TODO, should be dynamic */
-            vertical-align: top;
+    }
 
-            .mdl-layout__content {
-                width: 100%;
-                height: 100%;
-                position: relative;
+    #content {
+        transition: ease-in-out margin-left 0.3s;
+        max-width: 950px;
+        min-height: 380px;
+        margin-left: $sidebar_margin; /* TODO, should be dynamic */
+        vertical-align: top;
 
-                @media (min-width: $mini_width) {
-                    & {
-                        max-width: 650px;
-                    }
-                }
+        .mdl-layout__content {
+            width: 100%;
+            height: 100%;
+            position: relative;
 
-                .page-content {
-                    bottom: 0;
-                    margin: auto;
-                    margin-bottom: 54px;
-                    margin-top: 54px;
-                    padding-top: 16px;
-                    padding-bottom: 16px;
-                    overflow: hidden;
-
-                    @media screen and (min-width: 720px) {
-                        & {
-                            max-width: 720px;
-                            padding: 16px;
-                        }
-                    }
-
-                    @media screen and (min-width: 600px) {
-                        & {
-                            max-width: 600px;
-                            padding: 16px;
-                        }
-                    }
-                }
-            }
-
-            @media (max-width: $mini_width) {
+            @media (min-width: $mini_width) {
                 & {
-                    margin-left: 0px;
+                    max-width: 650px;
                 }
             }
-		}
-	}
+
+            .page-content {
+                bottom: 0;
+                margin: auto;
+                margin-bottom: 54px;
+                margin-top: 54px;
+                padding-top: 16px;
+                padding-bottom: 16px;
+                overflow: hidden;
+
+                @media screen and (min-width: 720px) {
+                    & {
+                        max-width: 720px;
+                        padding: 16px;
+                    }
+                }
+
+                @media screen and (min-width: 600px) {
+                    & {
+                        max-width: 600px;
+                        padding: 16px;
+                    }
+                }
+            }
+        }
+
+        @media (max-width: $mini_width) {
+            & {
+                margin-left: 0px;
+            }
+        }
+    }
+
 
 </style>
