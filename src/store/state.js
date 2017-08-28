@@ -1,14 +1,23 @@
-export const ACCOUNT_ID_KEY = "account_id";
-export const HASH_KEY = "hash";
-export const SALT_KEY = "salt";
-export const CONTACTS_KEY = "contacts";
+
+export const KEYS  = {
+    ACCOUNT_ID: 'account_id',
+    HASH: 'hash',
+    SALT: 'salt',
+    CONTACTS: 'contacts',
+    THEME: {
+        ROUND: 'theme_round',
+    }
+}
 
 export const state = {
-    account_id: window.localStorage.getItem(ACCOUNT_ID_KEY) || '',
-    hash: window.localStorage.getItem(HASH_KEY) || '',
-    salt: window.localStorage.getItem(SALT_KEY) || '',
+    // Persistent
+    account_id: window.localStorage.getItem(KEYS.ACCOUNT_ID) || '',
+    hash: window.localStorage.getItem(KEYS.HASH) || '',
+    salt: window.localStorage.getItem(KEYS.SALT) || '',
+    contacts: JSON.parse(window.localStorage.getItem(KEYS.CONTACTS) || '[]'),
+    theme_round: window.localStorage.getItem(KEYS.THEME.ROUND) || false,
+    // Per session
     aes: '',
-    contacts: JSON.parse(window.localStorage.getItem(CONTACTS_KEY) || '[]'),
     full_theme: true,
     sidebar_open: true,
 }
