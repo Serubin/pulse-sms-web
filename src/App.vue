@@ -7,7 +7,7 @@
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
                 </div>
-                <span class="mdl-layout-title" id="toolbar-title">Pulse</span>
+                <span class="mdl-layout-title" id="toolbar-title">{{ title }}</span>
             </div>  <!-- End Toolbar-Inner -->
         </div> <!-- End Toolbar-->
 
@@ -65,6 +65,7 @@ export default {
     data () {
         return {
             margin: 0,
+            title: "PulseClient", // TODO get from state
         }
     },
 
