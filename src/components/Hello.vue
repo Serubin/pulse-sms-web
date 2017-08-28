@@ -5,6 +5,7 @@
         <h2>Thread id: {{ $route.params.id }}</h2>
         <hr>
         <h3>Essential Links</h3>
+        <message :message-data='msg_de_data' thread-color='rgba(00,11,255,255)'></message>
         <ul>
             <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
             <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
@@ -24,12 +25,36 @@
 </template>
 
 <script>
+
+import Crypto from '@/crypto.js'
+import Message from '@/components/Message.vue'
+
 export default {
     name: 'hello',
     data () {
         return {
-            msg: 'Welcome to Your Vue.js App'
+            msg: 'Welcome to Your Vue.js App',
         }
+    },
+    computed: {
+        msg_de_data () {
+            return Crypto.decryptMessage({
+                "device_id":287325597367522,
+                "message_type":0,
+                "data":"Xw/3b5eI5sbT5Uk/Qfpv7Q==\n-:-XLF0/ibQQWjiB73+Ss1v/5Jv3Bva6jhLNbqGGDnplxF3r3ztV8MK50nYFE55GG0GID7VXs48lJBV\nybLPqB2pD+6s6UUfeNb4ehgUc5XAFSBcacDrbxgbPlTTR6QpnmT9\n",
+                "timestamp":1503813338717,
+                "mime_type":"tiyOyjgAbGa0gm7ntcHwlA==\n-:-bTQj3C2Sl4BOLjbQmOIRfg==\n",
+                "read":true,
+                "seen":true,
+                "message_from":null,
+                "color":null,
+                "sent_device":null
+            })
+        }
+
+    },
+    components: {
+        Message,
     }
 }
 </script>

@@ -42,11 +42,16 @@ export default {
             conversations: [],
         }
     },
-    watch: {
-        '$route' () { // Update index on route change
-            this.updateConversations() 
+
+    watch: { 
+        '$route' (to) { // Update index on route change
+
+            // Only update if list page
+            if(to.name == 'conversations-list') 
+                this.updateConversations() 
         }
     },
+
     components: {
         ConversationItem,
         Spinner
