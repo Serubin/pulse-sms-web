@@ -24,12 +24,17 @@
     </div>
 </template>
 
-<script>
 
+<script>
 import Spinner from '@/components/Spinner.vue'
+import AutoGrow from '@/lib/textarea-autogrow.js'
 
 export default {
     name: 'thread',
+
+    mounted () {
+        let autogrow = new AutoGrow({target: document.getElementById("message-entry")});
+    },
 
     components: {
         Spinner,
@@ -49,6 +54,49 @@ export default {
         bottom: 0%;
         clear: both;
         transition: ease-in-out width $anim-time;
+
+        @media (min-width: 750px) {
+            & {
+                width: 500px;
+            }
+        }
+
+        @media (min-width: 800px) {
+            & {
+                width: 550px;
+            }
+        }
+        @media (min-width: 850px) {
+            & {
+                width: 600px;
+            }
+        }
+        @media (min-width: 900px) {
+            & {
+                width: 650px;
+            }
+        }
+        @media (min-width:950px) {
+            & {
+                width: 650px;
+            }
+        }
+    }
+
+    .mdl-textfield {
+        padding: 0px 0;
+        padding-top: 20px;
+    }
+
+    .mdl-textfield__input {
+        min-height: 2em;
+        transition: height ease-in-out $anim-time;
+    }
+
+    .mdl-textfield__label:after {
+        background-color: rgba(0,0,0,0);
+        bottom: 1px;
+        height: 1px;
     }
 
     .send-bar-inner {
