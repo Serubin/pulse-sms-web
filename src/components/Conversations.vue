@@ -22,11 +22,11 @@ export default {
 
     mounted () {
 
-        this.updateConversations();
+        this.fetchConversations();
     },
 
     methods: {
-        updateConversations () {
+        fetchConversations () {
 
             // Get index from url/params
             var param_index = this.$route.params.index;
@@ -53,7 +53,8 @@ export default {
 
             // Only update if list page
             if(to.name == 'conversations-list') 
-                this.updateConversations() 
+                this.fetchConversations() 
+
         }
     },
 
