@@ -14,12 +14,19 @@ export const state = {
     account_id: window.localStorage.getItem(KEYS.ACCOUNT_ID) || '',
     hash: window.localStorage.getItem(KEYS.HASH) || '',
     salt: window.localStorage.getItem(KEYS.SALT) || '',
-    contacts: JSON.parse(window.localStorage.getItem(KEYS.CONTACTS) || '[]'),
+    contacts: JSON.parse(window.localStorage.getItem(KEYS.CONTACTS) || '{}'),
     theme_round: window.localStorage.getItem(KEYS.THEME.ROUND) || false,
+
     // Per session
     aes: '',
     full_theme: true,
     sidebar_open: true,
+}
+
+export const getters = {
+    getContact: (state) => (id) => {
+        return state.contacts[id];
+    }
 }
 
 export const mutations = {
@@ -28,6 +35,10 @@ export const mutations = {
     hash: (state, hash ) => state.hash = hash,
     salt: (state, salt ) => state.salt = salt,
     aes: (state, aes ) => state.aes = aes,
+    contact: (state, payload) => {
+        for(let i = 0; i < payload.length; i++)   
+            state.contacts[payload[i].id] = payload[i]
+    },
 }
 
 export const actions = {
@@ -54,6 +65,12 @@ export const actions = {
         if (state.aes != aes) // Reduce uneeded state changes
             commit('aes', aes)
     },
+    setContacts: ({ commit, state }, contacts) => {
+        if(!Array.isArray(contacts))
+            contacts = [ contacts ]
+
+        commit('contact', contacts);
+    }
 
 }
 

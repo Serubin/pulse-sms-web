@@ -36,6 +36,8 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 import Crypto from '@/crypto.js'
+import Querier from '@/query.js'
+import Util from '@/utils/util.js'
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations.vue'
 
@@ -54,6 +56,7 @@ export default {
     mounted () { // Add window event listener
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
+        this.updateContactCache();
 
         
     },
@@ -94,6 +97,32 @@ export default {
             }
 
             this.margin = margin
+        },
+
+        updateContactCache () {
+            let this_ = this;
+            Querier.fetchConversations("index_unarchived")
+                .then(response => { this_._updateContactCache(response) })
+
+            Querier.fetchConversations("index_archived")
+                .then(response => { this_._updateContactCache(response) })
+        },
+
+        _updateContactCache (response) {
+            let cache = [];
+
+            for(let i = 0; i < response.length; i++) {
+                cache.push(Util.generateContact(
+                    response[i].device_id,
+                    response[i].title,
+                    response[i].color,
+                    Util.expandColor(response[i].color_accent),
+                    Util.expandColor(response[i].color_light),
+                    Util.expandColor(response[i].color_dark)
+                ));
+            }
+
+            this.$store.dispatch('setContacts', cache) 
         }
     },
 
