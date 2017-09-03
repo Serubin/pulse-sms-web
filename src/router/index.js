@@ -19,9 +19,10 @@ export default new VueRouter({
             component: Conversations
         },
         {
-            path: '/thread/:id',
+            path: '/thread/:threadId',
             name: 'thread',
-            component: Thread
+            component: Thread,
+            props: true,
         }
     ]
 })

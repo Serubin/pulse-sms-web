@@ -34,8 +34,9 @@ export default {
     },
     methods: {
         routeToThread () {
+            
             this.$router.push({ 
-                name: 'thread', params: { id: this.conversation_id }
+                name: 'thread', params: { threadId: this.conversation_id }
             })
         }
     },

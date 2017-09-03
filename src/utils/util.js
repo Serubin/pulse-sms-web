@@ -27,5 +27,28 @@ export default class Util {
         string = string.replace(/\n/g, '<br />');
         return string;
     }
+
+    static generateContact (id, title, color, accent, ligher, darker) {
+        return {
+            id: id,
+            title: title,
+            colors: {
+                default: color,
+                accent: accent,
+                ligher: ligher,
+                darker: darker
+            }
+        }
+    }
+
+
+}
+
+/**
+* Contains element
+* @param element value
+*/
+Array.prototype.contains = function(element) {
+    return this.indexOf(element) > -1 ? true : false
 }
 
