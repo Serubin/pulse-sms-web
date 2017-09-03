@@ -1,7 +1,7 @@
 <template>
     <div class="message-wrapper" :title="stringTime">
-        <div :class="style_class"  :style="styleGenerator" :id="id">
-            {{ content }}
+        <div :class="style_class"  :style="styleGenerator" :id="id" v-html="content">
+            <!-- Content is inserted via v-html -->
         </div>
     </div>
 </template>

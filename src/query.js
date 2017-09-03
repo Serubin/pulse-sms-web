@@ -26,7 +26,10 @@ export default class Querier {
         return promise
     }
 
-    static fetchThread () {
+    static fetchThread (conversation_id) {
+
+        const limit = 70;
+
         const constructed_url = 
             Url.get('messages') + Url.getAccountParam() 
                 + "&conversation_id=" + conversation_id + "&limit=" + limit;
