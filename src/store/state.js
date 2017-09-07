@@ -21,6 +21,8 @@ export const state = {
     aes: '',
     full_theme: true,
     sidebar_open: true,
+    title: "PulseClient",
+    loading: true,
 }
 
 export const getters = {
@@ -30,6 +32,9 @@ export const getters = {
 }
 
 export const mutations = {
+
+    title: (state, title ) => state.title = title,
+    loading: (state, loading ) => state.loading = loading,
     full_theme: (state, full_theme ) => state.full_theme = full_theme,
     sidebar_open: (state, sidebar_open ) => state.sidebar_open = sidebar_open,
     hash: (state, hash ) => state.hash = hash,
@@ -42,6 +47,14 @@ export const mutations = {
 }
 
 export const actions = {
+    title: ({ commit, state }, title) => {
+        if (state.title != title) // Reduce uneeded state changes
+            commit('title', title)
+    },
+    loading: ({ commit, state }, loading) => {
+        if (state.loading != loading) // Reduce uneeded state changes
+            commit('loading', loading)
+    },
     full_theme: ({ commit, state }, full_theme) => { 
         if(state.full_theme != full_theme) // Reduce uneeded state changes
             commit('full_theme', full_theme);

@@ -27,7 +27,12 @@
                 </main>
             </div> <!-- End Content Area -->
 
-		</div> <!-- End Content Wrapper -->
+        </div> <!-- End Content Wrapper -->
+        
+        <!-- Loading splash page -->
+        <transition name="slide-fade">
+            <splash v-if="$store.state.loading"></splash>
+        </transition>
     </div>
 </template>
 
@@ -35,11 +40,13 @@
 
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
-import Crypto from '@/crypto.js'
-import Querier from '@/query.js'
+import Crypto from '@/utils/crypto.js'
+import Querier from '@/utils/query.js'
 import Util from '@/utils/util.js'
+
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations.vue'
+import Splash from '@/components/Splash.vue'
 
 export default {
     name: 'app',
@@ -57,8 +64,6 @@ export default {
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
         this.updateContactCache();
-
-        
     },
 
     beforeDestroy () { // Remove event listeners
@@ -68,7 +73,8 @@ export default {
     data () {
         return {
             margin: 0,
-            title: "PulseClient", // TODO get from state
+            loading: this.$store.state.loading,
+            title: this.$store.state.title, 
         }
     },
 
@@ -142,7 +148,8 @@ export default {
     },
     components: {
         Sidebar,
-        Conversations
+        Conversations,
+        Splash
     }
 }
 </script>
@@ -286,6 +293,19 @@ export default {
             }
         }
     }
-
+    
+    .slide-fade-enter-active {
+        transition-delay: 1s;
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition-delay: 1s;
+        transition: all .3s ease;
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateY(70%);
+        opacity: 0;
+    }
 
 </style>

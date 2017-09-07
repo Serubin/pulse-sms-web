@@ -12,7 +12,7 @@
 
 <script>
 
-import Querier from '@/query.js'
+import Querier from '@/utils/query.js'
 import ConversationItem from '@/components/ConversationItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
@@ -21,7 +21,6 @@ export default {
     props: ['small'],
 
     mounted () {
-
         this.fetchConversations();
     },
 
@@ -37,6 +36,9 @@ export default {
             Querier.fetchConversations(this.index)
                 .then(response => {
                     this.conversations = response;
+
+                    if (!this.small)
+                        this.$store.dispatch("loading", false);
                 });
         }
     },

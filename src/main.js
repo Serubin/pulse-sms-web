@@ -19,11 +19,14 @@ Vue.directive('mdl', {
     }
 })
 
-new Vue({
+let vue_bus;
+
+export default vue_bus = new Vue({
     el: '#app',
     store,
     router,
     template: '<App/>',
     components: { App }
 })
+
 
