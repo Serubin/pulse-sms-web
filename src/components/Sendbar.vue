@@ -21,7 +21,7 @@ import MessageManager from '@/utils/messages.js'
 
 export default {
     name: 'Sendbar',
-    props: ['eventName'],
+    props: ['threadId'],
 
     mounted () {
         let autogrow = new AutoGrow({target: document.getElementById("message-entry")});
@@ -34,14 +34,8 @@ export default {
             
             let value = e.target.value;
 
-            let event_obj = {
-                data: value,
-                timestamp: new Date().getTime(),
-                new_thread: false,
-            }
-
-            this.$emit('message-send', event_obj);
-
+            MessageManager.sendMessage(value, "text/plain", this.threadId)
+            
         }
     }
 }

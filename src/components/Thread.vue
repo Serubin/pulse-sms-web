@@ -4,10 +4,10 @@
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
-            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="color" ></message>
+            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="color"></message>
         </div>
         
-        <sendbar></sendbar>
+        <sendbar :thread-id="threadId"></sendbar>
     </div>
 </template>
 
@@ -25,9 +25,11 @@ export default {
     name: 'thread',
     props: ['threadId'],
 
+
     mounted () {
         this.fetchMessages();
 
+        this.$store.state.msgbus.$on('newMessage', this.addNewMessage)
     },
 
     data () {
@@ -54,7 +56,7 @@ export default {
                 .then(response => {
 
                     // Flip message order and push to local state
-                    for(let i = (response.length - 1); i > 0; i--)
+                    for(let i = (response.length - 1); i >= 0; i--) 
                         this.messages.push(response[i]);
 
                     // Wait for messages to render
@@ -64,6 +66,13 @@ export default {
                         this.$store.dispatch("loading", false);
                     });
                 });
+        },
+
+        addNewMessage(event_obj) {
+            this.messages.push(event_obj);
+            Vue.nextTick(() => { 
+                this.scrollToBottom(250);
+            });
         },
 
         scrollToBottom(speed) {
