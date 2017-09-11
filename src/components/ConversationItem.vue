@@ -41,6 +41,7 @@ export default {
         }
     },
     computed: {
+
         iconSize () {
             if (this.small)
                 return 24
@@ -61,6 +62,7 @@ export default {
             else
                 return { x: 24, y: 34, size: 30}
         },
+
         titleFirstLetter () {
             try { 
                 return this.title.split('')[0].toUpperCase()

@@ -35,7 +35,8 @@ export default {
             let value = e.target.value;
 
             MessageManager.sendMessage(value, "text/plain", this.threadId)
-            
+
+            e.target.value = "";
         }
     }
 }
