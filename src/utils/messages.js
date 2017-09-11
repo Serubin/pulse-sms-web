@@ -1,15 +1,63 @@
 import Vue from 'vue'
 import store from '@/store/'
+import Util from '@/utils/util.js'
 import Url from '@/utils/url.js'
 import Crypto from '@/utils/crypto.js'
 
 export default class MessageManager {
+
+    constructor () {
+        this.openWebSocket();
+    }
+
+    openWebSocket() {
+        let socket = new WebSocket( Url.get('websocket') + Url.getAccountParam());
+
+        socket.onopen = () => {
+            let subscribe = JSON.stringify({
+                "command": "subscribe",
+                "identifier": JSON.stringify({
+                    "channel": "NotificationsChannel"
+                })
+            });
+
+            socket.send(subscribe);
+        };
+
+        socket.onmessage = (e) => this.handleMessage(e);
+
+        socket.onclose = () => {
+            setTimeout(this.openWebSocket, 50);
+        };
+    }
+
+    handleMessage (e) {
+        
+
+        if (e.data.indexOf("ping") != -1)  // Is keep alive event
+            return;
+
+        let json = JSON.parse(e.data);
+
+        if (typeof json.message == "undefined") 
+            return;
+
+        if (json.message.operation == "added_message") {
+            let message = Crypto.decryptMessage(json.message.content)
+
+            store.state.msgbus.$emit('newMessage', message);
+        }
+
+    }
 
     static sendMessage (data, mime_type, thread_id) {
 
         let account_id = store.state.account_id;
 
         let id = MessageManager.generateId();
+
+        if (mime_type == "text/plain") 
+            data =  Util.entityEncode(data)
 
         let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Photo</i>";
 
@@ -51,7 +99,8 @@ export default class MessageManager {
 
         // Submit event
         let event_object = {
-            device_id: thread_id,
+            device_id: id,
+            conversation_id: thread_id,
             timestamp: timestamp,
             mime_type: mime_type,
             message_type: 2,

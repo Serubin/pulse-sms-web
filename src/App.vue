@@ -42,6 +42,7 @@ import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 import Crypto from '@/utils/crypto.js'
 import Querier from '@/utils/query.js'
+import MessageManager from '@/utils/messages.js'
 import Util from '@/utils/util.js'
 
 import Sidebar from '@/components/Sidebar.vue'
@@ -61,7 +62,11 @@ export default {
     },
 
     mounted () { // Add window event listener
+
+        this.mm = new MessageManager();
+
         window.addEventListener('resize', this.handleResize)
+
         this.handleResize();
         this.updateContactCache();
     },
@@ -75,6 +80,7 @@ export default {
             margin: 0,
             loading: this.$store.state.loading,
             title: this.$store.state.title, 
+            mm: null,
         }
     },
 
