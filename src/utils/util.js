@@ -29,6 +29,24 @@ export default class Util {
         return string;
     }
 
+    static generateSnippet (object) {
+
+        if(typeof object.snippet != "undefined")
+            return object.snippet;
+
+        let snippet = object.snippet || object.data;
+        let type = object.message_type || object.type;
+        let mime_type = object.mime_type || "text/plain";
+        
+        
+        snippet = mime_type == "text/plain" ? (snippet) : "<i>Photo</i>";
+
+        if (type != 0 && type != 6 && type != 3 && type != 5)
+            snippet = "You: " + snippet;
+
+        return snippet;
+        
+    }
     static generateContact (id, title, color, accent, ligher, darker) {
         return {
             id: id,

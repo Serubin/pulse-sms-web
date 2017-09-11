@@ -41,11 +41,13 @@ export default class MessageManager {
 
         if (typeof json.message == "undefined") 
             return;
-
+        
         if (json.message.operation == "added_message") {
             let message = Crypto.decryptMessage(json.message.content)
 
             store.state.msgbus.$emit('newMessage', message);
+        } else if (json.message.operation == "read_conversation") {
+            store.state.msgbus.$emit('conversationRead', json.message.content.id);
         }
 
     }
