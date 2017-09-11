@@ -10,7 +10,7 @@
         <p class="conversation-text conversation-text-small" :class="{ unread: !read }">
             <span class="conversation-title mdl-card__supporting-text conversation-title-small">{{ title }}</span>
             <br>
-            <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small">{{ snippet }}</span>
+            <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small" v-html="snippet"><!-- Raw html insert --></span>
         </p>
     </div>
 </template>
