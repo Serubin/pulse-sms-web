@@ -1,4 +1,4 @@
-import vue_bus from '@/main.js'
+import Vue from 'vue'
 import store from '@/store/'
 
 class Messages {
@@ -11,7 +11,6 @@ class Messages {
         let encrypted = encrypt(data);
         let snippetEncrypted = encrypt(snippet);
 
-        let
         let timestamp = new Date().getTime();
 
         // Add to page

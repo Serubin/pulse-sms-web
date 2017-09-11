@@ -1,3 +1,4 @@
+import Vue from 'vue';
 
 export const KEYS  = {
     ACCOUNT_ID: 'account_id',
@@ -23,6 +24,8 @@ export const state = {
     sidebar_open: true,
     title: "PulseClient",
     loading: true,
+
+    msgbus: new Vue(),
 }
 
 export const getters = {
