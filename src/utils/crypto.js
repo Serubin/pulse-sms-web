@@ -36,7 +36,7 @@ export default class Crypto {
             convo.title = Crypto.decrypt(convo.title);
 
             convo.snippet = Crypto.decrypt(convo.snippet);
-            convo.snippet = Util.entityEncode(convo.snippet);
+            convo.snippet = convo.snippet;
         } catch (err) {
             return null
         }
@@ -77,6 +77,12 @@ export default class Crypto {
         } catch (err) {
             return null
         }
+
+        if (typeof message.device_id == "undefined") // Correct for "id"
+            message.device_id = message.id;
+        
+        if (typeof message.message_type == "undefined")
+            message.message_type = message.type;
 
         return message;
     }

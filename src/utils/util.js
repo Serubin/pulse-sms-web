@@ -16,6 +16,8 @@ export default class Util {
     }
     
     static entityEncode (string) {
+        string = string.replace(/\n/g, '<br />');
+
         while (string.indexOf("<") !== -1) {
             string = string.replace("<", "&lt;");
         }
@@ -24,7 +26,6 @@ export default class Util {
             string = string.replace(">", "&gt;");
         }
 
-        string = string.replace(/\n/g, '<br />');
         return string;
     }
 
