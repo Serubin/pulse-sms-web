@@ -109,7 +109,7 @@ export default class Crypto {
      * @return encrypted data
      */
     static encrypt (data) {
-        var iv = sjcl.codec.hex.toBits(random128Hex());
+        var iv = sjcl.codec.hex.toBits(Crypto.random128Hex());
         var cipherbits = sjcl.mode.cbc.encrypt(
             store.state.aes, sjcl.codec.utf8String.toBits(data), iv, null
         );
@@ -124,10 +124,18 @@ export default class Crypto {
      * @return encrypted data
      */
     static encryptData (data) {
-        var iv = sjcl.codec.hex.toBits(random128Hex());
+        var iv = sjcl.codec.hex.toBits(Crypto.random128Hex());
         var bits = toBitArrayCodec(data);
         var cipherbits = sjcl.mode.cbc.encrypt(store.state.aes, bits, iv, null);
         return sjcl.codec.base64.fromBits(iv) + "-:-" + sjcl.codec.base64.fromBits(cipherbits);
+    }
+
+    static random128Hex() {
+        function random16Hex () {
+            return (0x10000 | Math.random() * 0x10000).toString(16).substr(1); 
+        }
+        return random16Hex() + random16Hex() + random16Hex() + random16Hex() +
+            random16Hex() + random16Hex() + random16Hex() + random16Hex();
     }
 }
 
