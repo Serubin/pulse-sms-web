@@ -71,7 +71,6 @@ export default class Crypto {
             message.mime_type = Crypto.decrypt(message.mime_type);
 
             message.data = Crypto.decrypt(message.data)
-            message.data = Util.entityEncode(message.data); // encode message
 
             message.message_from = Crypto.decrypt(message.message_from);
         } catch (err) {
