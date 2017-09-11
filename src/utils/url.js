@@ -2,14 +2,15 @@ import store from '@/store'
 
 export default class Url {
     static urls = {
-        'conversations':        "conversations/",
-        'messages':             "messages/",
-        'add_message':          "messages/add/",
+        "conversations":        "conversations/",
+        "messages":             "messages/",
+        "add_message":          "messages/add/",
         "update_conversation":  "conversations/update/",
+        "websocket":            "stream",
     }
 
     static getBaseUrl () {
-        return "https://api.messenger.klinkerapps.com/";
+        return "api.messenger.klinkerapps.com/";
     }
 
     static getApiVersion () {
@@ -21,7 +22,12 @@ export default class Url {
     }
 
     static get (name) {
-        return Url.getBaseUrl() + Url.getApiVersion() + Url.urls[name];
+
+        let protocol = "https://";
+        if(name == "websocket")
+            protocol = "wss://";
+
+        return protocol + Url.getBaseUrl() + Url.getApiVersion() + Url.urls[name];
     }
 }
 
