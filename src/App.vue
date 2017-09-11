@@ -30,7 +30,7 @@
         </div> <!-- End Content Wrapper -->
         
         <!-- Loading splash page -->
-        <transition name="slide-fade">
+        <transition name="splash-fade">
             <splash v-if="$store.state.loading"></splash>
         </transition>
     </div>
@@ -293,17 +293,17 @@ export default {
             }
         }
     }
-    
-    .slide-fade-enter-active {
+
+    /* splash-fade transition */
+    .splash-fade-enter-active {
         transition-delay: 1s;
-        transition: all .3s ease;
+        transition: all $anim-time ease;
     }
-    .slide-fade-leave-active {
+    .splash-fade-leave-active {
         transition-delay: 1s;
-        transition: all .3s ease;
+        transition: all $anim-time ease;
     }
-    .slide-fade-enter, .slide-fade-leave-to
-        /* .slide-fade-leave-active below version 2.1.8 */ {
+    .splash-fade-enter, .splash-fade-leave-to {
         transform: translateY(70%);
         opacity: 0;
     }
