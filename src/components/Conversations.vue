@@ -6,14 +6,14 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <conversation-item v-for="conversation in conversations" :key="conversation.device_id" :conversation-data="conversation" :small="small"></conversation-item>
+            <conversation-item v-for="conversation in conversations" :key="conversation.hash" :conversation-data="conversation" :small="small"></conversation-item>
         </transition-group>
 
     </div>
 </template>
 
 <script>
-
+import Hash from 'object-hash'
 import Util from '@/utils/util.js'
 import Querier from '@/utils/query.js'
 import ConversationItem from '@/components/ConversationItem.vue'
@@ -49,7 +49,6 @@ export default {
         },
 
         updateConversation (event_obj) {
-            console.log(event_obj);
             // Find conversation
             let conv_index = this.getConversation(event_obj.conversation_id);
             let conv_object = this.conversations[conv_index];
@@ -60,27 +59,24 @@ export default {
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
 
-            // Update snippet if required
-            if (conv_object.snippet != new_snippet)
-                this.$set(conv_object, "snippet", new_snippet);
-            
-            this.$set(conv_object, "read", event_obj.read);
+            conv_object.snippet = new_snippet;
+            conv_object.read = event_obj.read;
+
+            conv_object.hash = Hash(conv_object);
 
             // Move conversation if required
             if (conv_index != 0) {
                 conv_object = this.conversations.splice(conv_index, 1)[0]
                 this.conversations.unshift(conv_object)
-            } else {
-                this.$set(this.conversations, conv_index, conv_object)
-            }
-
+            } 
         },
 
         updateRead (id) {
-            console.log(id)
             let index = this.getConversation(id);
             let conv = this.conversations[index];
-            this.$set(conv, "read", true);
+
+            conv.read = true;
+            conv.hash = Hash(conv)
         },
 
         getConversation(id) {

@@ -107,6 +107,7 @@ export default class MessageManager {
             mime_type: mime_type,
             message_type: 2,
             data: data,
+            read: true,
             snippet: snippet
         }
 

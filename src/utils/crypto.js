@@ -1,5 +1,6 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
+import Hash from 'object-hash'
 import store from '@/store'
 
 import Util from '@/utils/util.js'
@@ -49,6 +50,9 @@ export default class Crypto {
         }
 
         convo.color = Util.expandColor(convo.color);
+
+
+        convo.hash = Hash(convo);
 
         return convo;
     }
