@@ -69,6 +69,13 @@ export default {
         },
 
         addNewMessage(event_obj) {
+
+            // Determine if displayed
+            let displayed = this.messages.containsObjKey('device_id', event_obj.device_id);
+            if(displayed)
+                return;
+            
+            console.log(event_obj)
             this.messages.push(event_obj);
             Vue.nextTick(() => { 
                 this.scrollToBottom(250);

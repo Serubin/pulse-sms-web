@@ -53,3 +53,17 @@ Array.prototype.contains = function(element) {
     return this.indexOf(element) > -1 ? true : false
 }
 
+/**
+* Contains element, by key
+* @param key
+* @param element value
+*/
+Array.prototype.containsObjKey = function(key, element) {
+
+    for (var i = 0; i < this.length; i++) 
+        if (this[i][key] === element)
+            return true
+
+    return false
+}
+
