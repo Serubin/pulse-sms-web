@@ -22,6 +22,7 @@ import Util from '@/utils/util.js'
 export default {
     name: 'conversation-item',
     props: [ 'conversationData', 'small'],
+
     data () {
         return {
             conversation_id: this.conversationData.device_id,
@@ -32,6 +33,7 @@ export default {
             timestamp: this.conversationData.timestamp,
         }
     },
+
     methods: {
         routeToThread () {
             
@@ -40,6 +42,7 @@ export default {
             })
         }
     },
+
     computed: {
 
         iconSize () {
