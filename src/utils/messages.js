@@ -1,21 +1,22 @@
 import Vue from 'vue'
 import store from '@/store/'
+import Url from '@/utils/url.js'
+import Crypto from '@/utils/crypto.js'
 
-class Messages {
+export default class MessageManager {
+
     static sendMessage (data, mime_type, thread_id) {
 
         let account_id = store.state.account_id;
 
+        let id = MessageManager.generateId();
+
         let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Photo</i>";
 
-        let encrypted = encrypt(data);
-        let snippetEncrypted = encrypt(snippet);
+        let encrypted = Crypto.encrypt(data);
+        let snippetEncrypted = Crypto.encrypt(snippet);
 
         let timestamp = new Date().getTime();
-
-        // Add to page
-        add_to_page(id, $message);
-        scrollToBottom(250);
 
         // Define request
         let request = {
@@ -25,7 +26,7 @@ class Messages {
             message_type: 2,
             data: encrypted,
             timestamp: timestamp,
-            mime_type: encrypt(mime_type),
+            mime_type: Crypto.encrypt(mime_type),
             read: true,
             seen: true
         };
@@ -38,20 +39,27 @@ class Messages {
             snippet: snippetEncrypted
         };
 
-        // TODO convert to querier
-        $.post(getBaseUrl() + "/api/v1/messages/add", request, "json")
-            .fail(failed);
-        $.post(getBaseUrl() + "/api/v1/conversations/update/" + thread_id, conversationRequest, "json");
+        // Update on servers
+        let constructed_url = Url.get('add_message');
+        Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            .catch(response => console.log(response));
 
+        constructed_url = Url.get('update_conversation') + thread_id;
+        Vue.http.post(constructed_url, conversationRequest, {'Content-Type': 'application/json'})
+            .catch(response => console.log(response));
+
+
+        // Submit event
         let event_object = {
-            thread_id: thread_id,
+            device_id: thread_id,
             timestamp: timestamp,
             mime_type: mime_type,
+            message_type: 2,
             data: data,
             snippet: snippet
         }
 
-        vue_bus.emit('new-message', event_object);
+        store.state.msgbus.$emit('newMessage', event_object);
 
     }
 

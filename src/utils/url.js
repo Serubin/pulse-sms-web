@@ -2,8 +2,10 @@ import store from '@/store'
 
 export default class Url {
     static urls = {
-        'conversations':  "conversations/",
-        'messages': "messages/"
+        'conversations':        "conversations/",
+        'messages':             "messages/",
+        'add_message':          "messages/add/",
+        "update_conversation":  "conversations/update/",
     }
 
     static getBaseUrl () {
