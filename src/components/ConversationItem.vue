@@ -17,7 +17,7 @@
 
 <script>
 
-import Util from '@/utils/util.js'
+import { Util } from '@/utils'
 
 export default {
     name: 'conversation-item',

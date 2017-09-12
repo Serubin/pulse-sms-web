@@ -15,7 +15,7 @@
 <script>
 import Vue from 'vue'
 import jump from 'jump.js'
-import Querier from '@/utils/query.js'
+import { Util, MessageManager } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
 import Message from '@/components/Message.vue'
@@ -52,7 +52,7 @@ export default {
 
     methods: {
         fetchMessages () {
-            Querier.fetchThread(this.conversation_id)
+            MessageManager.fetchThread(this.conversation_id)
                 .then(response => {
 
                     // Flip message order and push to local state

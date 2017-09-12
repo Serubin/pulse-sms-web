@@ -17,7 +17,7 @@
 
 <script>
 import AutoGrow from '@/lib/textarea-autogrow.js'
-import MessageManager from '@/utils/messages.js'
+import { MessageManager } from '@/utils'
 
 export default {
     name: 'Sendbar',

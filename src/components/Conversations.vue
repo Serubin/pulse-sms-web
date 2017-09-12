@@ -14,8 +14,7 @@
 
 <script>
 import Hash from 'object-hash'
-import Util from '@/utils/util.js'
-import Querier from '@/utils/query.js'
+import { Util, MessageManager } from '@/utils'
 import ConversationItem from '@/components/ConversationItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
@@ -39,7 +38,7 @@ export default {
                 + (param_index == null ? "unarchived" : param_index);
 
             // Start query
-            Querier.fetchConversations(this.index)
+            MessageManager.fetchConversations(this.index)
                 .then(response => {
                     this.conversations = response;
 
@@ -130,7 +129,6 @@ export default {
     .flip-list-enter, .flip-list-leave-to
     /* .flip-list-leave-active below version 2.1.8 */ {
         opacity: 0;
-        transform: translateX(0px);
     }
     .flip-list-leave-active {
         position: absolute;

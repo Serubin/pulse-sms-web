@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import store from '@/store/'
-import Util from '@/utils/util.js'
-import Url from '@/utils/url.js'
-import Crypto from '@/utils/crypto.js'
+
+import { Util, Url, Crypto } from '@/utils/'
 
 export default class MessageManager {
 
@@ -50,6 +49,50 @@ export default class MessageManager {
             store.state.msgbus.$emit('conversationRead', json.message.content.id);
         }
 
+    }
+
+    static fetchConversations (index) {
+        const constructed_url = 
+            Url.get('conversations') + index + Url.getAccountParam()
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then(response => {
+                    response = response.data
+                    // Decrypt Conversations items
+                    for(var i = 0; i < response.length; i++)
+                        response[i] = Crypto.decryptConversation(response[i]);
+
+                    resolve(response); // Resolve response
+                })
+                .catch(response => reject(response));
+        });
+
+        return promise
+    }
+
+    static fetchThread (conversation_id) {
+
+        const limit = 70;
+
+        const constructed_url = 
+            Url.get('messages') + Url.getAccountParam() 
+                + "&conversation_id=" + conversation_id + "&limit=" + limit;
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then(response => { 
+                    response = response.data
+                    // Decrypt Conversations items
+                    for(var i = 0; i < response.length; i++)
+                        response[i] = Crypto.decryptMessage(response[i]);
+
+                    resolve(response); // Resolve response
+                })
+                .catch(response => reject(response));
+        });
+
+        return promise
     }
 
     static sendMessage (data, mime_type, thread_id) {

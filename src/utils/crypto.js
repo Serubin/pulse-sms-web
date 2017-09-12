@@ -1,9 +1,9 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
+
 import Hash from 'object-hash'
 import store from '@/store'
-
-import Util from '@/utils/util.js'
+import { Util } from '@/utils'
 
 export default class Crypto {
     /**

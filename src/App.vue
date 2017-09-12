@@ -40,10 +40,8 @@
 
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
-import Crypto from '@/utils/crypto.js'
-import Querier from '@/utils/query.js'
-import MessageManager from '@/utils/messages.js'
-import Util from '@/utils/util.js'
+
+import { Util, Crypto, MessageManager } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations.vue'
@@ -113,10 +111,11 @@ export default {
 
         updateContactCache () {
             let this_ = this;
-            Querier.fetchConversations("index_unarchived")
+
+            MessageManager.fetchConversations("index_unarchived")
                 .then(response => { this_._updateContactCache(response) })
 
-            Querier.fetchConversations("index_archived")
+            MessageManager.fetchConversations("index_archived")
                 .then(response => { this_._updateContactCache(response) })
         },
 

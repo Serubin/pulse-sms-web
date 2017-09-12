@@ -1,3 +1,4 @@
+
 export default class Util {
     /**
      * Expand color to full RGBA string

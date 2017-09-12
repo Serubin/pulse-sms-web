@@ -26,7 +26,7 @@
 
 <script>
 
-import Crypto from '@/crypto.js'
+import { Crypto } from '@/utils'
 import Message from '@/components/Message.vue'
 
 export default {
