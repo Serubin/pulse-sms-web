@@ -1,6 +1,20 @@
 # pulse-client
 
-> PulseClient. An Open Source alternative to the PulseSMS web and desktop app.
+> PulseClient. An Open Source alternative to the PulseSMS web and desktop app. 
+> This will act as v3.0.0 taking over the original PulseClient app.
+
+## Current tasks (in no particular order)
+- [x] Basic Ui
+- [x] Conversation and Thread population
+- [x] Sending message + updating thread/conversation list
+- [x] Real time updating of thread/conversations
+- [] Login page
+- [] Support for images (displayed)
+- [] Support for uploading/sending images
+- [] Settings menu
+- [] Dynamic color theming
+- [] Emojis!
+- [] Notifications
 
 ## Build Setup
 
@@ -18,4 +32,8 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Contributing
+Contributing is more than welcome - this project is still in it's early stages and thus coding and design standards are still being designed.
+
+Pull requests will be evaluated on a case by case basis.
+
