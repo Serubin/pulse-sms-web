@@ -4,7 +4,7 @@
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../assets/images/ic_attach.png"/>
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../assets/images/ic_mood.png"/>
             <div class="entry mdl-textfield mdl-js-textfield">
-                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" autofocus @keydown.enter.stop.prevent="dispatchSend"></textarea>
+                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">Type message...</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
@@ -28,16 +28,19 @@ export default {
     },
 
     methods: {
-        dispatchSend(e) {
+        dispatchSend(e) { // Dispatch send message when klicked
             if (e.shiftKey)
                 return;
-            
+
             let value = e.target.value;
+
+            if (value.length <= 0) 
+                return;
 
             MessageManager.sendMessage(value, "text/plain", this.threadId)
 
             e.target.value = "";
-        }
+        },
     }
 }
 </script>
