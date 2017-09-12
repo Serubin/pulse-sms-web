@@ -8,13 +8,13 @@
 - [x] Conversation and Thread population
 - [x] Sending message + updating thread/conversation list
 - [x] Real time updating of thread/conversations
-- [] Login page
-- [] Support for images (displayed)
-- [] Support for uploading/sending images
-- [] Settings menu
-- [] Dynamic color theming
-- [] Emojis!
-- [] Notifications
+- [ ] Login page
+- [ ] Support for images (displayed)
+- [ ] Support for uploading/sending images
+- [ ] Settings menu
+- [ ] Dynamic color theming
+- [ ] Emojis!
+- [ ] Notifications
 
 ## Build Setup
 
