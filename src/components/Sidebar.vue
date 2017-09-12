@@ -63,11 +63,21 @@ export default {
     },
 
     methods: {
+        /**
+         * route to
+         * Handles routing and closes drawer
+         * 
+         * @param link - link to route too
+         */
         routeTo (link) {
             this.close_drawer()
             this.$router.push(this.links[link])
         },
 
+        /**
+         * close drawer
+         * Closes drawer if closeable
+         */
         close_drawer() {
             if(!this.full_theme)
                 this.$store.dispatch('sidebar_open', false);

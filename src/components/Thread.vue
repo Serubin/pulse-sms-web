@@ -67,22 +67,38 @@ export default {
                     });
                 });
         },
+        
 
+        /**
+         * EventHandler: Add new message
+         * Add's new message to thread
+         * 
+         * @param event_object
+         */
         addNewMessage(event_obj) {
+
+            // Ignore if message is not part of conversation
             if (event_obj.conversation_id != this.conversation_id)
                 return;
 
             // Determine if displayed
             let displayed = this.messages.containsObjKey('device_id', event_obj.device_id);
-            if(displayed)
+            if(displayed) // Ignore if displayed
                 return;
             
             this.messages.push(event_obj);
-            Vue.nextTick(() => { 
-                this.scrollToBottom(250);
+            
+            Vue.nextTick(() => {            // Animate on next tick to
+                this.scrollToBottom(250);   // avoid scrolling before render
             });
         },
 
+        /**
+         * Scroll to bottom
+         * Scrolls thread to bottom of page; uses tween easing
+         *
+         * @param speed - default to zero (no animation)
+         */
         scrollToBottom(speed) {
 
             if (typeof speed == "undefined") // Speed defaults to zero
