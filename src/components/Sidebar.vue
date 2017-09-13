@@ -31,7 +31,7 @@
                 <!-- If route is not conversation list -->
                 
                 <transition name="slide-left">
-                    <conversations v-if="$route.name != 'conversations-list'" small="true"></conversations>
+                    <conversations v-if="showConversations" small="true"></conversations>
                 </transition>
                 <!-- End if -->
                 
@@ -56,8 +56,8 @@ export default {
     data () {
         return {
             links: {
-                'conversations': { name: 'conversations-list', params: {index: null}},
-                'archive': { name: 'conversations-list', params: {index: 'archived'}}
+                'conversations': { name: 'conversations-list'},
+                'archive': { name: 'conversations-list-archived'}
             }
         }
     },
@@ -85,7 +85,7 @@ export default {
     },
 
     computed: {
-        marginLeft () {
+        marginLeft () { // Handles margins
             if(this.open)
                 return "margin-left: 0px;";
             else
@@ -97,6 +97,9 @@ export default {
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
         },
+        showConversations () {
+            return this.$route.name.indexOf('conversations-list') < 0;
+        }
     },
 
     components: {

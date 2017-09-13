@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import Hash from 'object-hash'
 import { Util, MessageManager } from '@/utils'
 import ConversationItem from '@/components/ConversationItem.vue'
@@ -20,7 +21,7 @@ import Spinner from '@/components/Spinner.vue'
 
 export default {
     name: 'conversations',
-    props: ['small'],
+    props: ['small', 'archive'],
 
     mounted () {
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
@@ -31,11 +32,6 @@ export default {
 
     methods: {
         fetchConversations () {
-
-            // Get index from url/params
-            var param_index = this.$route.params.index;
-            this.index = "index_" 
-                + (param_index == null ? "unarchived" : param_index);
 
             // Start query
             MessageManager.fetchConversations(this.index)
@@ -92,17 +88,24 @@ export default {
 
     data () {
         return {
-            index: 'index_unarchived',
             conversations: [],
         }
     },
 
+    computed: {
+        index () {
+            return "index_" + ( this.archive ? "archived" : "unarchived" );
+        }
+    },
+
     watch: { 
-        '$route' (to) { // Update index on route change
+        '$route' (to, from) { // Update index on route change
 
             // Only update if list page
-            if(to.name == 'conversations-list') 
-                this.fetchConversations() 
+            if (to.name != from.name && to.name.indexOf('conversations-list') >= 0) {
+                this.conversations = [];
+                this.fetchConversations()
+            }
 
         }
     },
@@ -129,6 +132,7 @@ export default {
     .flip-list-enter, .flip-list-leave-to
     /* .flip-list-leave-active below version 2.1.8 */ {
         opacity: 0;
+    
     }
     .flip-list-leave-active {
         position: absolute;

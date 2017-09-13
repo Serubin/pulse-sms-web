@@ -9,14 +9,17 @@ Vue.use(VueRouter)
 export default new VueRouter({
     mode: "history",
     routes: [
-        {
+        { 
             path: '/',
-            redirect: { name: 'conversations-list'}
+            name: 'conversations-list',
+            component: Conversations,
+            props: { 'archive': false, 'small': false },
         },
         {
-            path: '/:index',
-            name: 'conversations-list',
-            component: Conversations
+            path: '/archived',
+            name: 'conversations-list-archived',
+            component: Conversations,
+            props: { 'archive': true, 'small': false },
         },
         {
             path: '/thread/:threadId',
