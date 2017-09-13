@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import Login from '@/components/Login.vue'
 import Thread from '@/components/Thread.vue'
 import Conversations from '@/components/Conversations.vue'
 
@@ -26,6 +27,11 @@ export default new VueRouter({
             name: 'thread',
             component: Thread,
             props: true,
-        }
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: Login,
+        },
     ]
 })
