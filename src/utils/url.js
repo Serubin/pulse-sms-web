@@ -2,6 +2,7 @@ import store from '@/store'
 
 export default class Url {
     static urls = {
+        "login":                "accounts/login/",
         "conversations":        "conversations/",
         "messages":             "messages/",
         "add_message":          "messages/add/",

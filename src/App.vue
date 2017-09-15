@@ -52,21 +52,23 @@ export default {
 
     beforeCreate () {
 
-        if(this.$store.state.account_id != '') 
-            Crypto.setupAes();
-        else
-            return //TODO Redirect to login
+        if(this.$store.state.account_id != '') // If logged in
+            Crypto.setupAes();                 // Set up crypto
+        else // Otherwise, force login
+            this.$route.push('login');
 
     },
 
     mounted () { // Add window event listener
 
-        this.mm = new MessageManager();
-
         window.addEventListener('resize', this.handleResize)
-
         this.handleResize();
-        this.updateContactCache();
+
+        if (this.$store.state.account_id != '') // If logged in
+            this.applicationStart();            // Start app
+        else
+            this.$store.state.msgbus.$on('app-start', this.applicationStart);
+
     },
 
     beforeDestroy () { // Remove event listeners
@@ -83,6 +85,10 @@ export default {
     },
 
     methods: {
+        applicationStart () {
+            this.mm = new MessageManager();
+            this.updateContactCache();
+        },
         toggleSidebar () {
             if(!this.full_theme)
                 this.$store.dispatch('sidebar_open', !this.sidebar_open);
