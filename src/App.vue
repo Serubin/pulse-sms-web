@@ -16,7 +16,7 @@
 
             <!-- Side Menu -->
             <div id="side-menu">
-                <sidebar v-mdl :open="sidebar_open" :full_theme="full_theme" :sidebar_open.sync="sidebar_open" >
+                <sidebar v-mdl>
                 </sidebar>
             </div> <!-- End Side Menu -->
 
