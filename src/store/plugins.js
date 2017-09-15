@@ -1,15 +1,28 @@
 
 import { KEYS, state } from '@/store/state.js'
 
+    // called when the store is initialize  
 const localStoreSync = store => {
-    // called when the store is initialized
+    const local_items = {
+        'contacts': KEYS.CONTACTS,
+        'account_id': KEYS.ACCOUNT_ID,
+        'hash': KEYS.HASH,
+        'salt': KEYS.SALT,
+    }
+
+    // called after every mutation.
     store.subscribe((mutation, state) => {
-        // called after every mutation.
-        // The mutation comes in the format of `{ type, payload }`.
-        //
-        if (mutation.type == "contact") // Save contacts to local store
-            window.localStorage.setItem(KEYS.CONTACTS, JSON.stringify(state.contacts))
+        
+        // Only save if in local_items array
+        if (!Object.keys(local_items).contains(mutation.type))
+            return;
+
+        let key = local_items[mutation.type]
+        let value = JSON.stringify(state[mutation.type])
+
+        window.localStorage.setItem(key, value)
     })
 }
+
 
 export default [ localStoreSync ];

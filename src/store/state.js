@@ -40,6 +40,7 @@ export const mutations = {
     loading: (state, loading ) => state.loading = loading,
     full_theme: (state, full_theme ) => state.full_theme = full_theme,
     sidebar_open: (state, sidebar_open ) => state.sidebar_open = sidebar_open,
+    account_id: (state, account_id ) => state.accout_id = account_id,
     hash: (state, hash ) => state.hash = hash,
     salt: (state, salt ) => state.salt = salt,
     aes: (state, aes ) => state.aes = aes,
@@ -65,6 +66,11 @@ export const actions = {
     sidebar_open: ({ commit, state }, sidebar_open) => {
         if (state.sidebar_open != sidebar_open) // Reduce uneeded state changes
             commit('sidebar_open', sidebar_open)
+    },
+    // Saved account id
+    account_id: ({ commit, state }, account_id) => {
+        if (state.account_id != account_id) // Reduce uneeded state changes
+            commit('account_id', account_id)
     },
     // Saved hash
     hash: ({ commit, state }, hash) => {
