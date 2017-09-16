@@ -5,6 +5,7 @@
         </div>
         <div class="mdl-card__supporting-text">
             <p>First, sign up for an account from the <b>Text from any device</b> option in the navigation drawer of the phone app.</p>
+            <p v-if="error" class="error">Email or Password incorrect</p>
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
                     <input class="mdl-textfield__input" type="email" id="username" v-model="username" autofocus/>
@@ -15,12 +16,21 @@
                     <label class="mdl-textfield__label" for="password">Password</label>
                 </div>
             </form>
-            <a href="forgot_password.html">Forgot your password?</a><br/>
-            <a href="ios_support.html">Have an <i>iPhone</i>?</a>
+
+            <a href="https://messenger.klinkerapps.com/forgot_password.html">Forgot your password?</a>
+            <br>
+            <a href="https://messenger.klinkerapps.com/overview/platform-ios.html">Have an <i>iPhone</i>?</a>
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="login" @click="doLogin">Log in</button>
         </div>
+
+
+        <transition name="loading-fade">
+            <div class="loading-center" v-if="loading">
+                <spinner></spinner>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -28,24 +38,39 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 import Vue from 'vue'
-import { Crypto } from '@/utils/'
+import { Crypto, Url } from '@/utils/'
+import Spinner from '@/components/Spinner.vue'
 
 
 export default {
     name: 'login',
 
     mounted () {
+        if (this.$store.state.account_id != '')
+            return this.$router.push({ name: 'conversations-list'});
+
         this.$store.dispatch("loading", false);
     },
+
     data () {
         return {
             username: '',
             password: '',
+            loading: false,
+            error: false,
 
         }
-    }
+    },
+
     methods: {
         doLogin() {
+
+            if (this.username == '' || this.password == '')
+                return;
+
+            this.error = false;
+            this.loading = true;
+
             let constructed_url = Url.get('login')
 
             let request = {
@@ -53,28 +78,44 @@ export default {
                 password: this.password 
             };
 
+
             Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
-                .then((data) => this.handleData)
-                .catch(console.log("Login failed"));
+                .then((data) => this.handleData(data.data))
+                .catch((data) => this.handleError(data));
         },
+
         handleData (data) {
-        
+            this.error = false;
+
             // Create hash
             let derived_key = sjcl.misc.pbkdf2(this.password, data.salt2, 10000, 256, hmacSHA1);
             let base64_hash = sjcl.codec.base64.fromBits(derived_key);
-
             // Save data
             this.$store.dispatch('account_id', data.account_id);
             this.$store.dispatch('hash', base64_hash);
             this.$store.dispatch('salt', data.salt1);
 
             Crypto.setupAes(); // Setup aes for session
-            
+
+            this.loading = false;
+
             // Start app       
             this.$store.state.msgbus.$emit('start-app');
 
+            this.$router.push({ name: 'conversations-list'});
+
+        },
+
+        handleError(data) {
+            this.password = "";
+            this.error = true;
+            this.loading = false;
         }
-    }
+    },
+
+    components: {
+        Spinner
+    }   
 }
 </script>
 
@@ -87,6 +128,41 @@ export default {
         width: 330px;
         height: 100%;
         margin: 5em auto;
+    }
+
+    .loading-center {
+        position: absolute;
+        margin: 57px auto;
+        background: #fff;
+
+        height: 100%;
+        width: 100%;
+
+        text-align: center;
+        vertical-align: middle;
+
+        .spinner {
+            margin: 35% auto;
+            translate: scale(2);
+        }
+    }
+
+    .error {
+        color: rgb(255,64,129);
+    }
+
+    /* loading-fade transition */
+    .loading-fade-enter-active {
+        transition-delay: 1s;
+        transition: all $anim-time ease;
+    }
+    .loading-fade-leave-active {
+        transition-delay: 1s;
+        transition: all $anim-time ease;
+    }
+    .loading-fade-enter, .loading-fade-leave-to {
+        transform: translateY(70%);
+        opacity: 0;
     }
 
 </style>
