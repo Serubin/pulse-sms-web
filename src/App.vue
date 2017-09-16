@@ -55,7 +55,7 @@ export default {
         if(this.$store.state.account_id != '') // If logged in
             Crypto.setupAes();                 // Set up crypto
         else // Otherwise, force login
-            this.$route.push('login');
+            this.$router.push('login');
 
     },
 
@@ -67,7 +67,7 @@ export default {
         if (this.$store.state.account_id != '') // If logged in
             this.applicationStart();            // Start app
         else
-            this.$store.state.msgbus.$on('app-start', this.applicationStart);
+            this.$store.state.msgbus.$on('start-app', this.applicationStart);
 
     },
 
@@ -138,7 +138,6 @@ export default {
                     Util.expandColor(response[i].color_dark)
                 ));
             }
-
             this.$store.dispatch('setContacts', cache) 
         }
     },
