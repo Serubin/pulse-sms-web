@@ -10,13 +10,15 @@ export const KEYS  = {
     }
 }
 
+const empty_str = "\"\"";
+
 export const state = {
     // Persistent
-    account_id: window.localStorage.getItem(KEYS.ACCOUNT_ID) || '',
-    hash: window.localStorage.getItem(KEYS.HASH) || '',
-    salt: window.localStorage.getItem(KEYS.SALT) || '',
-    contacts: JSON.parse(window.localStorage.getItem(KEYS.CONTACTS) || '{}'),
-    theme_round: window.localStorage.getItem(KEYS.THEME.ROUND) || false,
+    account_id: JSON.parse( window.localStorage.getItem(KEYS.ACCOUNT_ID) || empty_str ),
+    hash: JSON.parse( window.localStorage.getItem(KEYS.HASH) || empty_str ),
+    salt: JSON.parse( window.localStorage.getItem(KEYS.SALT) || empty_str ),
+    contacts: JSON.parse( window.localStorage.getItem(KEYS.CONTACTS) || '{}' ),
+    theme_round: JSON.parse( window.localStorage.getItem(KEYS.THEME.ROUND) || "false" ),
 
     // Per session
     aes: '',
@@ -40,11 +42,11 @@ export const mutations = {
     loading: (state, loading ) => state.loading = loading,
     full_theme: (state, full_theme ) => state.full_theme = full_theme,
     sidebar_open: (state, sidebar_open ) => state.sidebar_open = sidebar_open,
-    account_id: (state, account_id ) => state.accout_id = account_id,
+    account_id: (state, account_id ) => state.account_id = account_id,
     hash: (state, hash ) => state.hash = hash,
     salt: (state, salt ) => state.salt = salt,
     aes: (state, aes ) => state.aes = aes,
-    contact: (state, payload) => {
+    contacts: (state, payload) => {
         for(let i = 0; i < payload.length; i++)   
             state.contacts[payload[i].id] = payload[i]
     },
@@ -91,7 +93,7 @@ export const actions = {
         if(!Array.isArray(contacts))
             contacts = [ contacts ]
 
-        commit('contact', contacts);
+        commit('contacts', contacts);
     }
 
 }
