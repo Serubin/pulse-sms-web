@@ -3,18 +3,9 @@
 > PulseClient. An Open Source alternative to the PulseSMS web and desktop app. 
 > This will act as v3.0.0 taking over the original PulseClient app.
 
-## Current tasks (in no particular order)
-- [x] Basic Ui
-- [x] Conversation and Thread population
-- [x] Sending message + updating thread/conversation list
-- [x] Real time updating of thread/conversations
-- [ ] Login page
-- [ ] Support for images (displayed)
-- [ ] Support for uploading/sending images
-- [ ] Settings menu
-- [ ] Dynamic color theming
-- [ ] Emojis!
-- [ ] Notifications
+## Current tasks 
+ See issues
+
 
 ## Build Setup
 
