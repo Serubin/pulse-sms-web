@@ -77,7 +77,7 @@ export default class MessageManager {
 
         const constructed_url = 
             Url.get('messages') + Url.getAccountParam() 
-                + "&conversation_id=" + conversation_id + "&limit=" + limit;
+                + "&conversation_id=" + conversation_id + "&limit=" + limit + "&web=true";
 
         const promise = new Promise((resolve, reject) => {
             Vue.http.get( constructed_url )

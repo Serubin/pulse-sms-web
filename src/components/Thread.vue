@@ -73,6 +73,7 @@ export default {
                         this.scrollToBottom();
 
                         this.$store.dispatch("loading", false);
+                        this.markAsRead();
                     });
                 });
         },
