@@ -3,10 +3,12 @@ import store from '@/store'
 export default class Url {
     static urls = {
         "login":                "accounts/login/",
-        "conversations":        "conversations/",
         "messages":             "messages/",
         "add_message":          "messages/add/",
+        "conversations":        "conversations/",
         "update_conversation":  "conversations/update/",
+        "read":                 "conversations/read/",
+        "dismiss":              "accounts/dismissed_notification/",
         "websocket":            "stream",
     }
 

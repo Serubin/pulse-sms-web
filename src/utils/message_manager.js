@@ -158,6 +158,18 @@ export default class MessageManager {
 
     }
 
+    static markAsRead (thread_id) {
+        
+        // Read conversation
+        let constructed_url = Url.get('read') + "/" + thread_id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+
+        // Dismiss notifiction
+        constructed_url = Url.get('dismiss') + Url.getAccountParam() 
+                + "&id=" + thread_id;
+        Vue.http.post(constructed_url);
+    }
+
     static generateId () {
         let min = 1;
         let max = 922337203685477;
