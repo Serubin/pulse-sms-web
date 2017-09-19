@@ -23,7 +23,7 @@ import Sendbar from '@/components/Sendbar.vue'
 
 export default {
     name: 'thread',
-    props: ['threadId'],
+    props: ['threadId', 'isRead'],
 
 
     mounted () {
@@ -37,6 +37,7 @@ export default {
     data () {
         return {
             conversation_id: this.threadId,
+            read: this.isRead,
             messages: [],
         }
     },
@@ -99,6 +100,9 @@ export default {
             Vue.nextTick(() => {            // Animate on next tick to
                 this.scrollToBottom(250);   // avoid scrolling before render
             });
+
+            if (event_obj.type == 0 || event_obj.type == 6)
+                this.read = false;
         },
 
         /**
@@ -128,7 +132,12 @@ export default {
         },
 
         markAsRead () {
+            
+            if(this.read) // Already read
+                return;
+
             MessageManager.markAsRead(this.conversation_id);
+            this.read = true; // Set thread to read
         }
     },
 
