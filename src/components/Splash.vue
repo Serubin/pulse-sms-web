@@ -1,7 +1,7 @@
 <template>
     <div v-mdl class="splash">
         <div class="splash-center">
-            <img src="..//assets/images/android-desktop.png" />
+            <img src="../assets/images/android-desktop.png" />
             <h3> {{ $store.state.title }} </h3>
         </div>
     </div>

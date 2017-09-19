@@ -28,8 +28,10 @@ export default {
 
     mounted () {
         this.fetchMessages();
+        
+        this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
 
-        this.$store.state.msgbus.$on('newMessage', this.addNewMessage)
+        window.addEventListener('focus', (e) => this.markAsRead());
     },
 
     data () {
@@ -51,6 +53,12 @@ export default {
     },
 
     methods: {
+
+        /**
+         * Fetch messages from server
+         * Get's latest messages from server, decrypts, and add's to
+         * this.messages for rendering.
+         */
         fetchMessages () {
             MessageManager.fetchThread(this.conversation_id)
                 .then(response => {
@@ -117,6 +125,10 @@ export default {
                     return c/2*((t-=2)*t*t + 2) + b;
                 }
             });
+        },
+
+        markAsRead () {
+            MessageManager.markAsRead(this.conversation_id);
         }
     },
 
