@@ -1,5 +1,5 @@
 <template>
-    <div id="thread-wrap">
+    <div id="thread-wrap" @click="markAsRead">
         <div class="page-content" id="message-list">
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
@@ -133,7 +133,7 @@ export default {
         },
 
         markAsRead () {
-            
+
             if(this.read) // Already read
                 return;
 
