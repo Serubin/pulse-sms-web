@@ -144,8 +144,8 @@ export default {
 
     watch: { 
         '$route' (to) { // Update thread on route change
-            this.threadId = to.params.threadId;
-            this.conversation_id = to.params.threadId;
+            this.conversation_id = this.threadId;
+            this.read = this.isRead
 
             this.messages = [];
             this.fetchMessages();
