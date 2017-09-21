@@ -199,58 +199,74 @@ export default {
 		background-color: #f7f7f7;
 		border-color: #e3e3e3;
 
-		#toolbar_inner {
-			max-width: 950px;
-            height: 100%;
-            transition: ease-in-out margin-left $anim-time;
+    }
 
-			#logo {
-				float: left;
-				margin-left: 20px;
-				padding-top: 9px;
+    #toolbar_inner {
+        max-width: 950px;
+        height: 100%;
+        transition: ease-in-out margin-left $anim-time;
 
-				#logo-image:hover {
-					cursor: pointer;
-				}
+        #logo {
+            float: left;
+            margin-left: 20px;
+            padding-top: 9px;
 
-				.icon_logo {
-					background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
-					margin-top: 2px;
-					width: 25px;
-					height: 25px;
-				}
+            #logo-image:hover {
+                cursor: pointer;
+            }
 
-				.icon_logo_dark {
-					background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
-					margin-top: 2px;
-					width: 25px;
-					height: 25px;
-                }
-				.icon_menu_toggle {
-					background: url(assets/images/vector/menu_toggle.svg) 0 0 no-repeat;
-					margin-top: 2px;
-					width: 25px;
-					height: 25px;
-				}
+            .icon_logo {
+                background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
+                margin-top: 2px;
+                width: 25px;
+                height: 25px;
+            }
 
-				.icon_menu_toggle_dark {
-					background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
-					margin-top: 2px;
-					width: 25px;
-					height: 25px;
-				}
+            .icon_logo_dark {
+                background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
+                margin-top: 2px;
+                width: 25px;
+                height: 25px;
+            }
+            .icon_menu_toggle {
+                background: url(assets/images/vector/menu_toggle.svg) 0 0 no-repeat;
+                margin-top: 2px;
+                width: 25px;
+                height: 25px;
+            }
 
-			}
+            .icon_menu_toggle_dark {
+                background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
+                margin-top: 2px;
+                width: 25px;
+                height: 25px;
+            }
 
-			.mdl-layout-title {
-				float: left;
-				margin-left: 15px;
-				margin-top: 12px;
-				color: #666666;
-			}
-		}
-	}
+        }
+
+        .mdl-layout-title {
+            float: left;
+            margin-left: 15px;
+            margin-top: 12px;
+            color: #666666;
+        }
+    }
+
 	
+    #toolbar_icons {
+        border: 0;
+        float: right;
+        height: 100%;
+        margin-top: 5px;
+        white-space: nowrap !important;
+
+        .mdl-menu, .mdl-menu__outline {
+            margin-top: -30px;
+            margin-left: -170px;
+        }
+
+    }
+
     #wrapper {
         transition: ease-in-out margin-left $anim-time;
 
@@ -263,45 +279,45 @@ export default {
         margin-left: $sidebar_margin; /* TODO, should be dynamic */
         vertical-align: top;
 
-        .mdl-layout__content {
-            width: 100%;
-            height: 100%;
-            position: relative;
-
-            @media (min-width: $mini_width) {
-                & {
-                    max-width: 650px;
-                }
-            }
-
-            .page-content {
-                bottom: 0;
-                margin: auto;
-                margin-bottom: 54px;
-                margin-top: 54px;
-                padding-top: 16px;
-                padding-bottom: 16px;
-                overflow: hidden;
-
-                @media screen and (min-width: 720px) {
-                    & {
-                        max-width: 720px;
-                        padding: 16px;
-                    }
-                }
-
-                @media screen and (min-width: 600px) {
-                    & {
-                        max-width: 600px;
-                        padding: 16px;
-                    }
-                }
-            }
-        }
-
         @media (max-width: $mini_width) {
             & {
                 margin-left: 0px;
+            }
+        }
+    }
+
+    .mdl-layout__content {
+        width: 100%;
+        height: 100%;
+        position: relative;
+
+        @media (min-width: $mini_width) {
+            & {
+                max-width: 650px;
+            }
+        }
+
+        .page-content {
+            bottom: 0;
+            margin: auto;
+            margin-bottom: 54px;
+            margin-top: 54px;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            overflow: hidden;
+
+            @media screen and (min-width: 720px) {
+                & {
+                    max-width: 720px;
+                    padding: 16px;
+                }
+            }
+
+            @media screen and (min-width: 600px) {
+                & {
+                    max-width: 600px;
+                    padding: 16px;
+                }
             }
         }
     }
