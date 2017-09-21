@@ -8,6 +8,17 @@
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
                 </div>
                 <span class="mdl-layout-title" id="toolbar-title">{{ title }}</span>
+                <div id="toolbar_icons">
+                    <button id="refresh-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                        <i class="material-icons">refresh</i>
+                    </button>
+                    <button class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
+                        <i class="material-icons">more_vert</i>
+                    </button>
+                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button">
+                        <li v-for="item in menu_items" class="mdl-menu__item" :id="item.name + '-btn'"><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item. title }}</a></li>
+                    </ul>
+                </div>
             </div>  <!-- End Toolbar-Inner -->
         </div> <!-- End Toolbar-->
 
@@ -154,6 +165,28 @@ export default {
         },
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
+        },
+
+        menu_items () {
+            let items = [
+                { 'name': "account", 'title': "My Account" },
+                { 'name': "settings", 'title': "Settings" },
+                { 'name': "help", 'title': "Help and Feedback" },
+                { 'name': "logout", 'title': "Logout" }
+            ]
+            
+            // TODO this doesn't work. at all
+            if (this.$route.name.includes('thread')) {
+                items.unshift(
+                    { 'name': "delete", 'title': "Delete Conversation" },
+                    (this.$route.path.includes("archived") ?
+                        { 'name': "archive", 'title': "Archive Conversation" } :
+                        {'name': "unarchive", 'title': "Unarchive Conversation" }),
+                    { "name": "blacklist", 'title': "Blacklist Contact"}, 
+                );
+            }
+        
+            return items
         }
     },
     components: {
