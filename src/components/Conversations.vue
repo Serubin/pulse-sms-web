@@ -6,7 +6,7 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <conversation-item v-for="conversation in conversations" :key="conversation.hash" :conversation-data="conversation" :small="small"></conversation-item>
+            <conversation-item v-for="conversation in conversations" :key="conversation.hash" :conversation-data="conversation" :archive="archive" :small="small"></conversation-item>
         </transition-group>
 
     </div>

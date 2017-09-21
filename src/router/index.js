@@ -31,6 +31,12 @@ let router = new VueRouter({
             props: true,
         },
         {
+            path: '/thread/:threadId/archived',
+            name: 'thread-archived',
+            component: Thread,
+            props: true,
+        },
+        {
             path: '/login',
             name: 'login',
             component: Login,

@@ -21,7 +21,7 @@ import { Util } from '@/utils'
 
 export default {
     name: 'conversation-item',
-    props: [ 'conversationData', 'small'],
+    props: [ 'conversationData', 'archive', 'small'],
 
     data () {
         return {
@@ -38,7 +38,7 @@ export default {
         routeToThread () {
             
             this.$router.push({ 
-                name: 'thread', params: { threadId: this.conversation_id, isRead: this.read }
+                name: 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
             })
         }
     },
