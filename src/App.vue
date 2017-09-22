@@ -15,8 +15,8 @@
                     <button class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
                         <i class="material-icons">more_vert</i>
                     </button>
-                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button">
-                        <li v-for="item in menu_items" class="mdl-menu__item" :id="item.name + '-btn'"><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item. title }}</a></li>
+                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button" >
+                        <li v-for="item in menu_items" class="mdl-menu__item" :id="item.name + '-btn'" @click.prevent="dispatchMenuButton(item.name)" v-mdl><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item. title }}</a></li>
                     </ul>
                 </div>
             </div>  <!-- End Toolbar-Inner -->
