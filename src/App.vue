@@ -135,7 +135,11 @@ export default {
 
             this.margin = margin
         },
-
+        
+        /**
+         * updateContactCache
+         * Launches requests to cache all current contacts
+         */
         updateContactCache () {
             let this_ = this;
 
@@ -145,7 +149,13 @@ export default {
             MessageManager.fetchConversations("index_archived")
                 .then(response => { this_._updateContactCache(response) })
         },
-
+        
+        /**
+         * _updateContactCache
+         * Adds response items to contact cache (stored locally)
+         * 
+         * @param response - server encoded response
+         */
         _updateContactCache (response) {
             let cache = [];
 

@@ -67,9 +67,13 @@ export default {
         },
 
         updateRead (id) {
+            
+            if(this.conversations.length < 1)
+                return;
+
             let index = this.getConversation(id);
             let conv = this.conversations[index];
-
+            
             conv.read = true;
             conv.hash = Hash(conv)
         },
@@ -104,7 +108,7 @@ export default {
             // Only update if list page
             if (to.name != from.name && to.name.indexOf('conversations-list') >= 0) {
                 this.conversations = [];
-                this.fetchConversations()
+                this.fetchConversations();
             }
 
         }
