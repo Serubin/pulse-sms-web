@@ -92,14 +92,24 @@ export default {
             loading: this.$store.state.loading,
             title: this.$store.state.title, 
             mm: null,
+            menu_items: []
         }
     },
 
     methods: {
+
+        /**
+         * Application start
+         * Used to allow for "late starts" such as after a login
+         * without refreshing page to remount app.
+         * Contains app components that require account to run.
+         */
         applicationStart () {
             this.mm = new MessageManager();
             this.updateContactCache();
+            this.populateMenuItems();
         },
+        
         toggleSidebar () {
             if(!this.full_theme)
                 this.$store.dispatch('sidebar_open', !this.sidebar_open);
@@ -150,7 +160,39 @@ export default {
                 ));
             }
             this.$store.dispatch('setContacts', cache) 
+        },
+
+        /**
+         * Populate Menu Items
+         * Populates drop down menu items based on page and message context
+         * Is called when routes change. Updates data() item to
+         * maintain UI reactivity.
+         */
+        populateMenuItems () {
+            let items = [
+                { 'name': "account", 'title': "My Account" },
+                { 'name': "settings", 'title': "Settings" },
+                { 'name': "help", 'title': "Help and Feedback" },
+                { 'name': "logout", 'title': "Logout" }
+            ]
+            
+            if (this.$route.name.includes('thread')) {
+                items.unshift(
+                    { 'name': "delete", 'title': "Delete Conversation" },
+                    (this.$route.path.includes("archived") ?
+                        { 'name': "archive", 'title': "Archive Conversation" } :
+                        {'name': "unarchive", 'title': "Unarchive Conversation" }),
+                    { "name": "blacklist", 'title': "Blacklist Contact"}, 
+                );
+            }
+        
+            return this.menu_items = items;
+        },
+
+        dispatchMenuButton (name) {
+            this.$store.state.msgbus.$emit(name + "-btn");
         }
+
     },
 
     computed: {
@@ -167,27 +209,12 @@ export default {
             return this.$store.state.full_theme;
         },
 
-        menu_items () {
-            let items = [
-                { 'name': "account", 'title': "My Account" },
-                { 'name': "settings", 'title': "Settings" },
-                { 'name': "help", 'title': "Help and Feedback" },
-                { 'name': "logout", 'title': "Logout" }
-            ]
-            
-            // TODO this doesn't work. at all
-            if (this.$route.name.includes('thread')) {
-                items.unshift(
-                    { 'name': "delete", 'title': "Delete Conversation" },
-                    (this.$route.path.includes("archived") ?
-                        { 'name': "archive", 'title': "Archive Conversation" } :
-                        {'name': "unarchive", 'title': "Unarchive Conversation" }),
-                    { "name": "blacklist", 'title': "Blacklist Contact"}, 
-                );
-            }
-        
-            return items
+    },
+    watch: {
+        '$route' (to, from) { // To update dropdown menu
+            this.populateMenuItems();
         }
+
     },
     components: {
         Sidebar,
