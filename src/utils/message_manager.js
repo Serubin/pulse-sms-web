@@ -10,9 +10,9 @@ export default class MessageManager {
     }
 
     openWebSocket() {
-        let socket = new WebSocket( Url.get('websocket') + Url.getAccountParam());
+        this.socket = new WebSocket( Url.get('websocket') + Url.getAccountParam());
 
-        socket.onopen = () => {
+        this.socket.onopen = () => {
             let subscribe = JSON.stringify({
                 "command": "subscribe",
                 "identifier": JSON.stringify({
@@ -20,14 +20,18 @@ export default class MessageManager {
                 })
             });
 
-            socket.send(subscribe);
+            this.socket.send(subscribe);
         };
 
-        socket.onmessage = (e) => this.handleMessage(e);
+        this.socket.onmessage = (e) => this.handleMessage(e);
 
-        socket.onclose = () => {
-            setTimeout(this.openWebSocket, 50);
+        this.socket.onclose = () => {
+            setTimeout(this.openWebSocket, 50); //TODO handle if cannot open again
         };
+    }
+
+    closeWebSocket() {
+        this.socket.close();
     }
 
     handleMessage (e) {

@@ -45,11 +45,13 @@ let router = new VueRouter({
 })
     
 router.beforeEach((to, from, next) => {
-    
-    if(to.name == 'login')
+    if (to.name == null)
+        return next({name: 'Conversations-list'});
+
+    if (to.name == 'login')
         return next();
 
-    if( store.state.account_id == '' )
+    if (store.state.account_id == '' )
         return next({name: 'login'});
 
     next();
