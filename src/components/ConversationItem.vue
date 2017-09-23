@@ -38,7 +38,7 @@ export default {
         routeToThread () {
             
             this.$router.push({ 
-                name: 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
+                name: !this.archive ? 'thread' : 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
             })
         }
     },

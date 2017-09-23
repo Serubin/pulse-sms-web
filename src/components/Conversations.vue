@@ -53,10 +53,11 @@ export default {
         },
 
         updateConversation (event_obj) {
+
             // Find conversation
             let conv_index = this.getConversation(event_obj.conversation_id);
             let conv_object = this.conversations[conv_index];
-
+            
             if(typeof conv_index == "undefined")
                 return false;
 
