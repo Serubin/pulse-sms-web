@@ -50,6 +50,9 @@ export const mutations = {
         for(let i = 0; i < payload.length; i++)   
             state.contacts[payload[i].id] = payload[i]
     },
+    clearContacts: (state, payload) => {
+        state.contacts = {};
+    }
 }
 
 export const actions = {

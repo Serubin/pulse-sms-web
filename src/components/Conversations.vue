@@ -24,10 +24,19 @@ export default {
     props: ['small', 'archive'],
 
     mounted () {
+
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
         this.$store.state.msgbus.$on('conversationRead', this.updateRead)
+        this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         this.fetchConversations();
+    },
+
+    beforeDestroy () {
+
+        this.$store.state.msgbus.$off('newMessage')
+        this.$store.state.msgbus.$off('conversationRead')
+        this.$store.state.msgbus.$off('refresh-btn');
     },
 
     methods: {
@@ -87,6 +96,15 @@ export default {
             }
 
             return null;
+        },
+
+        /**
+         * refresh
+         * Force refresh messages - fetches from server
+         */
+        refresh () {
+            this.conversations = [];
+            this.fetchConversations();
         }
     },
 

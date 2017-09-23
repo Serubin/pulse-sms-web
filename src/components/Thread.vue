@@ -30,8 +30,16 @@ export default {
         this.fetchMessages();
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
+        this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         window.addEventListener('focus', (e) => this.markAsRead());
+    },
+
+    beforeDestroy () {
+        
+        this.$store.state.msgbus.$off('newMessage');
+        this.$store.state.msgbus.$off('refresh-btn');
+
     },
 
     data () {
@@ -132,6 +140,11 @@ export default {
             });
         },
 
+        /**
+         * markAsRead
+         * Mark's thread as read if not already read.
+         * Thread will keep track of it's own read state (estimated)
+         */
         markAsRead () {
 
             if(this.read) // Already read
@@ -139,6 +152,15 @@ export default {
 
             MessageManager.markAsRead(this.conversation_id);
             this.read = true; // Set thread to read
+        },
+        /**
+         * refresh
+         * Force refresh messages - fetches from server
+         */
+        refresh () {
+            this.messages = [];
+            this.fetchMessages();
+            this.markAsRead();
         }
     },
 

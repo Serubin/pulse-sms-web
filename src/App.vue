@@ -9,7 +9,7 @@
                 </div>
                 <span class="mdl-layout-title" id="toolbar-title">{{ title }}</span>
                 <div id="toolbar_icons">
-                    <button id="refresh-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                    <button id="refresh-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
                         <i class="material-icons">refresh</i>
                     </button>
                     <button class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
@@ -80,10 +80,14 @@ export default {
         else
             this.$store.state.msgbus.$on('start-app', this.applicationStart);
 
+        this.$store.state.msgbus.$on('logout-btn', this.logout);
+
     },
 
     beforeDestroy () { // Remove event listeners
         window.removeEventListener('resize', this.handleResize)
+
+        this.$store.state.msgbus.$off('start-app');
     },
 
     data () {
@@ -113,6 +117,8 @@ export default {
         toggleSidebar () {
             if(!this.full_theme)
                 this.$store.dispatch('sidebar_open', !this.sidebar_open);
+            else 
+                this.$router.push('/');
         },
 
         handleResize () { // Handle resize. Toggles full/mini theme
@@ -201,6 +207,17 @@ export default {
 
         dispatchMenuButton (name) {
             this.$store.state.msgbus.$emit(name + "-btn");
+        },
+
+        logout () {
+            this.$store.dispatch('account_id', "");
+            this.$store.dispatch('hash', "");
+            this.$store.dispatch('salt', "");
+            this.$store.commit('clearContacts', {});
+
+            window.localStorage.clear();
+
+            this.$router.push('login');
         }
 
     },

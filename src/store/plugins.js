@@ -5,6 +5,7 @@ import { KEYS, state } from '@/store/state.js'
 const localStoreSync = store => {
     const local_items = {
         'contacts': KEYS.CONTACTS,
+        'clearContacts': KEYS.CONTACTS,
         'account_id': KEYS.ACCOUNT_ID,
         'hash': KEYS.HASH,
         'salt': KEYS.SALT,
