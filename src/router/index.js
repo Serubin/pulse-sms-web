@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import store from '@/store/'
 
 import Login from '@/components/Login.vue'
+import Settings from '@/components/Settings.vue'
 import Thread from '@/components/Thread.vue'
 import Conversations from '@/components/Conversations.vue'
 
@@ -40,6 +41,11 @@ let router = new VueRouter({
             path: '/login',
             name: 'login',
             component: Login,
+        },
+        {
+            path: '/settings',
+            name: 'settings',
+            component: Settings,
         },
     ],
 })
