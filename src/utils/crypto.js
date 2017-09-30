@@ -16,7 +16,7 @@ export default class Crypto {
         var combinedKey = store.state.account_id + ":" + store.state.hash + "\n"
         var key = sjcl.misc.pbkdf2(combinedKey, store.state.salt, 10000, 256, hmacSHA1)
 
-        store.dispatch('aes', new sjcl.cipher.aes(key)); // Store aes
+        store.commit('aes', new sjcl.cipher.aes(key)); // Store aes
         sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
     }
     

@@ -81,7 +81,7 @@ export default {
                     Vue.nextTick(() => { 
                         this.scrollToBottom();
 
-                        this.$store.dispatch("loading", false);
+                        this.$store.commit("loading", false);
                         this.markAsRead();
                     });
                 });

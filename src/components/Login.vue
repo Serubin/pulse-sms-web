@@ -49,7 +49,7 @@ export default {
         if (this.$store.state.account_id != '')
             return this.$router.push({ name: 'conversations-list'});
 
-        this.$store.dispatch("loading", false);
+        this.$store.commit("loading", false);
     },
 
     data () {
@@ -91,9 +91,9 @@ export default {
             let derived_key = sjcl.misc.pbkdf2(this.password, data.salt2, 10000, 256, hmacSHA1);
             let base64_hash = sjcl.codec.base64.fromBits(derived_key);
             // Save data
-            this.$store.dispatch('account_id', data.account_id);
-            this.$store.dispatch('hash', base64_hash);
-            this.$store.dispatch('salt', data.salt1);
+            this.$store.commit('account_id', data.account_id);
+            this.$store.commit('hash', base64_hash);
+            this.$store.commit('salt', data.salt1);
 
             Crypto.setupAes(); // Setup aes for session
 

@@ -80,7 +80,7 @@ export default {
          */
         close_drawer() {
             if(!this.full_theme)
-                this.$store.dispatch('sidebar_open', false);
+                this.$store.commit('sidebar_open', false);
         }
     },
 

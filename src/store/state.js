@@ -82,48 +82,6 @@ export const mutations = {
 }
 
 export const actions = {
-    title: ({ commit, state }, title) => {
-        if (state.title != title) // Reduce uneeded state changes
-            commit('title', title)
-    },
-    loading: ({ commit, state }, loading) => {
-        if (state.loading != loading) // Reduce uneeded state changes
-            commit('loading', loading)
-    },
-    full_theme: ({ commit, state }, full_theme) => { 
-        if(state.full_theme != full_theme) // Reduce uneeded state changes
-            commit('full_theme', full_theme);
-    },
-    sidebar_open: ({ commit, state }, sidebar_open) => {
-        if (state.sidebar_open != sidebar_open) // Reduce uneeded state changes
-            commit('sidebar_open', sidebar_open)
-    },
-    // Saved account id
-    account_id: ({ commit, state }, account_id) => {
-        if (state.account_id != account_id) // Reduce uneeded state changes
-            commit('account_id', account_id)
-    },
-    // Saved hash
-    hash: ({ commit, state }, hash) => {
-        if (state.hash != hash) // Reduce uneeded state changes
-            commit('hash', hash)
-    },
-    // Saved salt
-    salt: ({ commit, state }, salt) => {
-        if (state.salt != salt) // Reduce uneeded state changes
-            commit('salt', salt)
-    },
-    // AES
-    aes: ({ commit, state }, aes) => {
-        if (state.aes != aes) // Reduce uneeded state changes
-            commit('aes', aes)
-    },
-    setContacts: ({ commit, state }, contacts) => {
-        if(!Array.isArray(contacts))
-            contacts = [ contacts ]
-
-        commit('contacts', contacts);
-    }
 
 }
 

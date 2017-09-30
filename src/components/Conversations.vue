@@ -48,7 +48,7 @@ export default {
                     this.conversations = response;
 
                     if (!this.small)
-                        this.$store.dispatch("loading", false);
+                        this.$store.commit("loading", false);
                 });
         },
 

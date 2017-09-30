@@ -119,7 +119,7 @@ export default {
         
         toggleSidebar () {
             if(!this.full_theme)
-                this.$store.dispatch('sidebar_open', !this.sidebar_open);
+                this.$store.commit('sidebar_open', !this.sidebar_open);
             else 
                 this.$router.push('/');
         },
@@ -130,11 +130,11 @@ export default {
             var margin = 0;
 
             if (width > 750) {
-                this.$store.dispatch('sidebar_open', true);
-                this.$store.dispatch('full_theme', true);
+                this.$store.commit('sidebar_open', true);
+                this.$store.commit('full_theme', true);
             } else {
-                this.$store.dispatch('sidebar_open', false);
-                this.$store.dispatch('full_theme', false);
+                this.$store.commit('sidebar_open', false);
+                this.$store.commit('full_theme', false);
             }
 
             // Handles left side offset
@@ -178,7 +178,7 @@ export default {
                     Util.expandColor(response[i].color_dark)
                 ));
             }
-            this.$store.dispatch('setContacts', cache) 
+            this.$store.commit('setContacts', cache) 
         },
 
         /**
@@ -221,9 +221,9 @@ export default {
         },
 
         logout () {
-            this.$store.dispatch('account_id', "");
-            this.$store.dispatch('hash', "");
-            this.$store.dispatch('salt', "");
+            this.$store.commit('account_id', "");
+            this.$store.commit('hash', "");
+            this.$store.commit('salt', "");
             this.$store.commit('clearContacts', {});
 
             window.localStorage.clear();
