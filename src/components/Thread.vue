@@ -46,7 +46,7 @@ export default {
     data () {
         return {
             conversation_id: this.threadId,
-            read: this.isRead, // TODO not defined if loaded from start
+            read: this.isRead || true, 
             messages: [],
         }
     },

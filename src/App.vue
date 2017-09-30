@@ -34,7 +34,7 @@
             <!-- Content Area -->
             <div id="content"> 
                 <main class="mdl-layout__content">
-                    <router-view></router-view>
+                    <router-view v-if="mount_view"></router-view>
                 </main>
             </div> <!-- End Content Area -->
 
@@ -89,6 +89,9 @@ export default {
         window.removeEventListener('resize', this.handleResize)
 
         this.$store.state.msgbus.$off('start-app');
+        this.$store.state.msgbus.$off('settings-btn');
+        this.$store.state.msgbus.$off('logout-btn');
+
     },
 
     data () {
@@ -98,7 +101,8 @@ export default {
             title: this.$store.state.title, 
             mm: null,
             toolbar_color: this.$store.state.colors.default,
-            menu_items: []
+            menu_items: [],
+            mount_view: false,
         }
     },
 
@@ -115,6 +119,8 @@ export default {
             this.updateContactCache();
             MessageManager.fetchSettings();
             this.populateMenuItems();
+
+            this.mount_view = true;  // Mount view after application start
         },
         
         toggleSidebar () {
