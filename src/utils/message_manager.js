@@ -54,6 +54,32 @@ export default class MessageManager {
         }
 
     }
+    
+    static fetchSettings () {
+        let constructed_url = Url.get('settings') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    MessageManager.processSettings(response);
+                    resolve(response);
+
+                }).catch(response => reject(response));
+        });
+
+        return promise
+    }
+    static processSettings (response) {
+        response = response.data
+
+        store.commit('theme_base', response.base_theme);
+        store.commit('theme_round', response.rounder_bubbles);
+        store.commit('theme_global_colors', {
+            default: Util.expandColor(response.color),
+            dark: Util.expandColor(response.color_dark),
+            accent: Util.expandColor(response.color_accent),
+        });
+        store.commit('theme_use_global', response.use_global_theme);
+    }
 
     static fetchConversations (index) {
         const constructed_url = 

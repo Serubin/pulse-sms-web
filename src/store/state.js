@@ -5,8 +5,13 @@ export const KEYS  = {
     HASH: 'hash',
     SALT: 'salt',
     CONTACTS: 'contacts',
+    NOTIFICATIONS: 'notifications',
     THEME: {
         ROUND: 'theme_round',
+        BASE: 'theme_base',
+        GLOBAL_COLORS: 'theme_global_colors',
+        USE_GLOBAL: 'theme_use_global',
+        TOOLBAR: 'theme_toolbar',
     }
 }
 
@@ -18,7 +23,12 @@ export const state = {
     hash: JSON.parse( window.localStorage.getItem(KEYS.HASH) || empty_str ),
     salt: JSON.parse( window.localStorage.getItem(KEYS.SALT) || empty_str ),
     contacts: JSON.parse( window.localStorage.getItem(KEYS.CONTACTS) || '{}' ),
+    theme_base: JSON.parse( window.localStorage.getItem(KEYS.THEME.BASE) || "\"light\"" ),
+    theme_global_colors: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_COLORS) || "\"default\"" ),
+    theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
     theme_round: JSON.parse( window.localStorage.getItem(KEYS.THEME.ROUND) || "false" ),
+    theme_toolbar: JSON.parse( window.localStorage.getItem(KEYS.THEME.TOOLBAR) || "false" ),
+    notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "false" ),
 
     // Per session
     aes: '',
@@ -26,6 +36,12 @@ export const state = {
     sidebar_open: true,
     title: "PulseClient",
     loading: true,
+    colors: {
+        default: "#2196f3", 
+        dark: "#1565c0", 
+        accent: "#448aff",
+        text: "#ffffff",
+    },
 
     msgbus: new Vue(),
 }
@@ -46,7 +62,17 @@ export const mutations = {
     hash: (state, hash ) => state.hash = hash,
     salt: (state, salt ) => state.salt = salt,
     aes: (state, aes ) => state.aes = aes,
-    contacts: (state, payload) => {
+    theme_base: (state, theme_base ) => state.theme_base = theme_base,
+    theme_global_colors: (state, theme_global_colors ) => state.theme_global_colors = theme_global_colors,
+    theme_use_global: (state, theme_use_global ) => state.theme_use_global = theme_use_global,
+    theme_round: (state, theme_round ) => state.theme_round = theme_round,
+    notifications: (state, notifications) => state.notifications = notifications,
+    theme_toolbar: (state, theme_toolbar) => state.theme_toolbar = theme_toolbar,
+    colors: (state, colors) => state.colors = colors,
+    setContacts: (state, payload) => {
+        if(!Array.isArray(payload))
+            payload = [ payload ]
+
         for(let i = 0; i < payload.length; i++)   
             state.contacts[payload[i].id] = payload[i]
     },

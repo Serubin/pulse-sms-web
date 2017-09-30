@@ -51,19 +51,90 @@
 </template>
 
 <script>
+import { MessageManager } from '@/utils/'
+
 export default {
     name: 'settings',
+
     mounted () {
-        this.$store.dispatch("loading", false);
+        MessageManager.fetchSettings()
+            .then( response => {
+                this.$store.commit("loading", false);
+            })
     },
+
     data () {
         return {
-            base_theme: false,
-            round_bubbles: false,
-            global_colors: false,
-            use_global_theme: false,
-            colored_toolbar: false,
-            show_notifications: false,
+            colored_toolbar: this.$store.state.theme_toolbar,
+            show_notifications: this.$store.state.notifications,
+        }
+    },
+
+    computed: {
+        base_theme () {
+            let base = this.$store.state.theme_base;
+            base = base.charAt(0).toUpperCase() + base.slice(1);
+
+            return base;
+        },
+
+        global_colors () {
+            let colors = this.$store.state.theme_global_colors;
+
+            return this.rgbaToHex(colors.default) 
+                + ", " + this.rgbaToHex(colors.dark) 
+                + ", " + this.rgbaToHex(colors.accent);
+        },
+
+        use_global_theme () {
+            return this.boolToStr(this.$store.state.theme_use_global);
+        },
+
+        round_bubbles () {
+            return this.boolToStr(this.$store.state.theme_round);
+        }
+    },
+
+    methods: {
+        refreshSettings () {
+            MessageManager.fetchSettings();
+        },
+
+        /**
+         * rgbaToHex
+         * Converts rgba (css value, str) to string hex value (css)
+         * @param string - rgba(x, y, z, aa)
+         * @return #0x0y0z
+         */
+        rgbaToHex (rgba) {
+            let color_comps = rgba.match(/[0-9]+/g);
+            let str_16;
+            let hex = [];
+            
+            for( let c of color_comps) {
+                // Parse to b16
+                str_16 = parseInt(c).toString(16);
+                // Normalize
+                str_16 = str_16.length == 1 ? "0" + str_16 : str_16;
+
+                hex.push(str_16);
+            }
+            
+            return "#" + hex.slice(0, (hex.length - 1)).join("")
+        },
+        /**
+         * Bool to Yes/No
+         */
+        boolToStr (bool) {
+            return bool ? "Yes" : "No";
+        }
+    },
+    watch: {
+        'show_notifications' () {
+            this.$store.commit('notifications', this.show_notifications)
+        },
+        'colored_toolbar' () {
+            this.$store.commit('theme_toolbar', this.colored_toolbar)
         }
     }
 }

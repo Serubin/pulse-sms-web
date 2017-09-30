@@ -2,7 +2,7 @@
     <div id="app">
 
         <!-- Toolbar -->
-        <div id="toolbar"> 
+        <div id="toolbar" :style="{ backgroundColor: theme_toolbar }"> 
             <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
@@ -96,6 +96,7 @@ export default {
             loading: this.$store.state.loading,
             title: this.$store.state.title, 
             mm: null,
+            toolbar_color: this.$store.state.colors.default,
             menu_items: []
         }
     },
@@ -209,6 +210,14 @@ export default {
             this.$store.state.msgbus.$emit(name + "-btn");
         },
 
+        updateTheme (color) {
+            if (!this.$store.state.theme_toolbar)
+                return
+            
+            this.toolbar_color = color.default;
+
+        },
+
         logout () {
             this.$store.dispatch('account_id', "");
             this.$store.dispatch('hash', "");
@@ -235,11 +244,20 @@ export default {
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
         },
+        theme_toolbar () {
+            if (!this.$store.state.theme_toolbar) 
+                return "#f7f7f7"
+
+            return this.toolbar_color;
+        }
 
     },
     watch: {
         '$route' (to, from) { // To update dropdown menu
             this.populateMenuItems();
+        },
+        '$store.state.colors' (to) {
+            this.updateTheme(to);
         }
 
     },

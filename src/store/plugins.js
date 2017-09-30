@@ -9,6 +9,12 @@ const localStoreSync = store => {
         'account_id': KEYS.ACCOUNT_ID,
         'hash': KEYS.HASH,
         'salt': KEYS.SALT,
+        'theme_base': KEYS.THEME.BASE,
+        'theme_round': KEYS.THEME.ROUND,
+        'theme_global_colors': KEYS.THEME.GLOBAL_COLORS,
+        'theme_use_global': KEYS.THEME.USE_GLOBAL,
+        'theme_toolbar': KEYS.THEME.TOOLBAR,
+        'notifications': KEYS.NOTIFICATIONS,
     }
 
     // called after every mutation.
