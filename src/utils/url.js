@@ -9,6 +9,7 @@ export default class Url {
         "update_conversation":  "conversations/update/",
         "read":                 "conversations/read/",
         "dismiss":              "accounts/dismissed_notification/",
+        "settings":             "accounts/settings/",
         "websocket":            "stream",
     }
 

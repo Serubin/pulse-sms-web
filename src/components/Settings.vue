@@ -2,7 +2,7 @@
      <div id="settings" >
          <div class="page-content" id="account-list" v-mdl>
              <!-- Refresh Settings Button -->
-            <div class="click-item mdl-js-button mdl-js-ripple-effect" id="refresh_settings">
+            <div class="click-item mdl-js-button mdl-js-ripple-effect" id="refresh_settings" @click="refreshSettings">
                 <div class="mdl-color-text--grey-900">
                     Refresh settings from phone
                 </div>
@@ -32,14 +32,17 @@
                 <div class="mdl-color-text--grey-900">Apply to all Conversations</div>
                 <div class="mdl-color-text--grey-600">{{ use_global_theme }}</div>
             </div> <!-- End use global Theme -->
-
+            <br />
+            <h4>Web Settings</h4>
+            <br />
             <label for="colored-toolbar" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                 <input id="colored-toolbar" class="mdl-switch__input" type="checkbox" v-model="colored_toolbar">
                 <span class="mdl-switch__label mdl-color-text--grey-900">
                     Use colored toolbar
                 </span>
             </label>
-
+            <br />
+            <br />
             <label for="show-notifications" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                 <input id="show-notifications" class="mdl-switch__input" type="checkbox" v-model="show_notifications">
                 <span class="mdl-switch__label mdl-color-text--grey-900">

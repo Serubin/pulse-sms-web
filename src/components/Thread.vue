@@ -32,6 +32,7 @@ export default {
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
+
         window.addEventListener('focus', (e) => this.markAsRead());
     },
 

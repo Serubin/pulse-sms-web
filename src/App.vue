@@ -80,6 +80,7 @@ export default {
         else
             this.$store.state.msgbus.$on('start-app', this.applicationStart);
 
+        this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
 
     },
@@ -112,6 +113,7 @@ export default {
         applicationStart () {
             this.mm = new MessageManager();
             this.updateContactCache();
+            MessageManager.fetchSettings();
             this.populateMenuItems();
         },
         
