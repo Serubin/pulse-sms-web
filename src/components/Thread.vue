@@ -46,14 +46,14 @@ export default {
     data () {
         return {
             conversation_id: this.threadId,
-            read: this.isRead,
+            read: this.isRead, // TODO not defined if loaded from start
             messages: [],
         }
     },
 
     computed: {
 
-        contact_data () { 
+        contact_data () {
             return this.$store.getters.getContact(this.conversation_id);
         },
 
