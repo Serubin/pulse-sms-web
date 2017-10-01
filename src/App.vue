@@ -77,8 +77,10 @@ export default {
 
         if (this.$store.state.account_id != '') // If logged in
             this.applicationStart();            // Start app
-        else
+        else {
             this.$store.state.msgbus.$on('start-app', this.applicationStart);
+            this.mount_view = true;
+        }
 
         this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
