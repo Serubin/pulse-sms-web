@@ -7,12 +7,19 @@ export default class MessageManager {
 
     constructor () {
         this.openWebSocket();
+
+        this.has_disconnected = false;
     }
 
     openWebSocket() {
-        this.socket = new WebSocket( Url.get('websocket') + Url.getAccountParam());
+
+        let this_ = this;
+
+        this.socket = new WebSocket(Url.get('websocket') + Url.getAccountParam());
 
         this.socket.onopen = () => {
+
+            console.log("open web socket");
             let subscribe = JSON.stringify({
                 "command": "subscribe",
                 "identifier": JSON.stringify({
@@ -21,18 +28,36 @@ export default class MessageManager {
             });
 
             this.socket.send(subscribe);
+
+            if (this_.has_disconnected)
+                store.state.msgbus.$emit('refresh-btn');
+
+            this.has_disconnected = false;
         };
 
         this.socket.onmessage = (e) => this.handleMessage(e);
 
         this.socket.onclose = () => {
-            setTimeout(this.openWebSocket, 50); //TODO handle if cannot open again
+            console.log("closed web socket");
         };
+
+        this.socket.onerror = (e) => {
+            console.log("error web socket");
+            this.has_disconnected = true;
+
+            let reopenTimeout = Math.floor(Math.random() * 20);
+            while (reopenTimeout < 5) {
+                reopenTimeout = Math.floor(Math.random() * 20);
+            }
+
+            setTimeout(this_.openWebSocket, reopenTimeout);
+        }
     }
 
     closeWebSocket() {
         this.socket.close();
     }
+
 
     handleMessage (e) {
         
