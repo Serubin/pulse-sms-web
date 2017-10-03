@@ -1,3 +1,4 @@
+import jump from 'jump.js'
 
 export default class Util {
     /**
@@ -49,6 +50,7 @@ export default class Util {
         return snippet;
         
     }
+
     static generateContact (id, title, color, accent, ligher, darker) {
         return {
             id: id,
@@ -62,7 +64,31 @@ export default class Util {
         }
     }
 
+    /**
+        * Scroll to bottom
+        * Scrolls thread to bottom of page; uses tween easing
+        *
+        * @param speed - default to zero (no animation)
+        */
+    static scrollToBottom(speed) {
 
+        if (typeof speed == "undefined") // Speed defaults to zero
+            speed = 0;
+
+        const docu = document.getElementsByTagName("html")[0].clientHeight
+        const body = document.getElementsByTagName("body")[0].clientHeight
+
+        const bottom = Math.max(docu, body); // Calculate bottom
+
+        // Jump to bottom
+        jump(bottom, {
+            duration: speed,
+            easing: (t, b, c, d) => { // easeInOutCubic - @jaxgeller
+                if ((t/=d/2) < 1) return c/2*t*t*t + b;
+                return c/2*((t-=2)*t*t + 2) + b;
+            }
+        });
+    }
 }
 
 /**
