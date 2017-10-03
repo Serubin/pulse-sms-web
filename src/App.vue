@@ -92,6 +92,8 @@ export default {
         this.$store.state.msgbus.$off('settings-btn');
         this.$store.state.msgbus.$off('logout-btn');
 
+        this.mm.closeWebSocket();
+
     },
 
     data () {
