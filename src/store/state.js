@@ -69,7 +69,7 @@ export const mutations = {
     notifications: (state, notifications) => state.notifications = notifications,
     theme_toolbar: (state, theme_toolbar) => state.theme_toolbar = theme_toolbar,
     colors: (state, colors) => state.colors = colors,
-    setContacts: (state, payload) => {
+    contacts: (state, payload) => {
         if(!Array.isArray(payload))
             payload = [ payload ]
 
