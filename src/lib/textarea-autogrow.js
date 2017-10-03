@@ -1,6 +1,7 @@
+import { Util } from '@/utils'
+
 export default class AutoGrow {
     
-
     constructor (options) {
 
         this.content     = null;
@@ -10,7 +11,8 @@ export default class AutoGrow {
         this.row = 0;
         
         this.settings = {
-            extra_line: false
+            extra_line: false,
+            content_el: undefined
         }
 
         this.content = document.getElementsByClassName("page-content")[0];
@@ -27,6 +29,9 @@ export default class AutoGrow {
 
         if(typeof options.extra_line != "undefined" || typeof options.extraLine != "undefined")
             this.settings.extra_line = options.extra_line || options.extraLine;
+
+        if(typeof options.content_el != "undefined" || typeof options.content_el != "undefined")
+            this.settings.content_el = options.content_el || options.content_el;
 
         this.createMirror();
 
@@ -66,12 +71,12 @@ export default class AutoGrow {
         this.textarea.style.height = mirrorHeight + 10 + "px";
 
         let margin = 24 + mirrorHeight;
-        if(textareaHeight != mirrorHeight) {
+        if(textareaHeight != mirrorHeight && typeof this.settings.content != undefined) {
             
             if(margin < 54)
-                this.content.style.marginBottom = "54px";
+                this.settings.content_el.style.marginBottom = "54px";
             else
-                this.content.style.marginBottom = margin + "px";
+                this.settings.content_el.style.marginBottom = margin + "px";
 
         }
     }
