@@ -14,7 +14,6 @@
 
 <script>
 import Vue from 'vue'
-import jump from 'jump.js'
 import { Util, MessageManager } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
@@ -79,7 +78,7 @@ export default {
 
                     // Wait for messages to render
                     Vue.nextTick(() => { 
-                        this.scrollToBottom();
+                        Util.scrollToBottom();
 
                         this.$store.commit("loading", false);
                         this.markAsRead();
@@ -108,38 +107,13 @@ export default {
             this.messages.push(event_obj);
             
             Vue.nextTick(() => {            // Animate on next tick to
-                this.scrollToBottom(250);   // avoid scrolling before render
+                Util.scrollToBottom(250);   // avoid scrolling before render
             });
 
             if (event_obj.type == 0 || event_obj.type == 6)
                 this.read = false;
         },
 
-        /**
-         * Scroll to bottom
-         * Scrolls thread to bottom of page; uses tween easing
-         *
-         * @param speed - default to zero (no animation)
-         */
-        scrollToBottom(speed) {
-
-            if (typeof speed == "undefined") // Speed defaults to zero
-                speed = 0;
-
-            const docu = document.getElementsByTagName("html")[0].clientHeight
-            const body = document.getElementsByTagName("body")[0].clientHeight
-
-            const bottom = Math.max(docu, body); // Calculate bottom
-
-            // Jump to bottom
-            jump(bottom, {
-                duration: speed,
-                easing: (t, b, c, d) => { // easeInOutCubic - @jaxgeller
-                    if ((t/=d/2) < 1) return c/2*t*t*t + b;
-                    return c/2*((t-=2)*t*t + 2) + b;
-                }
-            });
-        },
 
         /**
          * markAsRead
