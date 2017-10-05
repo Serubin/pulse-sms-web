@@ -104,7 +104,8 @@ export default {
          * Force refresh messages - fetches from server
          */
         refresh () {
-            this.conversations = [];
+            if (!this.small) // Don't clear list if using sidebar list
+                this.conversations = [];
             this.fetchConversations();
         }
     },
