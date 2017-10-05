@@ -18,7 +18,7 @@ export default class MessageManager {
         let this_ = this;
 
 
-        this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam(), [], {debug: true});
+        this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
 
         this.socket.addEventListener('open', () => {
             
