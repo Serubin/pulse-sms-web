@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import store from '@/store/'
+import ReconnectingWebsocket from 'reconnecting-websocket'
 
 import { Util, Url, Crypto } from '@/utils/'
 
 export default class MessageManager {
 
     constructor () {
+        this.socket = null;
         this.openWebSocket();
-
+        
         this.has_disconnected = false;
     }
 
@@ -15,49 +17,36 @@ export default class MessageManager {
 
         let this_ = this;
 
-        this.socket = new WebSocket(Url.get('websocket') + Url.getAccountParam());
 
-        this.socket.onopen = () => {
+        this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam(), [], {debug: true});
 
-            console.log("open web socket");
+        this.socket.addEventListener('open', () => {
+            
+            if (this.has_disconnected)
+                store.state.msgbus.$emit('refresh-btn');
+
+            this.has_disconnected = false;
+
             let subscribe = JSON.stringify({
                 "command": "subscribe",
                 "identifier": JSON.stringify({
                     "channel": "NotificationsChannel"
                 })
             });
-
             this.socket.send(subscribe);
 
-            if (this_.has_disconnected)
-                store.state.msgbus.$emit('refresh-btn');
+        });
 
-            this.has_disconnected = false;
-        };
+        this.socket.addEventListener('message', (e) => this.handleMessage(e));
 
-        this.socket.onmessage = (e) => this.handleMessage(e);
-
-        this.socket.onclose = () => {
-            console.log("closed web socket");
-        };
-
-        this.socket.onerror = (e) => {
-            console.log("error web socket");
+        this.socket.addEventListener('close', () => {
             this.has_disconnected = true;
-
-            let reopenTimeout = Math.floor(Math.random() * 20);
-            while (reopenTimeout < 5) {
-                reopenTimeout = Math.floor(Math.random() * 20);
-            }
-
-            setTimeout(this_.openWebSocket, reopenTimeout);
-        }
+        });
     }
 
     closeWebSocket() {
         this.socket.close();
     }
-
 
     handleMessage (e) {
         
