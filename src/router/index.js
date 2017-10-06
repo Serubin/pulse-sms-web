@@ -5,8 +5,8 @@ import store from '@/store/'
 
 import Login from '@/components/Login.vue'
 import Settings from '@/components/Settings.vue'
-import Thread from '@/components/Thread.vue'
-import Conversations from '@/components/Conversations.vue'
+import Thread from '@/components/Thread/'
+import Conversations from '@/components/Conversations/'
 
 Vue.use(VueRouter)
 

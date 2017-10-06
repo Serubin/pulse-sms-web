@@ -55,7 +55,7 @@ import '@/lib/hmacsha1.js'
 import { Util, Crypto, MessageManager } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
-import Conversations from '@/components/Conversations.vue'
+import Conversations from '@/components/Conversations/'
 import Splash from '@/components/Splash.vue'
 
 export default {

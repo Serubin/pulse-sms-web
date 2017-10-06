@@ -79,7 +79,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    @import "../assets/scss/_vars.scss";
+    @import "../../assets/scss/_vars.scss";
 
     .conversation-card {
         &.mdl-card {
