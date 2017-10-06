@@ -1,8 +1,8 @@
 <template>
     <div class="send-bar">
         <div class="send-bar-inner" id="sendbar">
-            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../assets/images/ic_attach.png"/>
-            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../assets/images/ic_mood.png"/>
+            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png"/>
+            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png"/>
             <div class="entry mdl-textfield mdl-js-textfield" v-mdl>
                 <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">Type message...</label>
@@ -54,7 +54,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-@import "../assets/scss/_vars.scss";
+@import "../../assets/scss/_vars.scss";
 
     .send-bar {
         height: auto;

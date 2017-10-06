@@ -17,8 +17,8 @@ import Vue from 'vue'
 import { Util, MessageManager } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
-import Message from '@/components/Message.vue'
-import Sendbar from '@/components/Sendbar.vue'
+import Message from './Message.vue'
+import Sendbar from './Sendbar.vue'
 
 export default {
     name: 'thread',
@@ -159,6 +159,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    @import "../assets/scss/_vars.scss";
+    @import "../../assets/scss/_vars.scss";
     
 </style>

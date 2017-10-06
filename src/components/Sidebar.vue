@@ -49,7 +49,7 @@
 
 <script>
 
-import Conversations from '@/components/Conversations.vue'
+import Conversations from '@/components/Conversations/'
 
 export default {
     name: 'sidebar',
