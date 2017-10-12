@@ -26,6 +26,9 @@ export default {
 
 
     mounted () {
+        this.previous_title = this.$store.state.title;
+        this.$store.commit('title', this.contact_data.title);
+
         this.fetchMessages();
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
@@ -40,6 +43,7 @@ export default {
         this.$store.state.msgbus.$off('newMessage');
         this.$store.state.msgbus.$off('refresh-btn');
 
+        this.$store.commit('title', this.previous_title);
     },
 
     data () {
@@ -47,6 +51,7 @@ export default {
             conversation_id: this.threadId,
             read: this.isRead || true, 
             messages: [],
+            previous_title: "",
         }
     },
 
@@ -144,8 +149,11 @@ export default {
             this.conversation_id = this.threadId;
             this.read = this.isRead
 
+            this.$store.commit('title', this.contact_data.title);
+
             this.messages = [];
             this.fetchMessages();
+
         }
     },
 

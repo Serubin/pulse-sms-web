@@ -7,7 +7,7 @@
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
                 </div>
-                <span class="mdl-layout-title" id="toolbar-title">{{ title }}</span>
+                <span class="mdl-layout-title" id="toolbar-title">{{ $store.state.title }}</span>
                 <div id="toolbar_icons">
                     <button id="refresh-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
                         <i class="material-icons">refresh</i>
@@ -16,7 +16,7 @@
                         <i class="material-icons">more_vert</i>
                     </button>
                     <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button" >
-                        <li v-for="item in menu_items" class="mdl-menu__item" :id="item.name + '-btn'" @click.prevent="dispatchMenuButton(item.name)" v-mdl><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item. title }}</a></li>
+                        <li v-for="item in menu_items" class="mdl-menu__item" :id="item.name + '-btn'" @click.prevent="dispatchMenuButton(item.name)" v-mdl><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item.title }}</a></li>
                     </ul>
                 </div>
             </div>  <!-- End Toolbar-Inner -->
@@ -102,7 +102,6 @@ export default {
         return {
             margin: 0,
             loading: this.$store.state.loading,
-            title: this.$store.state.title, 
             mm: null,
             toolbar_color: this.$store.state.colors.default,
             menu_items: [],
