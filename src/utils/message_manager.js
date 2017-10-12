@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import store from '@/store/'
+import emojione from 'emojione'
 import ReconnectingWebsocket from 'reconnecting-websocket'
 
 import { Util, Url, Crypto } from '@/utils/'
 
+//TODO This should be API manager or something.
 export default class MessageManager {
 
     constructor () {
@@ -58,6 +60,11 @@ export default class MessageManager {
 
         if (typeof json.message == "undefined") 
             return;
+
+        if (typeof json.message.content.data != "undefined")
+            json.message.content.data = emojione.unicodeToImage(
+                    json.message.content.data
+                );
         
         if (json.message.operation == "added_message") {
             let message = Crypto.decryptMessage(json.message.content)

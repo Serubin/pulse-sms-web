@@ -70,6 +70,10 @@ export default {
             return new Date(this.timestamp).toLocaleString()
         },
         styleGenerator () {
+            // Only style recieved and media
+            if (this.type != 0 && this.type != 6) 
+                return "";
+
             return "background: " + this.color + ";"
                 + "border-color: " + this.color
                 + " transparent;"

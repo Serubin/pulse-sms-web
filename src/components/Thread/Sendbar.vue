@@ -48,6 +48,11 @@ export default {
             
             this.message = "";
         },
+    },
+    watch: { 
+        '$route' (to) { // Update thread on route change
+            this.message = "";
+        }
     }
 }
 </script>
