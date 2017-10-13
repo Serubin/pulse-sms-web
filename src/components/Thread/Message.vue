@@ -2,6 +2,13 @@
     <div class="message-wrapper" :title="stringTime">
         <div :class="style_class"  :style="styleGenerator" :id="id" v-html="content">
             <!-- Content is inserted via v-html -->
+
+            <!-- Media -->
+            <a href="media_link" target="_blank" v-show="is_media">
+                <img class="media" src="media_thumb" alt="Thumbnail">
+                <div class="article-title"> {{ media_title }} </div>
+                <div class="article-snippet"> {{ media_content }} </div>
+            </a>
         </div>
     </div>
 </template>
@@ -58,7 +65,12 @@ export default {
             type: this.messageData.message_type,
             timestamp: this.messageData.timestamp,
             color: 'rgba(255,255,255,1)',
-            style_class: [ ]
+            style_class: [ ],
+            is_media: false,
+            media_link: "",
+            media_thumb: "",
+            media_title: "",
+            media_content: ""
         }
     },
 
