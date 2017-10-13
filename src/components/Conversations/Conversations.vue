@@ -50,6 +50,25 @@ export default {
                     if (!this.small)
                         this.$store.commit("loading", false);
                 });
+            
+            // Save to contact cache
+            let cache = [];
+
+            for(let item of this.conversations) {
+                cache.push(
+                    Util.generateContact(
+                        item.device_id,
+                        item.title,
+                        item.color,
+                        Util.expandColor(item.color_accent),
+                        Util.expandColor(item.color_light),
+                        Util.expandColor(item.color_dark)
+                    )
+                );
+            }
+
+            this.$store.commit('contacts', cache) 
+
         },
 
         updateConversation (event_obj) {

@@ -118,7 +118,6 @@ export default {
          */
         applicationStart () {
             this.mm = new MessageManager();
-            this.updateContactCache();
             MessageManager.fetchSettings();
             this.populateMenuItems();
         },
@@ -151,43 +150,6 @@ export default {
             this.margin = margin
         },
         
-        /**
-         * updateContactCache
-         * Launches requests to cache all current contacts
-         */
-        updateContactCache () {
-            let this_ = this;
-
-            MessageManager.fetchConversations("index_unarchived")
-                .then(response => { this_._updateContactCache(response) })
-
-            MessageManager.fetchConversations("index_archived")
-                .then(response => { this_._updateContactCache(response) })
-        },
-        
-        /**
-         * _updateContactCache
-         * Adds response items to contact cache (stored locally)
-         * 
-         * @param response - server encoded response
-         */
-        _updateContactCache (response) {
-            let cache = [];
-
-            for(let i = 0; i < response.length; i++) {
-                cache.push(Util.generateContact(
-                    response[i].device_id,
-                    response[i].title,
-                    response[i].color,
-                    Util.expandColor(response[i].color_accent),
-                    Util.expandColor(response[i].color_light),
-                    Util.expandColor(response[i].color_dark)
-                ));
-            }
-            this.$store.commit('contacts', cache) 
-        },
-
-
         /**
          * Populate Menu Items
          * Populates drop down menu items based on page and message context

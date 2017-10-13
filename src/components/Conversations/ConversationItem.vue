@@ -36,7 +36,17 @@ export default {
 
     methods: {
         routeToThread () {
-            
+                       
+            let contact_data = Util.generateContact(
+                this.conversation_id, 
+                this.title, 
+                this.color, 
+                Util.expandColor(this.conversationData.color_accent),
+                Util.expandColor(this.conversationData.color_light),
+                Util.expandColor(this.conversationData.color_dark)
+            )
+            this.$store.commit('contacts', contact_data);
+
             this.$router.push({ 
                 name: !this.archive ? 'thread' : 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
             })
