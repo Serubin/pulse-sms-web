@@ -44,6 +44,7 @@
         <transition name="splash-fade">
             <splash v-if="$store.state.loading"></splash>
         </transition>
+        <Snackbar />
     </div>
 </template>
 
@@ -57,6 +58,7 @@ import { Util, Crypto, MessageManager } from '@/utils'
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
 import Splash from '@/components/Splash.vue'
+import Snackbar from '@/components/Snackbar.vue'
 
 export default {
     name: 'app',
@@ -235,7 +237,8 @@ export default {
     components: {
         Sidebar,
         Conversations,
-        Splash
+        Splash,
+        Snackbar
     }
 }
 </script>

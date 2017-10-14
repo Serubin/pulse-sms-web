@@ -89,6 +89,18 @@ export default class Util {
             }
         });
     }
+
+    static snackbar(message) {
+        var data = {}
+
+        if(typeof message == "string")
+            data = { message: message };
+        else
+            data = message
+
+        var notification = document.querySelector('.mdl-js-snackbar');
+        notification.MaterialSnackbar.showSnackbar(data);
+    }
 }
 
 /**
