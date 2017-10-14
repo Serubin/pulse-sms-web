@@ -47,7 +47,8 @@ export default class MessageManager {
     }
 
     closeWebSocket() {
-        this.socket.close();
+        this.socket.close(1000, '', {keepClosed: true});
+
     }
 
     handleMessage (e) {
@@ -116,7 +117,7 @@ export default class MessageManager {
 
                     resolve(response); // Resolve response
                 })
-                .catch(response => reject(response));
+                .catch( response => MessageManager.rejectHandler(response, reject) );
         });
 
         return promise
@@ -140,7 +141,7 @@ export default class MessageManager {
 
                     resolve(response); // Resolve response
                 })
-                .catch(response => reject(response));
+                .catch( response => MessageManager.rejectHandler(response, reject) );
         });
 
         return promise
@@ -213,7 +214,8 @@ export default class MessageManager {
         
         // Read conversation
         let constructed_url = Url.get('read') + "/" + thread_id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
+        Vue.http.post(constructed_url)
+            .reject((e) => MessageManager.rejectHandler(e));
 
         // Dismiss notifiction
         constructed_url = Url.get('dismiss') + Url.getAccountParam() 
@@ -226,5 +228,14 @@ export default class MessageManager {
         let max = 922337203685477;
 
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    static rejectHandler(e, callback=null) {
+        if (e.status == 401) 
+            return store.state.msgbus.$emit('logout-btn');
+            
+        if (callback)
+            return callback(e);
+
     }
 }

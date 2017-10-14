@@ -73,7 +73,6 @@ export default {
     },
 
     mounted () { // Add window event listener
-
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
 
@@ -192,12 +191,19 @@ export default {
         },
 
         logout () {
+
+            // Remove sensative data
             this.$store.commit('account_id', "");
             this.$store.commit('hash', "");
             this.$store.commit('salt', "");
             this.$store.commit('clearContacts', {});
-
+            
+            // Clear local storage (browser)
             window.localStorage.clear();
+            // Close socket
+            this.mm.closeWebSocket();
+
+            Util.snackbar("You've been logged out");
 
             this.$router.push('login');
         }
