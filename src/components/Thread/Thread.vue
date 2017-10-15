@@ -26,8 +26,6 @@ export default {
 
 
     mounted () {
-        this.previous_title = this.$store.state.title;
-        this.$store.commit('title', this.contact_data.title);
 
         this.fetchMessages();
         
@@ -87,6 +85,9 @@ export default {
 
                         this.$store.commit("loading", false);
                         this.markAsRead();
+
+                        this.previous_title = this.$store.state.title;
+                        this.$store.commit('title', this.contact_data.title);
                     });
                 });
         },
