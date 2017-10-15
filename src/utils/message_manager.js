@@ -24,8 +24,10 @@ export default class MessageManager {
 
         this.socket.addEventListener('open', () => {
             
-            if (this.has_disconnected)
+            if (this.has_disconnected) {
                 store.state.msgbus.$emit('refresh-btn');
+                Util.snackbar("And we're back!");
+            }
 
             this.has_disconnected = false;
 
@@ -41,7 +43,14 @@ export default class MessageManager {
 
         this.socket.addEventListener('message', (e) => this.handleMessage(e));
 
-        this.socket.addEventListener('close', () => {
+        this.socket.addEventListener('close', (e) => {
+
+            if (e.wasClean || e.code == 1001) // If not an error, ignore
+                return
+
+            if (!this.has_disconnected)
+                Util.snackbar("You've been disconnected. We're trying to reconnect you...");
+
             this.has_disconnected = true;
         });
     }

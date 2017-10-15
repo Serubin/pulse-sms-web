@@ -98,10 +98,12 @@ export default class Util {
         else
             data = message
 
-        var notification = document.querySelector('.mdl-js-snackbar');
-        notification.attributes.removeNamedItem("hidden");
+        var snackbar = document.querySelector('.mdl-js-snackbar');
 
-        notification.MaterialSnackbar.showSnackbar(data);
+        if (typeof snackbar.attributes['hidden'] != "undefined") // ad block work around
+            snackbar.attributes.removeNamedItem("hidden");
+
+        snackbar.MaterialSnackbar.showSnackbar(data);
     }
 }
 
