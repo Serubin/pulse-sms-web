@@ -24,10 +24,16 @@ export default {
         left: 24px;
         position: fixed;
         z-index: 45;
-    }
 
-    .mdl-snackbar--active {
-        transform: translate(0%, 0);
+        &--active {
+            transform: translate(0%, 0);
+        }
+
+        &__action {
+            opacity: 1;
+            height: 48px;
+            pointer-events: all;
+        }
     }
 
 </style>
