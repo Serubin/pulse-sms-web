@@ -163,9 +163,6 @@ export default class MessageManager {
 
         let id = MessageManager.generateId();
 
-        if (mime_type == "text/plain") 
-            data =  Util.entityEncode(data)
-
         let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Photo</i>";
 
         let encrypted = Crypto.encrypt(data);
