@@ -99,6 +99,8 @@ export default class Util {
             data = message
 
         var notification = document.querySelector('.mdl-js-snackbar');
+        notification.attributes.removeNamedItem("hidden");
+
         notification.MaterialSnackbar.showSnackbar(data);
     }
 }
