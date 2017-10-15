@@ -94,7 +94,8 @@ export default class MessageManager {
                     MessageManager.processSettings(response);
                     resolve(response);
 
-                }).catch(response => reject(response));
+                })
+                .catch( response => MessageManager.rejectHandler(response, reject) );
         });
 
         return promise
@@ -222,9 +223,9 @@ export default class MessageManager {
     static markAsRead (thread_id) {
         
         // Read conversation
-        let constructed_url = Url.get('read') + "/" + thread_id + Url.getAccountParam();
+        let constructed_url = Url.get('read') + thread_id + Url.getAccountParam();
         Vue.http.post(constructed_url)
-            .reject((e) => MessageManager.rejectHandler(e));
+            .catch((e) => MessageManager.rejectHandler(e));
 
         // Dismiss notifiction
         constructed_url = Url.get('dismiss') + Url.getAccountParam() 
