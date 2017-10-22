@@ -2,8 +2,8 @@
     <div class="send-bar">
         <div class="send-bar-inner" id="sendbar">
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png"/>
-            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png"/>
-            <Picker set="emojione"/>
+            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png" @click="toggleEmoji"/>
+            <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" v-show="show_emoji"/>
             <div class="entry mdl-textfield mdl-js-textfield" v-mdl>
                 <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">Type message...</label>
@@ -18,6 +18,7 @@
 
 <script>
 import AutoGrow from '@/lib/textarea-autogrow.js'
+import emojione from 'emojione'
 import 'vue-emoji-mart/css/emoji-mart.css'
 import { Picker } from 'vue-emoji-mart'
 import { MessageManager } from '@/utils'
@@ -33,6 +34,16 @@ export default {
     data () {
         return {
             message: "",
+            emojiStyle: {
+                position: "absolute",
+                left: 0,
+                bottom: "70px",
+                width: "18em",
+            },
+            perLine: 6,
+            set: 'emojione',
+            skin: 3,
+            show_emoji: false,
         }
     },
 
@@ -51,6 +62,16 @@ export default {
             
             this.message = "";
         },
+        toggleEmoji (toggle=null) {
+            if(typeof toggle != "boolean")
+                return this.show_emoji = !this.show_emoji
+            
+            return this.show_emoji = toggle
+
+        },
+        insertEmoji(e) {
+            this.message += e.native;
+        }
     },
     watch: { 
         '$route' (to) { // Update thread on route change
