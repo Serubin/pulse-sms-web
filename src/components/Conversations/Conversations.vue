@@ -41,16 +41,10 @@ export default {
     },
 
     methods: {
-        conversationComponent (e) {
-            console.log(e)
-        },
-
         fetchConversations () {
-
             // Start query
             MessageManager.fetchConversations(this.index)
                 .then(response => this.processConversations(response));
-
         },
 
         processConversations (response) {
@@ -59,16 +53,16 @@ export default {
             const titles = [];
             
             for(let i in response) {
-                let item = response[i]
+                const item = response[i]
                 
-                let title = this.calculateTitle(item);
+                const title = this.calculateTitle(item);
                 
                 if (!titles.includes(title)) {
                     titles.push(title);
 
                     this.conversations.push({
                         label: title, 
-                        hash: i
+                        hash: Hash(title)
                     });
                 }
 
@@ -115,7 +109,7 @@ export default {
             // Move conversation if required
             if (conv_index != 0) {
                 conv_object = this.conversations.splice(conv_index, 1)[0]
-                this.conversations.unshift(conv_object)
+                this.conversations.splice(1, 0, conv_object)
             } 
         },
 
