@@ -6,7 +6,7 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <conversation-item v-for="conversation in conversations" :key="conversation.hash" :conversation-data="conversation" :archive="archive" :small="small"></conversation-item>
+                <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'ConversationTitle'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
         </transition-group>
 
     </div>
@@ -17,6 +17,7 @@ import Vue from 'vue';
 import Hash from 'object-hash'
 import { Util, MessageManager } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
+import ConversationTitle from './ConversationTitle.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
@@ -40,21 +41,40 @@ export default {
     },
 
     methods: {
+        conversationComponent (e) {
+            console.log(e)
+        },
+
         fetchConversations () {
 
             // Start query
             MessageManager.fetchConversations(this.index)
-                .then(response => {
-                    this.conversations = response;
+                .then(response => this.processConversations(response));
 
-                    if (!this.small)
-                        this.$store.commit("loading", false);
-                });
+        },
+
+        processConversations (response) {
+
+            const cache = [];
+            const titles = [];
             
-            // Save to contact cache
-            let cache = [];
+            for(let i in response) {
+                let item = response[i]
+                
+                let title = this.calculateTitle(item);
+                
+                if (!titles.includes(title)) {
+                    titles.push(title);
 
-            for(let item of this.conversations) {
+                    this.conversations.push({
+                        label: title, 
+                        hash: i
+                    });
+                }
+
+                this.conversations.push(item)
+
+                // Save to contact cache
                 cache.push(
                     Util.generateContact(
                         item.device_id,
@@ -65,9 +85,13 @@ export default {
                         Util.expandColor(item.color_dark)
                     )
                 );
+
             }
 
             this.$store.commit('contacts', cache) 
+
+            if (!this.small)
+                this.$store.commit("loading", false);
 
         },
 
@@ -126,6 +150,62 @@ export default {
             if (!this.small) // Don't clear list if using sidebar list
                 this.conversations = [];
             this.fetchConversations();
+        },
+
+        calculateTitle (conversation) {
+            if (conversation.pinned) 
+                return "Pinned";
+            else if (isToday(conversation.timestamp)) 
+                return "Today";
+            else if (isYesterday(conversation.timestamp)) 
+                return "Yesterday";
+            else if (isLastWeek(conversation.timestamp)) 
+                return "This Week";
+            else if (isLastMonth(conversation.timestamp)) 
+                return "This Month";
+            else 
+                return "Older";
+            
+
+            function isToday(timestamp) {
+                let current = new Date();
+                zeroDate(current);
+
+                let time = new Date(timestamp);
+                zeroDate(time);
+
+                return current.getTime() == time.getTime();
+            }
+
+            function isYesterday(timestamp) {
+                let yesterday = new Date();
+                zeroDate(yesterday);
+                yesterday = new Date(yesterday.getTime() - 1000 * 60 * 60 * 24)
+
+                let time = new Date(timestamp);
+                zeroDate(time);
+
+                return yesterday.getTime() == time.getTime();
+            }
+
+            function isLastWeek(timestamp) {
+                let lastWeek = new Date();
+                zeroDate(lastWeek);
+                lastWeek = new Date(lastWeek.getTime() - 1000 * 60 * 60 * 24 * 7)
+
+                return timestamp > lastWeek.getTime() && timestamp < (new Date().getTime());
+            }
+
+            function isLastMonth(timestamp) {
+                return new Date().getMonth() == new Date(timestamp).getMonth();
+            }
+
+            function zeroDate(date) {
+                date.setHours(0);
+                date.setMinutes(0);
+                date.setSeconds(0);
+                date.setMilliseconds(0);
+            }
         }
     },
 
@@ -155,6 +235,7 @@ export default {
 
     components: {
         ConversationItem,
+        ConversationTitle,
         Spinner
     }
 }
