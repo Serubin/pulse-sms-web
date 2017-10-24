@@ -6,7 +6,7 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-                <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'ConversationTitle'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
+                <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
         </transition-group>
 
     </div>
@@ -17,7 +17,7 @@ import Vue from 'vue';
 import Hash from 'object-hash'
 import { Util, MessageManager } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
-import ConversationTitle from './ConversationTitle.vue'
+import DayLabel from './DayLabel.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
@@ -41,6 +41,7 @@ export default {
     },
 
     methods: {
+
         fetchConversations () {
             // Start query
             MessageManager.fetchConversations(this.index)
@@ -229,7 +230,7 @@ export default {
 
     components: {
         ConversationItem,
-        ConversationTitle,
+        DayLabel,
         Spinner
     }
 }

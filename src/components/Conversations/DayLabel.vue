@@ -4,7 +4,7 @@
 
 <script>
 export default {
-    name: 'conversation-title',
+    name: 'day-label',
     props: ['conversationData']
 }
 </script>
