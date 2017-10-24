@@ -10,6 +10,10 @@
                 <div class="article-snippet"> {{ media_content }} </div>
             </a>
         </div>
+
+        <div class="date-wrapper" v-if="dateLabel">
+            <div :class="dateType" class="mdl-color-text--grey-500"> {{ dateLabel }}</div>
+        </div>
     </div>
 </template>
 
@@ -70,7 +74,8 @@ export default {
             media_link: "",
             media_thumb: "",
             media_title: "",
-            media_content: ""
+            media_content: "",
+            dateLabel: null,
         }
     },
 
@@ -89,6 +94,13 @@ export default {
             return "background: " + this.color + ";"
                 + "border-color: " + this.color
                 + " transparent;"
+        },
+
+        dateType () {
+            if (this.type == 0 || this.type == 6)
+                return "date-sent"
+
+            return "date-recieved"
         }
     }
 }
