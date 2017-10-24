@@ -50,8 +50,11 @@ export default {
 
         processConversations (response) {
 
+            const updatedConversations = [];
+
             const cache = [];
             const titles = [];
+
             
             for(let i in response) {
                 const item = response[i]
@@ -61,13 +64,13 @@ export default {
                 if (!titles.includes(title)) {
                     titles.push(title);
 
-                    this.conversations.push({
+                    updatedConversations.push({
                         label: title, 
                         hash: Hash(title)
                     });
                 }
 
-                this.conversations.push(item)
+                updatedConversations.push(item)
 
                 // Save to contact cache
                 cache.push(
@@ -83,7 +86,8 @@ export default {
 
             }
 
-            this.$store.commit('contacts', cache) 
+            this.$store.commit('contacts', cache);
+            this.conversations = updatedConversations;
 
             if (!this.small)
                 this.$store.commit("loading", false);
@@ -93,8 +97,7 @@ export default {
         updateConversation (event_obj) {
 
             // Find conversation
-            let conv_index = this.getConversation(event_obj.conversation_id);
-            let conv_object = this.conversations[conv_index];
+            let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
             
             if(typeof conv_index == "undefined")
                 return false;
@@ -102,15 +105,15 @@ export default {
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
 
-            conv_object.snippet = new_snippet;
-            conv_object.read = event_obj.read;
+            conv.snippet = new_snippet;
+            conv.read = event_obj.read;
 
-            conv_object.hash = Hash(conv_object);
+            conv.hash = Hash(conv);
 
             // Move conversation if required
             if (conv_index != 0) {
-                conv_object = this.conversations.splice(conv_index, 1)[0]
-                this.conversations.splice(1, 0, conv_object)
+                conv = this.conversations.splice(conv_index, 1)[0]
+                this.conversations.splice(1, 0, conv)
             } 
         },
 
@@ -119,21 +122,20 @@ export default {
             if(this.conversations.length < 1)
                 return;
 
-            let index = this.getConversation(id);
-            let conv = this.conversations[index];
+            let { conv, conv_index } = this.getConversation(id);
             
             conv.read = true;
             conv.hash = Hash(conv)
         },
 
         getConversation(id) {
-            for(var i = 0; i < this.conversations.length; i++) {
-                if(id != this.conversations[i].device_id)
-                    continue;
+            for(let conv_index in this.conversations) {
+                let conv = this.conversations[conv_index];
 
-                return i;
+                if(id == conv.device_id)
+                    return  { conv, conv_index };
             }
-
+            
             return null;
         },
 
