@@ -6,7 +6,7 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <conversation-item v-for="conversation in conversations" :key="conversation.hash" :conversation-data="conversation" :archive="archive" :small="small"></conversation-item>
+                <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
         </transition-group>
 
     </div>
@@ -17,6 +17,7 @@ import Vue from 'vue';
 import Hash from 'object-hash'
 import { Util, MessageManager } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
+import DayLabel from './DayLabel.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
@@ -40,21 +41,38 @@ export default {
     },
 
     methods: {
-        fetchConversations () {
 
+        fetchConversations () {
             // Start query
             MessageManager.fetchConversations(this.index)
-                .then(response => {
-                    this.conversations = response;
+                .then(response => this.processConversations(response));
+        },
 
-                    if (!this.small)
-                        this.$store.commit("loading", false);
-                });
+        processConversations (response) {
+
+            const updatedConversations = [];
+
+            const cache = [];
+            const titles = [];
+
             
-            // Save to contact cache
-            let cache = [];
+            for(let i in response) {
+                const item = response[i]
+                
+                const title = this.calculateTitle(item);
+                
+                if (!titles.includes(title)) {
+                    titles.push(title);
 
-            for(let item of this.conversations) {
+                    updatedConversations.push({
+                        label: title, 
+                        hash: Hash(title)
+                    });
+                }
+
+                updatedConversations.push(item)
+
+                // Save to contact cache
                 cache.push(
                     Util.generateContact(
                         item.device_id,
@@ -65,17 +83,23 @@ export default {
                         Util.expandColor(item.color_dark)
                     )
                 );
+
             }
 
-            this.$store.commit('contacts', cache) 
+            this.$store.commit('contacts', cache);
+            this.conversations = updatedConversations;
+
+            if (!this.small) {
+                this.$store.commit("loading", false);
+                this.$store.commit('title', this.title);
+            }
 
         },
 
         updateConversation (event_obj) {
 
             // Find conversation
-            let conv_index = this.getConversation(event_obj.conversation_id);
-            let conv_object = this.conversations[conv_index];
+            let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
             
             if(typeof conv_index == "undefined")
                 return false;
@@ -83,15 +107,15 @@ export default {
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
 
-            conv_object.snippet = new_snippet;
-            conv_object.read = event_obj.read;
+            conv.snippet = new_snippet;
+            conv.read = event_obj.read;
 
-            conv_object.hash = Hash(conv_object);
+            conv.hash = Hash(conv);
 
             // Move conversation if required
             if (conv_index != 0) {
-                conv_object = this.conversations.splice(conv_index, 1)[0]
-                this.conversations.unshift(conv_object)
+                conv = this.conversations.splice(conv_index, 1)[0]
+                this.conversations.splice(1, 0, conv)
             } 
         },
 
@@ -100,21 +124,20 @@ export default {
             if(this.conversations.length < 1)
                 return;
 
-            let index = this.getConversation(id);
-            let conv = this.conversations[index];
+            let { conv, conv_index } = this.getConversation(id);
             
             conv.read = true;
             conv.hash = Hash(conv)
         },
 
         getConversation(id) {
-            for(var i = 0; i < this.conversations.length; i++) {
-                if(id != this.conversations[i].device_id)
-                    continue;
+            for(let conv_index in this.conversations) {
+                let conv = this.conversations[conv_index];
 
-                return i;
+                if(id == conv.device_id)
+                    return  { conv, conv_index };
             }
-
+            
             return null;
         },
 
@@ -126,11 +149,68 @@ export default {
             if (!this.small) // Don't clear list if using sidebar list
                 this.conversations = [];
             this.fetchConversations();
+        },
+
+        calculateTitle (conversation) {
+            if (conversation.pinned) 
+                return "Pinned";
+            else if (isToday(conversation.timestamp)) 
+                return "Today";
+            else if (isYesterday(conversation.timestamp)) 
+                return "Yesterday";
+            else if (isLastWeek(conversation.timestamp)) 
+                return "This Week";
+            else if (isLastMonth(conversation.timestamp)) 
+                return "This Month";
+            else 
+                return "Older";
+            
+
+            function isToday(timestamp) {
+                let current = new Date();
+                zeroDate(current);
+
+                let time = new Date(timestamp);
+                zeroDate(time);
+
+                return current.getTime() == time.getTime();
+            }
+
+            function isYesterday(timestamp) {
+                let yesterday = new Date();
+                zeroDate(yesterday);
+                yesterday = new Date(yesterday.getTime() - 1000 * 60 * 60 * 24)
+
+                let time = new Date(timestamp);
+                zeroDate(time);
+
+                return yesterday.getTime() == time.getTime();
+            }
+
+            function isLastWeek(timestamp) {
+                let lastWeek = new Date();
+                zeroDate(lastWeek);
+                lastWeek = new Date(lastWeek.getTime() - 1000 * 60 * 60 * 24 * 7)
+
+                return timestamp > lastWeek.getTime() && timestamp < (new Date().getTime());
+            }
+
+            function isLastMonth(timestamp) {
+                return new Date().getMonth() == new Date(timestamp).getMonth();
+            }
+
+            function zeroDate(date) {
+                date.setHours(0);
+                date.setMinutes(0);
+                date.setSeconds(0);
+                date.setMilliseconds(0);
+            }
         }
     },
 
     data () {
         return {
+            title: "Conversations",
             conversations: [],
         }
     },
@@ -155,6 +235,7 @@ export default {
 
     components: {
         ConversationItem,
+        DayLabel,
         Spinner
     }
 }

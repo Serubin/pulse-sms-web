@@ -168,7 +168,7 @@ export default {
             if (this.$route.name.includes('thread')) {
                 items.unshift(
                     { 'name': "delete", 'title': "Delete Conversation" },
-                    (this.$route.path.includes("archived") ?
+                    ( !this.$route.path.includes("archived") ?
                         { 'name': "archive", 'title': "Archive Conversation" } :
                         {'name': "unarchive", 'title': "Unarchive Conversation" }),
                     { "name": "blacklist", 'title': "Blacklist Contact"}, 
