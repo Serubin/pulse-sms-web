@@ -85,7 +85,7 @@ export default {
             media_thumb: "",
             media_title: "",
             media_content: "",
-            dateLabel: this.messageData.dateLabel || null
+            dateLabel: this.messageData.dateLabel
         }
     },
 
