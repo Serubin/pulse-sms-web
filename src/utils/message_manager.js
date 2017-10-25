@@ -1,4 +1,5 @@
 import Vue from 'vue'
+
 import store from '@/store/'
 import emojione from 'emojione'
 import ReconnectingWebsocket from 'reconnecting-websocket'
@@ -73,15 +74,48 @@ export default class MessageManager {
 
         if (typeof json.message.content.data != "undefined")
             json.message.content.data = emojione.unicodeToImage(
-                    json.message.content.data
-                );
+                json.message.content.data
+            );
         
         if (json.message.operation == "added_message") {
             let message = Crypto.decryptMessage(json.message.content)
 
+            this.notify(message);
+
             store.state.msgbus.$emit('newMessage', message);
         } else if (json.message.operation == "read_conversation") {
             store.state.msgbus.$emit('conversationRead', json.message.content.id);
+        }
+
+    }
+
+    notify(message) {
+
+        if (Notification.permission != "granted" && !store.state.notifications)
+            return
+
+        if (message.type != 0)
+            return;
+        
+        const contact = store.getters.getContact(message.conversation_id);
+
+        if (contact != null && contact.mute)
+            return;
+
+        const title = contact.title;
+        const snippet = contact.private_notifications 
+                            ? "" : Util.generateSnippet(message);
+
+        const link = "/thread/" + message.conversation_id;
+
+        var notification = new Notification(title, {
+            icon: '/static/images/android-desktop.png',
+            body: snippet
+        });
+
+        notification.onclick = () => {
+            window.focus()
+            router.push(link);
         }
 
     }

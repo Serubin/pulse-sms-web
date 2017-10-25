@@ -77,6 +77,8 @@ export default {
                     Util.generateContact(
                         item.device_id,
                         item.title,
+                        item.mute,
+                        item.private_notifications,
                         item.color,
                         Util.expandColor(item.color_accent),
                         Util.expandColor(item.color_light),

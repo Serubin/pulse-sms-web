@@ -51,10 +51,12 @@ export default class Util {
         
     }
 
-    static generateContact (id, title, color, accent, ligher, darker) {
+    static generateContact (id, title, mute, private_notifications, color, accent, ligher, darker) {
         return {
             id: id,
             title: title,
+            mute: mute,
+            private_notifications: private_notifications,
             colors: {
                 default: color,
                 accent: accent,

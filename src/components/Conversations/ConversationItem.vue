@@ -31,6 +31,8 @@ export default {
             read: this.conversationData.read,
             color: this.conversationData.color,
             timestamp: this.conversationData.timestamp,
+            mute: this.conversationData.mute,
+            private_notifications: this.conversationData.private_notifications
         }
     },
 
@@ -40,6 +42,8 @@ export default {
             let contact_data = Util.generateContact(
                 this.conversation_id, 
                 this.title, 
+                this.mute,
+                this.private_notifications,
                 this.color, 
                 Util.expandColor(this.conversationData.color_accent),
                 Util.expandColor(this.conversationData.color_light),
