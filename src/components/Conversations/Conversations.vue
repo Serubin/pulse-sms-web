@@ -89,8 +89,10 @@ export default {
             this.$store.commit('contacts', cache);
             this.conversations = updatedConversations;
 
-            if (!this.small)
+            if (!this.small) {
                 this.$store.commit("loading", false);
+                this.$store.commit('title', this.title);
+            }
 
         },
 
@@ -208,6 +210,7 @@ export default {
 
     data () {
         return {
+            title: "Conversations",
             conversations: [],
         }
     },
