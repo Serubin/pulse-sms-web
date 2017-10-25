@@ -1,6 +1,7 @@
 <template>
     <div class="message-wrapper" :title="stringTime">
         <div :class="style_class"  :style="styleGenerator" :id="id" v-html="content">
+            <div> {{ message_from }} </div>
             <!-- Content is inserted via v-html -->
 
             <!-- Media -->
@@ -58,6 +59,13 @@ export default {
             }
         }
 
+        // Display "From" in group messages
+        if ((this.message_from != null && this.message_from.length) != 0 &&
+            this.type == 0) {
+
+            this.message_from = "<b>" + this.message_from + ":</b><br/>";
+            this.content = this.message_from + this.content;
+        }
 
     },
 
@@ -68,6 +76,8 @@ export default {
             content: this.messageData.data,
             type: this.messageData.message_type,
             timestamp: this.messageData.timestamp,
+            message_from: this.messageData.message_from,
+
             color: 'rgba(255,255,255,1)',
             style_class: [ ],
             is_media: false,
@@ -75,7 +85,7 @@ export default {
             media_thumb: "",
             media_title: "",
             media_content: "",
-            dateLabel: null,
+            dateLabel: this.messageData.dateLabel || null
         }
     },
 
@@ -95,7 +105,6 @@ export default {
                 + "border-color: " + this.color
                 + " transparent;"
         },
-
         dateType () {
             if (this.type == 0 || this.type == 6)
                 return "date-sent"
