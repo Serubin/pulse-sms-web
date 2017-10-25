@@ -28,7 +28,7 @@ export const state = {
     theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
     theme_round: JSON.parse( window.localStorage.getItem(KEYS.THEME.ROUND) || "false" ),
     theme_toolbar: JSON.parse( window.localStorage.getItem(KEYS.THEME.TOOLBAR) || "false" ),
-    notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "false" ),
+    notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
 
     // Per session
     aes: '',
