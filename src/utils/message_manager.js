@@ -16,6 +16,9 @@ export default class MessageManager {
         this.has_disconnected = false;
     }
 
+    /**
+     * Open reconnecting websocket.
+     */
     openWebSocket() {
 
         let this_ = this;
@@ -56,13 +59,18 @@ export default class MessageManager {
         });
     }
 
+    /**
+     * Perminently close socket
+     */
     closeWebSocket() {
         this.socket.close(1000, '', {keepClosed: true});
-
     }
 
+    /**
+     * Handle incoming socket data
+     * @param e - socket event
+     */
     handleMessage (e) {
-        
 
         if (e.data.indexOf("ping") != -1)  // Is keep alive event
             return;
@@ -89,6 +97,10 @@ export default class MessageManager {
 
     }
 
+    /**
+     * Submit notification for message
+     * @param message  - message object
+     */
     notify(message) {
 
         if (Notification.permission != "granted" && !store.state.notifications)
@@ -134,6 +146,7 @@ export default class MessageManager {
 
         return promise
     }
+
     static processSettings (response) {
         response = response.data
 
