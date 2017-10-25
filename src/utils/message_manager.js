@@ -230,6 +230,19 @@ export default class MessageManager {
         Vue.http.post(constructed_url);
     }
 
+    static archiver (archive, conversation) {
+        let constructed_url;
+
+        if (archive)
+            constructed_url = Url.get('archive')
+        else
+            constructed_url = Url.get('unarchive')
+        
+        constructed_url += conversation + Url.getAccountParam();
+
+        Vue.http.post(constructed_url);
+    }
+
     static generateId () {
         let min = 1;
         let max = 922337203685477;

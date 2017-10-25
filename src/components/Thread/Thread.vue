@@ -32,6 +32,9 @@ export default {
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
+        this.$store.state.msgbus.$on('archive-btn', this.archive);
+        this.$store.state.msgbus.$on('unarchive-btn', this.archive);
+
 
         window.addEventListener('focus', (e) => this.markAsRead());
     },
@@ -40,6 +43,9 @@ export default {
         
         this.$store.state.msgbus.$off('newMessage');
         this.$store.state.msgbus.$off('refresh-btn');
+
+        this.$store.state.msgbus.$off('archive-btn', this.archive);
+        this.$store.state.msgbus.$off('unarchive-btn', this.archive);
 
         this.$store.commit('title', this.previous_title);
     },
@@ -61,6 +67,10 @@ export default {
 
         color () {
             return this.contact_data.colors.default;
+        },
+
+        isArchived () {
+            return this.$route.path.includes("archived");
         }
     },
 
@@ -158,7 +168,12 @@ export default {
             this.fetchMessages();
             this.markAsRead();
         },
-
+        
+        archive () {
+            MessageManager.archiver(!this.isArchived, this.conversation_id);
+            this.$router.push( !this.isArchived ? "/archived" : "/")
+        },
+        
         compareTimestamps(date, nextDate, length) {
 
             if (nextDate.getTime() > date.getTime() + (1000 * 60 * length))
