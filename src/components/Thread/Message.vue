@@ -107,9 +107,8 @@ export default {
         },
         dateType () {
             if (this.type == 0 || this.type == 6)
-                return "date-sent"
-
-            return "date-recieved"
+                return "date-received"
+            return "date-sent"
         }
     }
 }
@@ -119,81 +118,95 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
 
+    .date-wrapper {
+        clear: both;
+
+        .date-sent {
+            float: right;
+            margin-right: 36px;
+        }
+
+        .date-received {
+            float: left;
+            margin-left: 36px;
+        }
+    }
+    
     .message-wrapper {
         user-select: text;
         clear: both;
         display: block;
-    }
 
-    .message, .message-round {
-        position: relative;
-        padding: 16px;
-        margin: 4px 8px 4px 8px;
-        max-width: 310px;
-        border-radius: 2px;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        min-width: 18px;
+        .message, .message-round {
+            position: relative;
+            padding: 16px;
+            margin: 4px 8px 4px 8px;
+            max-width: 310px;
+            border-radius: 2px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            min-width: 18px;
 
-        &:after {
-            content: "";
-            position: absolute;
-            bottom: -20px;
-            left: 50px;
-            border-style: solid;
-            display: block;
-            top: 0px;
-            bottom: auto;
+            &:after {
+                content: "";
+                position: absolute;
+                bottom: -20px;
+                left: 50px;
+                border-style: solid;
+                display: block;
+                top: 0px;
+                bottom: auto;
+            }
         }
-    }
 
-    .received {
-        float: left;
-        color: white;
-        margin-left: 28px;
-        background: white;
-        border-color: red transparent;
+        .received {
+            float: left;
+            color: white;
+            margin-left: 28px;
+            background: white;
+            border-color: red transparent;
 
-        &:after {
-            left: -18px;
-            border-width: 15px 0 0 20px;
-            border-color: inherit;
+            &:after {
+                left: -18px;
+                border-width: 15px 0 0 20px;
+                border-color: inherit;
+            }
         }
-    }
 
-    .sent {
-        float: right;
-        color: black;
-        margin-right: 28px;
-        background: white;
+        .sent {
+            float: right;
+            color: black;
+            margin-right: 28px;
+            background: white;
 
-        &:after {
-            right: -18px;
-            border-width: 15px 20px 0 0;
-            border-color: white transparent;
+            &:after {
+                right: -18px;
+                border-width: 15px 20px 0 0;
+                border-color: white transparent;
+            }
         }
-    }
-    
-    .error {
-        float: right;
-        color: black;
-        margin-right: 28px;
-        background: #F44336;
-        color: white;
+        
+        .error {
+            float: right;
+            color: black;
+            margin-right: 28px;
+            background: #F44336;
+            color: white;
 
-        &:after {
-            right: -18px;
-            border-width: 15px 20px 0 0;
-            border-color: #F44336 transparent;
+            &:after {
+                right: -18px;
+                border-width: 15px 20px 0 0;
+                border-color: #F44336 transparent;
+            }
         }
-    }
 
-    .info {
-        text-align: center;
-        margin: auto;
+        .info {
+            text-align: center;
+            margin: auto;
 
-        &:after {
-            border-color: transparent transparent;
+            &:after {
+                border-color: transparent transparent;
+            }
         }
     }
 

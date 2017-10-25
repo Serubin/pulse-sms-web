@@ -75,9 +75,24 @@ export default {
             MessageManager.fetchThread(this.conversation_id)
                 .then(response => {
 
+                    let nextTimestamp;
+
                     // Flip message order and push to local state
-                    for(let i = (response.length - 1); i >= 0; i--) 
+                    for(let i = (response.length - 1); i >= 0; i--) {
+
+                        if (i == 0) // nextTimestamp processing
+                            nextTimestamp = new Date();
+                        else 
+                            nextTimestamp = new Date(response[i - 1].timestamp);
+
+                        response[i].dateLabel = this.compareTimestamps(
+                            new Date(response[i].timestamp), nextTimestamp, 15
+                        );
+                        
+                        // Push to list
                         this.messages.push(response[i]);
+
+                    }
 
                     // Wait for messages to render
                     Vue.nextTick(() => { 
@@ -142,6 +157,15 @@ export default {
             this.messages = [];
             this.fetchMessages();
             this.markAsRead();
+        },
+
+        compareTimestamps(date, nextDate, length) {
+
+            if (nextDate.getTime() > date.getTime() + (1000 * 60 * length))
+                return date.toLocaleString();
+            else 
+                return null;
+
         }
     },
 
