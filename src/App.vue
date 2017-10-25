@@ -86,6 +86,9 @@ export default {
         this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
 
+        if (this.$store.state.notifications)
+            Notification.requestPermission();
+
     },
 
     beforeDestroy () { // Remove event listeners

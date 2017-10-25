@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import router from '@/router/'
 import store from '@/store/'
 import emojione from 'emojione'
 import ReconnectingWebsocket from 'reconnecting-websocket'

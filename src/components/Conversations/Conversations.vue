@@ -103,7 +103,7 @@ export default {
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
             
-            if(typeof conv_index == "undefined")
+            if(!conv || !conv_index)
                 return false;
 
             // Generate new snippet
@@ -123,24 +123,28 @@ export default {
 
         updateRead (id) {
             
-            if(this.conversations.length < 1)
-                return;
-
             let { conv, conv_index } = this.getConversation(id);
+
+            if(!conv || !conv_index)
+                return false;
             
             conv.read = true;
             conv.hash = Hash(conv)
         },
 
         getConversation(id) {
-            for(let conv_index in this.conversations) {
-                let conv = this.conversations[conv_index];
+
+            let conv_index = null;
+            let conv = null;
+
+            for(conv_index in this.conversations) {
+                conv = this.conversations[conv_index];
 
                 if(id == conv.device_id)
                     return  { conv, conv_index };
             }
             
-            return null;
+            return  { conv, conv_index };
         },
 
         /**
