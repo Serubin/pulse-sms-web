@@ -6,8 +6,7 @@ import ReconnectingWebsocket from 'reconnecting-websocket'
 
 import { Util, Url, Crypto } from '@/utils/'
 
-//TODO This should be API manager or something.
-export default class MessageManager {
+export default class Api {
 
     constructor () {
         this.socket = null;
@@ -165,7 +164,7 @@ export default class MessageManager {
 
                     resolve(response); // Resolve response
                 })
-                .catch( response => MessageManager.rejectHandler(response, reject) );
+                .catch( response => Api.rejectHandler(response, reject) );
         });
 
         return promise
@@ -189,7 +188,7 @@ export default class MessageManager {
 
                     resolve(response); // Resolve response
                 })
-                .catch( response => MessageManager.rejectHandler(response, reject) );
+                .catch( response => Api.rejectHandler(response, reject) );
         });
 
         return promise
@@ -199,7 +198,7 @@ export default class MessageManager {
 
         let account_id = store.state.account_id;
 
-        let id = MessageManager.generateId();
+        let id = Api.generateId();
 
         let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Photo</i>";
 
@@ -260,7 +259,7 @@ export default class MessageManager {
         // Read conversation
         let constructed_url = Url.get('read') + thread_id + Url.getAccountParam();
         Vue.http.post(constructed_url)
-            .catch((e) => MessageManager.rejectHandler(e));
+            .catch((e) => Api.rejectHandler(e));
 
         // Dismiss notifiction
         constructed_url = Url.get('dismiss') + Url.getAccountParam() 
@@ -286,11 +285,11 @@ export default class MessageManager {
         const promise = new Promise((resolve, reject) => {
             Vue.http.get( constructed_url )
                 .then( response => {
-                    MessageManager.processSettings(response);
+                    Api.processSettings(response);
                     resolve(response);
 
                 })
-                .catch( response => MessageManager.rejectHandler(response, reject) );
+                .catch( response => Api.rejectHandler(response, reject) );
         });
 
         return promise

@@ -15,7 +15,7 @@
 <script>
 import Vue from 'vue';
 import Hash from 'object-hash'
-import { Util, MessageManager } from '@/utils'
+import { Util, Api } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
 import DayLabel from './DayLabel.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -44,7 +44,7 @@ export default {
 
         fetchConversations () {
             // Start query
-            MessageManager.fetchConversations(this.index)
+            Api.fetchConversations(this.index)
                 .then(response => this.processConversations(response));
         },
 

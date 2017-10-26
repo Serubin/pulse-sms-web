@@ -38,7 +38,7 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 import Vue from 'vue'
-import { Crypto, Url, MessageManager } from '@/utils/'
+import { Crypto, Url, Api } from '@/utils/'
 import Spinner from '@/components/Spinner.vue'
 
 
@@ -71,7 +71,7 @@ export default {
             this.error = false;
             this.loading = true;
 
-            MessageManager.login(this.username, this.password)
+            Api.login(this.username, this.password)
                 .then((data) => this.handleData(data.data))
                 .catch((data) => this.handleError(data));
         },

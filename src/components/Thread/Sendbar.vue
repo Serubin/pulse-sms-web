@@ -17,7 +17,7 @@
 
 <script>
 import AutoGrow from '@/lib/textarea-autogrow.js'
-import { MessageManager } from '@/utils'
+import { Api } from '@/utils'
 
 export default {
     name: 'Sendbar',
@@ -44,7 +44,7 @@ export default {
             if (this.message.length <= 0) 
                 return;
 
-            MessageManager.sendMessage(this.message, "text/plain", this.threadId)
+            Api.sendMessage(this.message, "text/plain", this.threadId)
             
             this.message = "";
         },

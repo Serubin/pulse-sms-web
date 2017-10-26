@@ -54,13 +54,13 @@
 </template>
 
 <script>
-import { MessageManager } from '@/utils/'
+import { Api } from '@/utils/'
 
 export default {
     name: 'settings',
 
     mounted () {
-        MessageManager.fetchSettings()
+        Api.fetchSettings()
             .then( response => {
                 this.$store.commit("loading", false);
             })
@@ -100,7 +100,7 @@ export default {
 
     methods: {
         refreshSettings () {
-            MessageManager.fetchSettings();
+            Api.fetchSettings();
         },
 
         /**

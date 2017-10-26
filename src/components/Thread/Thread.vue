@@ -14,7 +14,7 @@
 
 <script>
 import Vue from 'vue'
-import { Util, MessageManager } from '@/utils'
+import { Util, Api } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
 import Message from './Message.vue'
@@ -82,7 +82,7 @@ export default {
          * this.messages for rendering.
          */
         fetchMessages () {
-            MessageManager.fetchThread(this.conversation_id)
+            Api.fetchThread(this.conversation_id)
                 .then(response => {
 
                     let nextTimestamp;
@@ -156,7 +156,7 @@ export default {
             if(this.read) // Already read
                 return;
 
-            MessageManager.markAsRead(this.conversation_id);
+            Api.markAsRead(this.conversation_id);
             this.read = true; // Set thread to read
         },
         /**
@@ -170,7 +170,7 @@ export default {
         },
         
         archive () {
-            MessageManager.archiver(!this.isArchived, this.conversation_id);
+            Api.archiver(!this.isArchived, this.conversation_id);
             this.$router.push( !this.isArchived ? "/archived" : "/")
         },
         

@@ -53,7 +53,7 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 
-import { Util, Crypto, MessageManager } from '@/utils'
+import { Util, Crypto, Api } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
@@ -121,8 +121,8 @@ export default {
          * Contains app components that require account to run.
          */
         applicationStart () {
-            this.mm = new MessageManager();
-            MessageManager.fetchSettings();
+            this.mm = new Api();
+            Api.fetchSettings();
             this.populateMenuItems();
         },
         
