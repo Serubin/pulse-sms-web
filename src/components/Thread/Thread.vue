@@ -28,6 +28,8 @@ export default {
     mounted () {
 
         this.fetchMessages();
+
+        this.$el.querySelector('#message-entry').focus();
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -194,6 +196,10 @@ export default {
             this.messages = [];
             this.fetchMessages();
 
+        },
+
+        'conversation_id' (to) {
+            this.$el.querySelector('#message-entry').focus();
         }
     },
 
