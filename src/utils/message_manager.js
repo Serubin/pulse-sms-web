@@ -131,34 +131,25 @@ export default class MessageManager {
         }
 
     }
-    
-    static fetchSettings () {
-        let constructed_url = Url.get('settings') + Url.getAccountParam();
+ 
+    static login (username, password) {
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
-                    MessageManager.processSettings(response);
-                    resolve(response);
+            const constructed_url = Url.get('login')
+            const request = {
+                username,
+                password 
+            };
 
-                })
-                .catch( response => MessageManager.rejectHandler(response, reject) );
+            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+                .then((response) => resolve(response))
+                .catch((error) =>reject(error));
+
         });
 
         return promise
+
     }
 
-    static processSettings (response) {
-        response = response.data
-
-        store.commit('theme_base', response.base_theme);
-        store.commit('theme_round', response.rounder_bubbles);
-        store.commit('theme_global_colors', {
-            default: Util.expandColor(response.color),
-            dark: Util.expandColor(response.color_dark),
-            accent: Util.expandColor(response.color_accent),
-        });
-        store.commit('theme_use_global', response.use_global_theme);
-    }
 
     static fetchConversations (index) {
         const constructed_url = 
@@ -288,6 +279,35 @@ export default class MessageManager {
         constructed_url += conversation + Url.getAccountParam();
 
         Vue.http.post(constructed_url);
+    }
+
+    static fetchSettings () {
+        let constructed_url = Url.get('settings') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    MessageManager.processSettings(response);
+                    resolve(response);
+
+                })
+                .catch( response => MessageManager.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
+
+    static processSettings (response) {
+        response = response.data
+
+        store.commit('theme_base', response.base_theme);
+        store.commit('theme_round', response.rounder_bubbles);
+        store.commit('theme_global_colors', {
+            default: Util.expandColor(response.color),
+            dark: Util.expandColor(response.color_dark),
+            accent: Util.expandColor(response.color_accent),
+        });
+        store.commit('theme_use_global', response.use_global_theme);
     }
 
     static generateId () {

@@ -38,7 +38,7 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 import Vue from 'vue'
-import { Crypto, Url } from '@/utils/'
+import { Crypto, Url, MessageManager } from '@/utils/'
 import Spinner from '@/components/Spinner.vue'
 
 
@@ -71,15 +71,7 @@ export default {
             this.error = false;
             this.loading = true;
 
-            let constructed_url = Url.get('login')
-
-            let request = {
-                username: this.username,
-                password: this.password 
-            };
-
-
-            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            MessageManager.login(this.username, this.password)
                 .then((data) => this.handleData(data.data))
                 .catch((data) => this.handleError(data));
         },
