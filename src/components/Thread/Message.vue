@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import linkify from 'linkifyjs/html';
+
 export default {
     name: 'message',
     props: [ 'messageData', 'threadColor' ],
@@ -66,6 +68,9 @@ export default {
             this.message_from = "<b>" + this.message_from + ":</b><br/>";
             this.content = this.message_from + this.content;
         }
+
+        // Add links
+        this.content = linkify(this.content)
 
     },
 

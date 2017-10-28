@@ -13,6 +13,7 @@
   "dependencies": {
     "emojione": "^3.1.2",
     "jump.js": "^1.0.2",
+    "linkifyjs": "^2.1.5",
     "object-hash": "^1.1.8",
     "reconnecting-websocket": "^3.2.2",
     "vue": "^2.3.3",
