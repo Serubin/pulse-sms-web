@@ -38,7 +38,10 @@ export default {
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
 
-        window.addEventListener('focus', (e) => this.markAsRead());
+        window.addEventListener('focus', (e) => { 
+            this.markAsRead();
+            this.$el.querySelector('#message-entry').focus();
+        });
     },
 
     beforeDestroy () {
