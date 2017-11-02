@@ -28,39 +28,56 @@ class MediaLoader {
         };
     }
     
-    getMedia(id, mime) {
-        this.id = id;
-        this.mime = mime;
+    getMedia(id, mime, html=true) {
+        
+        return new Promise((resolve, reject) => {
+            getMediaFromServer(id, mime)
+                .then(response => {
 
-        getMediaFromServer(); //TODO create a return scheme
+                    if (html)
+                        resolve(this.getHtml(response, mime));
+                    else
+                        resolve(media_blob);
+
+                })
+                .catch(response => reject(response)); 
+        });
     }
 
     getMediaFromStore () {
-        var transaction = this.getTransaction();
+        return new Promise((resolve, reject) => {
+            // Retrieve the file that was just stored
+            const req = this.transaction.objectStore("images").get(deviceId);
+            req.onsuccess = (event) => {
+                // Get media from event
+                const media_blob = event.target.result;
 
-        // Retrieve the file that was just stored
-        var req = transaction.objectStore("images").get(deviceId);
-        req.onsuccess = function(event)  {
-            //TODO craete this logic
-            var imgFile = event.target.result;
-
-            if (imgFile == null) 
-                getImageFile();
-            else 
-                test()
-        }
+                if (media_blob == null)  // If null, get from server
+                    this.getMediaFromServer()
+                        .then(response => resolve(response))
+                        .catch(response => reject(response));
+                else
+                    resolve(media_blob); // Return media
+            }
+        })
     }
 
     getMediaFromServer () {
         return new Promise((resolve, reject) => {
             Api.fetchImage(this.id)
                 .then(data => {
+                    
+                    if (data == "" || data == null)
+                        reject(null);
+
                     // Decrypt blob
                     data = Crypto.decryptToBase64(data);
-                    // Send back blog
-                    resolve(data); 
+
                     // Store blob
                     this.storeImage(data); 
+
+                    // Send back blog
+                    resolve(data); 
                 });
             });
     }

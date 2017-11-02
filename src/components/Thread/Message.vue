@@ -5,8 +5,8 @@
             <!-- Content is inserted via v-html -->
 
             <!-- Media -->
-            <a href="media_link" target="_blank" v-show="is_media">
-                <img class="media" src="media_thumb" alt="Thumbnail">
+            <a :href="media_link" target="_blank" v-show="is_media">
+                <img class="media" :src="media_thumb" alt="Thumbnail">
                 <div class="article-title"> {{ media_title }} </div>
                 <div class="article-snippet"> {{ media_content }} </div>
             </a>
@@ -29,12 +29,13 @@ export default {
 
         this.style_class.push(this.round);
 
-        switch ( this.mime ) {
-            case "text/plain": {
+        switch ( this.mime.split("/")[0] ) {
+            case "text": {
                 this.content = this.content.replace(/\n/g, "<br />");
                 break;
             }
-            
+            case "image":
+                break;
             default: {
                 this.content = "<i>Not yet supported</i>";
                 break;
