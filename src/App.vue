@@ -53,7 +53,7 @@
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 
-import { Util, Crypto, Api } from '@/utils'
+import { Util, Crypto, Api, MediaLoader } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
@@ -124,6 +124,7 @@ export default {
             this.mm = new Api();
             Api.fetchSettings();
             this.populateMenuItems();
+            this.$store.commit('media_loader', new MediaLoader());
         },
         
         toggleSidebar () {
