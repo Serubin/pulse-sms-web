@@ -39,6 +39,7 @@ export default {
 
             case "image": { // Handle image
                 this.content = "<i> Loading MMS </i>";
+                this.is_media = true;
                 // Fetch media
                 MediaLoader.getMedia(this.id, this.mime)
                     .then(blob => { // Process media
@@ -49,7 +50,7 @@ export default {
                         // Set data
                         this.media_thumb = data_prefix + blob;
                         this.media_link = data_prefix + blob;
-                        this.is_media = true;
+                        
                     });
                 break;
             }
@@ -227,6 +228,7 @@ export default {
 
         .media {
             width: 250px;
+            height: 250px;
             background-repeat: no-repeat;
             object-fit: cover;
         }
