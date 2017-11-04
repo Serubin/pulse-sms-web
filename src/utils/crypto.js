@@ -109,7 +109,17 @@ export default class Crypto {
             sjcl.codec.base64.toBits(parts[0]), null)
         );
     }
-    
+
+    static decryptToBase64(data) {
+        if (data == null) {
+            return "";
+        }
+
+        var parts = data.split("-:-");
+        return sjcl.codec.base64.fromBits(
+            sjcl.mode.cbc.decrypt(store.state.aes, sjcl.codec.base64.toBits(parts[1]),
+            sjcl.codec.base64.toBits(parts[0]), null));
+    }   
     /**
      * encrypt
      * Encrypts arbitrary string data using stored aes
@@ -138,6 +148,7 @@ export default class Crypto {
         var cipherbits = sjcl.mode.cbc.encrypt(store.state.aes, bits, iv, null);
         return sjcl.codec.base64.fromBits(iv) + "-:-" + sjcl.codec.base64.fromBits(cipherbits);
     }
+
 
     static random128Hex() {
         function random16Hex () {
