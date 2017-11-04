@@ -44,6 +44,7 @@ export const state = {
     },
 
     msgbus: new Vue(),
+    media_loader: null,
 }
 
 export const getters = {
@@ -69,6 +70,7 @@ export const mutations = {
     notifications: (state, notifications) => state.notifications = notifications,
     theme_toolbar: (state, theme_toolbar) => state.theme_toolbar = theme_toolbar,
     colors: (state, colors) => state.colors = colors,
+    media_loader: (state, media_loader) => state.media_loader = media_loader,
     contacts: (state, payload) => {
         if(!Array.isArray(payload))
             payload = [ payload ]
@@ -78,7 +80,7 @@ export const mutations = {
     },
     clearContacts: (state, payload) => {
         state.contacts = {};
-    }
+    },
 }
 
 export const actions = {

@@ -1,12 +1,13 @@
 <template>
     <div class="message-wrapper" :title="stringTime">
-        <div :class="style_class"  :style="styleGenerator" :id="id" v-html="content">
-            <div> {{ message_from }} </div>
+        <div :class="style_class"  :style="styleGenerator" :id="id">
+            <div v-show="message_from"> <b> {{ message_from }} </b> <br /> </div>
+            <div v-html="content"></div>
             <!-- Content is inserted via v-html -->
 
             <!-- Media -->
-            <a href="media_link" target="_blank" v-show="is_media">
-                <img class="media" src="media_thumb" alt="Thumbnail">
+            <a :href="media_link" target="_blank" v-show="is_media">
+                <img class="media" :src="media_thumb" alt="Thumbnail">
                 <div class="article-title"> {{ media_title }} </div>
                 <div class="article-snippet"> {{ media_content }} </div>
             </a>
@@ -27,14 +28,32 @@ export default {
 
     mounted () {
 
+        const MediaLoader = this.$store.state.media_loader; // get loader
         this.style_class.push(this.round);
 
-        switch ( this.mime ) {
-            case "text/plain": {
+        switch ( this.mime.split("/")[0] ) {
+            case "text": {
                 this.content = this.content.replace(/\n/g, "<br />");
                 break;
             }
-            
+
+            case "image": { // Handle image
+                this.content = "<i> Loading MMS </i>";
+                // Fetch media
+                MediaLoader.getMedia(this.id, this.mime)
+                    .then(blob => { // Process media
+ 
+                        this.content = ""; // Don't set content
+                        // Construct data url
+                        const data_prefix = "data:" + this.mime + ";base64,";
+                        // Set data
+                        this.media_thumb = data_prefix + blob;
+                        this.media_link = data_prefix + blob;
+                        this.is_media = true;
+                    });
+                break;
+            }
+
             default: {
                 this.content = "<i>Not yet supported</i>";
                 break;
@@ -60,15 +79,7 @@ export default {
                 this.style_class.push('sent') //TODO add text color from global theme
             }
         }
-
-        // Display "From" in group messages
-        if ((this.message_from != null && this.message_from.length) != 0 &&
-            this.type == 0) {
-
-            this.message_from = "<b>" + this.message_from + ":</b><br/>";
-            this.content = this.message_from + this.content;
-        }
-
+        
         // Add links
         this.content = linkify(this.content)
 
@@ -212,6 +223,12 @@ export default {
             &:after {
                 border-color: transparent transparent;
             }
+        }
+
+        .media {
+            width: 250px;
+            background-repeat: no-repeat;
+            object-fit: cover;
         }
     }
 

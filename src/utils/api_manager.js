@@ -295,7 +295,6 @@ export default class Api {
         return promise
     }
 
-
     static processSettings (response) {
         response = response.data
 
@@ -307,6 +306,17 @@ export default class Api {
             accent: Util.expandColor(response.color_accent),
         });
         store.commit('theme_use_global', response.use_global_theme);
+    }
+
+    static fetchImage (image_id) {
+        const constructed_url = Url.get('media') + image_id + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get(constructed_url)
+                .then(response => resolve(response))
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
     }
 
     static generateId () {
