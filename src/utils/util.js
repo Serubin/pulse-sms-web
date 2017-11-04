@@ -72,10 +72,7 @@ export default class Util {
         *
         * @param speed - default to zero (no animation)
         */
-    static scrollToBottom(speed) {
-
-        if (typeof speed == "undefined") // Speed defaults to zero
-            speed = 0;
+    static scrollToBottom(speed=0) {
 
         const docu = document.getElementsByTagName("html")[0].clientHeight
         const body = document.getElementsByTagName("body")[0].clientHeight
