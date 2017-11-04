@@ -7,6 +7,7 @@ const DBTransaction = window.IDBTransaction || window.webkitIDBTransaction
     || window.OIDBTransaction || window.msIDBTransaction
 const dbVersion = 1.0;
 
+// DB name consts
 const dbName = "mediaFiles";
 const storeName = "media";
 
@@ -81,7 +82,7 @@ export default class MediaLoader {
             const transaction = this.getTransaction();
 
             // Retreive file
-            const req = transaction.objectStore("images").get(id);
+            const req = transaction.objectStore(storeName).get(id);
             req.onsuccess = (event) => {
                 // Get media from event
                 const media_blob = event.target.result;
