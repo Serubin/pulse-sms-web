@@ -85,7 +85,10 @@ export default class Api {
             );
         
         if (json.message.operation == "added_message") {
-            let message = Crypto.decryptMessage(json.message.content)
+            let message = json.message.content;
+            message.message_from = message.from;
+
+            message = Crypto.decryptMessage(message);
 
             this.notify(message);
 
