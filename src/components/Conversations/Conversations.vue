@@ -31,6 +31,13 @@ export default {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         this.fetchConversations();
+
+        if (!this.small)
+            this.$store.commit('colors', {
+                default: "#2196f3", 
+                dark: "#1565c0", 
+                accent: "#448aff",
+            });
     },
 
     beforeDestroy () {

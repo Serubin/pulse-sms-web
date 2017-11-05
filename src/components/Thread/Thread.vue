@@ -37,6 +37,8 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
+        this.$store.commit('colors', this.contact_data.colors);
+
 
         window.addEventListener('focus', (e) => { 
             this.markAsRead();
@@ -199,11 +201,10 @@ export default {
             this.messages = [];
             this.fetchMessages();
 
-        },
-
-        'conversation_id' (to) {
+            this.$store.commit('colors', this.contact_data.colors);
             this.$el.querySelector('#message-entry').focus();
-        }
+
+        },
     },
 
     components: {

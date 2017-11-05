@@ -8,7 +8,7 @@
                 <label class="mdl-textfield__label" for="message-entry">Type message...</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
-            <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" id="send-button" @click="dispatchSend">
+            <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" id="send-button" @click="dispatchSend">
                 <i class="material-icons md-18 material-icons-white">send</i>
             </button>
         </div>
@@ -39,7 +39,6 @@ export default {
                 this.message += "\n";
                 return;
             }
-
             
             if (this.message.length <= 0) 
                 return;
@@ -49,6 +48,13 @@ export default {
             this.message = "";
         },
     },
+
+    computed: {
+        send_color () {
+            return this.$store.state.colors_accent
+        },
+    },
+
     watch: { 
         '$route' (to) { // Update thread on route change
             this.message = "";

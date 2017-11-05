@@ -2,7 +2,7 @@
     <div id="app">
 
         <!-- Toolbar -->
-        <div id="toolbar" :style="{ backgroundColor: theme_toolbar }"> 
+        <div id="toolbar" :style="{ backgroundColor: theme_toolbar, color: text_color }"> 
             <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
@@ -107,7 +107,7 @@ export default {
             margin: 0,
             loading: this.$store.state.loading,
             mm: null,
-            toolbar_color: this.$store.state.colors.default,
+            toolbar_color: this.$store.state.colors_default,
             menu_items: [],
         }
     },
@@ -190,7 +190,7 @@ export default {
             if (!this.$store.state.theme_toolbar)
                 return
             
-            this.toolbar_color = color.default;
+            this.toolbar_color = color;
 
         },
 
@@ -217,8 +217,11 @@ export default {
     computed: {
         icon_class () {
             return {
-                'icon_logo': this.full_theme,
-                'icon_menu_toggle': !this.full_theme
+                'icon_logo': this.full_theme && !this.$store.state.theme_toolbar,
+                'icon_logo_dark': this.full_theme && this.$store.state.theme_toolbar,
+                'icon_menu_toggle': !this.full_theme && !this.$store.state.theme_toolbar,
+                'icon_menu_toggle_dark': !this.full_theme && this.$store.state.theme_toolbar,
+
             }
         },
         sidebar_open () { // Sidebar_open state
@@ -232,14 +235,17 @@ export default {
                 return "#f7f7f7"
 
             return this.toolbar_color;
+        },
+        text_color () {
+            if (this.$store.state.theme_toolbar) 
+                return "#fff";
         }
-
     },
     watch: {
         '$route' (to, from) { // To update dropdown menu
             this.populateMenuItems();
         },
-        '$store.state.colors' (to) {
+        '$store.state.colors_default' (to) {
             this.updateTheme(to);
         }
 
@@ -337,7 +343,6 @@ export default {
             float: left;
             margin-left: 15px;
             margin-top: 12px;
-            color: #666666;
         }
     }
 
