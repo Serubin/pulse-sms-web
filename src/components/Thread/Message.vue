@@ -33,26 +33,20 @@ export default {
         this.style_class.push(this.round);
 
         switch ( this.mime.split("/")[0] ) {
+            /* SMS Text message */
             case "text": {
                 this.content = Util.entityEncode(this.content);
                 break;
             }
 
-            case "image": { // Handle image
+            /* MMS Image Message */
+            case "image": { 
                 this.content = "<i> Loading MMS </i>";
                 this.is_media = true;
+
                 // Fetch media
                 MediaLoader.getMedia(this.id, this.mime)
-                    .then(blob => { // Process media
- 
-                        this.content = ""; // Don't set content
-                        // Construct data url
-                        const data_prefix = "data:" + this.mime + ";base64,";
-                        // Set data
-                        this.media_thumb = data_prefix + blob;
-                        this.media_link = data_prefix + blob;
-                        
-                    });
+                    .then(blob => this.loadImage(blob));
                 break;
             }
 
@@ -105,6 +99,19 @@ export default {
             media_content: "",
             dateLabel: this.messageData.dateLabel
         }
+    },
+    methods: {
+        loadImage (blob) {
+
+            this.content = ""; // Don't set content
+
+            // Construct data url
+            const data_prefix = "data:" + this.mime + ";base64,";
+            // Set data
+            this.media_thumb = data_prefix + blob;
+            this.media_link = data_prefix + blob;
+            
+        },
     },
 
     computed: {
