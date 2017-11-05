@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { Util } from '@/utils';
 import linkify from 'linkifyjs/html';
 
 export default {
@@ -33,7 +34,7 @@ export default {
 
         switch ( this.mime.split("/")[0] ) {
             case "text": {
-                this.content = this.content.replace(/\n/g, "<br />");
+                this.content = Util.entityEncode(this.content);
                 break;
             }
 
