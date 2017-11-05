@@ -36,12 +36,11 @@ export const state = {
     sidebar_open: true,
     title: "PulseClient",
     loading: true,
-    colors: {
-        default: "#2196f3", 
-        dark: "#1565c0", 
-        accent: "#448aff",
-        text: "#ffffff",
-    },
+
+    colors_default: "#2196f3", 
+    colors_dark: "#1565c0", 
+    colors_accent: "#448aff",
+    colors_text: "#ffffff",
 
     msgbus: new Vue(),
     media_loader: null,
@@ -69,8 +68,12 @@ export const mutations = {
     theme_round: (state, theme_round ) => state.theme_round = theme_round,
     notifications: (state, notifications) => state.notifications = notifications,
     theme_toolbar: (state, theme_toolbar) => state.theme_toolbar = theme_toolbar,
-    colors: (state, colors) => state.colors = colors,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
+    colors: (state, colors) => {
+        state.colors_default = colors.default;
+        state.colors_dark = colors.dark;
+        state.colors_accent = colors.accent;
+    },
     contacts: (state, payload) => {
         if(!Array.isArray(payload))
             payload = [ payload ]
