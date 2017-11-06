@@ -5,25 +5,25 @@
                 <ul id="drawer-links">
                     <li id="conversations-link" @click="routeTo('conversations')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_conversations">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon conversations">
                         Conversations
                         </div>
                     </li>
                     <li id="archive-link" @click="routeTo('archive')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_archive">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon archive">
                             Archive
                         </div>
                     </li>
                     <li id="scheduled-messages-link" @click="routeTo">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_scheduled_messages">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon scheduled_messages">
                             Scheduled Messages
                         </div>
                     </li>
                     <li id="blacklist-link" @click="routeTo">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
-                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon_blacklist">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon blacklist">
                             Blacklist
                         </div>
                     </li>
@@ -123,7 +123,7 @@ export default {
         overflow-y: hidden;
         z-index: 3;
         border-right: 1px solid #f1f1f1;
-        background-color: #f3f3f3;
+        background-color: $bg-light;
         
         &:hover {
             overflow-y: auto;
@@ -162,7 +162,7 @@ export default {
                     min-height: 26px;
                     width: 100%;
                     cursor: pointer;
-                    background-color: #f3f3f3;
+                    background-color: $bg-light;
                     padding: 7px 0;
 
                     img {
@@ -172,30 +172,26 @@ export default {
                     }
                 }
                 /* Icons */
-                .icon_conversations {
-                    background: url(../assets/images/vector/inbox.svg) 0 0 no-repeat;
+                .icon {
                     width: 24px;
                     height: 24px;
-                }
 
-                .icon_archive {
-                    background: url(../assets/images/vector/archive.svg) 0 0 no-repeat;
-                    width: 24px;
-                    height: 24px;
-                }
-                
-                .icon_scheduled_messages {
-                    background: url(../assets/images/vector/scheduled_messages.svg) 0 0 no-repeat;
-                    width: 24px;
-                    height: 24px;
-                }
-                
-                .icon_blacklist {
-                    background: url(../assets/images/vector/blacklist.svg) 0 0 no-repeat;
-                    width: 24px;
-                    height: 24px;
-                }
+                    &.conversations {
+                        background: url(../assets/images/vector/inbox.svg) 0 0 no-repeat;
+                    }
 
+                    &.archive {
+                        background: url(../assets/images/vector/archive.svg) 0 0 no-repeat;
+                    }
+                
+                    &.scheduled_messages {
+                        background: url(../assets/images/vector/scheduled_messages.svg) 0 0 no-repeat;
+                    }
+                    
+                    &.blacklist {
+                        background: url(../assets/images/vector/blacklist.svg) 0 0 no-repeat;
+                    }
+                }
             }
         }
     }   

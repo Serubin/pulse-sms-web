@@ -5,7 +5,7 @@
         <div id="toolbar" :style="{ backgroundColor: theme_toolbar, color: text_color }"> 
             <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
-                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
+                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class" />
                 </div>
                 <span class="mdl-layout-title" id="toolbar-title">{{ $store.state.title }}</span>
                 <div id="toolbar_icons">
@@ -217,11 +217,10 @@ export default {
     computed: {
         icon_class () {
             return {
-                'icon_logo': this.full_theme && !this.$store.state.theme_toolbar,
-                'icon_logo_dark': this.full_theme && this.$store.state.theme_toolbar,
-                'icon_menu_toggle': !this.full_theme && !this.$store.state.theme_toolbar,
-                'icon_menu_toggle_dark': !this.full_theme && this.$store.state.theme_toolbar,
-
+                'logo': this.full_theme && !this.$store.state.theme_toolbar,
+                'logo_dark': this.full_theme && this.$store.state.theme_toolbar,
+                'menu_toggle': !this.full_theme && !this.$store.state.theme_toolbar,
+                'menu_toggle_dark': !this.full_theme && this.$store.state.theme_toolbar,
             }
         },
         sidebar_open () { // Sidebar_open state
@@ -269,7 +268,7 @@ export default {
 		margin: auto;
 		margin-left: 0;
 		color: #202020;
-		background-color: #f3f3f3;
+		background-color: $bg-light;
 		font-family: "Open Sans", "Helvetica", Arial, sans-serif;
 		font-size: 14px;
 		padding: 0 !important;
@@ -291,7 +290,7 @@ export default {
 		width: 100%;
 		border-bottom: solid 1px #ca2100;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-		background-color: #f7f7f7;
+		background-color: $bg-light;
 		border-color: #e3e3e3;
 
     }
@@ -309,32 +308,27 @@ export default {
             #logo-image:hover {
                 cursor: pointer;
             }
+            
+            .icon {
+                margin-top: 2px;
+                width: 25px;
+                height: 25px;
+                
+                &.logo {
+                    background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
+                }
 
-            .icon_logo {
-                background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
-            }
+                &.logo_dark {
+                    background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
+                }
 
-            .icon_logo_dark {
-                background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
-            }
-            .icon_menu_toggle {
-                background: url(assets/images/vector/menu_toggle.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
-            }
+                &.menu_toggle {
+                    background: url(assets/images/vector/menu_toggle.svg) 0 0 no-repeat;
+                }
 
-            .icon_menu_toggle_dark {
-                background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
+                &.menu_toggle_dark {
+                    background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
+                }
             }
 
         }
