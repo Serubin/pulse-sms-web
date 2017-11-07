@@ -32,12 +32,11 @@ export default {
 
         this.fetchConversations();
 
-        if (!this.small)
-            this.$store.commit('colors', {
-                default: "#2196f3", 
-                dark: "#1565c0", 
-                accent: "#448aff",
-            });
+        if (!this.small) {
+            this.$store.commit('colors_default', this.$store.state.theme_global_default)
+            this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
+            this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
+        }
     },
 
     beforeDestroy () {

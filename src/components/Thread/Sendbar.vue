@@ -166,4 +166,16 @@ export default {
         resize: none;
     }
 
+
+    body.dark {
+        .send-bar-inner {
+            background: #374248;
+            color: #fff;
+        }
+
+        .mdl-textfield__label {
+            color: #fff !important;
+        }
+    }
+
 </style>

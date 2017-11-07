@@ -242,4 +242,16 @@ export default {
         }
     }
 
+
+    body.dark {
+        .sent {
+            background: $bg-darker;
+            color: #fff;
+
+            &:after {
+                border-color: $bg-darker transparent;
+            }
+        }
+    }
+
 </style>

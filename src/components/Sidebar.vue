@@ -112,6 +112,33 @@ export default {
 <style lang="scss" scoped>
     @import "../assets/scss/_vars.scss";
 
+    body.dark #sidebar {
+        background-color: $bg-dark;
+
+        #drawer-links li .link-card {
+            background-color: $bg-dark;
+            color: #fff;
+        }
+
+        .icon {
+            &.scheduled_messages {
+                background: url(../assets/images/vector/scheduled_messages-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.conversations {
+                background: url(../assets/images/vector/inbox-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.archive {
+                background: url(../assets/images/vector/archive-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.blacklist {
+                background: url(../assets/images/vector/blacklist-dark.svg) 0 0 no-repeat !important;
+            }
+        }
+    }
+
     #sidebar {
         transition: ease-in-out margin-left $anim-time;
         float: left;
@@ -122,7 +149,6 @@ export default {
         overflow-x: hidden;
         overflow-y: hidden;
         z-index: 3;
-        border-right: 1px solid #f1f1f1;
         background-color: $bg-light;
         
         &:hover {
@@ -139,7 +165,7 @@ export default {
             width: 230px;
             padding-bottom: 30px;
         }
-	
+
         #drawer-links {
             margin: 0;
             padding: 0;

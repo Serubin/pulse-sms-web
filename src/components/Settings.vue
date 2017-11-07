@@ -82,11 +82,13 @@ export default {
         },
 
         global_colors () {
-            let colors = this.$store.state.theme_global_colors;
+            const defaul = this.$store.state.theme_global_default;
+            const dark = this.$store.state.theme_global_dark;
+            const accent = this.$store.state.theme_global_accent;
 
-            return this.rgbaToHex(colors.default) 
-                + ", " + this.rgbaToHex(colors.dark) 
-                + ", " + this.rgbaToHex(colors.accent);
+            return this.rgbaToHex(defaul) 
+                + ", " + this.rgbaToHex(dark) 
+                + ", " + this.rgbaToHex(accent);
         },
 
         use_global_theme () {

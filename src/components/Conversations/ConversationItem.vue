@@ -29,7 +29,6 @@ export default {
             title: this.conversationData.title,
             snippet: this.conversationData.snippet,
             read: this.conversationData.read,
-            color: this.conversationData.color,
             timestamp: this.conversationData.timestamp,
             mute: this.conversationData.mute,
             private_notifications: this.conversationData.private_notifications
@@ -58,6 +57,12 @@ export default {
     },
 
     computed: {
+        color () {
+            if (this.$store.state.theme_use_global) 
+                return this.$store.state.theme_global_colors.default;
+
+            return this.conversationData.color;
+        },
 
         iconSize () {
             if (this.small)
@@ -95,13 +100,35 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
 
+    body.dark .conversation-card {
+        background: $bg-dark;
+
+        &.mdl-card {
+            background: $bg-darker;
+        }
+
+
+        &.small.mdl-card {
+            background: $bg-dark;
+        }
+
+        .conversation-text {
+            .conversation-title {
+                color: white;
+            }
+
+            .conversation-snippet {
+                color: rgba(255,255,255,.77);
+            }
+        }
+    }
+
     .conversation-card {
         &.mdl-card {
             display: block;
             min-height: 80px;
             width: 100%;
             cursor: pointer;
-            border-bottom: 1px solid #f3f3f3;
         }
 
         .contact-img {
@@ -137,7 +164,7 @@ export default {
         &.small {
             min-height: 56px;
             height: 56px;
-            background: #f3f3f3;
+            background: $bg-light;
 
             .contact-img {
                 width: 24px;

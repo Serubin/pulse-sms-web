@@ -73,8 +73,15 @@ export default {
     },
 
     mounted () { // Add window event listener
+
+        this.updateBodyClass(this.theme, "");
+
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
+
+        this.$store.commit('colors_default', this.$store.state.theme_global_default)
+        this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
+        this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
 
         if (this.$store.state.account_id != '') // If logged in
             this.applicationStart();            // Start app
@@ -188,7 +195,7 @@ export default {
 
         updateTheme (color) {
             if (!this.$store.state.theme_toolbar)
-                return
+                return false;
             
             this.toolbar_color = color;
 
@@ -210,6 +217,13 @@ export default {
             Util.snackbar("You've been logged out");
 
             this.$router.push('login');
+        },
+
+        updateBodyClass (to, from) {
+            console.log(to, from)
+            const body = this.$el.parentElement;
+            const classes = body.className.replace(from, "")
+            body.className = classes + " " + to;
         }
 
     },
@@ -229,9 +243,25 @@ export default {
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
         },
+        theme () {
+            const theme = this.$store.state.theme_base;
+
+            if (theme == "day_night") {
+                const hours = new Date().getHours();
+                if (hours < 7 || hours >= 20)
+                    return "dark";
+
+                return;
+            }
+
+            return this.$store.state.theme_base;
+        },
         theme_toolbar () {
+            if (this.$store.state.theme_use_global)
+                return this.$store.state.theme_global_default;
+
             if (!this.$store.state.theme_toolbar) 
-                return "#f7f7f7"
+                return false;
 
             return this.toolbar_color;
         },
@@ -246,6 +276,9 @@ export default {
         },
         '$store.state.colors_default' (to) {
             this.updateTheme(to);
+        },
+        'theme' (to, from) {
+            this.updateBodyClass(to, from)
         }
 
     },
@@ -422,6 +455,36 @@ export default {
     .splash-fade-enter, .splash-fade-leave-to {
         transform: translateY(70%);
         opacity: 0;
+    }
+    
+    body.dark {
+        background-color: $bg-dark;
+        color: #fff;
+
+        #toolbar {
+            border-bottom: solid 1px #ca2100;
+            background-color: $bg-darker;
+            border-color: #202b30;
+        }
+
+        #logo .icon {
+            &.logo {
+                background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.menu_toggle {
+                background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat !important;
+            }
+
+        }
+
+        .mdl-color-text--grey-900 {
+            color: #fff !important;
+        }
+
+        .mdl-color-text--grey-600 {
+            color: rgba(255,255,255,.77) !important;
+        }
     }
 
 </style>

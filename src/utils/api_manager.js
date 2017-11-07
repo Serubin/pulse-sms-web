@@ -303,12 +303,15 @@ export default class Api {
 
         store.commit('theme_base', response.base_theme);
         store.commit('theme_round', response.rounder_bubbles);
-        store.commit('theme_global_colors', {
-            default: Util.expandColor(response.color),
-            dark: Util.expandColor(response.color_dark),
-            accent: Util.expandColor(response.color_accent),
-        });
+        store.commit('theme_global_default', Util.expandColor(response.color));
+        store.commit('theme_global_dark', Util.expandColor(response.color_dark));
+        store.commit('theme_global_accent', Util.expandColor(response.color_accent));
         store.commit('theme_use_global', response.use_global_theme);
+
+        store.commit('colors_default', store.state.theme_global_default)
+        store.commit('colors_dark', store.state.theme_global_dark)
+        store.commit('colors_accent', store.state.theme_global_accent)
+
     }
 
     static fetchImage (image_id) {
