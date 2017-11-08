@@ -43,10 +43,38 @@ export default {
             case "image": { 
                 this.content = "<i> Loading MMS </i>";
                 this.is_media = true;
-
+    
                 // Fetch media
                 MediaLoader.getMedia(this.id, this.mime)
                     .then(blob => this.loadImage(blob));
+                break;
+            }
+            
+            case "media": {
+                this.is_media = true;
+
+                if (this.mime == "media/youtube") { // Legacy Youtube
+                    const video_id = this.content
+                        .replace("https://img.youtube.com/vi/", "")
+                        .replace("/maxresdefault.jpg", "");
+
+                    this.media_link = "https://youtube.com/watch?v=" + this.video_id;
+                    this.media_thumb = this.content;
+                    break;
+                }
+                
+                // Process Web/Youtube-v2
+                const media = JSON.parse(this.content);
+                
+                // Set media values
+                this.media_thumb = media.thumbnail || media.image_url ||"";
+                this.media_link = media.url || media.web_url || "";
+                this.media_title =  media.title || "";
+                this.media_content = media.description || "";
+
+                // Remove content
+                this.content = ""; 
+                
                 break;
             }
 
@@ -125,10 +153,14 @@ export default {
             // Only style recieved and media
             if (this.type != 0 && this.type != 6) 
                 return "";
+            
+            let media = "";
+            if (this.is_media)
+                media = "padding-bottom:4px;"
 
             return "background: " + this.color + ";"
                 + "border-color: " + this.color
-                + " transparent;"
+                + " transparent;" + media;
         },
         dateType () {
             if (this.type == 0 || this.type == 6)
@@ -186,9 +218,9 @@ export default {
 
         .received {
             float: left;
-            color: white;
+            color: #fff;
             margin-left: 28px;
-            background: white;
+            background: #fff;
             border-color: red transparent;
 
             &:after {
@@ -196,18 +228,25 @@ export default {
                 border-width: 15px 0 0 20px;
                 border-color: inherit;
             }
+            a {
+                color: #fff;
+            }
         }
 
         .sent {
             float: right;
             color: black;
             margin-right: 28px;
-            background: white;
+            background: #fff;
 
             &:after {
                 right: -18px;
                 border-width: 15px 20px 0 0;
-                border-color: white transparent;
+                border-color: #fff transparent;
+            }
+
+            a {
+                color: black;
             }
         }
         
@@ -216,7 +255,7 @@ export default {
             color: black;
             margin-right: 28px;
             background: #F44336;
-            color: white;
+            color: #fff;
 
             &:after {
                 right: -18px;
@@ -240,6 +279,56 @@ export default {
             background-repeat: no-repeat;
             object-fit: cover;
         }
+
+        a {
+            text-decoration: none;
+        }
+        .article-title {
+            margin-top: 8px;
+            font-size: 15px;
+            font-weight: normal;
+        }
+
+        .article-snippet {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: lighter;
+        }
+
+        @media screen and (min-width: 150px) {
+            .media {
+                width: 310px;
+            }
+        }
+
+        @media screen and (min-width: 350px) {
+            .media {
+                width: 310px;
+            }
+            .mdl-layout-title {
+                max-width: 160px;
+            }
+        }
+
+        @media screen and (min-width: 600px) {
+            .message, .message-round {
+                max-width: 372px;
+            }
+            .media {
+                width: 372px;
+            }
+        }
+
+        @media screen and (min-width: 720px) {
+            .message, .message-round {
+                max-width: 436px;
+            }
+            .media {
+                width: 436px;
+            }
+        }
+
+
     }
 
 
