@@ -79,7 +79,11 @@ export const mutations = {
     colors_default: (state, colors_default ) => state.colors_default = colors_default,
     colors_dark: (state, colors_dark ) => state.colors_dark = colors_dark,
     colors_accent: (state, colors_accent ) => state.colors_accent = colors_accent,
-
+    theme_global: (state, colors) => {
+        state.theme_global_default = colors.default;
+        state.theme_global_dark = colors.dark;
+        state.theme_global_accent = colors.accent;
+    },
     colors: (state, colors) => {
         state.colors_default = colors.default;
         state.colors_dark = colors.dark;

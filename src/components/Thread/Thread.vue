@@ -37,9 +37,6 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
-        this.$store.commit('colors', this.contact_data.colors);
-
-
         window.addEventListener('focus', (e) => { 
             this.markAsRead();
             this.$el.querySelector('#message-entry').focus();
@@ -111,12 +108,15 @@ export default {
 
                     }
 
+                    this.$store.commit('colors', this.contact_data.colors);
+
                     // Wait for messages to render
                     Vue.nextTick(() => { 
                         Util.scrollToBottom();
 
                         this.$store.commit("loading", false);
                         this.markAsRead();
+
 
                         this.previous_title = this.$store.state.title;
                         this.$store.commit('title', this.contact_data.title);

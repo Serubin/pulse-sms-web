@@ -78,10 +78,14 @@ export default {
 
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
-
-        this.$store.commit('colors_default', this.$store.state.theme_global_default)
-        this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
-        this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
+        
+        // Construct colors object
+        const colors = {
+            'default': this.$store.state.theme_global_default,
+            'dark': this.$store.state.theme_global_dark,
+            'accent': this.$store.state.theme_global_accent,
+        };
+        this.$store.commit('colors', colors);
 
         if (this.$store.state.account_id != '') // If logged in
             this.applicationStart();            // Start app
@@ -220,7 +224,6 @@ export default {
         },
 
         updateBodyClass (to, from) {
-            console.log(to, from)
             const body = this.$el.parentElement;
             const classes = body.className.replace(from, "")
             body.className = classes + " " + to;
