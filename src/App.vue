@@ -249,22 +249,21 @@ export default {
         theme () {
             const theme = this.$store.state.theme_base;
 
-            if (theme == "day_night") {
-                const hours = new Date().getHours();
-                if (hours < 7 || hours >= 20)
-                    return "dark";
-
-                return;
-            }
+            if (theme == "day_night") 
+                return this.is_night ? "dark" : "";
 
             return this.$store.state.theme_base;
+        },
+        is_night () {
+            const hours = new Date().getHours();
+            return hours < 7 || hours >= 20 ? true : false;
         },
         theme_toolbar () {
             if (this.$store.state.theme_use_global)
                 return this.$store.state.theme_global_default;
 
             if (!this.$store.state.theme_toolbar) 
-                return false;
+                return "";
 
             return this.toolbar_color;
         },
