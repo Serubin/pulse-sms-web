@@ -121,7 +121,7 @@ export default {
             conv.hash = Hash(conv);
 
             // Move conversation if required
-            if (conv_index != 0) {
+            if (conv_index != 1) {
                 conv = this.conversations.splice(conv_index, 1)[0]
                 this.conversations.splice(1, 0, conv)
             } 
