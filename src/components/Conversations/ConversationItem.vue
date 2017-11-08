@@ -38,6 +38,8 @@ export default {
     methods: {
         routeToThread () {
                        
+            this.close_drawer();
+
             let contact_data = Util.generateContact(
                 this.conversation_id, 
                 this.title, 
@@ -52,8 +54,17 @@ export default {
 
             this.$router.push({ 
                 name: !this.archive ? 'thread' : 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
-            })
+            });
+        },
+        /**
+         * close drawer
+         * Closes drawer if closeable
+         */
+        close_drawer() {
+            if(!this.$store.state.full_theme)
+                this.$store.commit('sidebar_open', false);
         }
+
     },
 
     computed: {
