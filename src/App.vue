@@ -2,7 +2,7 @@
     <div id="app">
 
         <!-- Toolbar -->
-        <div id="toolbar" :style="{ backgroundColor: theme_toolbar, color: text_color }"> 
+        <div id="toolbar" :style="{ color: text_color }"> 
             <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class" />
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+
+import Vue from 'vue'
 
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
@@ -281,6 +283,12 @@ export default {
         },
         'theme' (to, from) {
             this.updateBodyClass(to, from)
+        },
+        'theme_toolbar' (to, from) {
+            Vue.nextTick(() => {
+                const toolbar = this.$el.querySelector("#toolbar");
+                Util.materialColorChange(toolbar, to);
+            })
         }
 
     },
@@ -326,13 +334,15 @@ export default {
 		border-bottom: solid 1px #ca2100;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 		background-color: $bg-light;
-		border-color: #e3e3e3;
+        border-color: #e3e3e3;
 
     }
 
     #toolbar_inner {
         max-width: 950px;
         height: 100%;
+        position: relative;
+        z-index: 6;
         transition: ease-in-out margin-left $anim-time;
 
         #logo {
@@ -486,6 +496,41 @@ export default {
 
         .mdl-color-text--grey-600 {
             color: rgba(255,255,255,.77) !important;
+        }
+    }
+    
+    .transition span.animator {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+
+        span:first-of-type {
+            display: block;
+            position: absolute;
+            top: -50%;
+            width: 200%;
+            height: 200%;
+            margin-left: -50%;
+            border-radius: 50px;
+            opacity: 0;
+            z-index: 3;
+            animation: ripple .5s ease-out forwards;
+        }
+    }
+
+    @keyframes ripple {
+        0% {
+            transform: scaleX(0);
+        }
+        70% {
+            transform: scaleX(0.5);
+        }
+        100% {
+            opacity: 1;
+            transform: scaleX(1);
         }
     }
 

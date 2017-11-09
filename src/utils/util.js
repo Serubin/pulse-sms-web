@@ -16,7 +16,7 @@ export default class Util {
             a = ((num & 0xFF000000) >>> 24) / 255;
         return "rgba(" + [r, g, b, a].join(",") + ")";
     }
-    
+       
     static entityEncode (string) {
 
         while (string.indexOf("<") !== -1) {
@@ -103,6 +103,28 @@ export default class Util {
             snackbar.attributes.removeNamedItem("hidden");
 
         snackbar.MaterialSnackbar.showSnackbar(data);
+    }
+
+    static materialColorChange($el, color) {
+        
+        const container = document.createElement("span"); // Overflow container
+        const animator = document.createElement("span"); // Animation space
+        
+        container.appendChild(animator); // Prepare and insert in dom
+        container.className = "animator";
+        $el.insertBefore(container, $el.firstChild);
+
+        animator.style.background = color; // Add background color
+        $el.className += " transition"; // Add transition class for animation
+
+        setTimeout(() => {
+            $el.style.background = color;
+            $el.style.backgroundColor = color;
+            
+            $el.className = $el.className.replace(" transition", "");
+
+            $el.removeChild(container);
+        }, 1250);
     }
 }
 
