@@ -3,8 +3,10 @@
         <div class="send-bar-inner" id="sendbar">
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png"/>
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png" @click="toggleEmoji"/>
-            <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" v-show="show_emoji"/>
-            <div class="entry mdl-textfield mdl-js-textfield" v-mdl>
+            <div id="emoji-wrapper" v-show="show_emoji" @click="toggleEmoji">
+                    <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" />
+            </div>
+            <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
                 <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">Type message...</label>
             </div>
@@ -18,14 +20,10 @@
 
 <script>
 import AutoGrow from '@/lib/textarea-autogrow.js'
-<<<<<<< HEAD
 import emojione from 'emojione'
 import 'vue-emoji-mart/css/emoji-mart.css'
 import { Picker } from 'vue-emoji-mart'
-import { MessageManager } from '@/utils'
-=======
 import { Api } from '@/utils'
->>>>>>> devel
 
 export default {
     name: 'Sendbar',
@@ -33,6 +31,10 @@ export default {
 
     mounted () {
         let autogrow = new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
+
+        window.addEventListener('resize', this.updateEmojiMargin)
+        this.$wrapper = document.querySelector("#wrapper");
+        
     },
 
     data () {
@@ -48,6 +50,7 @@ export default {
             set: 'emojione',
             skin: 3,
             show_emoji: false,
+            $wrapper: null,
         }
     },
 
@@ -66,11 +69,30 @@ export default {
             this.message = "";
         },
         toggleEmoji (toggle=null) {
+
+            this.updateEmojiMargin(true);
             if(typeof toggle != "boolean")
                 return this.show_emoji = !this.show_emoji
             
             return this.show_emoji = toggle
 
+        },
+        updateEmojiMargin (force=false) {
+
+            if (!this.show_emoji && !force)
+                return;
+
+            // Calculate Margin (again...)
+            var MAIN_CONTENT_SIZE = 950;
+            var width = document.documentElement.clientWidth;
+            var margin = 0;
+
+            // Handles left side offset
+            if (width > MAIN_CONTENT_SIZE) {
+                margin = (width - MAIN_CONTENT_SIZE) / 2;
+            }
+
+            this.emojiStyle.left = (270  + margin) + "px";
         },
         insertEmoji(e) {
             this.message += e.native;
@@ -81,6 +103,11 @@ export default {
         send_color () {
             return this.$store.state.colors_accent
         },
+        is_dirty () {
+            if (this.message.length > 0)
+                return "is-dirty";
+            return "";
+        }
     },
 
     watch: { 
@@ -197,6 +224,19 @@ export default {
         resize: none;
     }
 
+    #emoji-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+
+        .emoji-mart {
+            z-index: 15;
+            transition: ease-in-out left $anim-time;
+        }
+    }
 
     body.dark {
         .send-bar-inner {
