@@ -152,9 +152,9 @@ export default {
         },
 
         handleResize () { // Handle resize. Toggles full/mini theme
-            var MAIN_CONTENT_SIZE = 950;
-            var width = document.documentElement.clientWidth;
-            var margin = 0;
+            const MAIN_CONTENT_SIZE = 950;
+            const width = document.documentElement.clientWidth;
+            let margin = 0;
 
             if (width > 750) {
                 this.$store.commit('sidebar_open', true);
@@ -179,7 +179,7 @@ export default {
          * maintain UI reactivity.
          */
         populateMenuItems () {
-            let items = [
+            const items = [
                 { 'name': "account", 'title': "My Account" },
                 { 'name': "settings", 'title': "Settings" },
                 { 'name': "help", 'title': "Help and Feedback" },

@@ -20,7 +20,7 @@ export default class Api {
      */
     openWebSocket() {
 
-        let this_ = this;
+        const this_ = this;
 
 
         this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
@@ -34,7 +34,7 @@ export default class Api {
 
             this.has_disconnected = false;
 
-            let subscribe = JSON.stringify({
+            const subscribe = JSON.stringify({
                 "command": "subscribe",
                 "identifier": JSON.stringify({
                     "channel": "NotificationsChannel"
@@ -122,7 +122,7 @@ export default class Api {
 
         const link = "/thread/" + message.conversation_id;
 
-        var notification = new Notification(title, {
+        const notification = new Notification(title, {
             icon: '/static/images/android-desktop.png',
             body: snippet
         });
@@ -162,7 +162,7 @@ export default class Api {
                 .then(response => {
                     response = response.data
                     // Decrypt Conversations items
-                    for(var i = 0; i < response.length; i++)
+                    for(let i = 0; i < response.length; i++)
                         response[i] = Crypto.decryptConversation(response[i]);
 
                     resolve(response); // Resolve response
@@ -186,7 +186,7 @@ export default class Api {
                 .then(response => { 
                     response = response.data
                     // Decrypt Conversations items
-                    for(var i = 0; i < response.length; i++)
+                    for(let i = 0; i < response.length; i++)
                         response[i] = Crypto.decryptMessage(response[i]);
 
                     resolve(response); // Resolve response

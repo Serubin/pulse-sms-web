@@ -37,7 +37,7 @@ export default class MediaLoader {
 
             if (this.db.setVersion) {
                 if (this.db.version != dbVersion) {
-                    var setVersion = this.db.setVersion(dbVersion);
+                    const setVersion = this.db.setVersion(dbVersion);
                     setVersion.onsuccess = (event) => {
                         this.createObjectStore(db);
                     };

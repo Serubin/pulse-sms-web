@@ -83,9 +83,9 @@ export default {
                 return;
 
             // Calculate Margin (again...)
-            var MAIN_CONTENT_SIZE = 950;
-            var width = document.documentElement.clientWidth;
-            var margin = 0;
+            const MAIN_CONTENT_SIZE = 950;
+            const width = document.documentElement.clientWidth;
+            let margin = 0;
 
             // Handles left side offset
             if (width > MAIN_CONTENT_SIZE) {

@@ -115,7 +115,7 @@ export default class AutoGrow {
     }
 
     getHeight (el) {
-        var el_style      = window.getComputedStyle(el),
+        let el_style      = window.getComputedStyle(el),
             el_display    = el_style.display,
             el_position   = el_style.position,
             el_visibility = el_style.visibility,

@@ -10,7 +10,7 @@ export default class Util {
     static expandColor (num) {
         num >>>= 0;
 
-        var b = num & 0xFF,
+        let b = num & 0xFF,
             g = (num & 0xFF00) >>> 8,
             r = (num & 0xFF0000) >>> 16,
             a = ((num & 0xFF000000) >>> 24) / 255;
@@ -90,14 +90,14 @@ export default class Util {
     }
 
     static snackbar(message) {
-        var data = {}
+        let data = {}
 
         if(typeof message == "string")
             data = { message: message };
         else
             data = message
 
-        var snackbar = document.querySelector('.mdl-js-snackbar');
+        const snackbar = document.querySelector('.mdl-js-snackbar');
 
         if (typeof snackbar.attributes['hidden'] != "undefined") // ad block work around
             snackbar.attributes.removeNamedItem("hidden");
@@ -143,7 +143,7 @@ Array.prototype.contains = function(element) {
 */
 Array.prototype.containsObjKey = function(key, element) {
 
-    for (var i = 0; i < this.length; i++) 
+    for (let i = 0; i < this.length; i++) 
         if (this[i][key] === element)
             return true
 
