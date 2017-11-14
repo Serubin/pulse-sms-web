@@ -14,7 +14,7 @@
 
 <script>
 import Vue from 'vue'
-import { Util, MessageManager } from '@/utils'
+import { Util, Api } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
 import Message from './Message.vue'
@@ -28,18 +28,28 @@ export default {
     mounted () {
 
         this.fetchMessages();
+
+        this.$el.querySelector('#message-entry').focus();
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
+        this.$store.state.msgbus.$on('archive-btn', this.archive);
+        this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
-        window.addEventListener('focus', (e) => this.markAsRead());
+        window.addEventListener('focus', (e) => { 
+            this.markAsRead();
+            this.$el.querySelector('#message-entry').focus();
+        });
     },
 
     beforeDestroy () {
         
         this.$store.state.msgbus.$off('newMessage');
         this.$store.state.msgbus.$off('refresh-btn');
+
+        this.$store.state.msgbus.$off('archive-btn', this.archive);
+        this.$store.state.msgbus.$off('unarchive-btn', this.archive);
 
         this.$store.commit('title', this.previous_title);
     },
@@ -61,6 +71,10 @@ export default {
 
         color () {
             return this.contact_data.colors.default;
+        },
+
+        isArchived () {
+            return this.$route.path.includes("archived");
         }
     },
 
@@ -72,12 +86,29 @@ export default {
          * this.messages for rendering.
          */
         fetchMessages () {
-            MessageManager.fetchThread(this.conversation_id)
+            Api.fetchThread(this.conversation_id)
                 .then(response => {
 
+                    let nextTimestamp;
+
                     // Flip message order and push to local state
-                    for(let i = (response.length - 1); i >= 0; i--) 
+                    for(let i = (response.length - 1); i >= 0; i--) {
+
+                        if (i == 0) // nextTimestamp processing
+                            nextTimestamp = new Date();
+                        else 
+                            nextTimestamp = new Date(response[i - 1].timestamp);
+
+                        response[i].dateLabel = this.compareTimestamps(
+                            new Date(response[i].timestamp), nextTimestamp, 15
+                        );
+                        
+                        // Push to list
                         this.messages.push(response[i]);
+
+                    }
+
+                    this.$store.commit('colors', this.contact_data.colors);
 
                     // Wait for messages to render
                     Vue.nextTick(() => { 
@@ -85,6 +116,7 @@ export default {
 
                         this.$store.commit("loading", false);
                         this.markAsRead();
+
 
                         this.previous_title = this.$store.state.title;
                         this.$store.commit('title', this.contact_data.title);
@@ -131,7 +163,7 @@ export default {
             if(this.read) // Already read
                 return;
 
-            MessageManager.markAsRead(this.conversation_id);
+            Api.markAsRead(this.conversation_id);
             this.read = true; // Set thread to read
         },
         /**
@@ -142,6 +174,20 @@ export default {
             this.messages = [];
             this.fetchMessages();
             this.markAsRead();
+        },
+        
+        archive () {
+            Api.archiver(!this.isArchived, this.conversation_id);
+            this.$router.push( !this.isArchived ? "/archived" : "/")
+        },
+        
+        compareTimestamps(date, nextDate, length) {
+
+            if (nextDate.getTime() > date.getTime() + (1000 * 60 * length))
+                return date.toLocaleString();
+            else 
+                return null;
+
         }
     },
 
@@ -155,7 +201,10 @@ export default {
             this.messages = [];
             this.fetchMessages();
 
-        }
+            this.$store.commit('colors', this.contact_data.colors);
+            this.$el.querySelector('#message-entry').focus();
+
+        },
     },
 
     components: {

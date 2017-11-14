@@ -9,7 +9,7 @@
                 <label class="mdl-textfield__label" for="message-entry">Type message...</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
-            <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" id="send-button" @click="dispatchSend">
+            <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" id="send-button" @click="dispatchSend">
                 <i class="material-icons md-18 material-icons-white">send</i>
             </button>
         </div>
@@ -18,10 +18,14 @@
 
 <script>
 import AutoGrow from '@/lib/textarea-autogrow.js'
+<<<<<<< HEAD
 import emojione from 'emojione'
 import 'vue-emoji-mart/css/emoji-mart.css'
 import { Picker } from 'vue-emoji-mart'
 import { MessageManager } from '@/utils'
+=======
+import { Api } from '@/utils'
+>>>>>>> devel
 
 export default {
     name: 'Sendbar',
@@ -53,12 +57,11 @@ export default {
                 this.message += "\n";
                 return;
             }
-
             
             if (this.message.length <= 0) 
                 return;
 
-            MessageManager.sendMessage(this.message, "text/plain", this.threadId)
+            Api.sendMessage(this.message, "text/plain", this.threadId)
             
             this.message = "";
         },
@@ -73,6 +76,13 @@ export default {
             this.message += e.native;
         }
     },
+
+    computed: {
+        send_color () {
+            return this.$store.state.colors_accent
+        },
+    },
+
     watch: { 
         '$route' (to) { // Update thread on route change
             this.message = "";
@@ -185,6 +195,18 @@ export default {
     #message-entry {
         height: 24px;
         resize: none;
+    }
+
+
+    body.dark {
+        .send-bar-inner {
+            background: #374248;
+            color: #fff;
+        }
+
+        .mdl-textfield__label {
+            color: #fff !important;
+        }
     }
 
 </style>

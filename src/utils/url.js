@@ -8,9 +8,12 @@ export default class Url {
         "conversations":        "conversations/",
         "update_conversation":  "conversations/update/",
         "read":                 "conversations/read/",
+        "archive":              "conversations/archive/",
+        "unarchive":            "conversations/unarchive/",
         "dismiss":              "accounts/dismissed_notification/",
         "settings":             "accounts/settings/",
         "websocket":            "stream",
+        "media":                "media/",
     }
 
     static getBaseUrl () {

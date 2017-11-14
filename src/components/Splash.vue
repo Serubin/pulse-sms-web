@@ -18,7 +18,7 @@ export default {
     @import "../assets/scss/_vars.scss";
 
     .splash {
-        background: #f3f3f3;
+        background: $bg-light;
         color: #666666;
         position: fixed;
         z-index: 1000;
@@ -38,6 +38,11 @@ export default {
             text-align: center;
             margin: 80vh auto;
         }
+    }
+
+    body.dark .splash {
+        background: $bg-dark;
+        color: #fff;
     }
 
 </style>
