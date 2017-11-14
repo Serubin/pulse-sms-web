@@ -39,6 +39,7 @@ export default class AutoGrow {
 
 		this.textarea.onkeyup = this.updateMirrorContent;
 		this.textarea.onfocus = this.updateMirrorContent;
+        this.textarea.onchange = this.updateMirrorContent;
         
         this.updateMirrorContent();
 
