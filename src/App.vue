@@ -102,6 +102,10 @@ export default {
         if (this.$store.state.notifications)
             Notification.requestPermission();
 
+
+        const toolbar = this.$el.querySelector("#toolbar");
+        Util.materialColorChange(toolbar, this.$store.state.colors_default);
+
     },
 
     beforeDestroy () { // Remove event listeners
