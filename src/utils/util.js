@@ -10,13 +10,13 @@ export default class Util {
     static expandColor (num) {
         num >>>= 0;
 
-        var b = num & 0xFF,
+        let b = num & 0xFF,
             g = (num & 0xFF00) >>> 8,
             r = (num & 0xFF0000) >>> 16,
             a = ((num & 0xFF000000) >>> 24) / 255;
         return "rgba(" + [r, g, b, a].join(",") + ")";
     }
-    
+       
     static entityEncode (string) {
 
         while (string.indexOf("<") !== -1) {
@@ -51,10 +51,12 @@ export default class Util {
         
     }
 
-    static generateContact (id, title, color, accent, ligher, darker) {
+    static generateContact (id, title, mute, private_notifications, color, accent, ligher, darker) {
         return {
             id: id,
             title: title,
+            mute: mute,
+            private_notifications: private_notifications,
             colors: {
                 default: color,
                 accent: accent,
@@ -70,10 +72,7 @@ export default class Util {
         *
         * @param speed - default to zero (no animation)
         */
-    static scrollToBottom(speed) {
-
-        if (typeof speed == "undefined") // Speed defaults to zero
-            speed = 0;
+    static scrollToBottom(speed=0) {
 
         const docu = document.getElementsByTagName("html")[0].clientHeight
         const body = document.getElementsByTagName("body")[0].clientHeight
@@ -91,19 +90,41 @@ export default class Util {
     }
 
     static snackbar(message) {
-        var data = {}
+        let data = {}
 
         if(typeof message == "string")
             data = { message: message };
         else
             data = message
 
-        var snackbar = document.querySelector('.mdl-js-snackbar');
+        const snackbar = document.querySelector('.mdl-js-snackbar');
 
         if (typeof snackbar.attributes['hidden'] != "undefined") // ad block work around
             snackbar.attributes.removeNamedItem("hidden");
 
         snackbar.MaterialSnackbar.showSnackbar(data);
+    }
+
+    static materialColorChange($el, color) {
+        
+        const container = document.createElement("span"); // Overflow container
+        const animator = document.createElement("span"); // Animation space
+        
+        container.appendChild(animator); // Prepare and insert in dom
+        container.className = "animator";
+        $el.insertBefore(container, $el.firstChild);
+
+        animator.style.background = color; // Add background color
+        $el.className += " transition"; // Add transition class for animation
+
+        setTimeout(() => {
+            $el.style.background = color;
+            $el.style.backgroundColor = color;
+            
+            $el.className = $el.className.replace(" transition", "");
+
+            $el.removeChild(container);
+        }, 1250);
     }
 }
 
@@ -122,7 +143,7 @@ Array.prototype.contains = function(element) {
 */
 Array.prototype.containsObjKey = function(key, element) {
 
-    for (var i = 0; i < this.length; i++) 
+    for (let i = 0; i < this.length; i++) 
         if (this[i][key] === element)
             return true
 

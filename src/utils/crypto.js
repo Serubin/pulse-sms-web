@@ -13,8 +13,8 @@ export default class Crypto {
      */
     static setupAes() {
         // Setup key
-        var combinedKey = store.state.account_id + ":" + store.state.hash + "\n"
-        var key = sjcl.misc.pbkdf2(combinedKey, store.state.salt, 10000, 256, hmacSHA1)
+        const combinedKey = store.state.account_id + ":" + store.state.hash + "\n"
+        const key = sjcl.misc.pbkdf2(combinedKey, store.state.salt, 10000, 256, hmacSHA1)
 
         store.commit('aes', new sjcl.cipher.aes(key)); // Store aes
         sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
@@ -103,13 +103,23 @@ export default class Crypto {
         if (data == null) 
             return "";
 
-        var parts = data.split("-:-");
+        const parts = data.split("-:-");
         return sjcl.codec.utf8String.fromBits(
             sjcl.mode.cbc.decrypt(store.state.aes, sjcl.codec.base64.toBits(parts[1]),
             sjcl.codec.base64.toBits(parts[0]), null)
         );
     }
-    
+
+    static decryptToBase64(data) {
+        if (data == null) {
+            return "";
+        }
+
+        const parts = data.split("-:-");
+        return sjcl.codec.base64.fromBits(
+            sjcl.mode.cbc.decrypt(store.state.aes, sjcl.codec.base64.toBits(parts[1]),
+            sjcl.codec.base64.toBits(parts[0]), null));
+    }   
     /**
      * encrypt
      * Encrypts arbitrary string data using stored aes
@@ -118,8 +128,8 @@ export default class Crypto {
      * @return encrypted data
      */
     static encrypt (data) {
-        var iv = sjcl.codec.hex.toBits(Crypto.random128Hex());
-        var cipherbits = sjcl.mode.cbc.encrypt(
+        const iv = sjcl.codec.hex.toBits(Crypto.random128Hex());
+        const cipherbits = sjcl.mode.cbc.encrypt(
             store.state.aes, sjcl.codec.utf8String.toBits(data), iv, null
         );
         return sjcl.codec.base64.fromBits(iv) + "-:-" + sjcl.codec.base64.fromBits(cipherbits);
@@ -133,11 +143,12 @@ export default class Crypto {
      * @return encrypted data
      */
     static encryptData (data) {
-        var iv = sjcl.codec.hex.toBits(Crypto.random128Hex());
-        var bits = toBitArrayCodec(data);
-        var cipherbits = sjcl.mode.cbc.encrypt(store.state.aes, bits, iv, null);
+        const iv = sjcl.codec.hex.toBits(Crypto.random128Hex());
+        const bits = toBitArrayCodec(data);
+        const cipherbits = sjcl.mode.cbc.encrypt(store.state.aes, bits, iv, null);
         return sjcl.codec.base64.fromBits(iv) + "-:-" + sjcl.codec.base64.fromBits(cipherbits);
     }
+
 
     static random128Hex() {
         function random16Hex () {

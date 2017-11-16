@@ -15,7 +15,7 @@
 <script>
 import Vue from 'vue';
 import Hash from 'object-hash'
-import { Util, MessageManager } from '@/utils'
+import { Util, Api } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
 import DayLabel from './DayLabel.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -31,6 +31,12 @@ export default {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         this.fetchConversations();
+
+        if (!this.small) {
+            this.$store.commit('colors_default', this.$store.state.theme_global_default)
+            this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
+            this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
+        }
     },
 
     beforeDestroy () {
@@ -44,7 +50,7 @@ export default {
 
         fetchConversations () {
             // Start query
-            MessageManager.fetchConversations(this.index)
+            Api.fetchConversations(this.index)
                 .then(response => this.processConversations(response));
         },
 
@@ -77,6 +83,8 @@ export default {
                     Util.generateContact(
                         item.device_id,
                         item.title,
+                        item.mute,
+                        item.private_notifications,
                         item.color,
                         Util.expandColor(item.color_accent),
                         Util.expandColor(item.color_light),
@@ -101,7 +109,7 @@ export default {
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
             
-            if(typeof conv_index == "undefined")
+            if(!conv || !conv_index)
                 return false;
 
             // Generate new snippet
@@ -113,7 +121,7 @@ export default {
             conv.hash = Hash(conv);
 
             // Move conversation if required
-            if (conv_index != 0) {
+            if (conv_index != 1) {
                 conv = this.conversations.splice(conv_index, 1)[0]
                 this.conversations.splice(1, 0, conv)
             } 
@@ -121,24 +129,28 @@ export default {
 
         updateRead (id) {
             
-            if(this.conversations.length < 1)
-                return;
-
             let { conv, conv_index } = this.getConversation(id);
+
+            if(!conv || !conv_index)
+                return false;
             
             conv.read = true;
             conv.hash = Hash(conv)
         },
 
         getConversation(id) {
-            for(let conv_index in this.conversations) {
-                let conv = this.conversations[conv_index];
+
+            let conv_index = null;
+            let conv = null;
+
+            for(conv_index in this.conversations) {
+                conv = this.conversations[conv_index];
 
                 if(id == conv.device_id)
                     return  { conv, conv_index };
             }
             
-            return null;
+            return  { conv, conv_index };
         },
 
         /**

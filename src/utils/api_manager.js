@@ -1,12 +1,12 @@
 import Vue from 'vue'
+import router from '@/router/'
 import store from '@/store/'
 import emojione from 'emojione'
 import ReconnectingWebsocket from 'reconnecting-websocket'
 
 import { Util, Url, Crypto } from '@/utils/'
 
-//TODO This should be API manager or something.
-export default class MessageManager {
+export default class Api {
 
     constructor () {
         this.socket = null;
@@ -15,9 +15,12 @@ export default class MessageManager {
         this.has_disconnected = false;
     }
 
+    /**
+     * Open reconnecting websocket.
+     */
     openWebSocket() {
 
-        let this_ = this;
+        const this_ = this;
 
 
         this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
@@ -31,7 +34,7 @@ export default class MessageManager {
 
             this.has_disconnected = false;
 
-            let subscribe = JSON.stringify({
+            const subscribe = JSON.stringify({
                 "command": "subscribe",
                 "identifier": JSON.stringify({
                     "channel": "NotificationsChannel"
@@ -55,13 +58,18 @@ export default class MessageManager {
         });
     }
 
+    /**
+     * Perminently close socket
+     */
     closeWebSocket() {
         this.socket.close(1000, '', {keepClosed: true});
-
     }
 
+    /**
+     * Handle incoming socket data
+     * @param e - socket event
+     */
     handleMessage (e) {
-        
 
         if (e.data.indexOf("ping") != -1)  // Is keep alive event
             return;
@@ -73,11 +81,16 @@ export default class MessageManager {
 
         if (typeof json.message.content.data != "undefined")
             json.message.content.data = emojione.unicodeToImage(
-                    json.message.content.data
-                );
+                json.message.content.data
+            );
         
         if (json.message.operation == "added_message") {
-            let message = Crypto.decryptMessage(json.message.content)
+            let message = json.message.content;
+            message.message_from = message.from;
+
+            message = Crypto.decryptMessage(message);
+
+            this.notify(message);
 
             store.state.msgbus.$emit('newMessage', message);
         } else if (json.message.operation == "read_conversation") {
@@ -85,33 +98,60 @@ export default class MessageManager {
         }
 
     }
-    
-    static fetchSettings () {
-        let constructed_url = Url.get('settings') + Url.getAccountParam();
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
-                    MessageManager.processSettings(response);
-                    resolve(response);
 
-                })
-                .catch( response => MessageManager.rejectHandler(response, reject) );
+    /**
+     * Submit notification for message
+     * @param message  - message object
+     */
+    notify(message) {
+
+        if (Notification.permission != "granted" && !store.state.notifications)
+            return
+
+        if (message.type != 0)
+            return;
+        
+        const contact = store.getters.getContact(message.conversation_id);
+
+        if (contact != null && contact.mute)
+            return;
+
+        const title = contact.title;
+        const snippet = contact.private_notifications 
+                            ? "" : Util.generateSnippet(message);
+
+        const link = "/thread/" + message.conversation_id;
+
+        const notification = new Notification(title, {
+            icon: '/static/images/android-desktop.png',
+            body: snippet
+        });
+
+        notification.onclick = () => {
+            window.focus()
+            router.push(link);
+        }
+
+    }
+ 
+    static login (username, password) {
+        const promise = new Promise((resolve, reject) => {
+            const constructed_url = Url.get('login')
+            const request = {
+                username,
+                password 
+            };
+
+            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+                .then((response) => resolve(response))
+                .catch((error) =>reject(error));
+
         });
 
         return promise
-    }
-    static processSettings (response) {
-        response = response.data
 
-        store.commit('theme_base', response.base_theme);
-        store.commit('theme_round', response.rounder_bubbles);
-        store.commit('theme_global_colors', {
-            default: Util.expandColor(response.color),
-            dark: Util.expandColor(response.color_dark),
-            accent: Util.expandColor(response.color_accent),
-        });
-        store.commit('theme_use_global', response.use_global_theme);
     }
+
 
     static fetchConversations (index) {
         const constructed_url = 
@@ -122,12 +162,12 @@ export default class MessageManager {
                 .then(response => {
                     response = response.data
                     // Decrypt Conversations items
-                    for(var i = 0; i < response.length; i++)
+                    for(let i = 0; i < response.length; i++)
                         response[i] = Crypto.decryptConversation(response[i]);
 
                     resolve(response); // Resolve response
                 })
-                .catch( response => MessageManager.rejectHandler(response, reject) );
+                .catch( response => Api.rejectHandler(response, reject) );
         });
 
         return promise
@@ -146,12 +186,12 @@ export default class MessageManager {
                 .then(response => { 
                     response = response.data
                     // Decrypt Conversations items
-                    for(var i = 0; i < response.length; i++)
+                    for(let i = 0; i < response.length; i++)
                         response[i] = Crypto.decryptMessage(response[i]);
 
                     resolve(response); // Resolve response
                 })
-                .catch( response => MessageManager.rejectHandler(response, reject) );
+                .catch( response => Api.rejectHandler(response, reject) );
         });
 
         return promise
@@ -161,7 +201,7 @@ export default class MessageManager {
 
         let account_id = store.state.account_id;
 
-        let id = MessageManager.generateId();
+        let id = Api.generateId();
 
         let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Photo</i>";
 
@@ -222,7 +262,7 @@ export default class MessageManager {
         // Read conversation
         let constructed_url = Url.get('read') + thread_id + Url.getAccountParam();
         Vue.http.post(constructed_url)
-            .catch((e) => MessageManager.rejectHandler(e));
+            .catch((e) => Api.rejectHandler(e));
 
         // Dismiss notifiction
         constructed_url = Url.get('dismiss') + Url.getAccountParam() 
@@ -241,6 +281,50 @@ export default class MessageManager {
         constructed_url += conversation + Url.getAccountParam();
 
         Vue.http.post(constructed_url);
+    }
+
+    static fetchSettings () {
+        let constructed_url = Url.get('settings') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    Api.processSettings(response);
+                    resolve(response);
+
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
+    static processSettings (response) {
+        response = response.data
+
+        const colors = {
+            'default': Util.expandColor(response.color),
+            'dark': Util.expandColor(response.color),
+            'accent': Util.expandColor(response.color),
+        };
+
+        store.commit('theme_base', response.base_theme);
+        store.commit('theme_round', response.rounder_bubbles);
+        store.commit('theme_use_global', response.use_global_theme);
+        store.commit('theme_global', colors);
+        store.commit('colors', colors);
+
+
+    }
+
+    static fetchImage (image_id) {
+        const constructed_url = Url.get('media') + image_id + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get(constructed_url)
+                .then(response => resolve(response))
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
     }
 
     static generateId () {

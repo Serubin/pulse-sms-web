@@ -14,7 +14,7 @@
 
 <script>
 import Vue from 'vue'
-import { Util, MessageManager } from '@/utils'
+import { Util, Api } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
 import Message from './Message.vue'
@@ -28,6 +28,8 @@ export default {
     mounted () {
 
         this.fetchMessages();
+
+        this.$el.querySelector('#message-entry').focus();
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -35,8 +37,10 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
-
-        window.addEventListener('focus', (e) => this.markAsRead());
+        window.addEventListener('focus', (e) => { 
+            this.markAsRead();
+            this.$el.querySelector('#message-entry').focus();
+        });
     },
 
     beforeDestroy () {
@@ -82,7 +86,7 @@ export default {
          * this.messages for rendering.
          */
         fetchMessages () {
-            MessageManager.fetchThread(this.conversation_id)
+            Api.fetchThread(this.conversation_id)
                 .then(response => {
 
                     let nextTimestamp;
@@ -104,12 +108,15 @@ export default {
 
                     }
 
+                    this.$store.commit('colors', this.contact_data.colors);
+
                     // Wait for messages to render
                     Vue.nextTick(() => { 
                         Util.scrollToBottom();
 
                         this.$store.commit("loading", false);
                         this.markAsRead();
+
 
                         this.previous_title = this.$store.state.title;
                         this.$store.commit('title', this.contact_data.title);
@@ -156,7 +163,7 @@ export default {
             if(this.read) // Already read
                 return;
 
-            MessageManager.markAsRead(this.conversation_id);
+            Api.markAsRead(this.conversation_id);
             this.read = true; // Set thread to read
         },
         /**
@@ -170,7 +177,7 @@ export default {
         },
         
         archive () {
-            MessageManager.archiver(!this.isArchived, this.conversation_id);
+            Api.archiver(!this.isArchived, this.conversation_id);
             this.$router.push( !this.isArchived ? "/archived" : "/")
         },
         
@@ -194,7 +201,10 @@ export default {
             this.messages = [];
             this.fetchMessages();
 
-        }
+            this.$store.commit('colors', this.contact_data.colors);
+            this.$el.querySelector('#message-entry').focus();
+
+        },
     },
 
     components: {

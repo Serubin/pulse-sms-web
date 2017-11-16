@@ -2,10 +2,10 @@
     <div id="app">
 
         <!-- Toolbar -->
-        <div id="toolbar" :style="{ backgroundColor: theme_toolbar }"> 
+        <div id="toolbar" :style="{ color: text_color }"> 
             <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
-                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" :class="icon_class" />
+                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class" />
                 </div>
                 <span class="mdl-layout-title" id="toolbar-title">{{ $store.state.title }}</span>
                 <div id="toolbar_icons">
@@ -50,10 +50,12 @@
 
 <script>
 
+import Vue from 'vue'
+
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 
-import { Util, Crypto, MessageManager } from '@/utils'
+import { Util, Crypto, Api, MediaLoader } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
@@ -73,8 +75,20 @@ export default {
     },
 
     mounted () { // Add window event listener
+        
+        this.calculateHour();
+        this.updateBodyClass(this.theme, "");
+
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
+        
+        // Construct colors object
+        const colors = {
+            'default': this.$store.state.theme_global_default,
+            'dark': this.$store.state.theme_global_dark,
+            'accent': this.$store.state.theme_global_accent,
+        };
+        this.$store.commit('colors', colors);
 
         if (this.$store.state.account_id != '') // If logged in
             this.applicationStart();            // Start app
@@ -85,6 +99,13 @@ export default {
 
         this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
+
+        if (this.$store.state.notifications)
+            Notification.requestPermission();
+
+
+        const toolbar = this.$el.querySelector("#toolbar");
+        Util.materialColorChange(toolbar, this.$store.state.colors_default);
 
     },
 
@@ -104,8 +125,9 @@ export default {
             margin: 0,
             loading: this.$store.state.loading,
             mm: null,
-            toolbar_color: this.$store.state.colors.default,
+            toolbar_color: this.$store.state.colors_default,
             menu_items: [],
+            hour: null,
         }
     },
 
@@ -118,9 +140,10 @@ export default {
          * Contains app components that require account to run.
          */
         applicationStart () {
-            this.mm = new MessageManager();
-            MessageManager.fetchSettings();
+            this.mm = new Api();
+            Api.fetchSettings();
             this.populateMenuItems();
+            this.$store.commit('media_loader', new MediaLoader());
         },
         
         toggleSidebar () {
@@ -131,9 +154,9 @@ export default {
         },
 
         handleResize () { // Handle resize. Toggles full/mini theme
-            var MAIN_CONTENT_SIZE = 950;
-            var width = document.documentElement.clientWidth;
-            var margin = 0;
+            const MAIN_CONTENT_SIZE = 950;
+            const width = document.documentElement.clientWidth;
+            let margin = 0;
 
             if (width > 750) {
                 this.$store.commit('sidebar_open', true);
@@ -158,7 +181,7 @@ export default {
          * maintain UI reactivity.
          */
         populateMenuItems () {
-            let items = [
+            const items = [
                 { 'name': "account", 'title': "My Account" },
                 { 'name': "settings", 'title': "Settings" },
                 { 'name': "help", 'title': "Help and Feedback" },
@@ -184,9 +207,9 @@ export default {
 
         updateTheme (color) {
             if (!this.$store.state.theme_toolbar)
-                return
+                return false;
             
-            this.toolbar_color = color.default;
+            this.toolbar_color = color;
 
         },
 
@@ -206,6 +229,22 @@ export default {
             Util.snackbar("You've been logged out");
 
             this.$router.push('login');
+        },
+
+        updateBodyClass (to, from) {
+            const body = this.$el.parentElement;
+            const classes = body.className.replace(from, "")
+            body.className = classes + " " + to;
+        },
+
+        calculateHour () {
+            
+            const nextHour = (60 - new Date().getMinutes()) * 60 * 1000
+            this.hour = new Date().getHours();
+
+            setTimeout(() => {
+                this.hour = new Date().getHours();
+            }, nextHour + 2000);
         }
 
     },
@@ -213,8 +252,10 @@ export default {
     computed: {
         icon_class () {
             return {
-                'icon_logo': this.full_theme,
-                'icon_menu_toggle': !this.full_theme
+                'logo': this.full_theme && !this.$store.state.theme_toolbar,
+                'logo_dark': this.full_theme && this.$store.state.theme_toolbar,
+                'menu_toggle': !this.full_theme && !this.$store.state.theme_toolbar,
+                'menu_toggle_dark': !this.full_theme && this.$store.state.theme_toolbar,
             }
         },
         sidebar_open () { // Sidebar_open state
@@ -223,20 +264,48 @@ export default {
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
         },
+        theme () {
+            const theme = this.$store.state.theme_base;
+
+            if (theme == "day_night") 
+                return this.is_night ? "dark" : "";
+
+            return this.$store.state.theme_base;
+        },
+
+        is_night () {
+            return this.hour < 7 || this.hour >= 20 ? true : false;
+        },
+
         theme_toolbar () {
+            if (this.$store.state.theme_use_global)
+                return this.$store.state.theme_global_default;
+
             if (!this.$store.state.theme_toolbar) 
-                return "#f7f7f7"
+                return "";
 
             return this.toolbar_color;
+        },
+        text_color () {
+            if (this.$store.state.theme_toolbar) 
+                return "#fff";
         }
-
     },
     watch: {
         '$route' (to, from) { // To update dropdown menu
             this.populateMenuItems();
         },
-        '$store.state.colors' (to) {
+        '$store.state.colors_default' (to) {
             this.updateTheme(to);
+        },
+        'theme' (to, from) {
+            this.updateBodyClass(to, from)
+        },
+        'theme_toolbar' (to, from) {
+            Vue.nextTick(() => {
+                const toolbar = this.$el.querySelector("#toolbar");
+                Util.materialColorChange(toolbar, to);
+            })
         }
 
     },
@@ -259,7 +328,7 @@ export default {
 		margin: auto;
 		margin-left: 0;
 		color: #202020;
-		background-color: #f3f3f3;
+		background-color: $bg-light;
 		font-family: "Open Sans", "Helvetica", Arial, sans-serif;
 		font-size: 14px;
 		padding: 0 !important;
@@ -281,14 +350,16 @@ export default {
 		width: 100%;
 		border-bottom: solid 1px #ca2100;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-		background-color: #f7f7f7;
-		border-color: #e3e3e3;
+		background-color: $bg-light;
+        border-color: #e3e3e3;
 
     }
 
     #toolbar_inner {
         max-width: 950px;
         height: 100%;
+        position: relative;
+        z-index: 6;
         transition: ease-in-out margin-left $anim-time;
 
         #logo {
@@ -299,32 +370,27 @@ export default {
             #logo-image:hover {
                 cursor: pointer;
             }
+            
+            .icon {
+                margin-top: 2px;
+                width: 25px;
+                height: 25px;
+                
+                &.logo {
+                    background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
+                }
 
-            .icon_logo {
-                background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
-            }
+                &.logo_dark {
+                    background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
+                }
 
-            .icon_logo_dark {
-                background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
-            }
-            .icon_menu_toggle {
-                background: url(assets/images/vector/menu_toggle.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
-            }
+                &.menu_toggle {
+                    background: url(assets/images/vector/menu_toggle.svg) 0 0 no-repeat;
+                }
 
-            .icon_menu_toggle_dark {
-                background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
-                margin-top: 2px;
-                width: 25px;
-                height: 25px;
+                &.menu_toggle_dark {
+                    background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat;
+                }
             }
 
         }
@@ -333,7 +399,6 @@ export default {
             float: left;
             margin-left: 15px;
             margin-top: 12px;
-            color: #666666;
         }
     }
 
@@ -419,6 +484,71 @@ export default {
     .splash-fade-enter, .splash-fade-leave-to {
         transform: translateY(70%);
         opacity: 0;
+    }
+    
+    body.dark {
+        background-color: $bg-dark;
+        color: #fff;
+
+        #toolbar {
+            border-bottom: solid 1px #ca2100;
+            background-color: $bg-darker;
+            border-color: #202b30;
+        }
+
+        #logo .icon {
+            &.logo {
+                background: url(assets/images/vector/pulse-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.menu_toggle {
+                background: url(assets/images/vector/menu_toggle-dark.svg) 0 0 no-repeat !important;
+            }
+
+        }
+
+        .mdl-color-text--grey-900 {
+            color: #fff !important;
+        }
+
+        .mdl-color-text--grey-600 {
+            color: rgba(255,255,255,.77) !important;
+        }
+    }
+    
+    .transition span.animator {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+
+        span:first-of-type {
+            display: block;
+            position: absolute;
+            top: -50%;
+            width: 200%;
+            height: 200%;
+            margin-left: -50%;
+            border-radius: 50px;
+            opacity: 0;
+            z-index: 3;
+            animation: ripple .5s ease-out forwards;
+        }
+    }
+
+    @keyframes ripple {
+        0% {
+            transform: scaleX(0);
+        }
+        70% {
+            transform: scaleX(0.5);
+        }
+        100% {
+            opacity: 1;
+            transform: scaleX(1);
+        }
     }
 
 </style>

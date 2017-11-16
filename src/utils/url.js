@@ -13,6 +13,7 @@ export default class Url {
         "dismiss":              "accounts/dismissed_notification/",
         "settings":             "accounts/settings/",
         "websocket":            "stream",
+        "media":                "media/",
     }
 
     static getBaseUrl () {
