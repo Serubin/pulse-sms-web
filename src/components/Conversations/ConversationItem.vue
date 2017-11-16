@@ -70,7 +70,7 @@ export default {
     computed: {
         color () {
             if (this.$store.state.theme_use_global) 
-                return this.$store.state.theme_global_colors.default;
+                return this.$store.state.theme_global_default;
 
             return this.conversationData.color;
         },
