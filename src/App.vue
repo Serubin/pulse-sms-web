@@ -75,7 +75,8 @@ export default {
     },
 
     mounted () { // Add window event listener
-
+        
+        this.calculateHour();
         this.updateBodyClass(this.theme, "");
 
         window.addEventListener('resize', this.handleResize)
@@ -126,6 +127,7 @@ export default {
             mm: null,
             toolbar_color: this.$store.state.colors_default,
             menu_items: [],
+            hour: null,
         }
     },
 
@@ -233,6 +235,16 @@ export default {
             const body = this.$el.parentElement;
             const classes = body.className.replace(from, "")
             body.className = classes + " " + to;
+        },
+
+        calculateHour () {
+            
+            const nextHour = (60 - new Date().getMinutes()) * 60 * 1000
+            this.hour = new Date().getHours();
+
+            setTimeout(() => {
+                this.hour = new Date().getHours();
+            }, nextHour + 2000);
         }
 
     },
@@ -260,10 +272,11 @@ export default {
 
             return this.$store.state.theme_base;
         },
+
         is_night () {
-            const hours = new Date().getHours();
-            return hours < 7 || hours >= 20 ? true : false;
+            return this.hour < 7 || this.hour >= 20 ? true : false;
         },
+
         theme_toolbar () {
             if (this.$store.state.theme_use_global)
                 return this.$store.state.theme_global_default;
