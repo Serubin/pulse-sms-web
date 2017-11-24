@@ -244,6 +244,7 @@ export default {
 
             setTimeout(() => {
                 this.hour = new Date().getHours();
+                this.calculateHour();
             }, nextHour + 2000);
         }
 
