@@ -89,6 +89,21 @@ export default class Util {
         });
     }
 
+    /**
+     * Is Scrolled to Bottom
+     * Determines if scrolled to bottom of page
+     *
+     * @param el, optional object
+     * @return boolean
+     */
+    static isScrolledToBottom(el = null) {
+        if (el == null)
+            el = document.querySelector("html");
+
+       return el.scrollTop ===
+            (el.scrollHeight - el.offsetHeight)
+    }
+
     static snackbar(message) {
         let data = {}
 
