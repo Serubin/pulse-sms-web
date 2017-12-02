@@ -74,6 +74,9 @@ export default class Util {
         */
     static scrollToBottom(speed=0) {
 
+        if (Util.isScrolledToBottom()) // Ignore if at bottom
+            return false;
+
         const docu = document.getElementsByTagName("html")[0].clientHeight
         const body = document.getElementsByTagName("body")[0].clientHeight
 
