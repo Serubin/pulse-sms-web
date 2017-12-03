@@ -1,0 +1,27 @@
+stages:
+    - deploy_prod
+    - deploy_dev
+
+deploy_prod:
+  variables:
+      DEST_PATH: "/var/www/pulse"
+  stage: deploy_prod
+  only:
+    - master
+  script:
+    - npm i
+    - npm run build -d $DEST_PATH
+    - cp -r dist/* $DEST_PATH
+
+deploy_dev:
+  variables:
+      DEST_PATH: "/var/www/pulse-beta"
+  stage: deploy_dev
+  only:
+    - devel
+  script:
+    - npm i
+    - npm run build
+    - cp -r dist/* $DEST_PATH
+
+
