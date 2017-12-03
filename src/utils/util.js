@@ -103,7 +103,7 @@ export default class Util {
         if (el == null)
             el = document.querySelector("html");
 
-       return el.scrollTop ===
+        return el.scrollTop ===
             (el.scrollHeight - el.offsetHeight)
     }
 
