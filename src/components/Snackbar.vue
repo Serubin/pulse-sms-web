@@ -25,6 +25,15 @@ export default {
         position: fixed;
         z-index: 45;
 
+        @media (max-width: $mini_width) {
+            & {
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                max-width: 100%
+            }
+        }
+
         &--active {
             transform: translate(0%, 0);
         }
