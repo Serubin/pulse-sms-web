@@ -37,6 +37,10 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
+        this.html = document.querySelector("html");
+        this.list = document.querySelector("#content");
+        this.snackbar = document.querySelector(".mdl-snackbar");
+
         window.addEventListener('focus', (e) => { 
             this.markAsRead();
             this.$el.querySelector('#message-entry').focus();
@@ -60,6 +64,9 @@ export default {
             read: this.isRead || true, 
             messages: [],
             previous_title: "",
+            html: document.querySelector("html"),
+            list: document.querySelector("#content"),
+            snackbar: document.querySelector(".mdl-snackbar"),
         }
     },
 
@@ -143,13 +150,46 @@ export default {
                 return;
             
             this.messages.push(event_obj);
-            
+
+            // Mark as unread
+            if (event_obj.type == 0 || event_obj.type == 6) 
+                this.read = false;
+
+            // Deploy snackbar if scrolled up 
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) > this.html.scrollTop
+                && !(this.list.scrollHeight < this.html.offsetHeight)) {
+                
+                if (!this.snackbar.MaterialSnackbar.active) {
+                    var data = {
+                        message: 'New Message',
+                        actionHandler: (e) => {
+                            this.snackbar.MaterialSnackbar.cleanup_(); // Hide snackbar
+
+                            Vue.nextTick(() => {            // Animate on next tick to
+                                Util.scrollToBottom(250);   // avoid scrolling before render
+                            });
+                        },
+                        actionText: 'Show',
+                        timeout: 60*60*60 // Hour timeout
+                    };
+                    Util.snackbar(data);
+
+                    setTimeout(() => { // If snackbar timeout, scroll to bottom
+                        Vue.nextTick(() => {            // Animate on next tick to
+                            Util.scrollToBottom(250);   // avoid scrolling before render
+                        });
+                    }, 60*60*60);
+                }
+                
+                return;
+            }
+
+
             Vue.nextTick(() => {            // Animate on next tick to
                 Util.scrollToBottom(250);   // avoid scrolling before render
             });
+            
 
-            if (event_obj.type == 0 || event_obj.type == 6)
-                this.read = false;
         },
 
 

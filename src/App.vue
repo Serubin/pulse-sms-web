@@ -105,7 +105,7 @@ export default {
 
 
         const toolbar = this.$el.querySelector("#toolbar");
-        Util.materialColorChange(toolbar, this.$store.state.colors_default);
+        Util.materialColorChange(toolbar, this.theme_toolbar);
 
     },
 
@@ -283,7 +283,7 @@ export default {
                 return this.$store.state.theme_global_default;
 
             if (!this.$store.state.theme_toolbar) 
-                return "";
+                return "#f3f3f3";
 
             return this.toolbar_color;
         },

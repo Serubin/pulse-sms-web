@@ -74,6 +74,9 @@ export default class Util {
         */
     static scrollToBottom(speed=0) {
 
+        if (Util.isScrolledToBottom()) // Ignore if at bottom
+            return false;
+
         const docu = document.getElementsByTagName("html")[0].clientHeight
         const body = document.getElementsByTagName("body")[0].clientHeight
 
@@ -87,6 +90,21 @@ export default class Util {
                 return c/2*((t-=2)*t*t + 2) + b;
             }
         });
+    }
+
+    /**
+     * Is Scrolled to Bottom
+     * Determines if scrolled to bottom of page
+     *
+     * @param el, optional object
+     * @return boolean
+     */
+    static isScrolledToBottom(el = null) {
+        if (el == null)
+            el = document.querySelector("html");
+
+        return el.scrollTop ===
+            (el.scrollHeight - el.offsetHeight)
     }
 
     static snackbar(message) {

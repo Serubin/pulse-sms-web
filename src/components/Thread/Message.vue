@@ -74,6 +74,8 @@ export default {
 
                 // Remove content
                 this.content = ""; 
+
+                this.media_thumb = this.media_thumb.replace("http", "https");
                 
                 break;
             }
