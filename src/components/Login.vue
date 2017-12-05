@@ -50,15 +50,16 @@ export default {
             return this.$router.push({ name: 'conversations-list'});
 
         this.$store.commit("loading", false);
+        this.$store.commit('title', this.title);
     },
 
     data () {
         return {
+            title: "PulseClient",
             username: '',
             password: '',
             loading: false,
             error: false,
-
         }
     },
 

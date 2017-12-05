@@ -64,10 +64,14 @@ export default {
             .then( response => {
                 this.$store.commit("loading", false);
             })
+
+
+        this.$store.commit('title', this.title);
     },
 
     data () {
         return {
+            title: "Settings",
             colored_toolbar: this.$store.state.theme_toolbar,
             show_notifications: this.$store.state.notifications,
         }
@@ -140,6 +144,8 @@ export default {
         },
         'colored_toolbar' () {
             this.$store.commit('theme_toolbar', this.colored_toolbar)
+            const toolbar = document.querySelector("#toolbar");
+            toolbar.style.background = "";
         }
     }
 }

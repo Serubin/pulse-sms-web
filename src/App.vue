@@ -219,6 +219,7 @@ export default {
             this.$store.commit('account_id', "");
             this.$store.commit('hash', "");
             this.$store.commit('salt', "");
+            this.$store.commit('aes', "");
             this.$store.commit('clearContacts', {});
             
             // Clear local storage (browser)
