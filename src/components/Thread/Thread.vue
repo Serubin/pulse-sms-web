@@ -145,9 +145,17 @@ export default {
                 return;
 
             // Determine if displayed
-            let displayed = this.messages.containsObjKey('device_id', event_obj.device_id);
+            const displayed = this.messages.containsObjKey('device_id', event_obj.device_id);
             if(displayed) // Ignore if displayed
                 return;
+            
+             // Add time stamp
+            const lastMessage = this.messages[this.messages.length - 1];
+            const lastTimestamp = new Date(lastMessage.timestamp);
+
+            lastMessage.dateLabel = this.compareTimestamps(
+                lastTimestamp, new Date(event_obj.timestamp), 15
+            );
             
             this.messages.push(event_obj);
 
