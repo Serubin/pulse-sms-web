@@ -282,9 +282,24 @@ export default {
                 return this.$store.state.theme_global_default;
 
             if (!this.$store.state.theme_toolbar) 
-                return "#f3f3f3";
+                return this.default_toolbar_color;
 
             return this.toolbar_color;
+        },
+
+        default_toolbar_color () {
+            const theme = this.theme;
+            let retval;
+
+            if (theme == "light")
+                retval = "#f3f3f3"
+            else if(theme == "dark")
+                retval ="#202B30"
+            else if(theme == "day_night")
+                retval = this.is_night ? "#202b30" : "#f3f3f3"
+
+            return retval;
+                
         },
         text_color () {
             if (this.$store.state.theme_toolbar) 
