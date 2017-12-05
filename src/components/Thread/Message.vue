@@ -16,6 +16,10 @@
         <div class="date-wrapper" v-if="dateLabel">
             <div :class="dateType" class="mdl-color-text--grey-500"> {{ dateLabel }}</div>
         </div>
+
+        <div class="sent-wrapper" v-if="sending">
+            <div class="sending mdl-color-text--grey-500">Sending...</div>
+        </div>
     </div>
 </template>
 
@@ -28,6 +32,9 @@ export default {
     props: [ 'messageData', 'threadColor' ],
 
     mounted () {
+
+        this.$store.state.msgbus.$on('updateMessageType',
+            (payload) => this.updateType(payload.id, payload.message_type));
 
         const MediaLoader = this.$store.state.media_loader; // get loader
         this.style_class.push(this.round);
@@ -142,9 +149,19 @@ export default {
             this.media_link = data_prefix + blob;
             
         },
+        updateType (id, type) {
+            if (this.id != id)
+                return;
+
+            this.type = type;
+        }
+
     },
 
     computed: {
+        sending () {
+            return this.type == 2 ? true : false;
+        },
         round () {
             return this.$store.state.round ? 'message-round' : 'message';
         },
@@ -177,10 +194,10 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
 
-    .date-wrapper {
+    .date-wrapper, .sent-wrapper {
         clear: both;
 
-        .date-sent {
+        .date-sent, .sending {
             float: right;
             margin-right: 36px;
         }
