@@ -74,17 +74,20 @@ export default class Api {
         if (e.data.indexOf("ping") != -1)  // Is keep alive event
             return;
 
-        let json = JSON.parse(e.data);
+        const json = JSON.parse(e.data);
 
         if (typeof json.message == "undefined") 
             return;
+
+        const operation = json.message.operation;
 
         if (typeof json.message.content.data != "undefined")
             json.message.content.data = emojione.unicodeToImage(
                 json.message.content.data
             );
         
-        if (json.message.operation == "added_message") {
+
+        if (operation == "added_message") {
             let message = json.message.content;
             message.message_from = message.from;
 
@@ -93,8 +96,13 @@ export default class Api {
             this.notify(message);
 
             store.state.msgbus.$emit('newMessage', message);
-        } else if (json.message.operation == "read_conversation") {
-            store.state.msgbus.$emit('conversationRead', json.message.content.id);
+        } else if (operation == "read_conversation") {
+            const id = json.message.content.id;
+            store.state.msgbus.$emit('conversationRead', id);
+        } else if (operation == "update_message_type") {
+            const id = json.message.content.id;
+            const message_type = json.message.content.message_type;
+            store.state.msgbus.$emit('updateMessageType', {id, message_type});
         }
 
     }
