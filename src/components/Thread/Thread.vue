@@ -154,7 +154,7 @@ export default {
             const lastTimestamp = new Date(lastMessage.timestamp);
 
             lastMessage.dateLabel = this.compareTimestamps(
-                lastTimestamp, new Date(event_obj.timestamp), 15
+                new Date(event_obj.timestamp), lastTimestamp, 15
             );
             
             this.messages.push(event_obj);
