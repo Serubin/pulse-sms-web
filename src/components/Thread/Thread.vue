@@ -45,6 +45,7 @@ export default {
             this.markAsRead();
             this.$el.querySelector('#message-entry').focus();
         });
+        window.addEventListener('scroll', this.cleanupSnackbar)
     },
 
     beforeDestroy () {
@@ -154,7 +155,7 @@ export default {
             const lastTimestamp = new Date(lastMessage.timestamp);
 
             lastMessage.dateLabel = this.compareTimestamps(
-                lastTimestamp, new Date(event_obj.timestamp), 15
+                new Date(event_obj.timestamp), lastTimestamp, 15
             );
             
             this.messages.push(event_obj);
@@ -227,6 +228,15 @@ export default {
         archive () {
             Api.archiver(!this.isArchived, this.conversation_id);
             this.$router.push( !this.isArchived ? "/archived" : "/")
+        },
+
+        cleanupSnackbar () {
+            if(!this.snackbar.MaterialSnackbar.active)
+                return false;
+            
+            // If within 200 px of the bottom, remove snack bar
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < this.html.scrollTop)
+                this.snackbar.MaterialSnackbar.cleanup_();
         },
         
         compareTimestamps(date, nextDate, length) {
