@@ -181,14 +181,13 @@ export default {
          * maintain UI reactivity.
          */
         populateMenuItems () {
+
             const items = [
-                { 'name': "account", 'title': "My Account" },
                 { 'name': "settings", 'title': "Settings" },
-                { 'name': "help", 'title': "Help and Feedback" },
                 { 'name': "logout", 'title': "Logout" }
             ]
             
-            if (this.$route.name.includes('thread')) {
+            if (this.$route.name.includes('thread'))
                 items.unshift(
                     { 'name': "delete", 'title': "Delete Conversation" },
                     ( !this.$route.path.includes("archived") ?
@@ -196,7 +195,13 @@ export default {
                         {'name': "unarchive", 'title': "Unarchive Conversation" }),
                     { "name": "blacklist", 'title': "Blacklist Contact"}, 
                 );
-            }
+            else 
+                items.unshift(
+                    { 'name': "account", 'title': "My Account" },
+                    { 'name': "help", 'title': "Help and Feedback" },
+                )
+
+
         
             return this.menu_items = items;
         },
