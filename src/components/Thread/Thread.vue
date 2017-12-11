@@ -38,6 +38,7 @@ export default {
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
         this.html = document.querySelector("html");
+        this.body = document.querySelector("body");
         this.list = document.querySelector("#content");
         this.snackbar = document.querySelector(".mdl-snackbar");
 
@@ -66,6 +67,7 @@ export default {
             messages: [],
             previous_title: "",
             html: document.querySelector("html"),
+            body: document.querySelector("body"),
             list: document.querySelector("#content"),
             snackbar: document.querySelector(".mdl-snackbar"),
         }
@@ -165,7 +167,7 @@ export default {
                 this.read = false;
 
             // Deploy snackbar if scrolled up 
-            if ((this.html.scrollHeight - this.html.offsetHeight - 200) > this.html.scrollTop
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) > Math.max(this.html.scrollTop, this.body.scrollTop)
                 && !(this.list.scrollHeight < this.html.offsetHeight)) {
                 
                 if (!this.snackbar.MaterialSnackbar.active) {
@@ -235,7 +237,7 @@ export default {
                 return false;
             
             // If within 200 px of the bottom, remove snack bar
-            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < this.html.scrollTop)
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < Math.max(this.html.scrollTop, this.body.scrollTop))
                 this.snackbar.MaterialSnackbar.cleanup_();
         },
         
