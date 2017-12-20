@@ -4,7 +4,7 @@
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
-            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="color"></message>
+            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="color" :text-color="text_color"></message>
         </div>
         
         <sendbar :thread-id="threadId"></sendbar>
@@ -85,6 +85,24 @@ export default {
 
         isArchived () {
             return this.$route.path.includes("archived");
+        },
+
+        // color string = 'rgba(r,g,b,a)'
+        // generated from the 'toColor' method above.
+        text_color () {
+
+            let colorString = this.color;
+
+            colorString = colorString.replace("rgba(", "").replace(")", "");
+            colorString = colorString.replace("rgb(", "").replace(")", "");
+
+            const  colorArray = colorString.split(",");
+            const  red = colorArray[0];
+            const  green = colorArray[1];
+            const  blue = colorArray[2];
+
+            const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+            return darkness >= 0.30 ? "#fff" : "#000";
         }
     },
 
