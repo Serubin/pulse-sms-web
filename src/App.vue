@@ -249,7 +249,7 @@ export default {
             this.hour = new Date().getHours();
 
             setTimeout(() => {
-                this.hour = new Date().getHours();
+                this.calculateHour()
             }, nextHour + 2000);
         }
 
