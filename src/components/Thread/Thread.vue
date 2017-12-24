@@ -1,6 +1,6 @@
 <template>
     <div id="thread-wrap" @click="markAsRead">
-        <div class="page-content" id="message-list">
+        <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom}">
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
@@ -37,16 +37,47 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
+        // Fetch dom
         this.html = document.querySelector("html");
         this.body = document.querySelector("body");
         this.list = document.querySelector("#content");
         this.snackbar = document.querySelector(".mdl-snackbar");
 
+        // Window focus event
         window.addEventListener('focus', (e) => { 
             this.markAsRead();
             this.$el.querySelector('#message-entry').focus();
         });
+
+        // Snackbar Clean up
         window.addEventListener('scroll', this.cleanupSnackbar)
+
+        // Drag drop event Listeners (For the lazy)
+        let event = ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop']
+            .map(
+                (i) => window.addEventListener(i, (e) => { 
+                    e.preventDefault()
+                    e.stopPropagation()
+                })
+            );
+
+        
+        event = ['dragover', 'dragenter']
+        event = ['dragleave', 'dragend', 'drop']
+        event = ['drop']
+            .map(
+                (i) => window.addEventListener(i, (e) => {
+
+                    let file;
+
+                    if (e.dataTransfer)
+                        file = e.dataTransfer.files[0]
+                    else
+                        file = e.target.files[0];
+
+                    Api.loadFile(file);
+                })
+            )
     },
 
     beforeDestroy () {
@@ -103,6 +134,10 @@ export default {
 
             const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
             return darkness >= 0.30 ? "#fff" : "#000";
+        },
+
+        margin_bottom () {
+            return this.$store.state.loaded_media ? "355px" : "54px";
         }
     },
 

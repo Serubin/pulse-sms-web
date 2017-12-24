@@ -81,6 +81,8 @@ export default {
 
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
+
+        Util.firebaseConfig();
         
         // Construct colors object
         const colors = {
@@ -510,6 +512,12 @@ export default {
     body.dark {
         background-color: $bg-dark;
         color: #fff;
+
+        .mdl-progress > .bufferbar {
+            background-image: linear-gradient(to right,rgba(55, 66, 72,.7),rgba(55, 66, 72,.7)),
+                linear-gradient(to right,rgb(33,150,243),rgb(33,150,243));
+        }
+
 
         #toolbar {
             border-bottom: solid 1px #ca2100;

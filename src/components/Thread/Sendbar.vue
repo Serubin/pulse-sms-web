@@ -1,5 +1,10 @@
 <template>
     <div class="send-bar">
+        <div v-if="$store.state.media_sending" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" v-mdl></div>
+        <div v-if="$store.state.loaded_media" class="preview">
+            <div class="overlay"></div>
+            <img :src="media_blob" />
+        </div>
         <div class="send-bar-inner" id="sendbar">
             <!-- Remove until implemented <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png"/> -->
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png" @click="toggleEmoji"/>
@@ -60,9 +65,17 @@ export default {
                 this.message += "\n";
                 return;
             }
-            
+
+            if (this.$store.state.loaded_media) {
+                Api.sendFile(this.$store.state.loaded_media, this.threadId);
+                this.$store.commit('loaded_media', null);
+
+                return;
+            }
+
             if (this.message.length <= 0) 
                 return;
+
 
             Api.sendMessage(this.message, "text/plain", this.threadId)
             
@@ -107,6 +120,9 @@ export default {
             if (this.message.length > 0)
                 return "is-dirty";
             return "";
+        },
+        media_blob () {
+            return window.URL.createObjectURL(this.$store.state.loaded_media)
         }
     },
 
@@ -133,6 +149,34 @@ export default {
         bottom: 0%;
         clear: both;
         transition: ease-in-out width $anim-time;
+
+        .mdl-progress {
+            width: 100%;
+        }
+
+        .preview {
+            position: relative;
+            background: #fafafa;
+            max-height: 300px;
+            overflow: hidden;
+
+            .overlay {
+                background: linear-gradient(to bottom, rgba(250,250,250,0) 95%,rgba(250,250,250,1) 100%);
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                height: 100%;
+                width: 100%;
+                z-index: 10;
+            }
+
+            img {
+                margin: 1em calc(24px + 16px + 8px) 1em;
+                width: calc(100% - 108px);
+            }
+
+
+        }
 
         @media (min-width: 750px) {
             & {
@@ -240,6 +284,14 @@ export default {
     }
 
     body.dark {
+        .preview {
+            background: rgb(55,66,72);
+
+            .overlay {
+                background: linear-gradient(to bottom, rgba(55,66,72,0) 95%,rgba(55,66,72,1) 100%);
+            }
+        }
+
         .send-bar-inner {
             background: #374248;
             color: #fff;

@@ -49,6 +49,9 @@ export const state = {
 
     msgbus: new Vue(),
     media_loader: null,
+
+    loaded_media: null,
+    media_sending: false,
 }
 
 export const getters = {
@@ -79,6 +82,8 @@ export const mutations = {
     colors_default: (state, colors_default ) => state.colors_default = colors_default,
     colors_dark: (state, colors_dark ) => state.colors_dark = colors_dark,
     colors_accent: (state, colors_accent ) => state.colors_accent = colors_accent,
+    loaded_media: (state, loaded_media ) => state.loaded_media = loaded_media,
+    media_sending: (state, media_sending ) => state.media_sending = media_sending,
     theme_global: (state, colors) => {
         state.theme_global_default = colors.default;
         state.theme_global_dark = colors.dark;

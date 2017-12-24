@@ -1,4 +1,5 @@
 import jump from 'jump.js'
+import * as firebase from 'firebase';
 
 export default class Util {
     /**
@@ -144,7 +145,19 @@ export default class Util {
             $el.removeChild(container);
         }, 1250);
     }
+
+    static firebaseConfig () {
+        const config = {
+            apiKey: "AIzaSyB0pMWyfvde4mbKO20t23EEGECEb5itD7I",
+            authDomain: "messenger-42616.firebaseapp.com",
+            databaseURL: "https://messenger-42616.firebaseio.com",
+            storageBucket: "messenger-42616.appspot.com",
+        }
+
+        firebase.initializeApp(config);
+    }
 }
+
 
 /**
 * Contains element

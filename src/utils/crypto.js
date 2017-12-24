@@ -144,11 +144,27 @@ export default class Crypto {
      */
     static encryptData (data) {
         const iv = sjcl.codec.hex.toBits(Crypto.random128Hex());
-        const bits = toBitArrayCodec(data);
+        const bits = Crypto.toBitArrayCodec(data);
         const cipherbits = sjcl.mode.cbc.encrypt(store.state.aes, bits, iv, null);
         return sjcl.codec.base64.fromBits(iv) + "-:-" + sjcl.codec.base64.fromBits(cipherbits);
     }
 
+    static toBitArrayCodec(bytes) {
+        let out = [], i, tmp=0;
+        for (i=0; i<bytes.length; i++) {
+            tmp = tmp << 8 | bytes[i];
+            if ((i&3) === 3) {
+                out.push(tmp);
+                tmp = 0;
+            }
+        }
+
+        if (i&3) {
+            out.push(sjcl.bitArray.partial(8*(i&3), tmp));
+        }
+
+        return out;
+    }
 
     static random128Hex() {
         function random16Hex () {
