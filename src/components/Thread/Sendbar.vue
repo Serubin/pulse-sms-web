@@ -69,8 +69,6 @@ export default {
             if (this.$store.state.loaded_media) {
                 Api.sendFile(this.$store.state.loaded_media, this.threadId);
                 this.$store.commit('loaded_media', null);
-
-                return;
             }
 
             if (this.message.length <= 0) 
