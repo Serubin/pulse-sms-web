@@ -44,23 +44,27 @@ export default {
         this.snackbar = document.querySelector(".mdl-snackbar");
 
         // Window focus event
-        window.addEventListener('focus', (e) => { 
+        let events = Util.addEventListeners(['focus'], (e) => { 
             this.markAsRead();
             this.$el.querySelector('#message-entry').focus();
         });
+        this.listeners.extend(events);
 
         // Snackbar Clean up
-        window.addEventListener('scroll', this.cleanupSnackbar)
+        events = Util.addEventListeners(['scroll'], this.cleanupSnackbar);
+        this.listeners.extend(events);
 
        // Drag drop event Listeners (For the lazy)
-        Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
+        events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
             (e) => { 
                 e.preventDefault()
                 e.stopPropagation()
             }
         );
+        this.listeners.extend(events);
+
         
-        Util.addEventListeners(['dragover', 'dragenter'],
+        events = Util.addEventListeners(['dragover', 'dragenter'],
             (e) => {
                 const file_drag = document.querySelector(".file-drag");
                 const classes = file_drag.className
@@ -68,16 +72,18 @@ export default {
                     file_drag.className = classes + " dragging";
             }
         );
+        this.listeners.extend(events);
 
-        Util.addEventListeners(['dragleave', 'dragend', 'drop'],
+        events = Util.addEventListeners(['dragleave', 'dragend', 'drop'],
             (e) => {
                 const file_drag = document.querySelector(".file-drag");
                 const classes = file_drag.className.replace(" dragging", "");
                 file_drag.className = classes;
             }
         );
+        this.listeners.extend(events);
 
-        Util.addEventListeners(['drop'],
+        events = Util.addEventListeners(['drop'],
             (e) => {
 
                 let file;
@@ -90,6 +96,7 @@ export default {
                 Api.loadFile(file);
             }
         );
+        this.listeners.extend(events);
 
     },
 
@@ -102,7 +109,9 @@ export default {
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
 
         this.$store.commit('title', this.previous_title);
-        
+
+        Util.removeEventListeners(this.listeners);
+
         // Remove any loaded media
         if (this.$store.state.loaded_media)
             this.$store.commit('loaded_media', null);
@@ -114,6 +123,7 @@ export default {
             read: this.isRead || true, 
             messages: [],
             previous_title: "",
+            listeners: [],
             html: document.querySelector("html"),
             body: document.querySelector("body"),
             list: document.querySelector("#content"),

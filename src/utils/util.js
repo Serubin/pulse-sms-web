@@ -108,6 +108,11 @@ export default class Util {
             (el.scrollHeight - el.offsetHeight)
     }
 
+    /**
+     * Display snackbar
+     *
+     * @param message - either a string, or data object
+     */
     static snackbar(message) {
         let data = {}
 
@@ -124,6 +129,12 @@ export default class Util {
         snackbar.MaterialSnackbar.showSnackbar(data);
     }
 
+    /**
+     * Color Change with Material Animations
+     *
+     * @param $el element
+     * @param color new color
+     */
     static materialColorChange($el, color) {
         
         const container = document.createElement("span"); // Overflow container
@@ -146,9 +157,22 @@ export default class Util {
         }, 1250);
     }
 
-    static addEventListeners(events, listener) {
+    static addEventListeners(events, listener, object=window) {
         return events.map(
-            (i) => window.addEventListener(i, (e) => listener)
+            (i) => { 
+                object.addEventListener(i, listener)
+
+                return { event: i, listener, object }
+            }
+        );
+    }
+
+    static removeEventListeners(listener_array) {
+        return listener_array.map(
+            (i) => {
+                console.log(i.event, " - ", i.listener);
+                i.object.removeEventListener(i.event, i.listener);
+            }
         );
     }
 
@@ -164,6 +188,9 @@ export default class Util {
     }
 }
 
+Array.prototype.extend = function(array){
+    this.push.apply(this, array)
+}
 
 /**
 * Contains element
