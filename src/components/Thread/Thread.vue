@@ -341,6 +341,9 @@ export default {
             this.messages = [];
             this.fetchMessages();
 
+            if (this.$store.state.loaded_media)
+                this.$store.commit('loaded_media', null);
+
             this.$store.commit('colors', this.contact_data.colors);
             this.$el.querySelector('#message-entry').focus();
 

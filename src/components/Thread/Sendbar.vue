@@ -1,9 +1,9 @@
 <template>
-    <div class="send-bar">
-        <div v-if="$store.state.media_sending" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" v-mdl></div>
+    <div class="send-bar" v-mdl>
+        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: $store.state.media_sending ? '' : 'none' }" v-mdl></div>
         <div v-if="$store.state.loaded_media" class="preview" v-mdl>
             <div class="overlay">
-                <button class="media-clear mdl-button mdl-js-button mdl-button--colored mdl-button--fab mdl-js-ripple-effect" @click="removeMedia">
+                <button class="media-clear mdl-button mdl-js-button mdl-button--colored mdl-button--fab mdl-js-ripple-effect" :style="{ background: send_color }" @click="removeMedia">
                     <i class="material-icons">clear</i>
                 </button>
             </div>
