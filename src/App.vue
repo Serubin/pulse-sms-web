@@ -45,6 +45,8 @@
             <splash v-if="$store.state.loading"></splash>
         </transition>
         <Snackbar />
+
+        <div class="file-drag"></div>
     </div>
 </template>
 
@@ -362,8 +364,18 @@ export default {
 		user-select: none;
 		font-smooth: always;
 		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .file-drag.dragging {
+        border: rgba(0,128,0,0.3) solid 1em;
+        position: fixed;
+        height: calc(100% - 2em);
+        width: calc(100% - 2em);
+        top: 0;
+        z-index: 10;
+        left: 0;
+    }
 
 	#toolbar {
 		height: 43px;

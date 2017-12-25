@@ -52,32 +52,45 @@ export default {
         // Snackbar Clean up
         window.addEventListener('scroll', this.cleanupSnackbar)
 
-        // Drag drop event Listeners (For the lazy)
-        let event = ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop']
-            .map(
-                (i) => window.addEventListener(i, (e) => { 
-                    e.preventDefault()
-                    e.stopPropagation()
-                })
-            );
-
+       // Drag drop event Listeners (For the lazy)
+        Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
+            (e) => { 
+                e.preventDefault()
+                e.stopPropagation()
+            }
+        );
         
-        event = ['dragover', 'dragenter']
-        event = ['dragleave', 'dragend', 'drop']
-        event = ['drop']
-            .map(
-                (i) => window.addEventListener(i, (e) => {
+        Util.addEventListeners(['dragover', 'dragenter'],
+            (e) => {
+                const file_drag = document.querySelector(".file-drag");
+                const classes = file_drag.className
+                if (classes.indexOf("dragging") < 0)
+                    file_drag.className = classes + " dragging";
+            }
+        );
 
-                    let file;
+        Util.addEventListeners(['dragleave', 'dragend', 'drop'],
+            (e) => {
+                const file_drag = document.querySelector(".file-drag");
+                const classes = file_drag.className.replace(" dragging", "");
+                file_drag.className = classes;
+            }
+        );
 
-                    if (e.dataTransfer)
-                        file = e.dataTransfer.files[0]
-                    else
-                        file = e.target.files[0];
+        Util.addEventListeners(['drop'],
+            (e) => {
 
-                    Api.loadFile(file);
-                })
-            )
+                let file;
+
+                if (e.dataTransfer)
+                    file = e.dataTransfer.files[0]
+                else
+                    file = e.target.files[0];
+
+                Api.loadFile(file);
+            }
+        );
+
     },
 
     beforeDestroy () {
@@ -89,6 +102,10 @@ export default {
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
 
         this.$store.commit('title', this.previous_title);
+        
+        // Remove any loaded media
+        if (this.$store.state.loaded_media)
+            this.$store.commit('loaded_media', null);
     },
 
     data () {

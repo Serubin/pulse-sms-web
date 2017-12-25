@@ -146,6 +146,12 @@ export default class Util {
         }, 1250);
     }
 
+    static addEventListeners(events, listener) {
+        return events.map(
+            (i) => window.addEventListener(i, (e) => listener)
+        );
+    }
+
     static firebaseConfig () {
         const config = {
             apiKey: "AIzaSyB0pMWyfvde4mbKO20t23EEGECEb5itD7I",

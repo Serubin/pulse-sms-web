@@ -1,12 +1,16 @@
 <template>
     <div class="send-bar">
         <div v-if="$store.state.media_sending" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" v-mdl></div>
-        <div v-if="$store.state.loaded_media" class="preview">
-            <div class="overlay"></div>
+        <div v-if="$store.state.loaded_media" class="preview" v-mdl>
+            <div class="overlay">
+                <button class="media-clear mdl-button mdl-js-button mdl-button--colored mdl-button--fab mdl-js-ripple-effect" @click="removeMedia">
+                    <i class="material-icons">clear</i>
+                </button>
+            </div>
             <img :src="media_blob" />
         </div>
         <div class="send-bar-inner" id="sendbar">
-            <!-- Remove until implemented <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png"/> -->
+            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png" @click.prevent="attachMedia"/>
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png" @click="toggleEmoji"/>
             <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
                     <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" />
@@ -78,6 +82,33 @@ export default {
             Api.sendMessage(this.message, "text/plain", this.threadId)
             
             this.message = "";
+        },
+        removeMedia () {
+            this.$store.commit('loaded_media', null);
+        },
+        attachMedia (e) {
+            const input = document.createElement('input');
+            input.setAttribute("type", "file");
+
+            // Change Event
+            input.addEventListener('change', (e) => {
+                let file;
+
+                if (e.dataTransfer)
+                    file = e.dataTransfer.files[0]
+                else
+                    file = e.target.files[0];
+
+                Api.loadFile(file);
+            });
+
+            // Simulate Click
+            const event = document.createEvent("MouseEvents");
+            event.initMouseEvent("click", true, true, window, 1, 0, 0, 0, 0,
+                false, false, false, false, 0, null);
+
+            // Dispatch click
+            input.dispatchEvent(event)
         },
         toggleEmoji (toggle=null) {
 
@@ -166,6 +197,25 @@ export default {
                 height: 100%;
                 width: 100%;
                 z-index: 10;
+                
+                .media-clear {
+                    position: absolute;
+                    margin: 0.3em 1em;
+                    background: rgb(33, 150, 243) none repeat scroll 0% 0%;
+                    padding: 0.3em;
+                    right: 1em;
+                    width: 24px;
+                    min-width: 24px;
+                    min-height: 24px;
+                    height: 24px;
+                }
+
+                .media-clear i {
+                    width: 24px;
+                    font-size: 18px;
+                    line-height: 24px;
+                    height: 24px;
+                }
             }
 
             img {
