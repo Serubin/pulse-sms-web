@@ -4,7 +4,7 @@
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
-            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="color" :text-color="text_color"></message>
+            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
         </div>
         
         <sendbar :thread-id="threadId"></sendbar>
@@ -27,9 +27,6 @@ export default {
 
     mounted () {
 
-        this.fetchMessages();
-
-        this.$el.querySelector('#message-entry').focus();
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -37,6 +34,7 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
+        
         // Fetch dom
         this.html = document.querySelector("html");
         this.body = document.querySelector("body");
@@ -54,7 +52,7 @@ export default {
         events = Util.addEventListeners(['scroll'], this.cleanupSnackbar);
         this.listeners.extend(events);
 
-       // Drag drop event Listeners (For the lazy)
+       // Drag Drop Prevent default
         events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
             (e) => { 
                 e.preventDefault()
@@ -63,7 +61,7 @@ export default {
         );
         this.listeners.extend(events);
 
-        
+        // Drag over events
         events = Util.addEventListeners(['dragover', 'dragenter'],
             (e) => {
                 const file_drag = document.querySelector(".file-drag");
@@ -74,6 +72,7 @@ export default {
         );
         this.listeners.extend(events);
 
+        // Drag leave events
         events = Util.addEventListeners(['dragleave', 'dragend', 'drop'],
             (e) => {
                 const file_drag = document.querySelector(".file-drag");
@@ -83,6 +82,7 @@ export default {
         );
         this.listeners.extend(events);
 
+        // Drop handling
         events = Util.addEventListeners(['drop'],
             (e) => {
 
@@ -97,6 +97,8 @@ export default {
             }
         );
         this.listeners.extend(events);
+
+        this.loadThread();
 
     },
 
@@ -124,6 +126,7 @@ export default {
             messages: [],
             previous_title: "",
             listeners: [],
+            colors_from: {},
             html: document.querySelector("html"),
             body: document.querySelector("body"),
             list: document.querySelector("#content"),
@@ -145,30 +148,44 @@ export default {
             return this.$route.path.includes("archived");
         },
 
-        // color string = 'rgba(r,g,b,a)'
-        // generated from the 'toColor' method above.
-        text_color () {
-
-            let colorString = this.color;
-
-            colorString = colorString.replace("rgba(", "").replace(")", "");
-            colorString = colorString.replace("rgb(", "").replace(")", "");
-
-            const  colorArray = colorString.split(",");
-            const  red = colorArray[0];
-            const  green = colorArray[1];
-            const  blue = colorArray[2];
-
-            const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-            return darkness >= 0.30 ? "#fff" : "#000";
-        },
-
         margin_bottom () {
             return this.$store.state.loaded_media ? "355px" : "54px";
         }
     },
 
     methods: {
+        loadThread () {
+            // Commit title and colors
+            this.$store.commit('title', this.contact_data.title);
+            this.$store.commit('colors', this.contact_data.colors);
+
+            // Fetch messages
+            this.messages = [];
+            this.colors_from = {};
+            this.fetchMessages();
+
+            // Focus
+            this.$el.querySelector('#message-entry').focus();
+
+            // Remove media if needed
+            if (this.$store.state.loaded_media)
+                this.$store.commit('loaded_media', null);
+
+            // Cache colors
+            const from = this.contact_data.title.split(", ");
+            if (from.length == 1)
+                this.colors_from[from[0]] =  this.contact_data.colors.default;
+            else
+                from.map(
+                    (i) => {
+                        const contact = Object.values(
+                            this.$store.state.contacts
+                        ).containsObjKey("title", i)
+                        this.colors_from[i] = contact.colors.default;
+                    }
+                );
+
+        },
 
         /**
          * Fetch messages from server
@@ -312,6 +329,35 @@ export default {
             this.$router.push( !this.isArchived ? "/archived" : "/")
         },
 
+        // color string = 'rgba(r,g,b,a)'
+        // generated from the 'toColor' method above.
+        text_color (message) {
+
+            let colorString;
+            if (message.message_from)
+                colorString = this.getColor(message)
+            else
+                colorString = this.color;
+
+            colorString = colorString.replace("rgba(", "").replace(")", "");
+            colorString = colorString.replace("rgb(", "").replace(")", "");
+
+            const  colorArray = colorString.split(",");
+            const  red = colorArray[0];
+            const  green = colorArray[1];
+            const  blue = colorArray[2];
+
+            const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+            return darkness >= 0.30 ? "#fff" : "#000";
+        },
+
+        getColor (message) {
+            if (message.message_from)
+                return this.colors_from[message.message_from]
+            else
+                return this.color
+        },
+
         cleanupSnackbar () {
             if(!this.snackbar.MaterialSnackbar.active)
                 return false;
@@ -335,17 +381,8 @@ export default {
         '$route' (to) { // Update thread on route change
             this.conversation_id = this.threadId;
             this.read = this.isRead
-
-            this.$store.commit('title', this.contact_data.title);
-
-            this.messages = [];
-            this.fetchMessages();
-
-            if (this.$store.state.loaded_media)
-                this.$store.commit('loaded_media', null);
-
-            this.$store.commit('colors', this.contact_data.colors);
-            this.$el.querySelector('#message-entry').focus();
+            
+            this.loadThread();
 
         },
     },

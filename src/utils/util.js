@@ -170,7 +170,6 @@ export default class Util {
     static removeEventListeners(listener_array) {
         return listener_array.map(
             (i) => {
-                console.log(i.event, " - ", i.listener);
                 i.object.removeEventListener(i.event, i.listener);
             }
         );
@@ -209,7 +208,7 @@ Array.prototype.containsObjKey = function(key, element) {
 
     for (let i = 0; i < this.length; i++) 
         if (this[i][key] === element)
-            return true
+            return this[i]
 
     return false
 }
