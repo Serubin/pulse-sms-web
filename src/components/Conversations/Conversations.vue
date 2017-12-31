@@ -120,10 +120,25 @@ export default {
 
             conv.hash = Hash(conv);
 
+
             // Move conversation if required
             if (conv_index != 1) {
                 conv = this.conversations.splice(conv_index, 1)[0]
-                this.conversations.splice(1, 0, conv)
+
+                // If top label is not "Today"
+                // This isn't elegant, but it works
+                if (this.conversations[0].label != "Today") {
+                    const title = "Today"; // Define title
+                    const label = {        // And Define Label
+                        label: title, 
+                        hash: Hash(title)
+                    } 
+                    // Push label and conversation
+                    this.conversations.splice(0, 0, label, conv)
+
+                } else { // Else, just push the converstation to index 1 (below label)
+                    this.conversations.splice(1, 0, conv)
+                }
             } 
         },
 
