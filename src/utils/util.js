@@ -1,4 +1,5 @@
 import jump from 'jump.js'
+import * as firebase from 'firebase';
 
 export default class Util {
     /**
@@ -107,6 +108,11 @@ export default class Util {
             (el.scrollHeight - el.offsetHeight)
     }
 
+    /**
+     * Display snackbar
+     *
+     * @param message - either a string, or data object
+     */
     static snackbar(message) {
         let data = {}
 
@@ -123,6 +129,12 @@ export default class Util {
         snackbar.MaterialSnackbar.showSnackbar(data);
     }
 
+    /**
+     * Color Change with Material Animations
+     *
+     * @param $el element
+     * @param color new color
+     */
     static materialColorChange($el, color) {
         
         const container = document.createElement("span"); // Overflow container
@@ -144,6 +156,39 @@ export default class Util {
             $el.removeChild(container);
         }, 1250);
     }
+
+    static addEventListeners(events, listener, object=window) {
+        return events.map(
+            (i) => { 
+                object.addEventListener(i, listener)
+
+                return { event: i, listener, object }
+            }
+        );
+    }
+
+    static removeEventListeners(listener_array) {
+        return listener_array.map(
+            (i) => {
+                i.object.removeEventListener(i.event, i.listener);
+            }
+        );
+    }
+
+    static firebaseConfig () {
+        const config = {
+            apiKey: "AIzaSyB0pMWyfvde4mbKO20t23EEGECEb5itD7I",
+            authDomain: "messenger-42616.firebaseapp.com",
+            databaseURL: "https://messenger-42616.firebaseio.com",
+            storageBucket: "messenger-42616.appspot.com",
+        }
+
+        firebase.initializeApp(config);
+    }
+}
+
+Array.prototype.extend = function(array){
+    this.push.apply(this, array)
 }
 
 /**
@@ -163,7 +208,7 @@ Array.prototype.containsObjKey = function(key, element) {
 
     for (let i = 0; i < this.length; i++) 
         if (this[i][key] === element)
-            return true
+            return this[i]
 
     return false
 }

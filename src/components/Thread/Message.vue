@@ -29,7 +29,7 @@ import linkify from 'linkifyjs/html';
 
 export default {
     name: 'message',
-    props: [ 'messageData', 'threadColor' ],
+    props: [ 'messageData', 'threadColor', 'textColor' ],
 
     mounted () {
 
@@ -179,7 +179,8 @@ export default {
 
             return "background: " + this.color + ";"
                 + "border-color: " + this.color
-                + " transparent;" + media;
+                + " transparent;" + media
+                + "color:" + this.textColor + ";";
         },
         dateType () {
             if (this.type == 0 || this.type == 6)

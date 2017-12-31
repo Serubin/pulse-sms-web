@@ -2,6 +2,8 @@ import Vue from 'vue'
 import router from '@/router/'
 import store from '@/store/'
 import emojione from 'emojione'
+import * as firebase from 'firebase';
+import ImageCompressor from '@xkeshi/image-compressor';
 import ReconnectingWebsocket from 'reconnecting-websocket'
 
 import { Util, Url, Crypto } from '@/utils/'
@@ -205,11 +207,11 @@ export default class Api {
         return promise
     }
 
-    static sendMessage (data, mime_type, thread_id) {
+    static sendMessage (data, mime_type, thread_id, message_id=null) {
 
         let account_id = store.state.account_id;
 
-        let id = Api.generateId();
+        let id = message_id || Api.generateId();
 
         let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Photo</i>";
 
@@ -263,6 +265,67 @@ export default class Api {
 
         store.state.msgbus.$emit('newMessage', event_object);
 
+    }
+
+    static loadFile(file, compress=null) {
+        
+        if (!file.type.startsWith("image/"))
+            return Util.snackbar("File type not supported")
+
+        if (compress < 0.05 && compress != null)
+            return Util.snackbar("Image too large")
+
+        if (compress == null)
+            compress = 0.6
+
+         // Disallow large non-image files
+        if ((file.type.startsWith("image/") || !file.type === "image/gif") 
+            && file.size > 1024 * 1024) {
+            return new ImageCompressor(file, {
+                quality: compress,
+                maxWidth: 1500,
+                maxHeight: 1500,
+                success: (result) => Api.loadFile(result, compress * 0.7),
+                error: (e) => null
+            });
+        }
+        
+        store.commit('loaded_media', file);
+        Vue.nextTick(() =>Util.scrollToBottom(250))
+
+    }
+
+    static sendFile(file, thread_id) {
+        store.commit('media_sending', true);
+
+        const reader = new FileReader()
+        reader.onload = (e) => {
+            let encryptedFile = Crypto.encryptData(new Uint8Array(e.target.result));
+            encryptedFile = new TextEncoder('utf-8').encode(encryptedFile);
+            
+            const id = Api.generateId();
+            const account_id = store.state.account_id;
+
+            const storageRef = firebase.storage().ref();
+            const accountRef = storageRef.child(account_id);
+            const messageRef = accountRef.child(id + "");
+
+            // Add to firebase
+            messageRef.put(encryptedFile).then((snapshot) => {
+                // Send message
+                Api.sendMessage("firebase -1", file.type, thread_id, id);
+                
+                // Make url
+                const constructed_url = Url.get('media') + id + Url.getAccountParam();
+                Vue.http.get(constructed_url);
+                
+                // Empty loaded media
+                store.commit('loaded_media', null)
+                store.commit('media_sending', false);
+            });
+        }
+
+        reader.readAsArrayBuffer(file);
     }
 
     static markAsRead (thread_id) {

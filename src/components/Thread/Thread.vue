@@ -1,10 +1,10 @@
 <template>
     <div id="thread-wrap" @click="markAsRead">
-        <div class="page-content" id="message-list">
+        <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom}">
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
-            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="color"></message>
+            <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
         </div>
         
         <sendbar :thread-id="threadId"></sendbar>
@@ -27,9 +27,6 @@ export default {
 
     mounted () {
 
-        this.fetchMessages();
-
-        this.$el.querySelector('#message-entry').focus();
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -37,15 +34,72 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
+        
+        // Fetch dom
         this.html = document.querySelector("html");
+        this.body = document.querySelector("body");
         this.list = document.querySelector("#content");
         this.snackbar = document.querySelector(".mdl-snackbar");
 
-        window.addEventListener('focus', (e) => { 
+        // Window focus event
+        let events = Util.addEventListeners(['focus'], (e) => { 
             this.markAsRead();
             this.$el.querySelector('#message-entry').focus();
         });
-        window.addEventListener('scroll', this.cleanupSnackbar)
+        this.listeners.extend(events);
+
+        // Snackbar Clean up
+        events = Util.addEventListeners(['scroll'], this.cleanupSnackbar);
+        this.listeners.extend(events);
+
+       // Drag Drop Prevent default
+        events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
+            (e) => { 
+                e.preventDefault()
+                e.stopPropagation()
+            }
+        );
+        this.listeners.extend(events);
+
+        // Drag over events
+        events = Util.addEventListeners(['dragover', 'dragenter'],
+            (e) => {
+                const file_drag = document.querySelector(".file-drag");
+                const classes = file_drag.className
+                if (classes.indexOf("dragging") < 0)
+                    file_drag.className = classes + " dragging";
+            }
+        );
+        this.listeners.extend(events);
+
+        // Drag leave events
+        events = Util.addEventListeners(['dragleave', 'dragend', 'drop'],
+            (e) => {
+                const file_drag = document.querySelector(".file-drag");
+                const classes = file_drag.className.replace(" dragging", "");
+                file_drag.className = classes;
+            }
+        );
+        this.listeners.extend(events);
+
+        // Drop handling
+        events = Util.addEventListeners(['drop'],
+            (e) => {
+
+                let file;
+
+                if (e.dataTransfer)
+                    file = e.dataTransfer.files[0]
+                else
+                    file = e.target.files[0];
+
+                Api.loadFile(file);
+            }
+        );
+        this.listeners.extend(events);
+
+        this.loadThread();
+
     },
 
     beforeDestroy () {
@@ -57,6 +111,12 @@ export default {
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
 
         this.$store.commit('title', this.previous_title);
+
+        Util.removeEventListeners(this.listeners);
+
+        // Remove any loaded media
+        if (this.$store.state.loaded_media)
+            this.$store.commit('loaded_media', null);
     },
 
     data () {
@@ -65,7 +125,10 @@ export default {
             read: this.isRead || true, 
             messages: [],
             previous_title: "",
+            listeners: [],
+            colors_from: {},
             html: document.querySelector("html"),
+            body: document.querySelector("body"),
             list: document.querySelector("#content"),
             snackbar: document.querySelector(".mdl-snackbar"),
         }
@@ -83,10 +146,46 @@ export default {
 
         isArchived () {
             return this.$route.path.includes("archived");
+        },
+
+        margin_bottom () {
+            return this.$store.state.loaded_media ? "355px" : "54px";
         }
     },
 
     methods: {
+        loadThread () {
+            // Commit title and colors
+            this.$store.commit('title', this.contact_data.title);
+            this.$store.commit('colors', this.contact_data.colors);
+
+            // Fetch messages
+            this.messages = [];
+            this.colors_from = {};
+            this.fetchMessages();
+
+            // Focus
+            this.$el.querySelector('#message-entry').focus();
+
+            // Remove media if needed
+            if (this.$store.state.loaded_media)
+                this.$store.commit('loaded_media', null);
+
+            // Cache colors
+            const from = this.contact_data.title.split(", ");
+            if (from.length == 1)
+                this.colors_from[from[0]] =  this.contact_data.colors.default;
+            else
+                from.map(
+                    (i) => {
+                        const contact = Object.values(
+                            this.$store.state.contacts
+                        ).containsObjKey("title", i)
+                        this.colors_from[i] = contact.colors.default;
+                    }
+                );
+
+        },
 
         /**
          * Fetch messages from server
@@ -165,7 +264,7 @@ export default {
                 this.read = false;
 
             // Deploy snackbar if scrolled up 
-            if ((this.html.scrollHeight - this.html.offsetHeight - 200) > this.html.scrollTop
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) > Math.max(this.html.scrollTop, this.body.scrollTop)
                 && !(this.list.scrollHeight < this.html.offsetHeight)) {
                 
                 if (!this.snackbar.MaterialSnackbar.active) {
@@ -230,12 +329,41 @@ export default {
             this.$router.push( !this.isArchived ? "/archived" : "/")
         },
 
+        // color string = 'rgba(r,g,b,a)'
+        // generated from the 'toColor' method above.
+        text_color (message) {
+
+            let colorString;
+            if (message.message_from)
+                colorString = this.getColor(message)
+            else
+                colorString = this.color;
+
+            colorString = colorString.replace("rgba(", "").replace(")", "");
+            colorString = colorString.replace("rgb(", "").replace(")", "");
+
+            const  colorArray = colorString.split(",");
+            const  red = colorArray[0];
+            const  green = colorArray[1];
+            const  blue = colorArray[2];
+
+            const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+            return darkness >= 0.30 ? "#fff" : "#000";
+        },
+
+        getColor (message) {
+            if (message.message_from)
+                return this.colors_from[message.message_from]
+            else
+                return this.color
+        },
+
         cleanupSnackbar () {
             if(!this.snackbar.MaterialSnackbar.active)
                 return false;
             
             // If within 200 px of the bottom, remove snack bar
-            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < this.html.scrollTop)
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < Math.max(this.html.scrollTop, this.body.scrollTop))
                 this.snackbar.MaterialSnackbar.cleanup_();
         },
         
@@ -253,14 +381,8 @@ export default {
         '$route' (to) { // Update thread on route change
             this.conversation_id = this.threadId;
             this.read = this.isRead
-
-            this.$store.commit('title', this.contact_data.title);
-
-            this.messages = [];
-            this.fetchMessages();
-
-            this.$store.commit('colors', this.contact_data.colors);
-            this.$el.querySelector('#message-entry').focus();
+            
+            this.loadThread();
 
         },
     },

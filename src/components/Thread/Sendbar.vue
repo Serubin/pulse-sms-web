@@ -1,7 +1,16 @@
 <template>
-    <div class="send-bar">
+    <div class="send-bar" v-mdl>
+        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: $store.state.media_sending ? '' : 'none' }" v-mdl></div>
+        <div v-if="$store.state.loaded_media" class="preview" v-mdl>
+            <div class="overlay">
+                <button class="media-clear mdl-button mdl-js-button mdl-button--colored mdl-button--fab mdl-js-ripple-effect" :style="{ background: send_color }" @click="removeMedia">
+                    <i class="material-icons">clear</i>
+                </button>
+            </div>
+            <img :src="media_blob" />
+        </div>
         <div class="send-bar-inner" id="sendbar">
-            <!-- Remove until implemented <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png"/> -->
+            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png" @click.prevent="attachMedia"/>
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png" @click="toggleEmoji"/>
             <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
                     <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" />
@@ -60,13 +69,46 @@ export default {
                 this.message += "\n";
                 return;
             }
-            
+
+            if (this.$store.state.loaded_media) {
+                Api.sendFile(this.$store.state.loaded_media, this.threadId);
+                this.$store.commit('loaded_media', null);
+            }
+
             if (this.message.length <= 0) 
                 return;
+
 
             Api.sendMessage(this.message, "text/plain", this.threadId)
             
             this.message = "";
+        },
+        removeMedia () {
+            this.$store.commit('loaded_media', null);
+        },
+        attachMedia (e) {
+            const input = document.createElement('input');
+            input.setAttribute("type", "file");
+
+            // Change Event
+            input.addEventListener('change', (e) => {
+                let file;
+
+                if (e.dataTransfer)
+                    file = e.dataTransfer.files[0]
+                else
+                    file = e.target.files[0];
+
+                Api.loadFile(file);
+            });
+
+            // Simulate Click
+            const event = document.createEvent("MouseEvents");
+            event.initMouseEvent("click", true, true, window, 1, 0, 0, 0, 0,
+                false, false, false, false, 0, null);
+
+            // Dispatch click
+            input.dispatchEvent(event)
         },
         toggleEmoji (toggle=null) {
 
@@ -107,6 +149,9 @@ export default {
             if (this.message.length > 0)
                 return "is-dirty";
             return "";
+        },
+        media_blob () {
+            return window.URL.createObjectURL(this.$store.state.loaded_media)
         }
     },
 
@@ -133,6 +178,53 @@ export default {
         bottom: 0%;
         clear: both;
         transition: ease-in-out width $anim-time;
+
+        .mdl-progress {
+            width: 100%;
+        }
+
+        .preview {
+            position: relative;
+            background: #fafafa;
+            max-height: 300px;
+            overflow: hidden;
+
+            .overlay {
+                background: linear-gradient(to bottom, rgba(250,250,250,0) 95%,rgba(250,250,250,1) 100%);
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                height: 100%;
+                width: 100%;
+                z-index: 10;
+                
+                .media-clear {
+                    position: absolute;
+                    margin: 0.3em 1em;
+                    background: rgb(33, 150, 243) none repeat scroll 0% 0%;
+                    padding: 0.3em;
+                    right: 1em;
+                    width: 24px;
+                    min-width: 24px;
+                    min-height: 24px;
+                    height: 24px;
+                }
+
+                .media-clear i {
+                    width: 24px;
+                    font-size: 18px;
+                    line-height: 24px;
+                    height: 24px;
+                }
+            }
+
+            img {
+                margin: 1em calc(24px + 16px + 8px) 1em;
+                width: calc(100% - 108px);
+            }
+
+
+        }
 
         @media (min-width: 750px) {
             & {
@@ -240,6 +332,14 @@ export default {
     }
 
     body.dark {
+        .preview {
+            background: rgb(55,66,72);
+
+            .overlay {
+                background: linear-gradient(to bottom, rgba(55,66,72,0) 95%,rgba(55,66,72,1) 100%);
+            }
+        }
+
         .send-bar-inner {
             background: #374248;
             color: #fff;

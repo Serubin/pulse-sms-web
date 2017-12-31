@@ -45,6 +45,8 @@
             <splash v-if="$store.state.loading"></splash>
         </transition>
         <Snackbar />
+
+        <div class="file-drag"></div>
     </div>
 </template>
 
@@ -81,6 +83,8 @@ export default {
 
         window.addEventListener('resize', this.handleResize)
         this.handleResize();
+
+        Util.firebaseConfig();
         
         // Construct colors object
         const colors = {
@@ -181,14 +185,13 @@ export default {
          * maintain UI reactivity.
          */
         populateMenuItems () {
+
             const items = [
-                { 'name': "account", 'title': "My Account" },
                 { 'name': "settings", 'title': "Settings" },
-                { 'name': "help", 'title': "Help and Feedback" },
                 { 'name': "logout", 'title': "Logout" }
             ]
             
-            if (this.$route.name.includes('thread')) {
+            if (this.$route.name.includes('thread'))
                 items.unshift(
                     { 'name': "delete", 'title': "Delete Conversation" },
                     ( !this.$route.path.includes("archived") ?
@@ -196,7 +199,13 @@ export default {
                         {'name': "unarchive", 'title': "Unarchive Conversation" }),
                     { "name": "blacklist", 'title': "Blacklist Contact"}, 
                 );
-            }
+            else 
+                items.unshift(
+                    { 'name': "account", 'title': "My Account" },
+                    { 'name': "help", 'title': "Help and Feedback" },
+                )
+
+
         
             return this.menu_items = items;
         },
@@ -244,8 +253,7 @@ export default {
             this.hour = new Date().getHours();
 
             setTimeout(() => {
-                this.hour = new Date().getHours();
-                this.calculateHour();
+                this.calculateHour()
             }, nextHour + 2000);
         }
 
@@ -356,8 +364,18 @@ export default {
 		user-select: none;
 		font-smooth: always;
 		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .file-drag.dragging {
+        border: rgba(0,128,0,0.3) solid 1em;
+        position: fixed;
+        height: calc(100% - 2em);
+        width: calc(100% - 2em);
+        top: 0;
+        z-index: 10;
+        left: 0;
+    }
 
 	#toolbar {
 		height: 43px;
@@ -506,6 +524,12 @@ export default {
     body.dark {
         background-color: $bg-dark;
         color: #fff;
+
+        .mdl-progress > .bufferbar {
+            background-image: linear-gradient(to right,rgba(55, 66, 72,.7),rgba(55, 66, 72,.7)),
+                linear-gradient(to right,rgb(33,150,243),rgb(33,150,243));
+        }
+
 
         #toolbar {
             border-bottom: solid 1px #ca2100;
