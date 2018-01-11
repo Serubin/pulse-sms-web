@@ -69,45 +69,57 @@ export default {
 
     beforeCreate () {
 
-        if(this.$store.state.account_id != '') // If logged in
-            Crypto.setupAes();                 // Set up crypto
-        else // Otherwise, force login
+        // Set title
+        this.$store.commit('title', "PulseClient");
+        // If logged in (account_id) then setup crypto
+        if(this.$store.state.account_id != '') 
+            Crypto.setupAes(); 
+        else // Otherwise, force login page
             this.$router.push('login');
 
     },
 
     mounted () { // Add window event listener
         
-        this.calculateHour();
-        this.updateBodyClass(this.theme, "");
+        this.calculateHour(); // Calculate the next hour (for day/night theme)
+        this.updateBodyClass(this.theme_str, ""); // Enables global theme
 
+        // Handle resizing for left margin size
         window.addEventListener('resize', this.handleResize)
-        this.handleResize();
+        this.handleResize(); // Get initial margin size
 
-        Util.firebaseConfig();
+        // Setup firebase
+        Util.firebaseConfig(); 
         
-        // Construct colors object
+        // Construct colors object from saved global theme
         const colors = {
             'default': this.$store.state.theme_global_default,
             'dark': this.$store.state.theme_global_dark,
             'accent': this.$store.state.theme_global_accent,
         };
-        this.$store.commit('colors', colors);
 
-        if (this.$store.state.account_id != '') // If logged in
-            this.applicationStart();            // Start app
-        else {
+        // Commit them to current application colors
+        this.$store.commit('colors', colors); 
+
+        // If logged in start app
+        if (this.$store.state.account_id != '') {
+            this.applicationStart();
+        } else { // Otherwise, add listener for start-app event
+                 // This allows for another part of the app to setup parts of the app
+                 // Which may have unmet requirements (such as login)
             this.$store.state.msgbus.$on('start-app', this.applicationStart);
             this.mount_view = true;
         }
-
+        
+        // Setup global button listeners
         this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
-
+        
+        // Request notification permissions if setting is on.
         if (this.$store.state.notifications)
             Notification.requestPermission();
 
-
+        // Set toolbar color with materialColorChange animiation
         const toolbar = this.$el.querySelector("#toolbar");
         Util.materialColorChange(toolbar, this.theme_toolbar);
 
@@ -144,24 +156,36 @@ export default {
          * Contains app components that require account to run.
          */
         applicationStart () {
-            this.mm = new Api();
+            // Setup the API (Open websocket)
+            this.mm = new Api(); 
+            // Grab user settings from server and store in local storage
             Api.fetchSettings();
+            // Populate the dropdown menu
             this.populateMenuItems();
+            // Setup and store the medialoader (MMS)
             this.$store.commit('media_loader', new MediaLoader());
         },
-        
+
+        /**
+         * Handles the sidebar button
+         * Toggles sidebar open/close or redirects to '/' based on current theme
+         */
         toggleSidebar () {
             if(!this.full_theme)
                 this.$store.commit('sidebar_open', !this.sidebar_open);
             else 
                 this.$router.push('/');
         },
-
+        /**
+         * Calculates margin size on window resize
+         * effectively creating a dynamic left-side whitespace
+         */
         handleResize () { // Handle resize. Toggles full/mini theme
             const MAIN_CONTENT_SIZE = 950;
             const width = document.documentElement.clientWidth;
             let margin = 0;
 
+            // If width is less than 750, close sidebar
             if (width > 750) {
                 this.$store.commit('sidebar_open', true);
                 this.$store.commit('full_theme', true);
@@ -171,10 +195,12 @@ export default {
             }
 
             // Handles left side offset
+            // Calculates width based on the main content size of 950
             if (width > MAIN_CONTENT_SIZE) {
                 margin = (width - MAIN_CONTENT_SIZE) / 2;
             }
-
+            
+            // Set margin
             this.margin = margin
         },
         
@@ -186,11 +212,13 @@ export default {
          */
         populateMenuItems () {
 
+            // Static items!
             const items = [
                 { 'name': "settings", 'title': "Settings" },
                 { 'name': "logout", 'title': "Logout" }
             ]
-            
+
+            // On thread add Delete, Blacklist, & Archive/unarchive
             if (this.$route.name.includes('thread'))
                 items.unshift(
                     { 'name': "delete", 'title': "Delete Conversation" },
@@ -199,29 +227,44 @@ export default {
                         {'name': "unarchive", 'title': "Unarchive Conversation" }),
                     { "name": "blacklist", 'title': "Blacklist Contact"}, 
                 );
-            else 
+            else  // Otherwise just Account & Help
                 items.unshift(
                     { 'name': "account", 'title': "My Account" },
                     { 'name': "help", 'title': "Help and Feedback" },
                 )
 
-
-        
+            // Set menu_items
             return this.menu_items = items;
         },
 
+        /**
+         * handles menu button click event.
+         * Dispatches an event with "name-btn" title.
+         * @param name - button name
+         */
         dispatchMenuButton (name) {
+            // Dispatch button event to message bus
             this.$store.state.msgbus.$emit(name + "-btn");
         },
 
+        /**
+         * Updates theme (toolbar color)
+         * When toolbar theme is enabled
+         * @param color - rgb/hex color string.
+         */
         updateTheme (color) {
+            // Ignore if toolbar theme is false
             if (!this.$store.state.theme_toolbar)
                 return false;
-            
+            // Set color
             this.toolbar_color = color;
-
         },
 
+        /**
+         * Handle logout
+         * Removes sensative data, clears local storage, 
+         * and closes websocket 
+         */
         logout () {
 
             // Remove sensative data
@@ -241,18 +284,29 @@ export default {
             this.$router.push('login');
         },
 
+        /**
+         * updates body class.
+         * Removes from class, adds to class
+         * @param to - new class
+         * @param from  - old class
+         */
         updateBodyClass (to, from) {
-            const body = this.$el.parentElement;
+            const body = this.$el.parentElement; // select body
+            // Add and remove classes
             const classes = body.className.replace(from, "")
             body.className = classes + " " + to;
         },
 
+        /**
+         * Sets current hour, ever hour on the hour.
+         */
         calculateHour () {
-            
-            const nextHour = (60 - new Date().getMinutes()) * 60 * 1000
-            this.hour = new Date().getHours();
 
-            setTimeout(() => {
+            // Determines ms to the next hour
+            const nextHour = (60 - new Date().getMinutes()) * 60 * 1000
+            this.hour = new Date().getHours(); // Get current hour
+
+            setTimeout(() => { // Rerun function at the next hour
                 this.calculateHour()
             }, nextHour + 2000);
         }
@@ -268,50 +322,52 @@ export default {
                 'menu_toggle_dark': !this.full_theme && this.$store.state.theme_toolbar,
             }
         },
+
         sidebar_open () { // Sidebar_open state
             return this.$store.state.sidebar_open;
         },
+
         full_theme () { // Full_theme state
             return this.$store.state.full_theme;
         },
-        theme () {
+
+        theme_str () {
             const theme = this.$store.state.theme_base;
 
+            // If day/night, return dark/light
             if (theme == "day_night") 
                 return this.is_night ? "dark" : "";
 
-            return this.$store.state.theme_base;
+            return theme; // Otherwise return stored theme
         },
 
-        is_night () {
+        is_night () { // If "night" (between 20 and 7)
             return this.hour < 7 || this.hour >= 20 ? true : false;
         },
 
-        theme_toolbar () {
-            if (this.$store.state.theme_use_global)
+        theme_toolbar () { // Determine toolbar color
+            if (this.$store.state.theme_use_global) // If use global 
                 return this.$store.state.theme_global_default;
 
-            if (!this.$store.state.theme_toolbar) 
+            if (!this.$store.state.theme_toolbar)  // If not color toolbar
                 return this.default_toolbar_color;
 
             return this.toolbar_color;
         },
 
-        default_toolbar_color () {
-            const theme = this.theme;
-            let retval;
+        default_toolbar_color () { // Determine default colors
+            const theme = this.theme_str; // Theme string
 
-            if (theme == "light")
-                retval = "#f3f3f3"
-            else if(theme == "dark")
-                retval ="#202B30"
-            else if(theme == "day_night")
-                retval = this.is_night ? "#202b30" : "#f3f3f3"
-
-            return retval;
+            if (theme == "light") // Light theme
+                return "#f3f3f3"
+            else if(theme == "dark") // Dark theme
+                return "#202B30"
+            else if(theme == "day_night") // Day night
+                return this.is_night ? "#202b30" : "#f3f3f3"
                 
         },
-        text_color () {
+
+        text_color () { // Determines toolbar text color
             if (this.$store.state.theme_toolbar) 
                 return "#fff";
         }
@@ -320,13 +376,13 @@ export default {
         '$route' (to, from) { // To update dropdown menu
             this.populateMenuItems();
         },
-        '$store.state.colors_default' (to) {
+        '$store.state.colors_default' (to) { // Handle theme changes
             this.updateTheme(to);
         },
-        'theme' (to, from) {
+        'theme_str' (to, from) { // Handles updating the body class
             this.updateBodyClass(to, from)
         },
-        'theme_toolbar' (to, from) {
+        'theme_toolbar' (to, from) { // Handle toolbar color change
             Vue.nextTick(() => {
                 const toolbar = this.$el.querySelector("#toolbar");
                 Util.materialColorChange(toolbar, to);
