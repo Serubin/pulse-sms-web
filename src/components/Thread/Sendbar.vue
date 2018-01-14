@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import AutoGrow from '@/lib/textarea-autogrow.js'
 import emojione from 'emojione'
 import 'vue-emoji-mart/css/emoji-mart.css'
@@ -36,14 +37,14 @@ import { Api } from '@/utils'
 
 export default {
     name: 'Sendbar',
-    props: ['threadId'],
+    props: ['threadId', 'onSend'],
 
     mounted () {
         let autogrow = new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
 
         window.addEventListener('resize', this.updateEmojiMargin)
         this.$wrapper = document.querySelector("#wrapper");
-        
+        this.$sendbar = document.querySelector("#message-entry");
     },
 
     data () {
@@ -60,65 +61,113 @@ export default {
             skin: 3,
             show_emoji: false,
             $wrapper: null,
+            $sendbar: null,
         }
     },
 
     methods: {
-        dispatchSend(e) { // Dispatch send message when klicked
+        /**
+         * dispatchSend
+         * Handles send and enter press
+         * Also handles shift modifier
+         * @param e - event object
+         */
+        dispatchSend(e) { // Dispatch send message when clicked
+
             if (e.shiftKey) {
-                this.message += "\n";
-                return;
+                // Get start/end of selection for insert location
+                const start = e.target.selectionStart;
+                const end =  e.target.selectionEnd;
+
+                // Overwrite selection with newline
+                this.message = this.message.substr(0,start) 
+                    + "\n" + this.message.substr(end, this.message.length)
+
+                // Set new location of selection to start of old selection
+                // Wait until next tick to ensure the new message gets rendered
+                Vue.nextTick(() =>  
+                    e.target.setSelectionRange(start, start)
+                );
+
+                return; // Full stop
             }
 
-            if (this.$store.state.loaded_media) {
-                Api.sendFile(this.$store.state.loaded_media, this.threadId);
-                this.$store.commit('loaded_media', null);
-            }
-
+            // If message is empty, we're done
             if (this.message.length <= 0) 
-                return;
+                return false;
 
-
-            Api.sendMessage(this.message, "text/plain", this.threadId)
+            // Send message to handler
+            this.onSend(this.message);
             
+            // Clear message
             this.message = "";
         },
+        /**
+         * Removes media from store
+         */
         removeMedia () {
-            this.$store.commit('loaded_media', null);
+            if (this.$store.state.loaded_media)
+                this.$store.commit('loaded_media', null);
         },
+
+        /**
+         * Attach media
+         * Get media from event and puts it in the store
+         * @param e - event object
+         */
         attachMedia (e) {
+
+            // Create input to attach file
             const input = document.createElement('input');
             input.setAttribute("type", "file");
 
-            // Change Event
+            // Add event listener
             input.addEventListener('change', (e) => {
                 let file;
 
+                // Get file from event
                 if (e.dataTransfer)
                     file = e.dataTransfer.files[0]
                 else
                     file = e.target.files[0];
-
+                
+                // Load file into cache
                 Api.loadFile(file);
             });
 
-            // Simulate Click
+            // Simulate Click to open file input menu
             const event = document.createEvent("MouseEvents");
             event.initMouseEvent("click", true, true, window, 1, 0, 0, 0, 0,
                 false, false, false, false, 0, null);
 
-            // Dispatch click
+            // Dispatch click event
             input.dispatchEvent(event)
         },
-        toggleEmoji (toggle=null) {
 
-            this.updateEmojiMargin(true);
-            if(typeof toggle != "boolean")
-                return this.show_emoji = !this.show_emoji
+        /**
+         * Toggle emoji menu
+         * @param toggle - toggle override (default: null)
+         */
+        toggleEmoji (toggle=null) {
             
+            // Update emoji wrapper margin
+            this.updateEmojiMargin(true);
+
+            // If no toggle given, toggle the show_emoji value
+            if(typeof toggle != "boolean") 
+                return this.show_emoji = !this.show_emoji
+                
+            // Otherwise set to provided toggle
             return this.show_emoji = toggle
 
         },
+
+        /**
+         * Updates margin of the emoji box
+         * Updates margin to match edge of the message box
+         * Note: only updates when emoji box is open
+         * @param force - force update
+         */
         updateEmojiMargin (force=false) {
 
             if (!this.show_emoji && !force)
@@ -129,15 +178,32 @@ export default {
             const width = document.documentElement.clientWidth;
             let margin = 0;
 
-            // Handles left side offset
+            // Handles left side offset - same alg as wrapper margin
             if (width > MAIN_CONTENT_SIZE) {
                 margin = (width - MAIN_CONTENT_SIZE) / 2;
             }
-
+            
+            // Set margin + sidebar
             this.emojiStyle.left = (270  + margin) + "px";
         },
+        /**
+         * Inserts Emoji to curser location
+         * @param e emoji event
+         */
         insertEmoji(e) {
-            this.message += e.native;
+            // Get start/end of selection for insert location
+            const start = this.$sendbar.selectionStart;
+            const end =  this.$sendbar.selectionEnd;
+
+            // Overwrite selection with emoji
+            this.message = this.message.substr(0,start) 
+                + e.native + this.message.substr(end, this.message.length)
+
+            // Set new location of selection to start of old selection
+            // Wait until next tick to ensure the new message gets rendered
+            Vue.nextTick(() =>  
+                this.$sendbar.setSelectionRange(start, start)
+            );
         }
     },
 
@@ -145,12 +211,12 @@ export default {
         send_color () {
             return this.$store.state.colors_accent
         },
-        is_dirty () {
+        is_dirty () { // Is dirty fix for mdl
             if (this.message.length > 0)
                 return "is-dirty";
             return "";
         },
-        media_blob () {
+        media_blob () { // creates url object from media blob
             return window.URL.createObjectURL(this.$store.state.loaded_media)
         }
     },
@@ -158,6 +224,7 @@ export default {
     watch: { 
         '$route' (to) { // Update thread on route change
             this.message = "";
+            this.removeMedia();
         }
     },
     components: {

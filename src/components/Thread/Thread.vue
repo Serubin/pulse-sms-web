@@ -7,7 +7,7 @@
             <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
         </div>
         
-        <sendbar :thread-id="threadId"></sendbar>
+        <sendbar :thread-id="threadId" :on-send="sendMessage"></sendbar>
     </div>
 </template>
 
@@ -43,7 +43,10 @@ export default {
 
         // Window focus event
         let events = Util.addEventListeners(['focus'], (e) => { 
-            this.markAsRead();
+
+            // Mark as read on focus
+            this.markAsRead(); 
+            // Focus cursor on message entry
             this.$el.querySelector('#message-entry').focus();
         });
         this.listeners.extend(events);
@@ -55,6 +58,7 @@ export default {
        // Drag Drop Prevent default
         events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
             (e) => { 
+                // Stop normal events
                 e.preventDefault()
                 e.stopPropagation()
             }
@@ -64,7 +68,10 @@ export default {
         // Drag over events
         events = Util.addEventListeners(['dragover', 'dragenter'],
             (e) => {
+                // Get file drag dom
                 const file_drag = document.querySelector(".file-drag");
+
+                // Add dragging class if not already added
                 const classes = file_drag.className
                 if (classes.indexOf("dragging") < 0)
                     file_drag.className = classes + " dragging";
@@ -75,7 +82,10 @@ export default {
         // Drag leave events
         events = Util.addEventListeners(['dragleave', 'dragend', 'drop'],
             (e) => {
+                // Get file drag dom
                 const file_drag = document.querySelector(".file-drag");
+
+                // Remove dragging class
                 const classes = file_drag.className.replace(" dragging", "");
                 file_drag.className = classes;
             }
@@ -85,19 +95,21 @@ export default {
         // Drop handling
         events = Util.addEventListeners(['drop'],
             (e) => {
-
                 let file;
 
+                // Get actual file
                 if (e.dataTransfer)
                     file = e.dataTransfer.files[0]
                 else
                     file = e.target.files[0];
-
+                
+                // Load file to local cache
                 Api.loadFile(file);
             }
         );
         this.listeners.extend(events);
-
+        
+        // Load thread
         this.loadThread();
 
     },
@@ -109,9 +121,11 @@ export default {
 
         this.$store.state.msgbus.$off('archive-btn', this.archive);
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
-
+        
+        // Restore last title
         this.$store.commit('title', this.previous_title);
 
+        // Remove event listeners
         Util.removeEventListeners(this.listeners);
 
         // Remove any loaded media
@@ -148,21 +162,47 @@ export default {
             return this.$route.path.includes("archived");
         },
 
-        margin_bottom () {
+        margin_bottom () { // Margin bottom when media is loaded
             return this.$store.state.loaded_media ? "355px" : "54px";
         }
     },
 
     methods: {
+
+        /**
+         * handles sendMessage event
+         * Call back for sending messages
+         * @param message - string message
+         */
+        sendMessage (message) {
+
+            // Send stored media if laoded
+            if (this.$store.state.loaded_media) {
+                Api.sendFile(this.$store.state.loaded_media, this.conversation_id);
+                this.$store.commit('loaded_media', null); // Remove from store
+            }
+
+            // If message is empty, we're done
+            if (message.length <= 0) 
+                return false;
+
+            // Otherwise send any corrisponding message
+            Api.sendMessage(message, "text/plain", this.conversation_id)
+
+        },
+
+        /**
+         * Load Thread
+         * Set's up thread, gets colors. initiate message fetch
+         */
         loadThread () {
-            // Commit title and colors
-            this.$store.commit('title', this.contact_data.title);
-            this.$store.commit('colors', this.contact_data.colors);
 
             // Fetch messages
             this.messages = [];
-            this.colors_from = {};
             this.fetchMessages();
+
+            // Colors, map name to color
+            this.colors_from = {}; 
 
             // Focus
             this.$el.querySelector('#message-entry').focus();
@@ -171,17 +211,20 @@ export default {
             if (this.$store.state.loaded_media)
                 this.$store.commit('loaded_media', null);
 
-            // Cache colors
-            const from = this.contact_data.title.split(", ");
-            if (from.length == 1)
+            // Get contact colors from cache
+            const from = this.contact_data.title.split(", "); // Split name(s)
+
+            if (from.length == 1) // If only one, use default color
                 this.colors_from[from[0]] =  this.contact_data.colors.default;
-            else
-                from.map(
-                    (i) => {
-                        const contact = Object.values(
-                            this.$store.state.contacts
-                        ).containsObjKey("title", i)
-                        this.colors_from[i] = contact.colors.default;
+            else // Otherwise, get from cache
+                from.map(  
+                    (i) => { // For each name
+                        const contact = Object.values( // Get contact
+                            this.$store.state.contacts // From cache
+                        ).containsObjKey("title", i)   // Match to "title"
+                        
+                        // Map name/title to color
+                        this.colors_from[i] = contact.colors.default; 
                     }
                 );
 
@@ -206,6 +249,7 @@ export default {
                         else 
                             nextTimestamp = new Date(response[i - 1].timestamp);
 
+                        // Compare current time stamp with the next (previous chronological)
                         response[i].dateLabel = this.compareTimestamps(
                             new Date(response[i].timestamp), nextTimestamp, 15
                         );
@@ -214,9 +258,7 @@ export default {
                         this.messages.push(response[i]);
 
                     }
-
-                    this.$store.commit('colors', this.contact_data.colors);
-
+                    
                     // Wait for messages to render
                     Vue.nextTick(() => { 
                         Util.scrollToBottom();
@@ -226,7 +268,10 @@ export default {
 
 
                         this.previous_title = this.$store.state.title;
+
+                        // Commit title and colors
                         this.$store.commit('title', this.contact_data.title);
+                        this.$store.commit('colors', this.contact_data.colors);
                     });
                 });
         },
@@ -300,7 +345,6 @@ export default {
 
         },
 
-
         /**
          * markAsRead
          * Mark's thread as read if not already read.
@@ -308,70 +352,116 @@ export default {
          */
         markAsRead () {
 
-            if(this.read) // Already read
+            if(this.read) // if already read, stop
                 return;
 
             Api.markAsRead(this.conversation_id);
             this.read = true; // Set thread to read
         },
+
         /**
          * refresh
          * Force refresh messages - fetches from server
          */
         refresh () {
-            this.messages = [];
-            this.fetchMessages();
-            this.markAsRead();
-        },
-        
-        archive () {
-            Api.archiver(!this.isArchived, this.conversation_id);
-            this.$router.push( !this.isArchived ? "/archived" : "/")
+            this.messages = []; // Clear messages
+            this.fetchMessages(); // Fetch messages
+            this.markAsRead(); // Mark as read
         },
 
-        // color string = 'rgba(r,g,b,a)'
-        // generated from the 'toColor' method above.
+        /**
+         * Archive conversation
+         */
+        archive () {
+
+            // Archive conversation on the server
+            Api.archiver(!this.isArchived, this.conversation_id);
+
+            // Snackbar the user
+            Util.snackbar("Conversation has been " +
+                (!this.isArchived ? "archived" : "unarchived"))
+            
+            // Awful terrible fix for thread snackbar clean up events
+            this.snackbar.MaterialSnackbar.active = false;
+
+            // Construct push URL
+            const constructed_url = (this.$route.path.replace("archived", "") // Remove archive 
+                + (!this.isArchived ? "/archived" : "/")) // Add archive or /
+                .replace("//", "/"); // Double slash fix
+            // Push to archived/normal route
+            this.$router.push( constructed_url )
+        },
+
+        /**
+         * Determine text color for messages
+         * Determines color "darkness" & returns black/white for text color
+         * @params message - message object
+         * @return text color
+         */
         text_color (message) {
 
-            let colorString;
-            if (message.message_from)
-                colorString = this.getColor(message)
-            else
+            // Get color string
+            let colorString; 
+            if (message.message_from)                 colorString = this.getColor(message)
+            else // Otherwise default color
                 colorString = this.color;
 
+            // Split up color string
             colorString = colorString.replace("rgba(", "").replace(")", "");
             colorString = colorString.replace("rgb(", "").replace(")", "");
 
+            // Get actual colors
             const  colorArray = colorString.split(",");
             const  red = colorArray[0];
             const  green = colorArray[1];
             const  blue = colorArray[2];
-
+            
+            // Some magic with implicit type conversion
             const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+
+            // Determine color
             return darkness >= 0.30 ? "#fff" : "#000";
         },
 
+        /**
+         * getColor from specific message, respecting contact colors
+         * @param message 
+         * @return color
+         */
         getColor (message) {
-            if (message.message_from)
-                return this.colors_from[message.message_from]
+            if (message.message_from) // If multiple senders, get specific color
+                return this.colors_from[message.message_from]; // Get color from cached colors
             else
-                return this.color
+                return this.color // Otherwise return conversation default
         },
 
+        /**
+         * Cleansup snackbar based on scroll position
+         * For intellegant dismissing of "new message" notification
+         * when the user is scrolled up in the conversation
+         */
         cleanupSnackbar () {
             if(!this.snackbar.MaterialSnackbar.active)
                 return false;
             
             // If within 200 px of the bottom, remove snack bar
-            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < Math.max(this.html.scrollTop, this.body.scrollTop))
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < 
+                Math.max(this.html.scrollTop, this.body.scrollTop))
                 this.snackbar.MaterialSnackbar.cleanup_();
         },
-        
+
+        /**
+         * Compare two timestamps to determine if "length" away from one another
+         * @param date - first date
+         * @param nextDate - next date
+         * @param length - time in minutes
+         */
         compareTimestamps(date, nextDate, length) {
 
+            // If the dates are length a part, return date string
             if (nextDate.getTime() > date.getTime() + (1000 * 60 * length))
                 return date.toLocaleString();
-            else 
+            else  // Otherwise null
                 return null;
 
         }
