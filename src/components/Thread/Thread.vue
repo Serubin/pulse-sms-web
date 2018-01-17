@@ -1,13 +1,13 @@
 <template>
     <div id="thread-wrap" @click="markAsRead">
-        <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom}">
+        <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom + 'px'}">
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
             <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
         </div>
         
-        <sendbar :thread-id="threadId" :on-send="sendMessage"></sendbar>
+        <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage"></sendbar>
     </div>
 </template>
 
@@ -40,6 +40,7 @@ export default {
         this.body = document.querySelector("body");
         this.list = document.querySelector("#content");
         this.snackbar = document.querySelector(".mdl-snackbar");
+        this.sendbar = document.querySelector("#sendbar");
 
         // Window focus event
         let events = Util.addEventListeners(['focus'], (e) => { 
@@ -109,6 +110,21 @@ export default {
         );
         this.listeners.extend(events);
         
+        // Watch sendbar's message content
+        this.$watch(
+            '$refs.sendbar.message',
+            (to) => setTimeout(() => { // Wait 500ms for text render and resize
+                // Set margin bottom
+                this.margin_bottom = this.$refs.sendbar.$el.clientHeight;
+                
+                // Scroll to bottom when ready
+                Vue.nextTick(() => setTimeout(() => { // Wait for new margin
+                    Util.scrollToBottom(500); // Scroll to bottom
+                }, 250))
+            }, 500),
+            { deep: true, immediate: true }
+        )
+
         // Load thread
         this.loadThread();
 
@@ -141,10 +157,12 @@ export default {
             previous_title: "",
             listeners: [],
             colors_from: {},
-            html: document.querySelector("html"),
-            body: document.querySelector("body"),
-            list: document.querySelector("#content"),
-            snackbar: document.querySelector(".mdl-snackbar"),
+            margin_bottom: "63",
+            html: null,
+            body: null,
+            list: null,
+            snackbar: null,
+            sendbar: null,
         }
     },
 
@@ -161,10 +179,6 @@ export default {
         isArchived () {
             return this.$route.path.includes("archived");
         },
-
-        margin_bottom () { // Margin bottom when media is loaded
-            return this.$store.state.loaded_media ? "355px" : "54px";
-        }
     },
 
     methods: {
@@ -471,7 +485,7 @@ export default {
         '$route' (to) { // Update thread on route change
             this.conversation_id = this.threadId;
             this.read = this.isRead
-            
+               
             this.loadThread();
 
         },
@@ -489,4 +503,7 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
     
+    #message-list {
+        transition: margin-bottom 0.3s ease-in-out;
+    }
 </style>
