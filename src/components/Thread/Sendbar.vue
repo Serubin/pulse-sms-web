@@ -86,7 +86,7 @@ export default {
                 // Set new location of selection to start of old selection
                 // Wait until next tick to ensure the new message gets rendered
                 Vue.nextTick(() =>  
-                    e.target.setSelectionRange(start, start)
+                    e.target.setSelectionRange(start + 1, start + 1)
                 );
 
                 return; // Full stop
@@ -202,7 +202,7 @@ export default {
             // Set new location of selection to start of old selection
             // Wait until next tick to ensure the new message gets rendered
             Vue.nextTick(() =>  
-                this.$sendbar.setSelectionRange(start, start)
+                this.$sendbar.setSelectionRange(start + 1, start + 1)
             );
         }
     },
