@@ -93,7 +93,7 @@ export default {
             }
 
             // If message is empty, we're done
-            if (this.message.length <= 0) 
+            if (this.message.length <= 0 && !this.$store.state.loaded_media ) 
                 return false;
 
             // Send message to handler
