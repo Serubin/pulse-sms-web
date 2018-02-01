@@ -8,17 +8,22 @@
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class" />
                 </div>
                 <span class="mdl-layout-title" id="toolbar-title">{{ $store.state.title }}</span>
-                <div id="toolbar_icons">
-                    <button id="refresh-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
+				<div id="toolbar_icons" >
+					<transition-group name="list">
+                    <button id="add-button" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="$route.path.indexOf('thread') != -1" key="add" @click="$router.push('/compose');">
+						<i class="material-icons material-icons-white">add</i>
+					</button>
+                    <button id="refresh-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')" key="refresh">
                         <i class="material-icons">refresh</i>
                     </button>
-                    <button class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button">
+                    <button class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button" key="more">
                         <i class="material-icons">more_vert</i>
                     </button>
+					</transition-group>
                     <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button" >
                         <li v-for="item in menu_items" class="mdl-menu__item" :id="item.name + '-btn'" @click.prevent="dispatchMenuButton(item.name)" v-mdl><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item.title }}</a></li>
                     </ul>
-                </div>
+				</div>
             </div>  <!-- End Toolbar-Inner -->
         </div> <!-- End Toolbar-->
 
@@ -576,7 +581,15 @@ export default {
         transform: translateY(70%);
         opacity: 0;
     }
-    
+
+	.list-enter-active, .list-leave-active {
+		transition: all .3s;
+	}
+	.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+		opacity: 0;
+		transform: translateX(30px);
+	}
+
     body.dark {
         background-color: $bg-dark;
         color: #fff;
