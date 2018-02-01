@@ -206,6 +206,24 @@ export default class Api {
 
         return promise
     }
+    
+    static createThread (to, message) {
+        const constructed_url = Url.get("new_thread");
+
+        const request = {
+            account_id: store.state.account_id,
+            to: to,
+            message: message
+        }
+        
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            .then( response  => resolve(response) )
+            .catch( response => Api.rejectHandler(response, reject) )
+        });
+
+        return promise;
+    }
 
     static sendMessage (data, mime_type, thread_id, message_id=null) {
 
@@ -387,11 +405,22 @@ export default class Api {
 
     }
 
+    static fetchContacts () {
+        let constructed_url = Url.get("contacts") + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => resolve(response) )
+                .catch( response => Api.rejectHandler(resposne, reject) );
+        });
+
+        return promise
+    }
+
     static fetchImage (image_id) {
         const constructed_url = Url.get('media') + image_id + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
             Vue.http.get(constructed_url)
-                .then(response => resolve(response))
+                .then( response => resolve(response) )
                 .catch( response => Api.rejectHandler(response, reject) );
         });
 

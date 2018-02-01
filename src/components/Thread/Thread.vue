@@ -7,7 +7,7 @@
             <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
         </div>
         
-        <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage"></sendbar>
+        <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage" :loading="$store.state.media_sending" ></sendbar>
     </div>
 </template>
 

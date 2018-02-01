@@ -5,6 +5,7 @@ export default class Url {
         "login":                "accounts/login/",
         "messages":             "messages/",
         "add_message":          "messages/add/",
+        "new_thread":           "messages/forward_to_phone",
         "conversations":        "conversations/",
         "update_conversation":  "conversations/update/",
         "read":                 "conversations/read/",
@@ -14,6 +15,7 @@ export default class Url {
         "settings":             "accounts/settings/",
         "websocket":            "stream",
         "media":                "media/",
+        "contacts":             "contacts/simple/",
     }
 
     static getBaseUrl () {

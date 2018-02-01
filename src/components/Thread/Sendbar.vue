@@ -1,6 +1,6 @@
 <template>
     <div class="send-bar" v-mdl>
-        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: $store.state.media_sending ? '' : 'none' }" v-mdl></div>
+        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: loading ? '' : 'none' }" v-mdl></div>
         <div v-if="$store.state.loaded_media" class="preview" v-mdl>
             <div class="overlay">
                 <button class="media-clear mdl-button mdl-js-button mdl-button--colored mdl-button--fab mdl-js-ripple-effect" :style="{ background: send_color }" @click="removeMedia">
@@ -37,7 +37,7 @@ import { Api } from '@/utils'
 
 export default {
     name: 'Sendbar',
-    props: ['threadId', 'onSend'],
+    props: ['threadId', 'onSend', 'loading'],
 
     mounted () {
         let autogrow = new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
