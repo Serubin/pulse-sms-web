@@ -203,7 +203,7 @@ export default {
     },
     computed: {
         matchListHeight() {
-            let height = 57 * this.matchList.length + 'px'
+            let height = 57 * ( this.matchList.length || 1 ) + 'px'
             return {
                 height: (this.matchList.length > 6 ?
                     57 * 6 : 57 * this.matchList.length) + "px"
