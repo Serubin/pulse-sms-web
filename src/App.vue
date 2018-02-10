@@ -250,6 +250,15 @@ export default {
         dispatchMenuButton (name) {
             // Dispatch button event to message bus
             this.$store.state.msgbus.$emit(name + "-btn");
+
+            if (name != "refresh")
+                return;
+
+            const btn = this.$el.querySelector("#refresh-button");
+            btn.className += " rotate";
+            setTimeout(() => {
+                btn.className = btn.className.replace(" rotate", "");
+            }, 250);
         },
 
         /**
@@ -566,6 +575,12 @@ export default {
                 }
             }
         }
+    }
+
+
+    #refresh-button.rotate {
+        transition: transform .3s ease-in;
+        transform: rotate(360deg);
     }
 
     /* splash-fade transition */
