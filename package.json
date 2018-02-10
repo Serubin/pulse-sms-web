@@ -1,6 +1,6 @@
 {
   "name": "pulse-client",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "PulseClient. An Open Source alternative to the PulseSMS web and desktop app.",
   "author": "Serubin <Serubin@serubin.net>",
   "private": true,
