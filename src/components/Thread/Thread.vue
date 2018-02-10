@@ -27,6 +27,8 @@ export default {
 
     mounted () {
 
+        if (typeof this.isRead == "undefined")
+            this.read = false;
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -49,6 +51,10 @@ export default {
             this.markAsRead(); 
             // Focus cursor on message entry
             this.$el.querySelector('#message-entry').focus();
+
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
         });
         this.listeners.extend(events);
 
@@ -152,7 +158,7 @@ export default {
     data () {
         return {
             conversation_id: this.threadId,
-            read: this.isRead || true, 
+            read: this.isRead, 
             messages: [],
             previous_title: "",
             listeners: [],
