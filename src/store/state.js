@@ -52,6 +52,8 @@ export const state = {
 
     loaded_media: null,
     media_sending: false,
+
+    last_ping: null,
 }
 
 export const getters = {
@@ -84,6 +86,7 @@ export const mutations = {
     colors_accent: (state, colors_accent ) => state.colors_accent = colors_accent,
     loaded_media: (state, loaded_media ) => state.loaded_media = loaded_media,
     media_sending: (state, media_sending ) => state.media_sending = media_sending,
+    last_ping: (state, last_ping ) => state.last_ping = last_ping,
     theme_global: (state, colors) => {
         state.theme_global_default = colors.default;
         state.theme_global_dark = colors.dark;

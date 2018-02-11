@@ -169,6 +169,26 @@ export default {
             this.populateMenuItems();
             // Setup and store the medialoader (MMS)
             this.$store.commit('media_loader', new MediaLoader());
+
+            // Interval check to maintain socket
+            setInterval(() => {
+                const last_ping = this.$store.state.last_ping;
+
+                // Ignore if ping is sitll none (usually just starting up)
+                if (last_ping == null)
+                    return;
+
+                // If last ping is within 15 seconds, ignore
+                if (last_ping > (Date.now() / 1000 >> 0) - 15)
+                    return;
+                
+                // Else, open new API and force refresh
+                this.mm = new Api();
+                this.$store.state.msgbus.$emit('refresh-btn');
+
+                // TODO slack like reconnection process
+
+            }, 15 * 1000);
         },
 
         /**

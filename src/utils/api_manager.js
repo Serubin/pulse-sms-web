@@ -73,35 +73,47 @@ export default class Api {
      */
     handleMessage (e) {
 
-        if (e.data.indexOf("ping") != -1)  // Is keep alive event
+        if (e.data.indexOf("ping") != -1) { // Is keep alive event
+            // Store last ping to maintain data connection
+            store.commit('last_ping', Date.now() / 1000 >> 0);
             return;
+        }
 
+        // Parse out JSON
         const json = JSON.parse(e.data);
 
+        // Ignore bad messages
         if (typeof json.message == "undefined") 
             return;
 
         const operation = json.message.operation;
 
+        // Parse any emojis
         if (typeof json.message.content.data != "undefined")
             json.message.content.data = emojione.unicodeToImage(
                 json.message.content.data
             );
         
 
-        if (operation == "added_message") {
-            let message = json.message.content;
+        if (operation == "added_message") { // Handles new messages
+
+            let message = json.message.content; 
+
+            // Translate api naming (naming shim)
             message.message_from = message.from;
 
+            // Decrypt
             message = Crypto.decryptMessage(message);
 
+            // Call notify
             this.notify(message);
 
+            // Emit to bus
             store.state.msgbus.$emit('newMessage', message);
-        } else if (operation == "read_conversation") {
+        } else if (operation == "read_conversation") { // Handles convo updates
             const id = json.message.content.id;
             store.state.msgbus.$emit('conversationRead', id);
-        } else if (operation == "update_message_type") {
+        } else if (operation == "update_message_type") { // Messages updates
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;
             store.state.msgbus.$emit('updateMessageType', {id, message_type});
