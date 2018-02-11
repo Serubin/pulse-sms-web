@@ -17,9 +17,11 @@
             <div :class="dateType" class="mdl-color-text--grey-500"> {{ dateLabel }}</div>
         </div>
 
-        <div class="sent-wrapper" v-if="sending">
-            <div class="sending mdl-color-text--grey-500">Sending...</div>
-        </div>
+        <transition name="slide-out">
+            <div class="sent-wrapper" v-if="sending">
+                    <div class="sending mdl-color-text--grey-500">Sending...</div>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -347,10 +349,18 @@ export default {
                 width: 436px;
             }
         }
-
-
     }
 
+    .slide-out-enter-active, .slide-out-leave-active {
+        transition: transform .3s ease-in, opacity .3s ease-in;
+        position: relative;
+        z-index: -10;
+    }
+
+    .slide-out-enter, .slide-out-leave-to {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
 
     body.dark {
         .sent {
