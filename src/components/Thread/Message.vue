@@ -84,7 +84,7 @@ export default {
                 // Remove content
                 this.content = ""; 
 
-                this.media_thumb = this.media_thumb.replace("http", "https");
+                this.media_thumb = this.media_thumb.replace(/https?/, "https");
                 
                 break;
             }
@@ -199,7 +199,7 @@ export default {
 
     .date-wrapper, .sent-wrapper {
         clear: both;
-
+        
         .date-sent, .sending {
             float: right;
             margin-right: 36px;

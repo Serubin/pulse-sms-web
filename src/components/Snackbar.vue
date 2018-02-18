@@ -23,7 +23,7 @@ export default {
         bottom: 24px;
         left: 24px;
         position: fixed;
-        z-index: 45;
+        z-index: 4500;
 
         @media (max-width: $mini_width) {
             & {

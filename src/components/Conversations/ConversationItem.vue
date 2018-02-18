@@ -8,7 +8,7 @@
 
         <!-- Conversation Item content -->
         <p class="conversation-text conversation-text-small" :class="{ unread: !read }">
-            <span class="conversation-title mdl-card__supporting-text conversation-title-small">{{ title }}</span>
+            <span class="conversation-title mdl-card__supporting-text conversation-title-small"><i v-if="!read"></i>{{ title }}</span>
             <br>
             <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small" v-html="snippet"><!-- Raw html insert --></span>
         </p>
@@ -158,12 +158,23 @@ export default {
             &.unread {
                 font-weight: bold;
             }
+
             .conversation-title {
                 color: black;
                 font-size: 16px;
                 padding: 24px 16px 0px 0px;
                 white-space: nowrap;
                 overflow: hidden;
+            }
+
+            .conversation-title i {
+                width: 8px;
+                height: 8px;
+                display: inline-block;
+                position: relative;
+                margin-right: 5px;
+                border-radius: 50%;
+                background-color: #2196f3;
             }
 
             .conversation-snippet {
