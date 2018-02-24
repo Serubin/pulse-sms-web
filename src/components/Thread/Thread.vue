@@ -393,17 +393,37 @@ export default {
          * Archive conversation
          */
         archive () {
-
+            const _this = this;
             // Archive conversation on the server
             Api.archiver(!this.isArchived, this.conversation_id);
 
             // Snackbar the user
-            Util.snackbar("Conversation has been " +
-                (!this.isArchived ? "archived" : "unarchived"))
+            Util.snackbar({
+                message: "Conversation has been " +
+                    (!this.isArchived ? "archived" : "unarchived"),
+                actionText: "Undo",
+                actionHandler: (e) =>  {
+                    // Construct push URL
+                    Api.archiver(!this.isArchived, this.conversation_id);
+                    this.push_archive_url();
+
+                    e.target.innerHTML = '<i class="material-icons">done</i>';
+
+                    setTimeout(() =>
+                        e.target.parentElement.MaterialSnackbar.cleanup_(),
+                    2000);
+
+                },
+                timeout: 6 * 1000
+            })
             
             // Awful terrible fix for thread snackbar clean up events
             this.snackbar.MaterialSnackbar.active = false;
+            
+            this.push_archive_url();
+        },
 
+        push_archive_url () {
             // Construct push URL
             const constructed_url = (this.$route.path.replace("archived", "") // Remove archive 
                 + (!this.isArchived ? "/archived" : "/")) // Add archive or /
