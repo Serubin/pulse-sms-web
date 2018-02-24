@@ -333,10 +333,13 @@ export default {
                 && !(this.list.scrollHeight < this.html.offsetHeight)) {
                 
                 if (!this.snackbar.MaterialSnackbar.active) {
-                    var data = {
+                    let timeoutId;
+                    const data = {
                         message: 'New Message',
                         actionHandler: (e) => {
                             this.snackbar.MaterialSnackbar.cleanup_(); // Hide snackbar
+
+                            clearTimeout(timeoutId); // Cancel timeout
 
                             Vue.nextTick(() => {            // Animate on next tick to
                                 Util.scrollToBottom(250);   // avoid scrolling before render
@@ -347,7 +350,7 @@ export default {
                     };
                     Util.snackbar(data);
 
-                    setTimeout(() => { // If snackbar timeout, scroll to bottom
+                    timeoutId = setTimeout(() => { // If snackbar timeout, scroll to bottom
                         Vue.nextTick(() => {            // Animate on next tick to
                             Util.scrollToBottom(250);   // avoid scrolling before render
                         });
@@ -356,7 +359,6 @@ export default {
                 
                 return;
             }
-
 
             Vue.nextTick(() => {            // Animate on next tick to
                 Util.scrollToBottom(250);   // avoid scrolling before render
