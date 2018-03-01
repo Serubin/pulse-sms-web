@@ -183,6 +183,7 @@ export default {
                     return;
                 
                 // Else, open new API and force refresh
+                this.mm.closeWebSocket()
                 this.mm = new Api();
                 this.$store.state.msgbus.$emit('refresh-btn');
 
