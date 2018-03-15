@@ -120,13 +120,10 @@ export default {
         this.$watch(
             '$refs.sendbar.message',
             (to) => setTimeout(() => { // Wait 500ms for text render and resize
+
                 // Set margin bottom
                 this.margin_bottom = this.$refs.sendbar.$el.clientHeight;
-                
-                // Scroll to bottom when ready
-                Vue.nextTick(() => setTimeout(() => { // Wait for new margin
-                    Util.scrollToBottom(500); // Scroll to bottom
-                }, 250))
+
             }, 500),
             { deep: true, immediate: true }
         )
