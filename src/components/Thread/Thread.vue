@@ -27,6 +27,8 @@ export default {
 
     mounted () {
 
+        if (typeof this.isRead == "undefined")
+            this.read = false;
         
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -49,6 +51,10 @@ export default {
             this.markAsRead(); 
             // Focus cursor on message entry
             this.$el.querySelector('#message-entry').focus();
+
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
         });
         this.listeners.extend(events);
 
@@ -114,13 +120,10 @@ export default {
         this.$watch(
             '$refs.sendbar.message',
             (to) => setTimeout(() => { // Wait 500ms for text render and resize
+
                 // Set margin bottom
                 this.margin_bottom = this.$refs.sendbar.$el.clientHeight;
-                
-                // Scroll to bottom when ready
-                Vue.nextTick(() => setTimeout(() => { // Wait for new margin
-                    Util.scrollToBottom(500); // Scroll to bottom
-                }, 250))
+
             }, 500),
             { deep: true, immediate: true }
         )
@@ -152,7 +155,7 @@ export default {
     data () {
         return {
             conversation_id: this.threadId,
-            read: this.isRead || true, 
+            read: this.isRead, 
             messages: [],
             previous_title: "",
             listeners: [],
@@ -327,10 +330,13 @@ export default {
                 && !(this.list.scrollHeight < this.html.offsetHeight)) {
                 
                 if (!this.snackbar.MaterialSnackbar.active) {
-                    var data = {
+                    let timeoutId;
+                    const data = {
                         message: 'New Message',
                         actionHandler: (e) => {
                             this.snackbar.MaterialSnackbar.cleanup_(); // Hide snackbar
+
+                            clearTimeout(timeoutId); // Cancel timeout
 
                             Vue.nextTick(() => {            // Animate on next tick to
                                 Util.scrollToBottom(250);   // avoid scrolling before render
@@ -341,7 +347,7 @@ export default {
                     };
                     Util.snackbar(data);
 
-                    setTimeout(() => { // If snackbar timeout, scroll to bottom
+                    timeoutId = setTimeout(() => { // If snackbar timeout, scroll to bottom
                         Vue.nextTick(() => {            // Animate on next tick to
                             Util.scrollToBottom(250);   // avoid scrolling before render
                         });
@@ -350,7 +356,6 @@ export default {
                 
                 return;
             }
-
 
             Vue.nextTick(() => {            // Animate on next tick to
                 Util.scrollToBottom(250);   // avoid scrolling before render
@@ -387,17 +392,37 @@ export default {
          * Archive conversation
          */
         archive () {
-
+            const _this = this;
             // Archive conversation on the server
             Api.archiver(!this.isArchived, this.conversation_id);
 
             // Snackbar the user
-            Util.snackbar("Conversation has been " +
-                (!this.isArchived ? "archived" : "unarchived"))
+            Util.snackbar({
+                message: "Conversation has been " +
+                    (!this.isArchived ? "archived" : "unarchived"),
+                actionText: "Undo",
+                actionHandler: (e) =>  {
+                    // Construct push URL
+                    Api.archiver(!this.isArchived, this.conversation_id);
+                    this.push_archive_url();
+
+                    e.target.innerHTML = '<i class="material-icons">done</i>';
+
+                    setTimeout(() =>
+                        e.target.parentElement.MaterialSnackbar.cleanup_(),
+                    2000);
+
+                },
+                timeout: 6 * 1000
+            })
             
             // Awful terrible fix for thread snackbar clean up events
             this.snackbar.MaterialSnackbar.active = false;
+            
+            this.push_archive_url();
+        },
 
+        push_archive_url () {
             // Construct push URL
             const constructed_url = (this.$route.path.replace("archived", "") // Remove archive 
                 + (!this.isArchived ? "/archived" : "/")) // Add archive or /

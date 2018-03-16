@@ -169,6 +169,27 @@ export default {
             this.populateMenuItems();
             // Setup and store the medialoader (MMS)
             this.$store.commit('media_loader', new MediaLoader());
+
+            // Interval check to maintain socket
+            setInterval(() => {
+                const last_ping = this.$store.state.last_ping;
+
+                // Ignore if ping is sitll none (usually just starting up)
+                if (last_ping == null)
+                    return;
+
+                // If last ping is within 15 seconds, ignore
+                if (last_ping > (Date.now() / 1000 >> 0) - 15)
+                    return;
+                
+                // Else, open new API and force refresh
+                this.mm.closeWebSocket()
+                this.mm = new Api();
+                this.$store.state.msgbus.$emit('refresh-btn');
+
+                // TODO slack like reconnection process
+
+            }, 15 * 1000);
         },
 
         /**
@@ -250,6 +271,15 @@ export default {
         dispatchMenuButton (name) {
             // Dispatch button event to message bus
             this.$store.state.msgbus.$emit(name + "-btn");
+
+            if (name != "refresh")
+                return;
+
+            const btn = this.$el.querySelector("#refresh-button");
+            btn.className += " rotate";
+            setTimeout(() => {
+                btn.className = btn.className.replace(" rotate", "");
+            }, 250);
         },
 
         /**
@@ -566,6 +596,12 @@ export default {
                 }
             }
         }
+    }
+
+
+    #refresh-button.rotate {
+        transition: transform .3s ease-in;
+        transform: rotate(360deg);
     }
 
     /* splash-fade transition */

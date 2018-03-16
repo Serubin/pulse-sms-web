@@ -41,9 +41,16 @@ export default {
         this.$store.commit("loading", false);
         Api.fetchContacts()
             .then((resp) => this.processContacts(resp));
+
+        this.$store.commit('colors_default', this.$store.state.theme_global_default)
+        this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
+        this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
+
+        this.$store.commit('title', this.title);
     },
     data () {
         return {
+            title: 'Compose',
             contacts: {},
             nameIndex: {},
             recipient: "",
@@ -117,8 +124,17 @@ export default {
             }
         },
         processInput (e) {
+            
+            if(e.metaKey && e.keyCode == 65) {
+                Vue.nextTick(() => {
+                    e.target.setSelectionRange(0, e.target.value.length + 1);
+                });
+            }
 
-            if (e.keyCode == 8)
+            if(e.metaKey)
+                return;
+
+            if (e.keyCode == 8 && e.target.selectionEnd == e.target.selectionStart)
                 this.recipient = this.recipient.substr(0,this.recipient.length - 1)
             else if(e.key.length == 1)
                 this.recipient += e.key;

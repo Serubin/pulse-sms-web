@@ -127,6 +127,8 @@ export default class Util {
             snackbar.attributes.removeNamedItem("hidden");
 
         snackbar.MaterialSnackbar.showSnackbar(data);
+
+        return snackbar;
     }
 
     /**
