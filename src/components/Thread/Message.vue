@@ -1,6 +1,7 @@
 <template>
     <div class="message-wrapper" :title="stringTime">
-        <div :class="style_class"  :style="styleGenerator" :id="id">
+        <div id="offset-marker" v-if="this.messageData.marker"></div>
+        <div :class="style_class"  :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
             <div v-show="message_from"> <b> {{ message_from }} </b> <br /> </div>
             <div v-html="content"></div>
             <!-- Content is inserted via v-html -->
@@ -34,6 +35,9 @@ export default {
     props: [ 'messageData', 'threadColor', 'textColor' ],
 
     mounted () {
+
+        if ( this.messageData.marker )
+            return;
 
         this.$store.state.msgbus.$on('updateMessageType',
             (payload) => this.updateType(payload.id, payload.message_type));

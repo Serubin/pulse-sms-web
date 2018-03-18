@@ -195,13 +195,14 @@ export default class Api {
         return promise
     }
 
-    static fetchThread (conversation_id) {
+    static fetchThread (conversation_id, offset=0) {
 
         const limit = 70;
 
         const constructed_url = 
             Url.get('messages') + Url.getAccountParam() 
-                + "&conversation_id=" + conversation_id + "&limit=" + limit + "&web=true";
+                + "&conversation_id=" + conversation_id + "&limit=" + limit 
+                + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
             Vue.http.get( constructed_url )
