@@ -187,6 +187,8 @@ export default {
                 this.mm = new Api();
                 this.$store.state.msgbus.$emit('refresh-btn');
 
+                this.calculateHour();
+
                 // TODO slack like reconnection process
 
             }, 15 * 1000);
