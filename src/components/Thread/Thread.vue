@@ -249,7 +249,9 @@ export default {
                         const contact = Object.values( // Get contact
                             this.$store.state.contacts // From cache
                         ).containsObjKey("title", i)   // Match to "title"
-                        
+
+                        if (!contact.colors.default)
+                            return this.colors_from[i] = this.color();
                         // Map name/title to color
                         this.colors_from[i] = contact.colors.default; 
                     }
@@ -479,8 +481,12 @@ export default {
 
             // Get color string
             let colorString; 
-            if (message.message_from)                 colorString = this.getColor(message)
+            if (message.message_from)
+                colorString = this.getColor(message)
             else // Otherwise default color
+                colorString = this.color;
+
+            if (!colorString)
                 colorString = this.color;
 
             // Split up color string
