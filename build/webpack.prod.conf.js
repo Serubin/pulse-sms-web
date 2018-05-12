@@ -89,7 +89,17 @@ var webpackConfig = merge(baseWebpackConfig, {
         from: path.resolve(__dirname, '../static'),
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
-      }
+      },
+      { // Copy manifiest
+        from: path.resolve(__dirname, '../manifest.json'),
+        to: config.build.assetsRoot,
+        ignore: ['.*']
+      },
+      { // Copy pwa service worker
+        from: path.resolve(__dirname, '../pwabuilder-sw.js'),
+        to: config.build.assetsRoot,
+        ignore: ['.*']
+      },
     ])
   ]
 })
