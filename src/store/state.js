@@ -53,6 +53,8 @@ export const state = {
     loaded_media: null,
     media_sending: false,
 
+    offline: !navigator.onLine,
+
     last_ping: null,
 }
 

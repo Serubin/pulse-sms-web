@@ -3,6 +3,10 @@
         <div class="splash-center">
             <img src="../assets/images/android-desktop.png" />
             <h3> {{ $store.state.title }} </h3>
+
+            <div id="offline">
+                <h4 v-if="$store.state.offline">Offline</h4>
+            </div>
         </div>
     </div>
 </template>
@@ -40,9 +44,24 @@ export default {
         }
     }
 
+    #offline {
+        width: 100%;
+
+        h4 {
+            background: #e3e3e3;
+            width: 100px;
+            margin: 0 auto;
+            border-radius: 20px;
+        }
+    }
+
     body.dark .splash {
         background: $bg-dark;
         color: #fff;
+    }
+
+    body.dark #offline h4 {
+        background: #545f65;
     }
 
 </style>
