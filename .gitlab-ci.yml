@@ -11,6 +11,7 @@ deploy_prod:
   script:
     - npm i
     - npm run build -d $DEST_PATH
+    - rm -rf $DEST_PATH/*
     - cp -r dist/* $DEST_PATH
 
 deploy_dev:
@@ -22,6 +23,7 @@ deploy_dev:
   script:
     - npm i
     - npm run build
+    - rm -rf $DEST_PATH/*
     - cp -r dist/* $DEST_PATH
 
 
