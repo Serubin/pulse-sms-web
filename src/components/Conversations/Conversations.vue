@@ -125,7 +125,7 @@ export default {
 
             // Get start index (index after pinned items)
             let startIndex = 0;
-            if (this.conversations[0].label == "Pinned") { // If there are any pinned items
+            if (this.conversations[0].label == "Pinned" && !conv.pinned) { // If there are any pinned items
                 this.conversations.some( (conv, i) => {
                     if (typeof conv.label != "undefined" // Loop until we find a label
                         && conv.label != "Pinned") { // That is not "pinned"
@@ -142,7 +142,8 @@ export default {
 
                 // If top label is not "Today"
                 // This isn't elegant, but it works
-                if (this.conversations[startIndex].label != "Today") {
+                if (this.conversations[startIndex].label != "Today" 
+                    && this.conversations[startIndex].label != "Pinned") {
                     const title = "Today"; // Define title
                     const label = {        // And Define Label
                         label: title, 
