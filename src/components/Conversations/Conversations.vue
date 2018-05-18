@@ -123,23 +123,38 @@ export default {
             conv.hash = Hash(conv);
 
 
+            // Get start index (index after pinned items)
+            let startIndex = 0;
+            if (this.conversations[0].label == "Pinned") { // If there are any pinned items
+                this.conversations.some( (conv, i) => {
+                    if (typeof conv.label != "undefined" // Loop until we find a label
+                        && conv.label != "Pinned") { // That is not "pinned"
+
+                        startIndex = i; // Save index and return
+                        return true
+                    }
+                })
+            }
+            
             // Move conversation if required
-            if (conv_index != 1) {
+            if (conv_index != startIndex + 1) {
                 conv = this.conversations.splice(conv_index, 1)[0]
 
                 // If top label is not "Today"
                 // This isn't elegant, but it works
-                if (this.conversations[0].label != "Today") {
+                if (this.conversations[startIndex].label != "Today") {
                     const title = "Today"; // Define title
                     const label = {        // And Define Label
                         label: title, 
                         hash: Hash(title)
                     } 
+
                     // Push label and conversation
-                    this.conversations.splice(0, 0, label, conv)
+                    this.conversations.splice(startIndex, 0, label, conv)
 
                 } else { // Else, just push the converstation to index 1 (below label)
-                    this.conversations.splice(1, 0, conv)
+
+                    this.conversations.splice(startIndex + 1, 0, conv)
                 }
             } 
         },
