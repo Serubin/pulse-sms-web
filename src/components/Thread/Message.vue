@@ -169,7 +169,7 @@ export default {
             return this.type == 2 ? true : false;
         },
         round () {
-            return this.$store.state.round ? 'message-round' : 'message';
+            return this.$store.state.theme_round ? 'message-round' : 'message';
         },
         stringTime () {
             return new Date(this.timestamp).toLocaleString()
@@ -229,17 +229,21 @@ export default {
             overflow-wrap: break-word;
             word-wrap: break-word;
             min-width: 18px;
+        }
 
-            &:after {
-                content: "";
-                position: absolute;
-                bottom: -20px;
-                left: 50px;
-                border-style: solid;
-                display: block;
-                top: 0px;
-                bottom: auto;
-            }
+        .message-round {
+            border-radius: 15px;
+        }
+
+        .message:after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 50px;
+            border-style: solid;
+            display: block;
+            top: 0px;
+            bottom: auto;
         }
 
         .received {
