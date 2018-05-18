@@ -2,7 +2,7 @@
     <div id="thread-wrap" @click="markAsRead">
         <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom + 'px'}">
             <!-- Load More Button -->
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore" v-if="messages.length != 0">Load Previous</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore" v-if="messages.length > 69">Load Previous</button>
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
