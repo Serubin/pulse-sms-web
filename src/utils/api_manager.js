@@ -418,6 +418,20 @@ export default class Api {
 
     }
 
+    static updateSetting (setting, type, value) {
+        let constructed_url = Url.get("update_setting") +
+            "?pref=" + setting 
+            + "&type=" + type 
+            + "&value=" + value;
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.post( constructed_url, Url.getAccountPayload(), 
+                {'Content-Type': 'application/json'})
+                .then( response => resolve(true) )
+                .catch( response => Api.rejectHandler(resposne, reject) );
+        });
+    }
+
     static fetchContacts () {
         let constructed_url = Url.get("contacts") + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
