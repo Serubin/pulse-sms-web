@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 34 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
+    <title>bubble 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="bubble">
+            <g id="message-bubble">
+                <g id="path-1-link" fill-rule="nonzero" fill="#FAFAFA">
+                    <path d="M7.4575913,26.5474177 L31,26.5474177 C32.6568542,26.5474177 34,25.204272 34,23.5474177 L34,3.0474177 C34,1.3905635 32.6568542,0.0474177 31,0.0474177 L3,0.0474177 L3,0.0474177 C1.3431458,0.0474177 0,1.3905635 0,3.0474177 L0,3.0474177 L0,19.7181812 L0,34.0743241 L7.4575913,26.5474177 Z" id="path-1"></path>
+                </g>
+                <g id="path-1-link" fill="#FAFAFA">
+                    <path d="M7.4575913,26.5474177 L31,26.5474177 C32.6568542,26.5474177 34,25.204272 34,23.5474177 L34,3.0474177 C34,1.3905635 32.6568542,0.0474177 31,0.0474177 L3,0.0474177 L3,0.0474177 C1.3431458,0.0474177 0,1.3905635 0,3.0474177 L0,3.0474177 L0,19.7181812 L0,34.0743241 L7.4575913,26.5474177 Z" id="path-1"></path>
+                </g>
+            </g>
+            <g id="lines" transform="translate(5.000000, 3.003677)" fill-rule="nonzero">
+                <rect id="bottom" fill="#777777" x="0" y="14.8141337" width="24" height="3.75"></rect>
+                <rect id="middle" fill="#777777" x="0" y="8.45628633" width="24" height="3.75"></rect>
+                <rect id="top" fill="#777777" x="0" y="2.04778395" width="24" height="3.75"></rect>
+                <polygon id="line-clip" fill="#FAFAFA" points="5.15453844 20.7186532 25.5932992 0.436922499 25.5932992 20.0944383"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
