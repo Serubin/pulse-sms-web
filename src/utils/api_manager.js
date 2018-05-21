@@ -405,8 +405,8 @@ export default class Api {
 
         const colors = {
             'default': Util.expandColor(response.color),
-            'dark': Util.expandColor(response.color),
-            'accent': Util.expandColor(response.color),
+            'dark': Util.expandColor(response.color_dark),
+            'accent': Util.expandColor(response.color_accent),
         };
 
         store.commit('theme_base', response.base_theme);

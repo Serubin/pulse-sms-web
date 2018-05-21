@@ -16,10 +16,11 @@
             </div>
             <!-- End Refresh settings button -->
 
-            <div class="item mdl-js-button mdl-js-ripple-effect" id="base-theme" @click="menu.toggle()"> <!-- Base theme -->
+            <div class="item mdl-js-button mdl-js-ripple-effect" id="base-theme" @click="theme_menu.toggle()"> <!-- Base theme -->
                 <div class="mdl-color-text--grey-900">Base Theme</div>
                 <div class="mdl-color-text--grey-600">{{ base_theme }}</div>
             </div> 
+
             <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
                 id="base-theme-menu" data-mdl-for="base-theme">
                 <li class="mdl-menu__item" @click="theme='day_night'">Day / Night</li>
@@ -27,10 +28,35 @@
                 <li class="mdl-menu__item" @click="theme='dark'">Dark</li>
             </ul><!-- End Base Theme -->
 
-            <div class="item mdl-js-button mdl-js-ripple-effect"> <!-- Global Colors -->
+            <div class="item mdl-js-button mdl-js-ripple-effect" @click="color_dialog.showModal();"> <!-- Global Colors -->
                 <div class="mdl-color-text--grey-900">Primary Color, Primary Color Dark, Accent Color</div>
                 <div class="mdl-color-text--grey-600">{{ global_colors }}</div>
             </div> <!-- End Global Colors -->
+
+            <dialog class="mdl-dialog">
+                <div class="mdl-dialog__content">
+                    <h4>Update Theme Colors</h4>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        Primary Color
+                        <input class="mdl-textfield__input" type="text" id="theme-default" v-model="theme_default"/>
+                        <label class="mdl-textfield__label" for="theme-default">Default Color</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        Dark Color
+                        <input class="mdl-textfield__input" type="text" id="theme-dark" v-model="theme_dark"/>
+                        <label class="mdl-textfield__label" for="theme-dark">Dark Color</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        Accent Color
+                        <input class="mdl-textfield__input" type="text" id="theme-accent" v-model="theme_accent"/>
+                        <label class="mdl-textfield__label" for="theme-accent">Accent Color</label>
+                    </div>
+                </div>
+                <div class="mdl-dialog__actions">
+                    <button type="button" class="mdl-button close" @click="saveColors()">Save</button>
+                    <button type="button" class="mdl-button close" @click="color_dialog.close()">Close</button>
+                </div>
+            </dialog>
 
             <br />
 
@@ -81,7 +107,8 @@
 </template>
 
 <script>
-import { Api } from '@/utils/'
+import { Api, Util } from '@/utils/'
+import dialogPolyfill from 'dialog-polyfill'
 
 export default {
     name: 'settings',
@@ -93,9 +120,15 @@ export default {
             })
 
         this.$store.commit('title', this.title);
+        this.$store.state.msgbus.$on('refresh-btn', this.refreshSettings);
 
-        let menuEl = this.$el.querySelector("#base-theme-menu")
-        this.menu = menuEl.MaterialMenu;
+
+        let theme_menu_el = this.$el.querySelector("#base-theme-menu")
+        this.theme_menu = theme_menu_el.MaterialMenu;
+
+        this.color_dialog = this.$el.querySelector(".mdl-dialog");
+        if (! this.color_dialog.showModal) 
+            dialogPolyfill.registerDialog(this.color_dialog)
 
     },
 
@@ -107,7 +140,11 @@ export default {
             global_theme: this.$store.state.theme_use_global,
             show_notifications: this.$store.state.notifications,
             theme: this.$store.state.theme_base,
-            menu: null
+            theme_default: this.rgbaToHex(this.$store.state.theme_global_default),
+            theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark),
+            theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent),
+            theme_menu: null,
+            color_dialog: null
         }
     },
 
@@ -138,12 +175,13 @@ export default {
 
         round_bubbles () {
             return this.boolToStr(this.$store.state.theme_round);
-        }
+        },
     },
 
     methods: {
         refreshSettings () {
             Api.fetchSettings();
+            Util.snackbar("Settings Refreshed")
         },
 
         /**
@@ -168,16 +206,50 @@ export default {
             
             return "#" + hex.slice(0, (hex.length - 1)).join("")
         },
+        hexToRgb(hex) {
+            let r = parseInt(hex.slice(1, 3), 16),
+                g = parseInt(hex.slice(3, 5), 16),
+                b = parseInt(hex.slice(5, 7), 16),
+                a = 255 & 0xFF;
+
+            return (r << 16) + (g << 8) + (b << 0) + (a << 24);
+        },
         /**
          * Bool to Yes/No
          */
         boolToStr (bool) {
             return bool ? "Yes" : "No";
+        },
+        saveColors () {
+
+            // Convert hex to RGB Int
+            const theme_default = this.hexToRgb(this.theme_default)
+            const theme_dark = this.hexToRgb(this.theme_dark)
+            const theme_accent = this.hexToRgb(this.theme_accent)
+
+            // Update value on remote server
+            Api.updateSetting("global_primary_color", "int", theme_default);
+            Api.updateSetting("global_primary_dark_color", "int", theme_dark);
+            Api.updateSetting("global_accent_color", "int", theme_accent);
+
+            // Store rgba value in store
+            this.$store.commit('theme_global_default', Util.expandColor(theme_default))
+            this.$store.commit('theme_global_dark', Util.expandColor(theme_dark))
+            this.$store.commit('theme_global_accent', Util.expandColor(theme_accent))
+
+
+            this.$store.commit('colors_default', Util.expandColor(theme_default))
+            this.$store.commit('colors_dark', Util.expandColor(theme_dark))
+            this.$store.commit('colors_accent', Util.expandColor(theme_accent))
+
+
+            this.color_dialog.close()
         }
+
     },
     watch: {
         'show_notifications' () {
-            this.$store.commit('notifications', this.show_notifications)
+            this.$store.commit('notifications', this.show_notifications);
         },
         'round_messages' () {
             this.$store.commit('theme_round', this.round_messages)
@@ -195,6 +267,15 @@ export default {
             this.$store.commit('theme_toolbar', this.colored_toolbar)
             const toolbar = document.querySelector("#toolbar");
             toolbar.style.background = "";
+        },
+        '$store.state.theme_global_default' () {
+            this.theme_default = this.rgbaToHex(this.$store.state.theme_global_default);
+        },
+        '$store.state.theme_global_dark' () {
+            this.theme_dark = this.rgbaToHex(this.$store.state.theme_global_dark);
+        },
+        '$store.state.theme_global_accent' () {
+            this.theme_accent = this.rgbaToHex(this.$store.state.theme_global_accent);
         }
     }
 }
@@ -213,6 +294,12 @@ export default {
         width: 100%;
         padding: 16px;
         line-height: 18px;
+    }
+
+    dialog {
+        position: fixed;
+        top: 50%;
+        transform: translate(0, -50%);
     }
 
 </style>
