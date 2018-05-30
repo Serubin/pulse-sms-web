@@ -92,7 +92,7 @@ export default {
 
             this.loading = false;
 
-            // Start app       
+            // Start app
             this.$store.state.msgbus.$emit('start-app');
 
             this.$router.push({ name: 'conversations-list'});
@@ -108,14 +108,14 @@ export default {
 
     components: {
         Spinner
-    }   
+    }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../assets/scss/_vars.scss";
-    
+
     #login-pane {
         position: relative;
         width: 330px;

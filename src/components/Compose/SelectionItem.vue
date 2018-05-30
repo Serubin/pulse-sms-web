@@ -13,14 +13,14 @@ export default {
     name: 'SelectionItem',
     props: [ 'contact', 'onClick'],
     components: {
-        
+
     }
 }
 </script>
 
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
-    
+
     li {
         min-height: 2em;
         width: 100%;

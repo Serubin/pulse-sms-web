@@ -8,7 +8,7 @@
             <!-- messages will be inserted here -->
             <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
         </div>
-        
+
         <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage" :loading="$store.state.media_sending" ></sendbar>
     </div>
 </template>
@@ -33,14 +33,14 @@ export default {
 
         if (typeof this.isRead == "undefined")
             this.read = false;
-        
+
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
-        
+
         // Fetch dom
         this.html = document.querySelector("html");
         this.body = document.querySelector("body");
@@ -49,10 +49,10 @@ export default {
         this.sendbar = document.querySelector("#sendbar");
 
         // Window focus event
-        let events = Util.addEventListeners(['focus'], (e) => { 
+        let events = Util.addEventListeners(['focus'], (e) => {
 
             // Mark as read on focus
-            this.markAsRead(); 
+            this.markAsRead();
             // Focus cursor on message entry
             this.$el.querySelector('#message-entry').focus();
 
@@ -68,7 +68,7 @@ export default {
 
        // Drag Drop Prevent default
         events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
-            (e) => { 
+            (e) => {
                 // Stop normal events
                 e.preventDefault()
                 e.stopPropagation()
@@ -113,13 +113,13 @@ export default {
                     file = e.dataTransfer.files[0]
                 else
                     file = e.target.files[0];
-                
+
                 // Load file to local cache
                 Api.loadFile(file);
             }
         );
         this.listeners.extend(events);
-        
+
         // Watch sendbar's message content
         this.$watch(
             '$refs.sendbar.message',
@@ -138,13 +138,13 @@ export default {
     },
 
     beforeDestroy () {
-        
+
         this.$store.state.msgbus.$off('newMessage');
         this.$store.state.msgbus.$off('refresh-btn');
 
         this.$store.state.msgbus.$off('archive-btn', this.archive);
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
-        
+
         // Restore last title
         this.$store.commit('title', this.previous_title);
 
@@ -159,7 +159,7 @@ export default {
     data () {
         return {
             conversation_id: this.threadId,
-            read: this.isRead, 
+            read: this.isRead,
             messages: [],
 
             previous_title: "",
@@ -209,7 +209,7 @@ export default {
             }
 
             // If message is empty, we're done
-            if (message.length <= 0) 
+            if (message.length <= 0)
                 return false;
 
             // Otherwise send any corrisponding message
@@ -229,7 +229,7 @@ export default {
             this.fetchMessages();
 
             // Colors, map name to color
-            this.colors_from = {}; 
+            this.colors_from = {};
 
             // Focus
             this.$el.querySelector('#message-entry').focus();
@@ -244,7 +244,7 @@ export default {
             if (from.length == 1) // If only one, use default color
                 this.colors_from[from[0]] =  this.contact_data.colors.default;
             else // Otherwise, get from cache
-                from.map(  
+                from.map(
                     (i) => { // For each name
                         const contact = Object.values( // Get contact
                             this.$store.state.contacts // From cache
@@ -253,7 +253,7 @@ export default {
                         if (!contact.colors.default)
                             return this.colors_from[i] = this.color();
                         // Map name/title to color
-                        this.colors_from[i] = contact.colors.default; 
+                        this.colors_from[i] = contact.colors.default;
                     }
                 );
 
@@ -267,17 +267,17 @@ export default {
         fetchMessages (offset=0) {
             Api.fetchThread(this.conversation_id, offset)
                 .then(response => {
-                    
+
                     let new_messages = [];
                     let nextTimestamp;
 
-                    
+
                     // Flip message order and push to local state
                     for(let i = (response.length - 1); i >= 0; i--) {
 
                         if (i == 0) // nextTimestamp processing
                             nextTimestamp = new Date();
-                        else 
+                        else
                             nextTimestamp = new Date(response[i - 1].timestamp);
 
                         // Compare current time stamp with the next (previous chronological)
@@ -286,7 +286,7 @@ export default {
                         );
 
                         // Push to list
-                        new_messages.push(response[i]); 
+                        new_messages.push(response[i]);
                     }
 
                     if (offset > 0) // Create marker for scroll back
@@ -294,17 +294,17 @@ export default {
                             marker: true
                         });
 
-                    
+
                     // If offset is larger than zero, pre-pend to list
                     if (offset > 0)
                         this.messages = new_messages.concat(this.messages);
                     else
-                        this.messages = new_messages; 
+                        this.messages = new_messages;
 
 
 
                     // Wait for messages to render
-                    Vue.nextTick(() => { 
+                    Vue.nextTick(() => {
                         if (this.offset <= 0)
                             Util.scrollToBottom();
 
@@ -331,12 +331,12 @@ export default {
                     });
                 });
         },
-        
+
 
         /**
          * EventHandler: Add new message
          * Add's new message to thread
-         * 
+         *
          * @param event_object
          */
         addNewMessage(event_obj) {
@@ -349,7 +349,7 @@ export default {
             const displayed = this.messages.containsObjKey('device_id', event_obj.device_id);
             if(displayed) // Ignore if displayed
                 return;
-            
+
              // Add time stamp
             const lastMessage = this.messages[this.messages.length - 1];
             const lastTimestamp = new Date(lastMessage.timestamp);
@@ -357,17 +357,17 @@ export default {
             lastMessage.dateLabel = this.compareTimestamps(
                 new Date(event_obj.timestamp), lastTimestamp, 15
             );
-            
+
             this.messages.push(event_obj);
 
             // Mark as unread
-            if (event_obj.type == 0 || event_obj.type == 6) 
+            if (event_obj.type == 0 || event_obj.type == 6)
                 this.read = false;
 
-            // Deploy snackbar if scrolled up 
+            // Deploy snackbar if scrolled up
             if ((this.html.scrollHeight - this.html.offsetHeight - 200) > Math.max(this.html.scrollTop, this.body.scrollTop)
                 && !(this.list.scrollHeight < this.html.offsetHeight)) {
-                
+
                 if (!this.snackbar.MaterialSnackbar.active) {
                     let timeoutId;
                     const data = {
@@ -392,14 +392,14 @@ export default {
                         });
                     }, 60*60*60);
                 }
-                
+
                 return;
             }
 
             Vue.nextTick(() => {            // Animate on next tick to
                 Util.scrollToBottom(250);   // avoid scrolling before render
             });
-            
+
 
         },
 
@@ -455,16 +455,16 @@ export default {
                 },
                 timeout: 6 * 1000
             })
-            
+
             // Awful terrible fix for thread snackbar clean up events
             this.snackbar.MaterialSnackbar.active = false;
-            
+
             this.push_archive_url();
         },
 
         push_archive_url () {
             // Construct push URL
-            const constructed_url = (this.$route.path.replace("archived", "") // Remove archive 
+            const constructed_url = (this.$route.path.replace("archived", "") // Remove archive
                 + (!this.isArchived ? "/archived" : "/")) // Add archive or /
                 .replace("//", "/"); // Double slash fix
             // Push to archived/normal route
@@ -480,7 +480,7 @@ export default {
         text_color (message) {
 
             // Get color string
-            let colorString; 
+            let colorString;
             if (message.message_from)
                 colorString = this.getColor(message)
             else // Otherwise default color
@@ -498,7 +498,7 @@ export default {
             const  red = colorArray[0];
             const  green = colorArray[1];
             const  blue = colorArray[2];
-            
+
             // Some magic with implicit type conversion
             const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
 
@@ -508,7 +508,7 @@ export default {
 
         /**
          * getColor from specific message, respecting contact colors
-         * @param message 
+         * @param message
          * @return color
          */
         getColor (message) {
@@ -526,9 +526,9 @@ export default {
         cleanupSnackbar () {
             if(!this.snackbar.MaterialSnackbar.active)
                 return false;
-            
+
             // If within 200 px of the bottom, remove snack bar
-            if ((this.html.scrollHeight - this.html.offsetHeight - 200) < 
+            if ((this.html.scrollHeight - this.html.offsetHeight - 200) <
                 Math.max(this.html.scrollTop, this.body.scrollTop))
                 this.snackbar.MaterialSnackbar.cleanup_();
         },
@@ -554,11 +554,11 @@ export default {
         }
     },
 
-    watch: { 
+    watch: {
         '$route' (to) { // Update thread on route change
             this.conversation_id = this.threadId;
             this.read = this.isRead
-               
+
             this.loadThread();
 
         },
@@ -581,7 +581,7 @@ export default {
         margin-left: calc(50% - (136.5px)/2);
         margin-bottom: 30px;
     }
-    
+
     #message-list {
         transition: margin-bottom 0.3s ease-in-out;
     }

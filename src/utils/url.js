@@ -38,7 +38,6 @@ export default class Url {
     }
 
     static get (name) {
-
         let protocol = "https://";
         if(name == "websocket")
             protocol = "wss://";
@@ -46,4 +45,3 @@ export default class Url {
         return protocol + Url.getBaseUrl() + Url.getApiVersion() + Url.urls[name];
     }
 }
-

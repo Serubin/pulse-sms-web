@@ -1,6 +1,6 @@
 {
   "name": "pulse-client",
-  "version": "3.3.0",
+  "version": "3.2.1",
   "description": "PulseClient. An Open Source alternative to the PulseSMS web and desktop app.",
   "author": "Serubin <Serubin@serubin.net>",
   "private": true,
@@ -9,11 +9,11 @@
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src",
-    "lint-fix": "eslint --ext .js,.vue src --fix"
+    "lint-fix": "eslint --ext .js,.vue src --fix",
+    "deploy": "npm run build; touch dist/CNAME; echo \"pulsesms.app\" > dist/CNAME; push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
     "@xkeshi/image-compressor": "^0.5.2",
-    "dialog-polyfill": "^0.4.9",
     "emojione": "^3.1.2",
     "firebase": "^4.8.1",
     "jump.js": "^1.0.2",
@@ -58,6 +58,7 @@
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
     "ora": "^1.2.0",
+    "push-dir": "^0.4.1",
     "rimraf": "^2.6.0",
     "sass": "^1.0.0-beta.4",
     "sass-loader": "^6.0.6",

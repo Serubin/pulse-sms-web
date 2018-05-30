@@ -13,14 +13,14 @@ export default class Api {
     constructor () {
         this.socket = null;
         this.openWebSocket();
-        
+
         this.has_disconnected = false;
     }
 
     /**
      * Open reconnecting websocket.
      */
-    openWebSocket() {
+    openWebSocket () {
 
         const this_ = this;
 
@@ -28,7 +28,7 @@ export default class Api {
         this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
 
         this.socket.addEventListener('open', () => {
-            
+
             if (this.has_disconnected) {
                 store.state.msgbus.$emit('refresh-btn');
                 Util.snackbar("And we're back!");
@@ -83,7 +83,7 @@ export default class Api {
         const json = JSON.parse(e.data);
 
         // Ignore bad messages
-        if (typeof json.message == "undefined") 
+        if (typeof json.message == "undefined")
             return;
 
         const operation = json.message.operation;
@@ -93,11 +93,11 @@ export default class Api {
             json.message.content.data = emojione.unicodeToImage(
                 json.message.content.data
             );
-        
+
 
         if (operation == "added_message") { // Handles new messages
 
-            let message = json.message.content; 
+            let message = json.message.content;
 
             // Translate api naming (naming shim)
             message.message_from = message.from;
@@ -132,14 +132,14 @@ export default class Api {
 
         if (message.type != 0)
             return;
-        
+
         const contact = store.getters.getContact(message.conversation_id);
 
         if (contact != null && contact.mute)
             return;
 
         const title = contact.title;
-        const snippet = contact.private_notifications 
+        const snippet = contact.private_notifications
                             ? "" : Util.generateSnippet(message);
 
         const link = "/thread/" + message.conversation_id;
@@ -155,13 +155,13 @@ export default class Api {
         }
 
     }
- 
+
     static login (username, password) {
         const promise = new Promise((resolve, reject) => {
             const constructed_url = Url.get('login')
             const request = {
                 username,
-                password 
+                password
             };
 
             Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
@@ -176,7 +176,7 @@ export default class Api {
 
 
     static fetchConversations (index) {
-        const constructed_url = 
+        const constructed_url =
             Url.get('conversations') + index + Url.getAccountParam()
 
         const promise = new Promise((resolve, reject) => {
@@ -199,14 +199,14 @@ export default class Api {
 
         const limit = 70;
 
-        const constructed_url = 
-            Url.get('messages') + Url.getAccountParam() 
-                + "&conversation_id=" + conversation_id + "&limit=" + limit 
+        const constructed_url =
+            Url.get('messages') + Url.getAccountParam()
+                + "&conversation_id=" + conversation_id + "&limit=" + limit
                 + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
             Vue.http.get( constructed_url )
-                .then(response => { 
+                .then(response => {
                     response = response.data
                     // Decrypt Conversations items
                     for(let i = 0; i < response.length; i++)
@@ -219,7 +219,7 @@ export default class Api {
 
         return promise
     }
-    
+
     static createThread (to, message) {
         const constructed_url = Url.get("new_thread");
 
@@ -228,7 +228,7 @@ export default class Api {
             to: to,
             message: message
         }
-        
+
         const promise = new Promise((resolve, reject) => {
             Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
             .then( response  => resolve(response) )
@@ -299,7 +299,7 @@ export default class Api {
     }
 
     static loadFile(file, compress=null) {
-        
+
         if (!file.type.startsWith("image/"))
             return Util.snackbar("File type not supported")
 
@@ -310,7 +310,7 @@ export default class Api {
             compress = 0.6
 
          // Disallow large non-image files
-        if ((file.type.startsWith("image/") || !file.type === "image/gif") 
+        if ((file.type.startsWith("image/") || !file.type === "image/gif")
             && file.size > 1024 * 1024) {
             return new ImageCompressor(file, {
                 quality: compress,
@@ -320,7 +320,7 @@ export default class Api {
                 error: (e) => null
             });
         }
-        
+
         store.commit('loaded_media', file);
         Vue.nextTick(() =>Util.scrollToBottom(250))
 
@@ -333,7 +333,7 @@ export default class Api {
         reader.onload = (e) => {
             let encryptedFile = Crypto.encryptData(new Uint8Array(e.target.result));
             encryptedFile = new TextEncoder('utf-8').encode(encryptedFile);
-            
+
             const id = Api.generateId();
             const account_id = store.state.account_id;
 
@@ -345,11 +345,11 @@ export default class Api {
             messageRef.put(encryptedFile).then((snapshot) => {
                 // Send message
                 Api.sendMessage("firebase -1", file.type, thread_id, id);
-                
+
                 // Make url
                 const constructed_url = Url.get('media') + id + Url.getAccountParam();
                 Vue.http.get(constructed_url);
-                
+
                 // Empty loaded media
                 store.commit('loaded_media', null)
                 store.commit('media_sending', false);
@@ -360,14 +360,14 @@ export default class Api {
     }
 
     static markAsRead (thread_id) {
-        
+
         // Read conversation
         let constructed_url = Url.get('read') + thread_id + Url.getAccountParam();
         Vue.http.post(constructed_url)
             .catch((e) => Api.rejectHandler(e));
 
         // Dismiss notifiction
-        constructed_url = Url.get('dismiss') + Url.getAccountParam() 
+        constructed_url = Url.get('dismiss') + Url.getAccountParam()
                 + "&id=" + thread_id;
         Vue.http.post(constructed_url);
     }
@@ -379,7 +379,7 @@ export default class Api {
             constructed_url = Url.get('archive')
         else
             constructed_url = Url.get('unarchive')
-        
+
         constructed_url += conversation + Url.getAccountParam();
 
         Vue.http.post(constructed_url);
@@ -405,8 +405,8 @@ export default class Api {
 
         const colors = {
             'default': Util.expandColor(response.color),
-            'dark': Util.expandColor(response.color_dark),
-            'accent': Util.expandColor(response.color_accent),
+            'dark': Util.expandColor(response.color),
+            'accent': Util.expandColor(response.color),
         };
 
         store.commit('theme_base', response.base_theme);
@@ -420,12 +420,12 @@ export default class Api {
 
     static updateSetting (setting, type, value) {
         let constructed_url = Url.get("update_setting") +
-            "?pref=" + setting 
-            + "&type=" + type 
+            "?pref=" + setting
+            + "&type=" + type
             + "&value=" + value;
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.post( constructed_url, Url.getAccountPayload(), 
+            Vue.http.post( constructed_url, Url.getAccountPayload(),
                 {'Content-Type': 'application/json'})
                 .then( response => resolve(true) )
                 .catch( response => Api.rejectHandler(resposne, reject) );
@@ -462,9 +462,9 @@ export default class Api {
     }
 
     static rejectHandler(e, callback=null) {
-        if (e.status == 401) 
+        if (e.status == 401)
             return store.state.msgbus.$emit('logout-btn');
-            
+
         if (callback)
             return callback(e);
 

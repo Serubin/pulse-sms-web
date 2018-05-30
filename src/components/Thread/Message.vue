@@ -53,16 +53,16 @@ export default {
             }
 
             /* MMS Image Message */
-            case "image": { 
+            case "image": {
                 this.content = "<i> Loading MMS </i>";
                 this.is_media = true;
-    
+
                 // Fetch media
                 MediaLoader.getMedia(this.id, this.mime)
                     .then(blob => this.loadImage(blob));
                 break;
             }
-            
+
             case "media": {
                 this.is_media = true;
 
@@ -75,10 +75,10 @@ export default {
                     this.media_thumb = this.content;
                     break;
                 }
-                
+
                 // Process Web/Youtube-v2
                 const media = JSON.parse(this.content);
-                
+
                 // Set media values
                 this.media_thumb = media.thumbnail || media.image_url ||"";
                 this.media_link = media.url || media.web_url || "";
@@ -86,10 +86,10 @@ export default {
                 this.media_content = media.description || "";
 
                 // Remove content
-                this.content = ""; 
+                this.content = "";
 
                 this.media_thumb = this.media_thumb.replace(/https?/, "https");
-                
+
                 break;
             }
 
@@ -101,7 +101,7 @@ export default {
 
         switch ( this.type ) {
             case 0:
-            case 6: { 
+            case 6: {
                 this.color = this.threadColor;
                 this.style_class.push('received');
                 break;
@@ -118,7 +118,7 @@ export default {
                 this.style_class.push('sent') //TODO add text color from global theme
             }
         }
-        
+
         // Add links
         this.content = linkify(this.content)
 
@@ -153,7 +153,7 @@ export default {
             // Set data
             this.media_thumb = data_prefix + blob;
             this.media_link = data_prefix + blob;
-            
+
         },
         updateType (id, type) {
             if (this.id != id)
@@ -176,9 +176,9 @@ export default {
         },
         styleGenerator () {
             // Only style recieved and media
-            if (this.type != 0 && this.type != 6) 
+            if (this.type != 0 && this.type != 6)
                 return "";
-            
+
             let media = "";
             if (this.is_media)
                 media = "padding-bottom:4px;"
@@ -203,7 +203,7 @@ export default {
 
     .date-wrapper, .sent-wrapper {
         clear: both;
-        
+
         .date-sent, .sending {
             float: right;
             margin-right: 36px;
@@ -214,7 +214,7 @@ export default {
             margin-left: 36px;
         }
     }
-    
+
     .message-wrapper {
         user-select: text;
         clear: both;
@@ -279,7 +279,7 @@ export default {
                 color: black;
             }
         }
-        
+
         .error {
             float: right;
             color: black;

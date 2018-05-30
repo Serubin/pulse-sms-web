@@ -1,7 +1,7 @@
 
 import { KEYS, state } from '@/store/state.js'
 
-    // called when the store is initialize  
+// called when the store is initialize
 const localStoreSync = store => {
     const local_items = {
         'contacts': KEYS.CONTACTS,
@@ -21,7 +21,6 @@ const localStoreSync = store => {
 
     // called after every mutation.
     store.subscribe((mutation, state) => {
-        
         // Only save if in local_items array
         if (!Object.keys(local_items).contains(mutation.type))
             return;

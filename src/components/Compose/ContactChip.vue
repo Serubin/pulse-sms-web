@@ -11,7 +11,7 @@ export default {
     name: 'ContactChip',
     props: [ 'contact', 'onDelete'],
     components: {
-        
+
     }
 }
 </script>

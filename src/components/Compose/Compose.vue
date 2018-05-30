@@ -71,18 +71,18 @@ export default {
             this.selectedContacts.map((value) => { // Concat selected contacts
                 to += value.phone + ",";
             });
-            
+
             to = to.slice(0, to.length - 1); // Remove trailing comma
             this.sending = true;
 
             Api.createThread(to, message);
-            
+
             setTimeout(() => {
                 Api.fetchConversations("index_unarchived")
                     .then((resp) => {
                         const thread_id = resp[0].device_id;
 
-                        this.$router.push({ 
+                        this.$router.push({
                             name:  'thread', params: { threadId: thread_id, isRead: true }
                         });
                     });
@@ -100,12 +100,12 @@ export default {
             const duplicates = [];
 
             for (let contact of response.data) {
-                
+
                 // Decrypt
                 contact.name = Crypto.decrypt(contact.name);
                 contact.phone_number = Crypto.decrypt(contact.phone_number);
 
-                if (contains.indexOf(contact.name) >= 0) { 
+                if (contains.indexOf(contact.name) >= 0) {
                     // Track duplicates and mark for removal
                     duplicates[duplicates.length] = contact.id;
                     continue;
@@ -113,18 +113,18 @@ export default {
 
                 // Contacts by name, index
                 this.nameIndex[contact.name.toLowerCase()] = this.contacts.length;
-                
+
                 // Add to cache
-                this.contacts[contact.id] = { 
-                    'id': contact.id, 
-                    'name': contact.name, 
-                    'phone': contact.phone_number 
+                this.contacts[contact.id] = {
+                    'id': contact.id,
+                    'name': contact.name,
+                    'phone': contact.phone_number
                 };
 
             }
         },
         processInput (e) {
-            
+
             if(e.metaKey && e.keyCode == 65) {
                 Vue.nextTick(() => {
                     e.target.setSelectionRange(0, e.target.value.length + 1);
@@ -139,7 +139,7 @@ export default {
             else if(e.key.length == 1)
                 this.recipient += e.key;
 
-            if (this.recipient == "") 
+            if (this.recipient == "")
                 this.matchList = []
 
             if (this.recipient.length > 0)
@@ -149,17 +149,17 @@ export default {
                 || (e.keyCode == 188)) {
 
                 let val = this.recipient.replace(",", "");
-                
+
                 const contact = Object.values(this.contacts).containsObjKey('name', val);
                 if (contact) {
                     this.recipient = "";
                     return this.addContact(contact);
                 }
-                
+
                 if (!/(\d{10}|\d{3}-\d{3}-\d{4})/.test(val)) {
                     return
                 }
-                
+
                 this.addContact({
                     'id': val.replace(/-/g,""),
                     'name': val,
@@ -183,7 +183,7 @@ export default {
             }
             if (e.keyCode == 8 && this.recipient == "") {
                 const last = this.selectedContacts.length - 1;
-                this.hilighted = this.selectedContacts[last]; 
+                this.hilighted = this.selectedContacts[last];
 
                 return;
             }
@@ -198,12 +198,12 @@ export default {
             const reg = new RegExp(input.split('').join('\\w*').replace(/\W/, ""), 'i');
 
             return Object.values(this.contacts).filter((data) => {
-                if (data.name.match(reg)) 
+                if (data.name.match(reg))
                     return data;
             });
         },
         addContact (contact) {
-            
+
             this.matchList = [];
             this.recipient = "";
 
@@ -353,7 +353,7 @@ export default {
     .flip-list-enter, .flip-list-leave-to
     /* .flip-list-leave-active below version 2.1.8 */ {
         opacity: 0;
-    
+
     }
     .flip-list-leave-active {
         position: absolute;

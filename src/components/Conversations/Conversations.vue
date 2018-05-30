@@ -63,17 +63,17 @@ export default {
             const cache = [];
             const titles = [];
 
-            
+
             for(let i in response) {
                 const item = response[i]
-                
+
                 const title = this.calculateTitle(item);
-                
+
                 if (!titles.includes(title)) {
                     titles.push(title);
 
                     updatedConversations.push({
-                        label: title, 
+                        label: title,
                         hash: Hash(title)
                     });
                 }
@@ -110,7 +110,7 @@ export default {
 
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
-            
+
             if(!conv || !conv_index)
                 return false;
 
@@ -135,20 +135,20 @@ export default {
                     }
                 })
             }
-            
+
             // Move conversation if required
             if (conv_index != startIndex + 1) {
                 conv = this.conversations.splice(conv_index, 1)[0]
 
                 // If top label is not "Today"
                 // This isn't elegant, but it works
-                if (this.conversations[startIndex].label != "Today" 
+                if (this.conversations[startIndex].label != "Today"
                     && this.conversations[startIndex].label != "Pinned") {
                     const title = "Today"; // Define title
                     const label = {        // And Define Label
-                        label: title, 
+                        label: title,
                         hash: Hash(title)
-                    } 
+                    }
 
                     // Push label and conversation
                     this.conversations.splice(startIndex, 0, label, conv)
@@ -157,16 +157,16 @@ export default {
 
                     this.conversations.splice(startIndex + 1, 0, conv)
                 }
-            } 
+            }
         },
 
         updateRead (id) {
-            
+
             let { conv, conv_index } = this.getConversation(id);
 
             if(!conv || !conv_index)
                 return false;
-            
+
             conv.read = true;
             conv.hash = Hash(conv)
         },
@@ -182,7 +182,7 @@ export default {
                 if(id == conv.device_id)
                     return  { conv, conv_index };
             }
-            
+
             return  { conv, conv_index };
         },
 
@@ -197,19 +197,19 @@ export default {
         },
 
         calculateTitle (conversation) {
-            if (conversation.pinned) 
+            if (conversation.pinned)
                 return "Pinned";
-            else if (isToday(conversation.timestamp)) 
+            else if (isToday(conversation.timestamp))
                 return "Today";
-            else if (isYesterday(conversation.timestamp)) 
+            else if (isYesterday(conversation.timestamp))
                 return "Yesterday";
-            else if (isLastWeek(conversation.timestamp)) 
+            else if (isLastWeek(conversation.timestamp))
                 return "This Week";
-            else if (isLastMonth(conversation.timestamp)) 
+            else if (isLastMonth(conversation.timestamp))
                 return "This Month";
-            else 
+            else
                 return "Older";
-            
+
 
             function isToday(timestamp) {
                 let current = new Date();
@@ -266,7 +266,7 @@ export default {
         }
     },
 
-    watch: { 
+    watch: {
         '$route' (to, from) { // Update index on route change
 
             // Only update if list page
@@ -307,7 +307,7 @@ export default {
     .flip-list-enter, .flip-list-leave-to
     /* .flip-list-leave-active below version 2.1.8 */ {
         opacity: 0;
-    
+
     }
     .flip-list-leave-active {
         position: absolute;

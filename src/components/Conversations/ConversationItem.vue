@@ -37,22 +37,22 @@ export default {
 
     methods: {
         routeToThread () {
-                       
+
             this.close_drawer();
 
             let contact_data = Util.generateContact(
-                this.conversation_id, 
-                this.title, 
+                this.conversation_id,
+                this.title,
                 this.mute,
                 this.private_notifications,
-                this.color, 
+                this.color,
                 Util.expandColor(this.conversationData.color_accent),
                 Util.expandColor(this.conversationData.color_light),
                 Util.expandColor(this.conversationData.color_dark)
             )
             this.$store.commit('contacts', contact_data);
 
-            this.$router.push({ 
+            this.$router.push({
                 name: !this.archive ? 'thread' : 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
             });
         },
@@ -69,7 +69,7 @@ export default {
 
     computed: {
         color () {
-            if (this.$store.state.theme_use_global) 
+            if (this.$store.state.theme_use_global)
                 return this.$store.state.theme_global_default;
 
             return this.conversationData.color;
@@ -97,7 +97,7 @@ export default {
         },
 
         titleFirstLetter () {
-            try { 
+            try {
                 return this.title.split('')[0].toUpperCase()
             } catch (e) { // Edge case for message with no title ??
                 return ""
@@ -154,7 +154,7 @@ export default {
             height: 52px;
             margin-right: 16px;
             overflow: hidden;
-        
+
             &.unread {
                 font-weight: bold;
             }

@@ -80,12 +80,12 @@ export default {
                 const end =  e.target.selectionEnd;
 
                 // Overwrite selection with newline
-                this.message = this.message.substr(0,start) 
+                this.message = this.message.substr(0,start)
                     + "\n" + this.message.substr(end, this.message.length)
 
                 // Set new location of selection to start of old selection
                 // Wait until next tick to ensure the new message gets rendered
-                Vue.nextTick(() =>  
+                Vue.nextTick(() =>
                     e.target.setSelectionRange(start + 1, start + 1)
                 );
 
@@ -93,12 +93,12 @@ export default {
             }
 
             // If message is empty, we're done
-            if (this.message.length <= 0 && !this.$store.state.loaded_media ) 
+            if (this.message.length <= 0 && !this.$store.state.loaded_media )
                 return false;
 
             // Send message to handler
             this.onSend(this.message);
-            
+
             // Clear message
             this.message = "";
         },
@@ -130,7 +130,7 @@ export default {
                     file = e.dataTransfer.files[0]
                 else
                     file = e.target.files[0];
-                
+
                 // Load file into cache
                 Api.loadFile(file);
             });
@@ -149,14 +149,14 @@ export default {
          * @param toggle - toggle override (default: null)
          */
         toggleEmoji (toggle=null) {
-            
+
             // Update emoji wrapper margin
             this.updateEmojiMargin(true);
 
             // If no toggle given, toggle the show_emoji value
-            if(typeof toggle != "boolean") 
+            if(typeof toggle != "boolean")
                 return this.show_emoji = !this.show_emoji
-                
+
             // Otherwise set to provided toggle
             return this.show_emoji = toggle
 
@@ -182,7 +182,7 @@ export default {
             if (width > MAIN_CONTENT_SIZE) {
                 margin = (width - MAIN_CONTENT_SIZE) / 2;
             }
-            
+
             // Set margin + sidebar
             this.emojiStyle.left = (270  + margin) + "px";
         },
@@ -196,12 +196,12 @@ export default {
             const end =  this.$sendbar.selectionEnd;
 
             // Overwrite selection with emoji
-            this.message = this.message.substr(0,start) 
+            this.message = this.message.substr(0,start)
                 + e.native + this.message.substr(end, this.message.length)
 
             // Set new location of selection to start of old selection
             // Wait until next tick to ensure the new message gets rendered
-            Vue.nextTick(() =>  
+            Vue.nextTick(() =>
                 this.$sendbar.setSelectionRange(start + 1, start + 1)
             );
         }
@@ -221,7 +221,7 @@ export default {
         }
     },
 
-    watch: { 
+    watch: {
         '$route' (to) { // Update thread on route change
             this.message = "";
             this.removeMedia();
@@ -264,7 +264,7 @@ export default {
                 height: 100%;
                 width: 100%;
                 z-index: 10;
-                
+
                 .media-clear {
                     position: absolute;
                     margin: 0.3em 1em;
@@ -345,7 +345,7 @@ export default {
         padding-left: 16px;
         padding-right: 16px;
         border-radius: 2px;
-        
+
         .entry {
             width: calc(100% - 108px);
             margin-top: -4px;

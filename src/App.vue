@@ -2,7 +2,7 @@
     <div id="app">
 
         <!-- Toolbar -->
-        <div id="toolbar" :style="{ color: text_color }"> 
+        <div id="toolbar" :style="{ color: text_color }">
             <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
                 <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class" />
@@ -28,7 +28,7 @@
         </div> <!-- End Toolbar-->
 
         <!-- Content Wrapper -->
-        <div id="wrapper" :style="{ marginLeft: margin + 'px'}"> 
+        <div id="wrapper" :style="{ marginLeft: margin + 'px'}">
 
             <!-- Side Menu -->
             <div id="side-menu">
@@ -37,18 +37,18 @@
             </div> <!-- End Side Menu -->
 
             <!-- Content Area -->
-            <div id="content"> 
+            <div id="content">
                 <main class="mdl-layout__content">
                     <router-view></router-view>
                 </main>
             </div> <!-- End Content Area -->
 
         </div> <!-- End Content Wrapper -->
-        
+
         <!-- Loading splash page -->
-        <transition name="splash-fade">
+        <!-- <transition name="splash-fade">
             <splash v-if="$store.state.loading"></splash>
-        </transition>
+        </transition> -->
         <Snackbar />
 
         <div class="file-drag"></div>
@@ -73,19 +73,18 @@ export default {
     name: 'app',
 
     beforeCreate () {
+        this.$store.commit('title', "Pulse SMS");
 
-        // Set title
-        this.$store.commit('title', "PulseClient");
         // If logged in (account_id) then setup crypto
-        if(this.$store.state.account_id != '') 
-            Crypto.setupAes(); 
-        else // Otherwise, force login page
+        if(this.$store.state.account_id != '')
+            Crypto.setupAes();
+        else
             this.$router.push('login');
 
     },
 
     mounted () { // Add window event listener
-        
+
         this.calculateHour(); // Calculate the next hour (for day/night theme)
         this.updateBodyClass(this.theme_str, ""); // Enables global theme
 
@@ -94,8 +93,8 @@ export default {
         this.handleResize(); // Get initial margin size
 
         // Setup firebase
-        Util.firebaseConfig(); 
-        
+        Util.firebaseConfig();
+
         // Construct colors object from saved global theme
         const colors = {
             'default': this.$store.state.theme_global_default,
@@ -104,7 +103,7 @@ export default {
         };
 
         // Commit them to current application colors
-        this.$store.commit('colors', colors); 
+        this.$store.commit('colors', colors);
 
         // If logged in start app
         if (this.$store.state.account_id != '') {
@@ -115,11 +114,11 @@ export default {
             this.$store.state.msgbus.$on('start-app', this.applicationStart);
             this.mount_view = true;
         }
-        
+
         // Setup global button listeners
         this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
-        
+
         // Request notification permissions if setting is on.
         if (this.$store.state.notifications)
             Notification.requestPermission();
@@ -162,7 +161,7 @@ export default {
          */
         applicationStart () {
             // Setup the API (Open websocket)
-            this.mm = new Api(); 
+            this.mm = new Api();
             // Grab user settings from server and store in local storage
             Api.fetchSettings();
             // Populate the dropdown menu
@@ -181,7 +180,7 @@ export default {
                 // If last ping is within 15 seconds, ignore
                 if (last_ping > (Date.now() / 1000 >> 0) - 15)
                     return;
-                
+
                 // Else, open new API and force refresh
                 this.mm.closeWebSocket()
                 this.mm = new Api();
@@ -201,7 +200,7 @@ export default {
         toggleSidebar () {
             if(!this.full_theme)
                 this.$store.commit('sidebar_open', !this.sidebar_open);
-            else 
+            else
                 this.$router.push('/');
         },
         /**
@@ -227,11 +226,11 @@ export default {
             if (width > MAIN_CONTENT_SIZE) {
                 margin = (width - MAIN_CONTENT_SIZE) / 2;
             }
-            
+
             // Set margin
             this.margin = margin
         },
-        
+
         /**
          * Populate Menu Items
          * Populates drop down menu items based on page and message context
@@ -253,7 +252,7 @@ export default {
                     ( !this.$route.path.includes("archived") ?
                         { 'name': "archive", 'title': "Archive Conversation" } :
                         {'name': "unarchive", 'title': "Unarchive Conversation" }),
-                    { "name": "blacklist", 'title': "Blacklist Contact"}, 
+                    { "name": "blacklist", 'title': "Blacklist Contact"},
                 );
             else  // Otherwise just Account & Help
                 items.unshift(
@@ -299,8 +298,8 @@ export default {
 
         /**
          * Handle logout
-         * Removes sensative data, clears local storage, 
-         * and closes websocket 
+         * Removes sensative data, clears local storage,
+         * and closes websocket
          */
         logout () {
 
@@ -310,7 +309,7 @@ export default {
             this.$store.commit('salt', "");
             this.$store.commit('aes', "");
             this.$store.commit('clearContacts', {});
-            
+
             // Clear local storage (browser)
             window.localStorage.clear();
             // Close socket
@@ -372,7 +371,7 @@ export default {
             const theme = this.$store.state.theme_base;
 
             // If day/night, return dark/light
-            if (theme == "day_night") 
+            if (theme == "day_night")
                 return this.is_night ? "dark" : "";
 
             return theme; // Otherwise return stored theme
@@ -383,7 +382,7 @@ export default {
         },
 
         theme_toolbar () { // Determine toolbar color
-            if (this.$store.state.theme_use_global) // If use global 
+            if (this.$store.state.theme_use_global) // If use global
                 return this.$store.state.theme_global_default;
 
             if (!this.$store.state.theme_toolbar)  // If not color toolbar
@@ -401,11 +400,11 @@ export default {
                 return "#202B30"
             else if(theme == "day_night") // Day night
                 return this.is_night ? "#202b30" : "#f3f3f3"
-                
+
         },
 
         text_color () { // Determines toolbar text color
-            if (this.$store.state.theme_toolbar) 
+            if (this.$store.state.theme_toolbar)
                 return "#fff";
         }
     },
@@ -437,7 +436,7 @@ export default {
 </script>
 
 <style lang="scss">
-    
+
     @import "./assets/scss/material.blue-pink.min.css";
     @import "./assets/scss/_vars.scss";
 
@@ -498,12 +497,12 @@ export default {
             #logo-image:hover {
                 cursor: pointer;
             }
-            
+
             .icon {
                 margin-top: 2px;
                 width: 25px;
                 height: 25px;
-                
+
                 &.logo {
                     background: url(assets/images/vector/pulse.svg) 0 0 no-repeat;
                 }
@@ -530,7 +529,7 @@ export default {
         }
     }
 
-	
+
     #toolbar_icons {
         border: 0;
         float: right;
@@ -663,7 +662,7 @@ export default {
             color: rgba(255,255,255,.77) !important;
         }
     }
-    
+
     .transition span.animator {
         position: absolute;
         height: 100%;

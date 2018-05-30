@@ -29,12 +29,12 @@
                     </li>
                 </ul>
                 <!-- If route is not conversation list -->
-                
+
                 <transition name="slide-left">
                     <conversations v-if="showConversations" small="true"></conversations>
                 </transition>
                 <!-- End if -->
-                
+
             </div>
         </div> <!-- End sidebar-internal -->
 
@@ -66,7 +66,7 @@ export default {
         /**
          * route to
          * Handles routing and closes drawer
-         * 
+         *
          * @param link - link to route too
          */
         routeTo (link) {
@@ -98,7 +98,7 @@ export default {
             return this.$store.state.full_theme;
         },
         showConversations () {
-            return this.$route.name.indexOf('conversations-list') < 0 
+            return this.$route.name.indexOf('conversations-list') < 0
             && this.$store.state.account_id != '';
         }
     },
@@ -150,7 +150,7 @@ export default {
         overflow-y: hidden;
         z-index: 3;
         background-color: $bg-light;
-        
+
         &:hover {
             overflow-y: auto;
         }
@@ -209,18 +209,18 @@ export default {
                     &.archive {
                         background: url(../assets/images/vector/archive.svg) 0 0 no-repeat;
                     }
-                
+
                     &.scheduled_messages {
                         background: url(../assets/images/vector/scheduled_messages.svg) 0 0 no-repeat;
                     }
-                    
+
                     &.blacklist {
                         background: url(../assets/images/vector/blacklist.svg) 0 0 no-repeat;
                     }
                 }
             }
         }
-    }   
+    }
     /* Click catcher - Overlay */
     #sidebar-overlay {
         opacity: 0.2;
