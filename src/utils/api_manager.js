@@ -195,13 +195,14 @@ export default class Api {
         return promise
     }
 
-    static fetchThread (conversation_id) {
+    static fetchThread (conversation_id, offset=0) {
 
         const limit = 70;
 
         const constructed_url = 
             Url.get('messages') + Url.getAccountParam() 
-                + "&conversation_id=" + conversation_id + "&limit=" + limit + "&web=true";
+                + "&conversation_id=" + conversation_id + "&limit=" + limit 
+                + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
             Vue.http.get( constructed_url )
@@ -404,8 +405,8 @@ export default class Api {
 
         const colors = {
             'default': Util.expandColor(response.color),
-            'dark': Util.expandColor(response.color),
-            'accent': Util.expandColor(response.color),
+            'dark': Util.expandColor(response.color_dark),
+            'accent': Util.expandColor(response.color_accent),
         };
 
         store.commit('theme_base', response.base_theme);
@@ -415,6 +416,20 @@ export default class Api {
         store.commit('colors', colors);
 
 
+    }
+
+    static updateSetting (setting, type, value) {
+        let constructed_url = Url.get("update_setting") +
+            "?pref=" + setting 
+            + "&type=" + type 
+            + "&value=" + value;
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.post( constructed_url, Url.getAccountPayload(), 
+                {'Content-Type': 'application/json'})
+                .then( response => resolve(true) )
+                .catch( response => Api.rejectHandler(resposne, reject) );
+        });
     }
 
     static fetchContacts () {

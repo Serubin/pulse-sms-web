@@ -3,6 +3,7 @@ import store from '@/store'
 export default class Url {
     static urls = {
         "login":                "accounts/login/",
+        "update_setting":       "accounts/update_setting",
         "messages":             "messages/",
         "add_message":          "messages/add/",
         "new_thread":           "messages/forward_to_phone",
@@ -28,6 +29,12 @@ export default class Url {
 
     static getAccountParam () {
         return "?account_id=" + store.state.account_id;
+    }
+
+    static getAccountPayload () {
+        return {
+            account_id: store.state.account_id
+        }
     }
 
     static get (name) {

@@ -1,6 +1,7 @@
 <template>
     <div class="message-wrapper" :title="stringTime">
-        <div :class="style_class"  :style="styleGenerator" :id="id">
+        <div id="offset-marker" v-if="this.messageData.marker"></div>
+        <div :class="style_class"  :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
             <div v-show="message_from"> <b> {{ message_from }} </b> <br /> </div>
             <div v-html="content"></div>
             <!-- Content is inserted via v-html -->
@@ -34,6 +35,9 @@ export default {
     props: [ 'messageData', 'threadColor', 'textColor' ],
 
     mounted () {
+
+        if ( this.messageData.marker )
+            return;
 
         this.$store.state.msgbus.$on('updateMessageType',
             (payload) => this.updateType(payload.id, payload.message_type));
@@ -165,7 +169,7 @@ export default {
             return this.type == 2 ? true : false;
         },
         round () {
-            return this.$store.state.round ? 'message-round' : 'message';
+            return this.$store.state.theme_round ? 'message-round' : 'message';
         },
         stringTime () {
             return new Date(this.timestamp).toLocaleString()
@@ -225,17 +229,21 @@ export default {
             overflow-wrap: break-word;
             word-wrap: break-word;
             min-width: 18px;
+        }
 
-            &:after {
-                content: "";
-                position: absolute;
-                bottom: -20px;
-                left: 50px;
-                border-style: solid;
-                display: block;
-                top: 0px;
-                bottom: auto;
-            }
+        .message-round {
+            border-radius: 15px;
+        }
+
+        .message:after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            left: 50px;
+            border-style: solid;
+            display: block;
+            top: 0px;
+            bottom: auto;
         }
 
         .received {

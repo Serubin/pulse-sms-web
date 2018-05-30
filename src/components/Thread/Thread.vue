@@ -1,6 +1,8 @@
 <template>
     <div id="thread-wrap" @click="markAsRead">
         <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom + 'px'}">
+            <!-- Load More Button -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore" v-if="messages.length > 69">Load Previous</button>
             <!-- Spinner On load -->
             <spinner class="spinner" v-if="messages.length == 0"></spinner>
             <!-- messages will be inserted here -->
@@ -14,6 +16,8 @@
 
 <script>
 import Vue from 'vue'
+import jump from 'jump.js'
+
 import { Util, Api } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
@@ -157,15 +161,20 @@ export default {
             conversation_id: this.threadId,
             read: this.isRead, 
             messages: [],
+
             previous_title: "",
             listeners: [],
+
             colors_from: {},
             margin_bottom: "63",
+
             html: null,
             body: null,
             list: null,
             snackbar: null,
             sendbar: null,
+
+            offset: 0,
         }
     },
 
@@ -215,6 +224,7 @@ export default {
         loadThread () {
 
             // Fetch messages
+            this.offset = 0;
             this.messages = [];
             this.fetchMessages();
 
@@ -239,7 +249,9 @@ export default {
                         const contact = Object.values( // Get contact
                             this.$store.state.contacts // From cache
                         ).containsObjKey("title", i)   // Match to "title"
-                        
+
+                        if (!contact.colors.default)
+                            return this.colors_from[i] = this.color();
                         // Map name/title to color
                         this.colors_from[i] = contact.colors.default; 
                     }
@@ -252,12 +264,14 @@ export default {
          * Get's latest messages from server, decrypts, and add's to
          * this.messages for rendering.
          */
-        fetchMessages () {
-            Api.fetchThread(this.conversation_id)
+        fetchMessages (offset=0) {
+            Api.fetchThread(this.conversation_id, offset)
                 .then(response => {
-
+                    
+                    let new_messages = [];
                     let nextTimestamp;
 
+                    
                     // Flip message order and push to local state
                     for(let i = (response.length - 1); i >= 0; i--) {
 
@@ -270,15 +284,40 @@ export default {
                         response[i].dateLabel = this.compareTimestamps(
                             new Date(response[i].timestamp), nextTimestamp, 15
                         );
-                        
-                        // Push to list
-                        this.messages.push(response[i]);
 
+                        // Push to list
+                        new_messages.push(response[i]); 
                     }
+
+                    if (offset > 0) // Create marker for scroll back
+                        new_messages.push({
+                            marker: true
+                        });
+
                     
+                    // If offset is larger than zero, pre-pend to list
+                    if (offset > 0)
+                        this.messages = new_messages.concat(this.messages);
+                    else
+                        this.messages = new_messages; 
+
+
+
                     // Wait for messages to render
                     Vue.nextTick(() => { 
-                        Util.scrollToBottom();
+                        if (this.offset <= 0)
+                            Util.scrollToBottom();
+
+                        if (this.offset > 0 && this.$el.querySelector("#offset-marker"))
+                            jump('#offset-marker', {
+                                duration: 0,
+                                offset: -190,
+                                callback: () => {
+                                    this.messages.splice(offset,1);
+                                }
+                            });
+
+                        this.offset += 70;
 
                         this.$store.commit("loading", false);
                         this.markAsRead();
@@ -383,6 +422,7 @@ export default {
          * Force refresh messages - fetches from server
          */
         refresh () {
+            this.offset = 0; // Clear offset
             this.messages = []; // Clear messages
             this.fetchMessages(); // Fetch messages
             this.markAsRead(); // Mark as read
@@ -441,8 +481,12 @@ export default {
 
             // Get color string
             let colorString; 
-            if (message.message_from)                 colorString = this.getColor(message)
+            if (message.message_from)
+                colorString = this.getColor(message)
             else // Otherwise default color
+                colorString = this.color;
+
+            if (!colorString)
                 colorString = this.color;
 
             // Split up color string
@@ -503,6 +547,10 @@ export default {
             else  // Otherwise null
                 return null;
 
+        },
+
+        handleShowMore() {
+            this.fetchMessages(this.offset);
         }
     },
 
@@ -527,6 +575,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
+
+    button {
+        background: #f3f3f3;
+        margin-left: calc(50% - (136.5px)/2);
+        margin-bottom: 30px;
+    }
     
     #message-list {
         transition: margin-bottom 0.3s ease-in-out;
