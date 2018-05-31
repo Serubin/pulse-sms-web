@@ -173,22 +173,30 @@ export default class Api {
 
     }
 
-
     static fetchConversations (index) {
+        if (Api.conversations == null) {
+            Api.conversations = { };
+        }
+
         const constructed_url =
             Url.get('conversations') + index + Url.getAccountParam()
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then(response => {
-                    response = response.data
-                    // Decrypt Conversations items
-                    for(let i = 0; i < response.length; i++)
-                        response[i] = Crypto.decryptConversation(response[i]);
+            if (Api.conversations[index] == null) {
+                Vue.http.get( constructed_url )
+                    .then(response => {
+                        response = response.data
+                        // Decrypt Conversations items
+                        for(let i = 0; i < response.length; i++)
+                            response[i] = Crypto.decryptConversation(response[i]);
 
-                    resolve(response); // Resolve response
-                })
-                .catch( response => Api.rejectHandler(response, reject) );
+                        Api.conversations[index] = response;
+                        resolve(response); // Resolve response
+                    })
+                    .catch( response => Api.rejectHandler(response, reject) );
+            } else {
+                resolve(Api.conversations[index]);
+            }
         });
 
         return promise
