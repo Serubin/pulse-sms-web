@@ -24,7 +24,6 @@ export default class Api {
 
         const this_ = this;
 
-
         this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
 
         this.socket.addEventListener('open', () => {

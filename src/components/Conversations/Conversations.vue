@@ -255,7 +255,7 @@ export default {
 
     data () {
         return {
-            title: "Conversations",
+            title: "",
             conversations: [],
         }
     },
