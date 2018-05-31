@@ -94,28 +94,48 @@ export default class Api {
             );
 
 
-        if (operation == "added_message") { // Handles new messages
-
+        if (operation == "added_message") {
             let message = json.message.content;
-
-            // Translate api naming (naming shim)
             message.message_from = message.from;
-
-            // Decrypt
             message = Crypto.decryptMessage(message);
 
-            // Call notify
             this.notify(message);
-
-            // Emit to bus
+            this.cacheMessage(message);
             store.state.msgbus.$emit('newMessage', message);
-        } else if (operation == "read_conversation") { // Handles convo updates
+        } else if (operation == "read_conversation") {
             const id = json.message.content.id;
+
+            this.readConversation('index_unarchived');
+            this.readConversation('index_archived');
             store.state.msgbus.$emit('conversationRead', id);
-        } else if (operation == "update_message_type") { // Messages updates
+        } else if (operation == "update_message_type") {
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;
-            store.state.msgbus.$emit('updateMessageType', {id, message_type});
+
+            this.updateMessageType(id, message_type);
+            store.state.msgbus.$emit('updateMessageType', { id, message_type });
+        } else if (operation == "added_conversation") {
+            const id = json.message.content.id;
+
+            Api.conversations['index_unarchived'] = null;
+            store.state.msgbus.$emit('addedConversation', { id });
+        } else if (operation == "removed_conversation") {
+            const id = json.message.content.id;
+
+            this.removeConversation(id, 'index_unarchived');
+            store.state.msgbus.$emit('removedConversation', { id });
+        } else if (operation == "archive_conversation") {
+            const id = json.message.content.id;
+
+            if (json.message.content.archive) {
+                this.removeConversation(id, 'index_unarchived');
+                Api.conversations['index_archived'] = null;
+            } else {
+                this.removeConversation(id, 'index_archived');
+                Api.conversations['index_unarchived'] = null;
+            }
+
+            store.state.msgbus.$emit('removedConversation', { id });
         }
 
     }
@@ -153,6 +173,75 @@ export default class Api {
             router.push(link);
         }
 
+    }
+
+    /**
+     * Removes the cached conversation.
+     * @param conversation_id - conversation to remove.
+     * @param index - the index of the cached conversation list. Usually 'index_unarchived' or 'index_archived'.
+     */
+    removeConversation (conversation_id, index = 'index_unarchived') {
+        if (Api.conversations[index] == null) {
+            return;
+        }
+
+        for (var i = 0; i < Api.conversations[index].length; i++) {
+            if (Api.conversations[index] != null && Api.conversations[index][i].device_id == conversation_id) {
+                Api.conversations[index].splice(i, 1);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Mark the conversation as read.
+     * @param conversation_id - the conversation to mark read.
+     * @param index - the index of the cached conversation list. Usually 'index_unarchived' or 'index_archived'.
+     */
+    readConversation (conversation_id, index = 'index_unarchived') {
+        if (Api.conversations[index] == null) {
+            return;
+        }
+
+        for (var i = 0; i < Api.conversations[index].length; i++) {
+            if (Api.conversations[index] != null && Api.conversations[index][i].device_id == conversation_id) {
+                Api.conversations[index][i].read = true;
+                return;
+            }
+        }
+    }
+
+    /**
+     * Add a new message to the cached data.
+     * @param message - the message to add.
+     */
+    cacheMessage (message) {
+        if (Api.messages == null || Api.messages[message.conversation_id] == null) {
+            return;
+        }
+
+        Api.messages[message.conversation_id].unshift(message)
+    }
+
+    /**
+     * Add a new message to the cached data.
+     * @param message - the message to add.
+     */
+    updateMessageType (message_id, new_type) {
+        if (Api.messages == null) {
+            return;
+        }
+
+        for (var conversation_id in Api.messages) {
+            if (Api.messages.hasOwnProperty(conversation_id)) {
+                for (var i = 0; i < Api.messages[conversation_id].length; i++) {
+                    if (Api.messages[conversation_id] != null && Api.messages[conversation_id][i].device_id == message_id) {
+                        Api.messages[conversation_id][i].message_type = new_type;
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     static login (username, password) {

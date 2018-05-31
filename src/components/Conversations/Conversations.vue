@@ -30,6 +30,7 @@ export default {
 
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
         this.$store.state.msgbus.$on('conversationRead', this.updateRead)
+        this.$store.state.msgbus.$on('removedConversation', this.fetchConversations)
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         this.fetchConversations();
@@ -111,8 +112,14 @@ export default {
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
 
-            if(!conv || !conv_index)
+            if (!conv || !conv_index) {
+                // if the conversation doesn't exist, we have a problem, or it is a new conversation.
+                // invalidate the refresh the list from the API.
+                Api.conversations = null;
+                this.fetchConversations();
+
                 return false;
+            }
 
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
@@ -121,7 +128,6 @@ export default {
             conv.read = event_obj.read;
 
             conv.hash = Hash(conv);
-
 
             // Get start index (index after pinned items)
             let startIndex = 0;
@@ -183,7 +189,10 @@ export default {
                     return  { conv, conv_index };
             }
 
-            return  { conv, conv_index };
+            conv_index = null;
+            conv = null;
+
+            return { conv, conv_index };
         },
 
         /**
@@ -193,6 +202,8 @@ export default {
         refresh () {
             if (!this.small) // Don't clear list if using sidebar list
                 this.conversations = [];
+
+            Api.conversations = null;
             this.fetchConversations();
         },
 
