@@ -139,6 +139,7 @@ export default {
             color: 'rgba(255,255,255,1)',
             style_class: [ ],
             is_media: false,
+            is_article: false,
             media_link: "",
             media_thumb: "",
             media_title: "",
