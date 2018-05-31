@@ -9,8 +9,8 @@
             <!-- Media -->
             <a :href="media_link" target="_blank" v-show="is_media">
                 <img class="media" :src="media_thumb" alt="Thumbnail">
-                <div class="article-title"> {{ media_title }} </div>
-                <div class="article-snippet"> {{ media_content }} </div>
+                <div class="article-title" v-show="is_article"> {{ media_title }} </div>
+                <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
             </a>
         </div>
 
@@ -64,6 +64,7 @@ export default {
 
             case "media": {
                 this.is_media = true;
+                this.is_article = true;
 
                 if (this.mime == "media/youtube") { // Legacy Youtube
                     const video_id = this.content
@@ -177,7 +178,7 @@ export default {
                 return "";
 
             let media = "";
-            if (this.is_media)
+            if (this.is_article || this.is_media)
                 media = "padding-bottom:10px;"
 
             return "background: " + this.color + ";"
@@ -222,7 +223,8 @@ export default {
             padding: 16px;
             margin: 4px 8px 4px 8px;
             max-width: 310px;
-            border-radius: 2px;
+            border-radius: 15px;
+            box-shadow: -1px 2px 4px rgba(0, 0, 0, .1);
             overflow-wrap: break-word;
             word-wrap: break-word;
             min-width: 18px;
@@ -249,10 +251,11 @@ export default {
             margin-left: 28px;
             background: #fff;
             border-color: red transparent;
+		        box-shadow: 1px 2px 4px rgba(0, 0, 0, .2);
 
             &:after {
-                left: -18px;
-                border-width: 15px 0 0 20px;
+                left: -8px;
+                border-width: 35px 0 0 20px;
                 border-color: inherit;
             }
             a {
@@ -267,8 +270,8 @@ export default {
             background: #fff;
 
             &:after {
-                right: -18px;
-                border-width: 15px 20px 0 0;
+                right: -8px;
+                border-width: 15px 10px 0 0;
                 border-color: #fff transparent;
             }
 
@@ -285,8 +288,8 @@ export default {
             color: #fff;
 
             &:after {
-                right: -18px;
-                border-width: 15px 20px 0 0;
+                right: -8px;
+                border-width: 15px 10px 0 0;
                 border-color: #F44336 transparent;
             }
         }
@@ -354,6 +357,10 @@ export default {
                 width: 436px;
             }
         }
+    }
+
+    img {
+      padding-bottom: 4px;
     }
 
     .slide-out-enter-active, .slide-out-leave-active {
