@@ -344,10 +344,13 @@ export default {
         margin: auto;
         padding-left: 16px;
         padding-right: 16px;
-        border-radius: 2px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        border-radius: 16px 16px 0px 0px;
+        box-shadow: -0px -0px 3px rgba(0, 0, 0, .15);
 
         .entry {
-            width: calc(100% - 108px);
+            width: calc(100% - 124px);
             margin-top: -4px;
         }
 
@@ -375,7 +378,7 @@ export default {
             width: 24px;
             height: 24px;
             opacity: .56;
-            margin-right: 8px;
+            margin-right: 16px;
         }
     }
 

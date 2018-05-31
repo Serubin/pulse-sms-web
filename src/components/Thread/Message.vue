@@ -1,7 +1,7 @@
 <template>
     <div class="message-wrapper" :title="stringTime">
         <div id="offset-marker" v-if="this.messageData.marker"></div>
-        <div :class="style_class"  :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
+        <div :class="style_class" :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
             <div v-show="message_from"> <b> {{ message_from }} </b> <br /> </div>
             <div v-html="content"></div>
             <!-- Content is inserted via v-html -->
@@ -66,6 +66,8 @@ export default {
                 this.is_media = true;
                 this.is_article = true;
 
+                this.style_class.push('media-preview');
+
                 if (this.mime == "media/youtube") { // Legacy Youtube
                     const video_id = this.content
                         .replace("https://img.youtube.com/vi/", "")
@@ -99,23 +101,25 @@ export default {
             }
         }
 
-        switch ( this.type ) {
-            case 0:
-            case 6: {
-                this.color = this.threadColor;
-                this.style_class.push('received');
-                break;
-            }
-            case 3: {
-                this.style_class.push('error');
-                break;
-            }
-            case 5: {
-                this.style_class.push("info mdl-color-text--grey-700");
-                break;
-            }
-            default: {
-                this.style_class.push('sent') //TODO add text color from global theme
+        if (!this.is_article) {
+            switch ( this.type ) {
+                case 0:
+                case 6: {
+                    this.color = this.threadColor;
+                    this.style_class.push('received');
+                    break;
+                }
+                case 3: {
+                    this.style_class.push('error');
+                    break;
+                }
+                case 5: {
+                    this.style_class.push("info mdl-color-text--grey-700");
+                    break;
+                }
+                default: {
+                    this.style_class.push('sent') //TODO add text color from global theme
+                }
             }
         }
 
@@ -234,6 +238,21 @@ export default {
             border-radius: 15px;
         }
 
+        .media-preview {
+            text-align: center;
+            margin: auto;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            background: white;
+            color: black;
+            box-shadow: 1px 2px 4px rgba(0, 0, 0, .1);
+        }
+
+        .article-title, .article-snippet {
+            color: black;
+            text-align: left;
+        }
+
         .message:after {
             content: "";
             position: absolute;
@@ -243,6 +262,10 @@ export default {
             display: block;
             top: 0px;
             bottom: auto;
+        }
+
+        .media-preview:after {
+            display: none;
         }
 
         .received {
