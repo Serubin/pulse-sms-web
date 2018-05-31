@@ -540,6 +540,7 @@ export default {
         .mdl-menu, .mdl-menu__outline {
             margin-top: -30px;
             margin-left: -170px;
+            transform-origin: right top 0;
         }
 
     }
