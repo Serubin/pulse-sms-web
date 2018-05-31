@@ -279,7 +279,7 @@ export default {
 
             &:after {
                 left: -8px;
-                border-width: 35px 0 0 20px;
+                border-width: 37px 0 0 22px;
                 border-color: inherit;
             }
             a {
