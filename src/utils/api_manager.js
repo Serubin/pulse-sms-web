@@ -202,7 +202,10 @@ export default class Api {
         return promise
     }
 
-    static fetchThread (conversation_id, offset=0) {
+    static fetchThread (conversation_id, offset = 0) {
+        if (Api.messages == null) {
+            Api.messages = { };
+        }
 
         const limit = 70;
 
@@ -212,16 +215,21 @@ export default class Api {
                 + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then(response => {
-                    response = response.data
-                    // Decrypt Conversations items
-                    for(let i = 0; i < response.length; i++)
-                        response[i] = Crypto.decryptMessage(response[i]);
+            if (Api.messages[conversation_id] == null) {
+                Vue.http.get( constructed_url )
+                    .then(response => {
+                        response = response.data
+                        // Decrypt Conversations items
+                        for(let i = 0; i < response.length; i++)
+                            response[i] = Crypto.decryptMessage(response[i]);
 
-                    resolve(response); // Resolve response
-                })
-                .catch( response => Api.rejectHandler(response, reject) );
+                        Api.messages[conversation_id] = response;
+                        resolve(response); // Resolve response
+                    })
+                    .catch( response => Api.rejectHandler(response, reject) );
+            } else {
+                resolve(Api.messages[conversation_id]);
+            }
         });
 
         return promise
@@ -287,7 +295,6 @@ export default class Api {
         constructed_url = Url.get('update_conversation') + thread_id;
         Vue.http.post(constructed_url, conversationRequest, {'Content-Type': 'application/json'})
             .catch(response => console.log(response));
-
 
         // Submit event
         let event_object = {
