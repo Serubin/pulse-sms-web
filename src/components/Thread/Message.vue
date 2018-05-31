@@ -35,7 +35,6 @@ export default {
     props: [ 'messageData', 'threadColor', 'textColor' ],
 
     mounted () {
-
         if ( this.messageData.marker )
             return;
 
@@ -54,7 +53,7 @@ export default {
 
             /* MMS Image Message */
             case "image": {
-                this.content = "<i> Loading MMS </i>";
+                this.content = "<i style='line-height:250px;'> Loading MMS </i>";
                 this.is_media = true;
 
                 // Fetch media
@@ -121,7 +120,6 @@ export default {
 
         // Add links
         this.content = linkify(this.content)
-
     },
 
     data () {
@@ -145,7 +143,6 @@ export default {
     },
     methods: {
         loadImage (blob) {
-
             this.content = ""; // Don't set content
 
             // Construct data url
@@ -181,7 +178,7 @@ export default {
 
             let media = "";
             if (this.is_media)
-                media = "padding-bottom:4px;"
+                media = "padding-bottom:10px;"
 
             return "background: " + this.color + ";"
                 + "border-color: " + this.color
