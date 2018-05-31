@@ -289,8 +289,6 @@ export default {
                 margin: 1em calc(24px + 16px + 8px) 1em;
                 width: calc(100% - 108px);
             }
-
-
         }
 
         @media (min-width: 750px) {
@@ -298,25 +296,39 @@ export default {
                 width: 500px;
             }
         }
-
         @media (min-width: 800px) {
             & {
-                width: 550px;
+                width: 540px;
+            }
+        }
+        @media (min-width: 820px) {
+            & {
+                width: 555px;
             }
         }
         @media (min-width: 850px) {
             & {
+                width: 580px;
+            }
+        }
+        @media (min-width: 870px) {
+            & {
                 width: 600px;
             }
         }
-        @media (min-width: 900px) {
+        @media (min-width: 890px) {
+            & {
+                width: 620px;
+            }
+        }
+        @media (min-width: 920px) {
             & {
                 width: 650px;
             }
         }
         @media (min-width:950px) {
             & {
-                width: 650px;
+                width: 680px;
             }
         }
     }
