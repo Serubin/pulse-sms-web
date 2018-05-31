@@ -163,7 +163,7 @@ export default {
 
     computed: {
         sending () {
-            return this.type == 2 ? true : false;
+            return this.type == 2 && (new Date().getTime() - this.timestamp) < 1000 * 60 ? true : false;
         },
         round () {
             return this.$store.state.theme_round ? 'message-round' : 'message';
