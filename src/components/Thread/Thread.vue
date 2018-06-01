@@ -66,7 +66,7 @@ export default {
         events = Util.addEventListeners(['scroll'], this.cleanupSnackbar);
         this.listeners.extend(events);
 
-       // Drag Drop Prevent default
+        // Drag Drop Prevent default
         events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
             (e) => {
                 // Stop normal events
@@ -350,7 +350,7 @@ export default {
             if(displayed) // Ignore if displayed
                 return;
 
-             // Add time stamp
+            // Add time stamp
             const lastMessage = this.messages[this.messages.length - 1];
             const lastTimestamp = new Date(lastMessage.timestamp);
 

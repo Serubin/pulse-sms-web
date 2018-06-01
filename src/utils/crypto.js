@@ -19,7 +19,7 @@ export default class Crypto {
         store.commit('aes', new sjcl.cipher.aes(key)); // Store aes
         sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
     }
-    
+
     /**
      * decryptConversation
      *
@@ -41,7 +41,7 @@ export default class Crypto {
         } catch (err) {
             return null
         }
-        
+
         // Handle phone number(s) if applicable
         try {
             convo.phone_numbers = Crypto.decrypt(convo.phone_numbers);
@@ -83,7 +83,7 @@ export default class Crypto {
 
         if (typeof message.device_id == "undefined") // Correct for "id"
             message.device_id = message.id;
-        
+
         if (typeof message.message_type == "undefined")
             message.message_type = message.type;
 

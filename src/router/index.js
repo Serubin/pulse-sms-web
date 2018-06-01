@@ -14,7 +14,7 @@ Vue.use(VueRouter)
 let router = new VueRouter({
     mode: "history",
     routes: [
-        { 
+        {
             path: '/',
             name: 'conversations-list',
             component: Conversations,
