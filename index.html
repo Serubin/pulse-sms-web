@@ -11,15 +11,6 @@
 		<meta name="theme-color" content="#00695C">
         <link rel="icon" sizes="192x192" href="/static/images/android-desktop.png">
 
-        <script>
-        (function(){
-            var redirect = sessionStorage.redirect;
-            delete sessionStorage.redirect;
-            if (redirect && redirect != location.href)
-                history.replaceState(null, null, redirect);
-        })();
-        </script>
-
 		<!--<meta name="apple-mobile-web-app-capable" content="yes">-->
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<meta name="apple-mobile-web-app-title" content="Pulse">
