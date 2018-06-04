@@ -258,7 +258,7 @@ export default {
             content: "";
             position: absolute;
             bottom: -20px;
-            left: 50px;
+            left: 50%;
             border-style: solid;
             display: block;
             top: 0px;
@@ -275,7 +275,7 @@ export default {
             margin-left: 28px;
             background: #fff;
             border-color: red transparent;
-		        box-shadow: 1px 2px 4px rgba(0, 0, 0, .2);
+            box-shadow: 1px 2px 4px rgba(0, 0, 0, .2);
 
             &:after {
                 left: -8px;
