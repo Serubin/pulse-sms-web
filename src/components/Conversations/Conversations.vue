@@ -112,7 +112,8 @@ export default {
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
 
             if(!conv || !conv_index)
-                return false;
+                return false; // TODO Add new message
+
 
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
@@ -183,7 +184,7 @@ export default {
                     return  { conv, conv_index };
             }
 
-            return  { conv, conv_index };
+            return  { conv: null, conv_index: -1 };
         },
 
         /**
