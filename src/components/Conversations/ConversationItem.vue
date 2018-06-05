@@ -97,6 +97,10 @@ export default {
         },
 
         titleFirstLetter () {
+            if (this.small) {
+                return ""
+            }
+
             try {
                 return this.title.split('')[0].toUpperCase()
             } catch (e) { // Edge case for message with no title ??
