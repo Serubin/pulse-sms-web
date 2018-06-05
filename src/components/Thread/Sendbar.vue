@@ -10,8 +10,8 @@
             <img :src="media_blob" />
         </div>
         <div class="send-bar-inner" id="sendbar">
-            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" type="image" src="../../assets/images/ic_attach.png" @click.prevent="attachMedia"/>
-            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" type="image" src="../../assets/images/ic_mood.png" @click="toggleEmoji"/>
+            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" @click.prevent="attachMedia"/>
+            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" @click="toggleEmoji"/>
             <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
                     <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" />
             </div>
@@ -45,6 +45,11 @@ export default {
         window.addEventListener('resize', this.updateEmojiMargin)
         this.$wrapper = document.querySelector("#wrapper");
         this.$sendbar = document.querySelector("#message-entry");
+
+        if (this.$store.state.theme_global_dark) {
+            // document.querySelector("#emoji").src = "../../assets/images/ic_mood_white.png";
+            // document.querySelector("#attach").src = "../../assets/images/ic_attach_white.png";
+        }
     },
 
     data () {
@@ -236,6 +241,31 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 @import "../../assets/scss/_vars.scss";
+
+    #emoji {
+        background: url("../../assets/images/ic_mood.png") no-repeat;
+        background-size: cover;
+    }
+
+    #attach {
+        background: url("../../assets/images/ic_attach.png") no-repeat;
+        background-size: cover;
+        margin-top: 18px;
+        width: 24px;
+        height: 24px;
+    }
+
+    body.dark {
+      #emoji {
+          background: url("../../assets/images/ic_mood_white.png") no-repeat;
+          background-size: cover;
+      }
+
+      #attach {
+          background: url("../../assets/images/ic_attach_white.png") no-repeat;
+          background-size: cover;
+      }
+    }
 
     .send-bar {
         height: auto;
