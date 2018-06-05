@@ -126,7 +126,6 @@ export default {
         // Set toolbar color with materialColorChange animiation
         const toolbar = this.$el.querySelector("#toolbar");
         Util.materialColorChange(toolbar, this.theme_toolbar);
-
     },
 
     beforeDestroy () { // Remove event listeners
@@ -289,10 +288,6 @@ export default {
          * @param color - rgb/hex color string.
          */
         updateTheme (color) {
-            // Ignore if toolbar theme is false
-            if (!this.$store.state.theme_toolbar)
-                return false;
-            // Set color
             this.toolbar_color = color;
         },
 
@@ -352,10 +347,10 @@ export default {
     computed: {
         icon_class () {
             return {
-                'logo': this.full_theme && !this.$store.state.theme_toolbar,
-                'logo_dark': this.full_theme && this.$store.state.theme_toolbar,
-                'menu_toggle': !this.full_theme && !this.$store.state.theme_toolbar,
-                'menu_toggle_dark': !this.full_theme && this.$store.state.theme_toolbar,
+                'logo': false,
+                'logo_dark': this.full_theme,
+                'menu_toggle': false,
+                'menu_toggle_dark': !this.full_theme,
             }
         },
 
@@ -385,9 +380,6 @@ export default {
             if (this.$store.state.theme_use_global) // If use global
                 return this.$store.state.theme_global_default;
 
-            if (!this.$store.state.theme_toolbar)  // If not color toolbar
-                return this.default_toolbar_color;
-
             return this.toolbar_color;
         },
 
@@ -404,8 +396,7 @@ export default {
         },
 
         text_color () { // Determines toolbar text color
-            if (this.$store.state.theme_toolbar)
-                return "#fff";
+            return "#fff";
         }
     },
     watch: {

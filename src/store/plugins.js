@@ -14,7 +14,6 @@ const localStoreSync = store => {
         'theme_global_dark': KEYS.THEME.GLOBAL_DARK,
         'theme_global_accent': KEYS.THEME.GLOBAL_ACCENT,
         'theme_use_global': KEYS.THEME.USE_GLOBAL,
-        'theme_toolbar': KEYS.THEME.TOOLBAR,
         'notifications': KEYS.NOTIFICATIONS,
     }
 

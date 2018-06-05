@@ -74,15 +74,6 @@
             <h4>Web Settings</h4>
             <br />
             <div class="label-item">
-                <label for="colored-toolbar" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
-                    <input id="colored-toolbar" class="mdl-switch__input" type="checkbox" v-model="colored_toolbar">
-                    <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Use colored toolbar
-                    </span>
-                </label>
-            </div>
-            <br />
-            <div class="label-item">
                 <label for="show-notifications" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="show-notifications" class="mdl-switch__input" type="checkbox" v-model="show_notifications">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
@@ -123,7 +114,6 @@ export default {
     data () {
         return {
             title: "Settings",
-            colored_toolbar: this.$store.state.theme_toolbar,
             global_theme: this.$store.state.theme_use_global,
             show_notifications: this.$store.state.notifications,
             theme: this.$store.state.theme_base,
@@ -241,11 +231,6 @@ export default {
         'theme' () {
             this.$store.commit('theme_base', this.theme),
             Api.updateSetting("base_theme", "string", this.theme)
-        },
-        'colored_toolbar' () {
-            this.$store.commit('theme_toolbar', this.colored_toolbar)
-            const toolbar = document.querySelector("#toolbar");
-            toolbar.style.background = "";
         },
         '$store.state.theme_global_default' () {
             this.theme_default = this.rgbaToHex(this.$store.state.theme_global_default);

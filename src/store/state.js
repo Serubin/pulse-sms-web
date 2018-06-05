@@ -11,8 +11,7 @@ export const KEYS  = {
         GLOBAL_DEFAULT: 'theme_global_default',
         GLOBAL_DARK: 'theme_global_dark',
         GLOBAL_ACCENT: 'theme_global_accent',
-        USE_GLOBAL: 'theme_use_global',
-        TOOLBAR: 'theme_toolbar',
+        USE_GLOBAL: 'theme_use_global'
     }
 }
 
@@ -30,7 +29,6 @@ export const state = {
     theme_global_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#1565c0\"" ),
     theme_global_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#448aff\"" ),
     theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
-    theme_toolbar: JSON.parse( window.localStorage.getItem(KEYS.THEME.TOOLBAR) || "false" ),
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
 
     /* Per session */
@@ -78,7 +76,6 @@ export const mutations = {
     theme_global_accent: (state, theme_global_accent ) => state.theme_global_accent = theme_global_accent,
     theme_use_global: (state, theme_use_global ) => state.theme_use_global = theme_use_global,
     notifications: (state, notifications) => state.notifications = notifications,
-    theme_toolbar: (state, theme_toolbar) => state.theme_toolbar = theme_toolbar,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
     colors_default: (state, colors_default ) => state.colors_default = colors_default,
     colors_dark: (state, colors_dark ) => state.colors_dark = colors_dark,
