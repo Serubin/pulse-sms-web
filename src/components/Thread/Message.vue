@@ -42,7 +42,7 @@ export default {
             (payload) => this.updateType(payload.id, payload.message_type));
 
         const MediaLoader = this.$store.state.media_loader; // get loader
-        this.style_class.push(this.round);
+        this.style_class.push('message');
 
         switch ( this.mime.split("/")[0] ) {
             /* SMS Text message */
@@ -171,9 +171,6 @@ export default {
         sending () {
             return this.type == 2 && (new Date().getTime() - this.timestamp) < 1000 * 60 ? true : false;
         },
-        round () {
-            return this.$store.state.theme_round ? 'message-round' : 'message';
-        },
         stringTime () {
             return new Date(this.timestamp).toLocaleString()
         },
@@ -223,7 +220,7 @@ export default {
         clear: both;
         display: block;
 
-        .message, .message-round {
+        .message {
             position: relative;
             padding: 16px;
             margin: 4px 8px 4px 8px;
@@ -233,10 +230,6 @@ export default {
             overflow-wrap: break-word;
             word-wrap: break-word;
             min-width: 18px;
-        }
-
-        .message-round {
-            border-radius: 15px;
         }
 
         .media-preview {
@@ -365,7 +358,7 @@ export default {
         }
 
         @media screen and (min-width: 600px) {
-            .message, .message-round {
+            .message {
                 max-width: 372px;
             }
             .media {
@@ -374,7 +367,7 @@ export default {
         }
 
         @media screen and (min-width: 720px) {
-            .message, .message-round {
+            .message {
                 max-width: 436px;
             }
             .media {

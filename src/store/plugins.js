@@ -10,7 +10,6 @@ const localStoreSync = store => {
         'hash': KEYS.HASH,
         'salt': KEYS.SALT,
         'theme_base': KEYS.THEME.BASE,
-        'theme_round': KEYS.THEME.ROUND,
         'theme_global_default': KEYS.THEME.GLOBAL_DEFAULT,
         'theme_global_dark': KEYS.THEME.GLOBAL_DARK,
         'theme_global_accent': KEYS.THEME.GLOBAL_ACCENT,

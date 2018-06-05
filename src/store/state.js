@@ -7,7 +7,6 @@ export const KEYS  = {
     CONTACTS: 'contacts',
     NOTIFICATIONS: 'notifications',
     THEME: {
-        ROUND: 'theme_round',
         BASE: 'theme_base',
         GLOBAL_DEFAULT: 'theme_global_default',
         GLOBAL_DARK: 'theme_global_dark',
@@ -31,7 +30,6 @@ export const state = {
     theme_global_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#1565c0\"" ),
     theme_global_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#448aff\"" ),
     theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
-    theme_round: JSON.parse( window.localStorage.getItem(KEYS.THEME.ROUND) || "false" ),
     theme_toolbar: JSON.parse( window.localStorage.getItem(KEYS.THEME.TOOLBAR) || "false" ),
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
 
@@ -79,7 +77,6 @@ export const mutations = {
     theme_global_dark: (state, theme_global_dark ) => state.theme_global_dark = theme_global_dark,
     theme_global_accent: (state, theme_global_accent ) => state.theme_global_accent = theme_global_accent,
     theme_use_global: (state, theme_use_global ) => state.theme_use_global = theme_use_global,
-    theme_round: (state, theme_round ) => state.theme_round = theme_round,
     notifications: (state, notifications) => state.notifications = notifications,
     theme_toolbar: (state, theme_toolbar) => state.theme_toolbar = theme_toolbar,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
@@ -103,7 +100,7 @@ export const mutations = {
         if(!Array.isArray(payload))
             payload = [ payload ]
 
-        for(let i = 0; i < payload.length; i++)   
+        for(let i = 0; i < payload.length; i++)
             state.contacts[payload[i].id] = payload[i]
     },
     clearContacts: (state, payload) => {
@@ -114,4 +111,3 @@ export const mutations = {
 export const actions = {
 
 }
-

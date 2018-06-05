@@ -71,18 +71,6 @@
             </div> <!-- End Global Theme -->
 
             <br />
-
-            <!-- Round Messages -->
-            <div class="label-item">
-                <label for="round-messages" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
-                    <input id="round-messages" class="mdl-switch__input" type="checkbox" v-model="round_messages">
-                    <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Round Message Bubbles
-                    </span>
-                </label>
-            </div> <!-- End Round Messages -->
-
-            <br />
             <h4>Web Settings</h4>
             <br />
             <div class="label-item">
@@ -136,7 +124,6 @@ export default {
         return {
             title: "Settings",
             colored_toolbar: this.$store.state.theme_toolbar,
-            round_messages: this.$store.state.theme_round,
             global_theme: this.$store.state.theme_use_global,
             show_notifications: this.$store.state.notifications,
             theme: this.$store.state.theme_base,
@@ -171,11 +158,7 @@ export default {
 
         use_global_theme () {
             return this.boolToStr(this.$store.state.theme_use_global);
-        },
-
-        round_bubbles () {
-            return this.boolToStr(this.$store.state.theme_round);
-        },
+        }
     },
 
     methods: {
@@ -250,10 +233,6 @@ export default {
     watch: {
         'show_notifications' () {
             this.$store.commit('notifications', this.show_notifications);
-        },
-        'round_messages' () {
-            this.$store.commit('theme_round', this.round_messages)
-            Api.updateSetting("rounder_bubbles", "boolean", this.round_messages);
         },
         'global_theme' () {
             this.$store.commit('theme_use_global', this.global_theme)
