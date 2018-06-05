@@ -239,10 +239,7 @@ export default {
         populateMenuItems () {
 
             // Static items!
-            const items = [
-                { 'name': "settings", 'title': "Settings" },
-                { 'name': "logout", 'title': "Logout" }
-            ]
+            const items = [ ]
 
             // On thread add Delete, Blacklist, & Archive/unarchive
             if (this.$route.name.includes('thread'))
@@ -257,6 +254,8 @@ export default {
                 items.unshift(
                     { 'name': "account", 'title': "My Account" },
                     { 'name': "help", 'title': "Help and Feedback" },
+                    { 'name': "settings", 'title': "Settings" },
+                    { 'name': "logout", 'title': "Logout" }
                 )
 
             // Set menu_items
