@@ -49,7 +49,7 @@ export default class MediaLoader {
             this.createObjectStore(event.target.result);
         };
     }
-    
+
     /** 
      * getMedia - get's media from server or local store
      *
@@ -58,7 +58,7 @@ export default class MediaLoader {
      * @return Promise
      */
     getMedia(id, mime) {
-        
+
         return new Promise((resolve, reject) => {
             this.getMediaFromStore(id) // Atempt to get media from local store
                 .then(response => resolve(response))
@@ -94,7 +94,7 @@ export default class MediaLoader {
             }
         });
     }
-    
+
     /**
      * getMediaFromServer - gets media from remote server
      *
@@ -105,14 +105,14 @@ export default class MediaLoader {
         return new Promise((resolve, reject) => {
             Api.fetchImage(id)
                 .then(data => {
-                    
+
                     // get data out of json response
                     data = data.data;
 
                     // Reject empty response
                     if (data == "" || data == null)
                         reject(null);
-                    
+
                     // Decrypt blob
                     data = Crypto.decryptToBase64(data);
 

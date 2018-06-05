@@ -8,7 +8,7 @@
         <transition-group name="flip-list" tag="div">
                 <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
         </transition-group>
-        <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" v-if="!small" v-mdl>
+        <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="{ background: $store.state.colors_accent }" v-if="!small" v-mdl>
             <i class="material-icons md-light">add</i>
         </button>
     </div>
@@ -112,14 +112,18 @@ export default {
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
 
-            if (!conv || !conv_index) {
-                // if the conversation doesn't exist, we have a problem, or it is a new conversation.
-                // invalidate the refresh the list from the API.
-                Api.conversations = null;
-                this.fetchConversations();
+//            if (!conv || !conv_index) {
+//                // if the conversation doesn't exist, we have a problem, or it is a new conversation.
+//                // invalidate the refresh the list from the API.
+//                // It is better to fix the actual problem and update the messages correctly though, without the refresh.
+//                Api.conversations = null;
+//                this.fetchConversations();
 
-                return false;
-            }
+//                return false;
+//            }
+
+            if(!conv || !conv_index)
+                return false; // TODO Add new message
 
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
@@ -189,10 +193,7 @@ export default {
                     return  { conv, conv_index };
             }
 
-            conv_index = null;
-            conv = null;
-
-            return { conv, conv_index };
+            return  { conv: null, conv_index: -1 };
         },
 
         /**

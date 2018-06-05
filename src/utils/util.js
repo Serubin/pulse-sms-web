@@ -17,7 +17,7 @@ export default class Util {
             a = ((num & 0xFF000000) >>> 24) / 255;
         return "rgba(" + [r, g, b, a].join(",") + ")";
     }
-       
+
     static entityEncode (string) {
 
         while (string.indexOf("<") !== -1) {
@@ -41,15 +41,15 @@ export default class Util {
         let snippet = object.snippet || object.data;
         let type = object.message_type || object.type;
         let mime_type = object.mime_type || "text/plain";
-        
-        
+
+
         snippet = mime_type == "text/plain" ? (snippet) : "<i>Photo</i>";
 
         if (type != 0 && type != 6 && type != 3 && type != 5)
             snippet = "You: " + snippet;
 
         return snippet;
-        
+
     }
 
     static generateContact (id, title, mute, private_notifications, color, accent, ligher, darker) {
@@ -138,10 +138,10 @@ export default class Util {
      * @param color new color
      */
     static materialColorChange($el, color) {
-        
+
         const container = document.createElement("span"); // Overflow container
         const animator = document.createElement("span"); // Animation space
-        
+
         container.appendChild(animator); // Prepare and insert in dom
         container.className = "animator";
         $el.insertBefore(container, $el.firstChild);
@@ -152,7 +152,7 @@ export default class Util {
         setTimeout(() => {
             $el.style.background = color;
             $el.style.backgroundColor = color;
-            
+
             $el.className = $el.className.replace(" transition", "");
 
             $el.removeChild(container);

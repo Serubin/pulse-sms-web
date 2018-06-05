@@ -14,7 +14,7 @@ Vue.use(VueRouter)
 let router = new VueRouter({
     mode: "history",
     routes: [
-        { 
+        {
             path: '/',
             name: 'conversations-list',
             component: Conversations,
@@ -55,7 +55,7 @@ let router = new VueRouter({
         },
     ],
 })
-    
+
 router.beforeEach((to, from, next) => {
     if (to.name == null)
         return next({name: 'Conversations-list'});
@@ -68,5 +68,13 @@ router.beforeEach((to, from, next) => {
 
     next();
 })
+
+// This script is a work around for github pages deployments.
+// If a redirect session is created, delete and redirect
+var redirect = sessionStorage.redirect;
+delete sessionStorage.redirect;
+
+if (redirect && redirect != location.href)
+    router.replace(redirect.split(location.host)[1])
 
 export default router
