@@ -431,7 +431,6 @@ export default {
     @import "./assets/scss/material.blue-pink.min.css";
     @import "./assets/scss/_vars.scss";
 
-
     body {
         margin: auto;
         margin-left: 0;
@@ -619,6 +618,14 @@ export default {
         transform: translateX(30px);
     }
 
+    .link-sent {
+        color: black;
+    }
+
+    .link-received {
+        color: white;
+    }
+
     body.dark {
         background-color: $bg-dark;
         color: #fff;
@@ -627,7 +634,6 @@ export default {
             background-image: linear-gradient(to right,rgba(55, 66, 72,.7),rgba(55, 66, 72,.7)),
                 linear-gradient(to right,rgb(33,150,243),rgb(33,150,243));
         }
-
 
         #toolbar {
             border-bottom: solid 1px #ca2100;
@@ -652,6 +658,10 @@ export default {
 
         .mdl-color-text--grey-600 {
             color: rgba(255,255,255,.77) !important;
+        }
+
+        .link-sent {
+            color: white;
         }
     }
 

@@ -101,10 +101,12 @@ export default {
             }
         }
 
+        let linkClass = 'link-sent'
         if (!this.is_article) {
             switch ( this.type ) {
                 case 0:
                 case 6: {
+                    linkClass = 'link-received'
                     this.color = this.threadColor;
                     this.style_class.push('received');
                     break;
@@ -124,7 +126,7 @@ export default {
         }
 
         // Add links
-        this.content = linkify(this.content)
+        this.content = linkify(this.content, { className: linkClass })
     },
 
     data () {
@@ -275,8 +277,9 @@ export default {
                 border-width: 37px 0 0 22px;
                 border-color: inherit;
             }
+
             a {
-                color: #fff;
+                color: white;
             }
         }
 
