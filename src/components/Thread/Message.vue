@@ -81,15 +81,25 @@ export default {
                 // Process Web/Youtube-v2
                 const media = JSON.parse(this.content);
 
-                // Set media values
-                this.media_thumb = media.thumbnail || media.image_url ||"";
-                this.media_link = media.url || media.web_url || "";
-                this.media_title =  media.title || "";
-                this.media_content = media.description || "";
+                if (this.mime == "media/map") {
+                    let map = "https://maps.googleapis.com/maps/api/staticmap" +
+                          "?size=600x400" +
+                          "&markers=color:red%7C" + media.latitude + "," + media.longitude +
+                          "&key=AIzaSyAHq1IIIdGz01rEbEtUtDwEFJWwvAI_lww"
+                    let googleMaps = "https://maps.google.com/maps/@" + media.latitude + "," + media.longitude + ",16z";
 
-                // Remove content
+                    this.media_thumb = map;
+                    this.media_link = googleMaps;
+                    this.media_title = "";
+                    this.media_content = "";
+                } else if (this.mim == "media/youtube-v2") {
+                    this.media_thumb = media.thumbnail || media.image_url ||"";
+                    this.media_link = media.url || media.web_url || "";
+                    this.media_title =  media.title || "";
+                    this.media_content = media.description || "";
+                }
+
                 this.content = "";
-
                 this.media_thumb = this.media_thumb.replace(/https?/, "https");
 
                 break;
