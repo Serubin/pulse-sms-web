@@ -68,17 +68,6 @@ export default {
 
                 this.style_class.push('media-preview');
 
-                if (this.mime == "media/youtube") { // Legacy Youtube
-                    const video_id = this.content
-                        .replace("https://img.youtube.com/vi/", "")
-                        .replace("/maxresdefault.jpg", "");
-
-                    this.media_link = "https://youtube.com/watch?v=" + this.video_id;
-                    this.media_thumb = this.content;
-                    break;
-                }
-
-                // Process Web/Youtube-v2
                 const media = JSON.parse(this.content);
 
                 if (this.mime == "media/map") {
@@ -92,11 +81,16 @@ export default {
                     this.media_link = googleMaps;
                     this.media_title = "";
                     this.media_content = "";
-                } else if (this.mim == "media/youtube-v2") {
-                    this.media_thumb = media.thumbnail || media.image_url ||"";
-                    this.media_link = media.url || media.web_url || "";
-                    this.media_title =  media.title || "";
-                    this.media_content = media.description || "";
+                } else if (this.mime == "media/youtube-v2") {
+                    this.media_thumb = media.thumbnail;
+                    this.media_link = media.url;
+                    this.media_title =  media.title;
+                    this.media_content = "";
+                } else if (this.mime == "media/web") {
+                    this.media_thumb = media.image_url;
+                    this.media_link = media.web_url;
+                    this.media_title =  media.title;
+                    this.media_content = media.description;
                 }
 
                 this.content = "";
