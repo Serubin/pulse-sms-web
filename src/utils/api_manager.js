@@ -137,7 +137,7 @@ export default class Api {
         if (contact != null && contact.mute)
             return;
 
-        const title = contact.title;
+        const title = contact.name;
         const snippet = contact.private_notifications
                             ? "" : Util.generateSnippet(message);
 
