@@ -161,6 +161,9 @@ export default {
         applicationStart () {
             // Setup the API (Open websocket)
             this.mm = new Api();
+            // Fetch contacts for cache
+            Api.fetchContacts()
+                .then((resp) => this.processContacts(resp));
             // Grab user settings from server and store in local storage
             Api.fetchSettings();
             // Populate the dropdown menu
@@ -339,7 +342,37 @@ export default {
             setTimeout(() => { // Rerun function at the next hour
                 this.calculateHour()
             }, nextHour + 2000);
-        }
+        },
+
+        /**
+         * Process contacts received from server
+         * Saves contacts in contacts array
+         * Also starts recipient processing
+         * @param data, contact request result
+         */
+        processContacts(response) {
+            const contacts_cache = [];
+
+            for (let contact of response.data) {
+                // Decrypt
+                contact = Crypto.decryptContact(contact);
+
+                // Generate contact and add to cache list
+                let contact_data = Util.generateContact(
+                    Util.createIdMatcher(contact.phone_number),
+                    contact.name,
+                    contact.phone_number,
+                    false, // mute
+                    false, // private_notification
+                    contact.color,
+                    contact.color_accent,
+                    null, // darker
+                    null // lighter
+                );
+                contacts_cache.push(contact_data);
+            }
+            this.$store.commit('contacts', contacts_cache);
+        },
 
     },
 

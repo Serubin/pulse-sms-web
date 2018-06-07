@@ -5,6 +5,7 @@ export const KEYS  = {
     HASH: 'hash',
     SALT: 'salt',
     CONTACTS: 'contacts',
+    CONVERSATIONS: 'conversations',
     NOTIFICATIONS: 'notifications',
     THEME: {
         BASE: 'theme_base',
@@ -23,6 +24,7 @@ export const state = {
     hash: JSON.parse( window.localStorage.getItem(KEYS.HASH) || empty_str ),
     salt: JSON.parse( window.localStorage.getItem(KEYS.SALT) || empty_str ),
     contacts: JSON.parse( window.localStorage.getItem(KEYS.CONTACTS) || '{}' ),
+    conversations: JSON.parse( window.localStorage.getItem(KEYS.CONVERSATIONS) || '{}' ),
 
     theme_base: JSON.parse( window.localStorage.getItem(KEYS.THEME.BASE) || "\"light\"" ),
     theme_global_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#2196f3\"" ),
@@ -55,6 +57,9 @@ export const state = {
 }
 
 export const getters = {
+    getConversationData: (state) => (id) => {
+        return state.conversations[id];
+    },
     getContact: (state) => (id) => {
         return state.contacts[id];
     }
@@ -92,6 +97,13 @@ export const mutations = {
         state.colors_default = colors.default;
         state.colors_dark = colors.dark;
         state.colors_accent = colors.accent;
+    },
+    conversations: (state, payload) => {
+        if(!Array.isArray(payload))
+            payload = [ payload ]
+
+        for(let i = 0; i < payload.length; i++)
+            state.conversations[payload[i].id] = payload[i]
     },
     contacts: (state, payload) => {
         if(!Array.isArray(payload))

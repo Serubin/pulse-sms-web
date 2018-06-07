@@ -64,7 +64,6 @@ export default class Crypto {
      * @param convo - message object
      * @return decrypted message
      */
-
     static decryptMessage (message) {
         // Removes miliiseconds from timestamp
         message.timestamp = message.timestamp / 1000 >> 0; // Remove ms
@@ -91,16 +90,37 @@ export default class Crypto {
     }
 
     /**
+     * decryptContact
+     *
+     * Decryptes message object
+     * @param contact - contact object
+     * @return decrypted contact or null
+     */
+    static decryptContact (contact) {
+        try {
+            contact.name = Crypto.decrypt(contact.name);
+            contact.phone_number = Crypto.decrypt(contact.phone_number);
+            contact.id_matcher = Crypto.decrypt(contact.id_matcher);
+            contact.color = Util.expandColor(contact.color);
+            contact.color_accent = Util.expandColor(contact.color_accent);
+        } catch (err) {
+            return null;
+        }
+
+        return contact;
+    }
+
+    /**
      * decrypt
      *
      * Decrypts encoded and encrypted string using stored aes
-     * 
+     *
      * @param data - string
      * @return decrypted string
      */
     static decrypt (data) {
 
-        if (data == null) 
+        if (data == null)
             return "";
 
         const parts = data.split("-:-");
@@ -119,7 +139,7 @@ export default class Crypto {
         return sjcl.codec.base64.fromBits(
             sjcl.mode.cbc.decrypt(store.state.aes, sjcl.codec.base64.toBits(parts[1]),
             sjcl.codec.base64.toBits(parts[0]), null));
-    }   
+    }
     /**
      * encrypt
      * Encrypts arbitrary string data using stored aes
@@ -168,7 +188,7 @@ export default class Crypto {
 
     static random128Hex() {
         function random16Hex () {
-            return (0x10000 | Math.random() * 0x10000).toString(16).substr(1); 
+            return (0x10000 | Math.random() * 0x10000).toString(16).substr(1);
         }
         return random16Hex() + random16Hex() + random16Hex() + random16Hex() +
             random16Hex() + random16Hex() + random16Hex() + random16Hex();

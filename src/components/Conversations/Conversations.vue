@@ -85,6 +85,7 @@ export default {
                     Util.generateContact(
                         item.device_id,
                         item.title,
+                        item.phone_numbers,
                         item.mute,
                         item.private_notifications,
                         item.color,
@@ -96,7 +97,7 @@ export default {
 
             }
 
-            this.$store.commit('contacts', cache);
+            this.$store.commit('conversations', cache);
             this.conversations = updatedConversations;
 
             if (!this.small) {

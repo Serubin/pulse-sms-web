@@ -132,7 +132,7 @@ export default class Api {
         if (message.type != 0)
             return;
 
-        const contact = store.getters.getContact(message.conversation_id);
+        const contact = store.getters.getConversationData(message.conversation_id);
 
         if (contact != null && contact.mute)
             return;
