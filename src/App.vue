@@ -357,6 +357,9 @@ export default {
                 // Decrypt
                 contact = Crypto.decryptContact(contact);
 
+                if (!contact)
+                    continue;
+
                 // Generate contact and add to cache list
                 let contact_data = Util.generateContact(
                     Util.createIdMatcher(contact.phone_number),
