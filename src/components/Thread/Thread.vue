@@ -543,7 +543,7 @@ export default {
          */
         conversationInformation () {
             // Just a way to give the user the phone number for the conversation
-            const baseText = this.conversation_data.phone_number.indexOf(",") < 0 ? "Phone numbers: " : "Phone number: "
+            const baseText = this.conversation_data.phone_number.indexOf(",") < 0 ? "Phone number: " : "Phone numbers: "
             Util.snackbar({
                 message: baseText + this.conversation_data.phone_number,
                 actionText: "Copy",
