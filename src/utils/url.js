@@ -18,6 +18,7 @@ export default class Url {
         "websocket":            "stream",
         "media":                "media/",
         "contacts":             "contacts/simple/",
+        "create_blacklist":     "blacklists/add/",
     }
 
     static getBaseUrl () {

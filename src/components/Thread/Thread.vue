@@ -152,6 +152,9 @@ export default {
         this.$store.state.msgbus.$off('archive-btn', this.archive);
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
 
+        this.$store.state.msgbus.$off('delete-btn', this.delete);
+        this.$store.state.msgbus.$off('blacklist-btn', this.blacklist);
+
         // Restore last title
         this.$store.commit('title', this.previous_title);
 
@@ -443,6 +446,7 @@ export default {
          */
         archive () {
             const _this = this;
+
             // Archive conversation on the server
             Api.archiver(!this.isArchived, this.conversation_id);
 
@@ -492,6 +496,27 @@ export default {
             this.$router.push('/');
         },
 
+        /**
+         * Blacklist contact
+         */
+        blacklist () {
+            const _this = this;
+
+            Api.createBlacklist(this.conversation_data.phone_number);
+            Api.archiver(true, this.conversation_id);
+
+            // Snackbar the user
+            Util.snackbar({
+                message: "Contact has been blacklisted",
+                timeout: 6 * 1000
+            })
+
+            // Awful terrible fix for thread snackbar clean up events
+            this.snackbar.MaterialSnackbar.active = false;
+
+            this.$router.push('/');
+        },
+
         push_archive_url () {
             // Construct push URL
             const constructed_url = (this.$route.path.replace("archived", "") // Remove archive
@@ -500,7 +525,7 @@ export default {
             // Push to archived/normal route
             this.$router.push(constructed_url);
         },
-        
+
         /**
          * Determine text color for messages
          * Determines color "darkness" & returns black/white for text color

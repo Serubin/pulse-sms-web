@@ -406,6 +406,17 @@ export default class Api {
         Vue.http.post(constructed_url);
     }
 
+    static createBlacklist (phone_number) {
+        let request = {
+            account_id: store.state.account_id,
+            device_id: Api.generateId(),
+            phone_number: Crypto.encrypt(phone_number)
+        };
+
+        let constructed_url = Url.get('create_blacklist');
+        Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'});
+    }
+
     static fetchSettings () {
         let constructed_url = Url.get('settings') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
