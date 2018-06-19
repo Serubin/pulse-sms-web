@@ -55,7 +55,7 @@ export default class SessionCache {
     }
 
     static hasConversations (index = 'index_unarchived') {
-        return SessionCache.getConversations[index] != null;
+        return SessionCache.getConversations(index) != null;
     }
 
     static hasMessages (conversation_id) {
