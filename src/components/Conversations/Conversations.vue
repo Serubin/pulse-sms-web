@@ -5,7 +5,7 @@
         <spinner class="spinner" v-if="conversations.length == 0"></spinner>
 
         <!-- Conversation items -->
-        <transition-group name="fade" tag="div">
+        <transition-group name="flip-list" tag="div">
             <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
         </transition-group>
 
@@ -127,9 +127,6 @@ export default {
 
                 return false;
             }
-
-            if(!conv || !conv_index)
-                return false; // TODO Add new message
 
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
@@ -325,11 +322,15 @@ export default {
         }
     }
 
-    .fade-enter-active, .fade-leave-active {
-      transition: opacity .5s;
+    .flip-list-enter, .flip-list-leave-to	{
+        opacity: 0;
     }
 
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-      opacity: 0;
+    .flip-list-leave-active {
+        position: absolute;
+    }
+
+    .flip-list-move {
+        transition: transform $anim-time;
     }
 </style>
