@@ -52,10 +52,11 @@ export default class Util {
 
     }
 
-    static generateContact (id, title, mute, private_notifications, color, accent, ligher, darker) {
+    static generateContact (id, name, phone_number, mute, private_notifications, color, accent, ligher, darker) {
         return {
             id: id,
-            title: title,
+            name: name,
+            phone_number: phone_number,
             mute: mute,
             private_notifications: private_notifications,
             colors: {
@@ -65,6 +66,18 @@ export default class Util {
                 darker: darker
             }
         }
+    }
+
+    static createIdMatcher(phone) {
+        let stripped = phone.replace(/\+/g, "").replace(/ /g, "")
+                .replace(/\-/g, "").replace(/\./g, "")
+                .replace(/\(/g, "").replace(/\)/g, "")
+                .replace(/\,/g, "");
+
+        if (stripped.length > 8)
+            return stripped.substring(stripped.length - 8, stripped.length);
+        else
+            return stripped;
     }
 
     /**

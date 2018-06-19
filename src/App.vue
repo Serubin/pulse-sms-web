@@ -126,7 +126,6 @@ export default {
         // Set toolbar color with materialColorChange animiation
         const toolbar = this.$el.querySelector("#toolbar");
         Util.materialColorChange(toolbar, this.theme_toolbar);
-
     },
 
     beforeDestroy () { // Remove event listeners
@@ -162,6 +161,9 @@ export default {
         applicationStart () {
             // Setup the API (Open websocket)
             this.mm = new Api();
+            // Fetch contacts for cache
+            Api.fetchContacts()
+                .then((resp) => this.processContacts(resp));
             // Grab user settings from server and store in local storage
             Api.fetchSettings();
             // Populate the dropdown menu
@@ -240,10 +242,7 @@ export default {
         populateMenuItems () {
 
             // Static items!
-            const items = [
-                { 'name': "settings", 'title': "Settings" },
-                { 'name': "logout", 'title': "Logout" }
-            ]
+            const items = [ ]
 
             // On thread add Delete, Blacklist, & Archive/unarchive
             if (this.$route.name.includes('thread'))
@@ -258,6 +257,8 @@ export default {
                 items.unshift(
                     { 'name': "account", 'title': "My Account" },
                     { 'name': "help", 'title': "Help and Feedback" },
+                    { 'name': "settings", 'title': "Settings" },
+                    { 'name': "logout", 'title': "Logout" }
                 )
 
             // Set menu_items
@@ -289,10 +290,6 @@ export default {
          * @param color - rgb/hex color string.
          */
         updateTheme (color) {
-            // Ignore if toolbar theme is false
-            if (!this.$store.state.theme_toolbar)
-                return false;
-            // Set color
             this.toolbar_color = color;
         },
 
@@ -345,17 +342,50 @@ export default {
             setTimeout(() => { // Rerun function at the next hour
                 this.calculateHour()
             }, nextHour + 2000);
-        }
+        },
+
+        /**
+         * Process contacts received from server
+         * Saves contacts in contacts array
+         * Also starts recipient processing
+         * @param data, contact request result
+         */
+        processContacts(response) {
+            const contacts_cache = [];
+
+            for (let contact of response.data) {
+                // Decrypt
+                contact = Crypto.decryptContact(contact);
+
+                if (!contact)
+                    continue;
+
+                // Generate contact and add to cache list
+                let contact_data = Util.generateContact(
+                    Util.createIdMatcher(contact.phone_number),
+                    contact.name,
+                    contact.phone_number,
+                    false, // mute
+                    false, // private_notification
+                    contact.color,
+                    contact.color_accent,
+                    null, // darker
+                    null // lighter
+                );
+                contacts_cache.push(contact_data);
+            }
+            this.$store.commit('contacts', contacts_cache);
+        },
 
     },
 
     computed: {
         icon_class () {
             return {
-                'logo': this.full_theme && !this.$store.state.theme_toolbar,
-                'logo_dark': this.full_theme && this.$store.state.theme_toolbar,
-                'menu_toggle': !this.full_theme && !this.$store.state.theme_toolbar,
-                'menu_toggle_dark': !this.full_theme && this.$store.state.theme_toolbar,
+                'logo': false,
+                'logo_dark': this.full_theme,
+                'menu_toggle': false,
+                'menu_toggle_dark': !this.full_theme,
             }
         },
 
@@ -385,9 +415,6 @@ export default {
             if (this.$store.state.theme_use_global) // If use global
                 return this.$store.state.theme_global_default;
 
-            if (!this.$store.state.theme_toolbar)  // If not color toolbar
-                return this.default_toolbar_color;
-
             return this.toolbar_color;
         },
 
@@ -404,8 +431,7 @@ export default {
         },
 
         text_color () { // Determines toolbar text color
-            if (this.$store.state.theme_toolbar)
-                return "#fff";
+            return "#fff";
         }
     },
     watch: {
@@ -440,13 +466,12 @@ export default {
     @import "./assets/scss/material.blue-pink.min.css";
     @import "./assets/scss/_vars.scss";
 
-
     body {
         margin: auto;
         margin-left: 0;
         color: #202020;
         background-color: $bg-light;
-        font-family: "Open Sans", "Helvetica", Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         font-size: 14px;
         padding: 0 !important;
         margin-bottom: 0 !important;
@@ -628,6 +653,14 @@ export default {
         transform: translateX(30px);
     }
 
+    .link-sent {
+        color: black;
+    }
+
+    .link-received {
+        color: white;
+    }
+
     body.dark {
         background-color: $bg-dark;
         color: #fff;
@@ -636,7 +669,6 @@ export default {
             background-image: linear-gradient(to right,rgba(55, 66, 72,.7),rgba(55, 66, 72,.7)),
                 linear-gradient(to right,rgb(33,150,243),rgb(33,150,243));
         }
-
 
         #toolbar {
             border-bottom: solid 1px #ca2100;
@@ -661,6 +693,10 @@ export default {
 
         .mdl-color-text--grey-600 {
             color: rgba(255,255,255,.77) !important;
+        }
+
+        .link-sent {
+            color: white;
         }
     }
 

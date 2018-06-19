@@ -180,12 +180,12 @@ export default {
 
     computed: {
 
-        contact_data () {
-            return this.$store.getters.getContact(this.conversation_id);
+        conversation_data () {
+            return this.$store.getters.getConversationData(this.conversation_id);
         },
 
         color () {
-            return this.contact_data.colors.default;
+            return this.conversation_data.colors.default;
         },
 
         isArchived () {
@@ -239,21 +239,23 @@ export default {
                 this.$store.commit('loaded_media', null);
 
             // Get contact colors from cache
-            const from = this.contact_data.title.split(", "); // Split name(s)
+            const from = this.conversation_data
+                .phone_number.split(", "); // Split numbers
 
-            if (from.length == 1) // If only one, use default color
-                this.colors_from[from[0]] =  this.contact_data.colors.default;
+            if (from.length == 1)  // If only one, use default color
+                this.colors_from[this.conversation_data.name]  // Save color by name
+                        = this.conversation_data.colors.default;
+
             else // Otherwise, get from cache
                 from.map(
                     (i) => { // For each name
-                        const contact = Object.values( // Get contact
-                            this.$store.state.contacts // From cache
-                        ).containsObjKey("title", i)   // Match to "title"
+                        const id = Util.createIdMatcher(i)
+                        const contact = this.$store.getters.getContact(id); // Get contact
 
                         if (!contact.colors.default)
                             return this.colors_from[i] = this.color();
-                        // Map name/title to color
-                        this.colors_from[i] = contact.colors.default;
+                        // Map name to color
+                        this.colors_from[contact.name] = contact.colors.default;
                     }
                 );
 
@@ -271,7 +273,6 @@ export default {
                     let new_messages = [];
                     let nextTimestamp;
 
-
                     // Flip message order and push to local state
                     for(let i = (response.length - 1); i >= 0; i--) {
 
@@ -284,7 +285,6 @@ export default {
                         response[i].dateLabel = this.compareTimestamps(
                             new Date(response[i].timestamp), nextTimestamp, 15
                         );
-
                         // Push to list
                         new_messages.push(response[i]);
                     }
@@ -326,8 +326,8 @@ export default {
                         this.previous_title = this.$store.state.title;
 
                         // Commit title and colors
-                        this.$store.commit('title', this.contact_data.title);
-                        this.$store.commit('colors', this.contact_data.colors);
+                        this.$store.commit('title', this.conversation_data.name);
+                        this.$store.commit('colors', this.conversation_data.colors);
                     });
                 });
         },

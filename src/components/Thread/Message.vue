@@ -42,7 +42,7 @@ export default {
             (payload) => this.updateType(payload.id, payload.message_type));
 
         const MediaLoader = this.$store.state.media_loader; // get loader
-        this.style_class.push(this.round);
+        this.style_class.push('message');
 
         switch ( this.mime.split("/")[0] ) {
             /* SMS Text message */
@@ -68,28 +68,32 @@ export default {
 
                 this.style_class.push('media-preview');
 
-                if (this.mime == "media/youtube") { // Legacy Youtube
-                    const video_id = this.content
-                        .replace("https://img.youtube.com/vi/", "")
-                        .replace("/maxresdefault.jpg", "");
-
-                    this.media_link = "https://youtube.com/watch?v=" + this.video_id;
-                    this.media_thumb = this.content;
-                    break;
-                }
-
-                // Process Web/Youtube-v2
                 const media = JSON.parse(this.content);
 
-                // Set media values
-                this.media_thumb = media.thumbnail || media.image_url ||"";
-                this.media_link = media.url || media.web_url || "";
-                this.media_title =  media.title || "";
-                this.media_content = media.description || "";
+                if (this.mime == "media/map") {
+                    let map = "https://maps.googleapis.com/maps/api/staticmap" +
+                          "?size=600x400" +
+                          "&markers=color:red%7C" + media.latitude + "," + media.longitude +
+                          "&key=AIzaSyAHq1IIIdGz01rEbEtUtDwEFJWwvAI_lww"
+                    let googleMaps = "https://maps.google.com/maps/@" + media.latitude + "," + media.longitude + ",16z";
 
-                // Remove content
+                    this.media_thumb = map;
+                    this.media_link = googleMaps;
+                    this.media_title = "";
+                    this.media_content = "";
+                } else if (this.mime == "media/youtube-v2") {
+                    this.media_thumb = media.thumbnail;
+                    this.media_link = media.url;
+                    this.media_title =  media.title;
+                    this.media_content = "";
+                } else if (this.mime == "media/web") {
+                    this.media_thumb = media.image_url;
+                    this.media_link = media.web_url;
+                    this.media_title =  media.title;
+                    this.media_content = media.description;
+                }
+
                 this.content = "";
-
                 this.media_thumb = this.media_thumb.replace(/https?/, "https");
 
                 break;
@@ -101,10 +105,12 @@ export default {
             }
         }
 
+        let linkClass = 'link-sent'
         if (!this.is_article) {
             switch ( this.type ) {
                 case 0:
                 case 6: {
+                    linkClass = 'link-received'
                     this.color = this.threadColor;
                     this.style_class.push('received');
                     break;
@@ -124,7 +130,7 @@ export default {
         }
 
         // Add links
-        this.content = linkify(this.content)
+        this.content = linkify(this.content, { className: linkClass })
     },
 
     data () {
@@ -170,9 +176,6 @@ export default {
     computed: {
         sending () {
             return this.type == 2 && (new Date().getTime() - this.timestamp) < 1000 * 60 ? true : false;
-        },
-        round () {
-            return this.$store.state.theme_round ? 'message-round' : 'message';
         },
         stringTime () {
             return new Date(this.timestamp).toLocaleString()
@@ -223,7 +226,7 @@ export default {
         clear: both;
         display: block;
 
-        .message, .message-round {
+        .message {
             position: relative;
             padding: 16px;
             margin: 4px 8px 4px 8px;
@@ -233,10 +236,6 @@ export default {
             overflow-wrap: break-word;
             word-wrap: break-word;
             min-width: 18px;
-        }
-
-        .message-round {
-            border-radius: 15px;
         }
 
         .media-preview {
@@ -282,8 +281,9 @@ export default {
                 border-width: 37px 0 0 22px;
                 border-color: inherit;
             }
+
             a {
-                color: #fff;
+                color: white;
             }
         }
 
@@ -365,7 +365,7 @@ export default {
         }
 
         @media screen and (min-width: 600px) {
-            .message, .message-round {
+            .message {
                 max-width: 372px;
             }
             .media {
@@ -374,7 +374,7 @@ export default {
         }
 
         @media screen and (min-width: 720px) {
-            .message, .message-round {
+            .message {
                 max-width: 436px;
             }
             .media {

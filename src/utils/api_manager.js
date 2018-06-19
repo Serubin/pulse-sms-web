@@ -152,12 +152,12 @@ export default class Api {
         if (message.type != 0)
             return;
 
-        const contact = store.getters.getContact(message.conversation_id);
+        const contact = store.getters.getConversationData(message.conversation_id);
 
         if (contact != null && contact.mute)
             return;
 
-        const title = contact.title;
+        const title = contact.name;
         const snippet = contact.private_notifications
                             ? "" : Util.generateSnippet(message);
 
@@ -513,7 +513,7 @@ export default class Api {
         };
 
         store.commit('theme_base', response.base_theme);
-        store.commit('theme_round', response.rounder_bubbles);
+        store.commit('theme_use_global', response.use_global_theme);
         store.commit('theme_use_global', response.use_global_theme);
         store.commit('theme_global', colors);
         store.commit('colors', colors);

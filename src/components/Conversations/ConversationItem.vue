@@ -2,7 +2,7 @@
     <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small, 'mdl-shadow--2dp': !small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
-            <circle :cx="circleSize" :cy="circleSize" :r="circleSize" shape-rendering="auto" :fill="color"></circle>
+            <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
             <text :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ titleFirstLetter }} </text>
         </svg>
 
@@ -93,10 +93,14 @@ export default {
             if (this.small)
                 return { x: 12, y: 17.5, size: 16}
             else
-                return { x: 24, y: 34, size: 30}
+                return { x: 25, y: 35, size: 30}
         },
 
         titleFirstLetter () {
+            if (this.small) {
+                return ""
+            }
+
             try {
                 return this.title.split('')[0].toUpperCase()
             } catch (e) { // Edge case for message with no title ??
@@ -143,8 +147,8 @@ export default {
         }
 
         .contact-img {
-            width: 48px;
-            height: 48px;
+            width: 49px;
+            height: 49px;
             float: left;
             margin: 16px;
         }
@@ -189,8 +193,8 @@ export default {
             background: $bg-light;
 
             .contact-img {
-                width: 24px;
-                height: 24px;
+                width: 25px;
+                height: 25px;
             }
 
             .conversation-text {

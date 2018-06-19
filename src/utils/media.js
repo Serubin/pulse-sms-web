@@ -1,9 +1,9 @@
 import { Api, Crypto } from '@/utils'
 
 // IndexedDB
-const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB 
+const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
         || window.OIndexedDB || window.msIndexedDB
-const DBTransaction = window.IDBTransaction || window.webkitIDBTransaction 
+const DBTransaction = window.IDBTransaction || window.webkitIDBTransaction
     || window.OIDBTransaction || window.msIDBTransaction
 const dbVersion = 1.0;
 
@@ -41,7 +41,7 @@ export default class MediaLoader {
                     setVersion.onsuccess = (event) => {
                         this.createObjectStore(db);
                     };
-                } 
+                }
             }
         };
 
@@ -50,7 +50,7 @@ export default class MediaLoader {
         };
     }
 
-    /** 
+    /**
      * getMedia - get's media from server or local store
      *
      * @param id - device id (media id)
@@ -66,7 +66,7 @@ export default class MediaLoader {
                     this.getMediaFromServer(id) // If fail, get from server
                         .then(response => resolve(response))
                         .catch(response => console.log(response))
-                }); 
+                });
         });
     }
 
@@ -87,7 +87,7 @@ export default class MediaLoader {
                 // Get media from event
                 const media_blob = event.target.result;
 
-                if (media_blob != null)  
+                if (media_blob != null)
                     resolve(media_blob); // Return media
                 else
                     reject(null); // Return media
@@ -106,6 +106,18 @@ export default class MediaLoader {
             Api.fetchImage(id)
                 .then(data => {
 
+                    // One user was having issues with the web app freezing. It was coming from decrypting images...
+                    // with data.length on the blob:
+
+                    // freezing image size: 63,214,836
+                    // good image size:         40,125
+                    // good image size:        124,914
+
+                    if (data.data.length > 25000000) {
+                        reject(null)
+                        return
+                    }
+
                     // get data out of json response
                     data = data.data;
 
@@ -117,10 +129,10 @@ export default class MediaLoader {
                     data = Crypto.decryptToBase64(data);
 
                     // Store blob
-                    this.storeMedia(id, data); 
+                    this.storeMedia(id, data);
 
                     // Send back blog
-                    resolve(data); 
+                    resolve(data);
                 });
         });
     }
@@ -155,4 +167,3 @@ export default class MediaLoader {
         db.createObjectStore(storeName);
     }
 }
-

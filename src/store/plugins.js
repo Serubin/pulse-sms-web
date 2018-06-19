@@ -5,17 +5,16 @@ import { KEYS, state } from '@/store/state.js'
 const localStoreSync = store => {
     const local_items = {
         'contacts': KEYS.CONTACTS,
+        'conversations': KEYS.CONVERSATIONS,
         'clearContacts': KEYS.CONTACTS,
         'account_id': KEYS.ACCOUNT_ID,
         'hash': KEYS.HASH,
         'salt': KEYS.SALT,
         'theme_base': KEYS.THEME.BASE,
-        'theme_round': KEYS.THEME.ROUND,
         'theme_global_default': KEYS.THEME.GLOBAL_DEFAULT,
         'theme_global_dark': KEYS.THEME.GLOBAL_DARK,
         'theme_global_accent': KEYS.THEME.GLOBAL_ACCENT,
         'theme_use_global': KEYS.THEME.USE_GLOBAL,
-        'theme_toolbar': KEYS.THEME.TOOLBAR,
         'notifications': KEYS.NOTIFICATIONS,
     }
 
