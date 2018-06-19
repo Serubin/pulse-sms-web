@@ -5,9 +5,10 @@
         <spinner class="spinner" v-if="conversations.length == 0"></spinner>
 
         <!-- Conversation items -->
-        <transition-group name="flip-list" tag="div">
-                <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
+        <transition-group name="fade" tag="div">
+            <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
         </transition-group>
+
         <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="{ background: $store.state.colors_accent }" v-if="!small" v-mdl>
             <i class="material-icons md-light">add</i>
         </button>
@@ -206,8 +207,8 @@ export default {
          * Force refresh messages - fetches from server
          */
         refresh () {
-            if (!this.small) // Don't clear list if using sidebar list
-                this.conversations = [];
+            //if (!this.small) // Don't clear list if using sidebar list
+                //this.conversations = [];
 
             SessionCache.invalidateAllConversations();
             this.fetchConversations();
@@ -306,6 +307,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
+
     .compose {
         position: fixed;
         bottom: 0%;
@@ -313,6 +315,7 @@ export default {
         z-index: 3;
         margin: 24px;
     }
+
     #conversation-list {
         width: 100%;
         margin-top: 36px !important;
@@ -321,15 +324,12 @@ export default {
             margin-top: 100px;
         }
     }
-    .flip-list-enter, .flip-list-leave-to
-    /* .flip-list-leave-active below version 2.1.8 */ {
-        opacity: 0;
 
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .5s;
     }
-    .flip-list-leave-active {
-        position: absolute;
-    }
-    .flip-list-move {
-        transition: transform $anim-time;
+
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
     }
 </style>

@@ -1,18 +1,21 @@
 <template>
     <div class="message-wrapper" :title="stringTime">
         <div id="offset-marker" v-if="this.messageData.marker"></div>
-        <div :class="style_class" :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
-            <div v-show="message_from"> <b> {{ message_from }} </b> <br /> </div>
-            <div v-html="content"></div>
-            <!-- Content is inserted via v-html -->
 
-            <!-- Media -->
-            <a :href="media_link" target="_blank" v-show="is_media">
-                <img class="media" :src="media_thumb" alt="Thumbnail">
-                <div class="article-title" v-show="is_article"> {{ media_title }} </div>
-                <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
-            </a>
-        </div>
+        <transition name="fade">
+            <div :class="style_class" :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
+                <div v-show="message_from"> <b> {{ message_from }} </b> <br /> </div>
+                <div v-html="content"></div>
+                <!-- Content is inserted via v-html -->
+
+                <!-- Media -->
+                <a :href="media_link" target="_blank" v-show="is_media">
+                    <img class="media" :src="media_thumb" alt="Thumbnail">
+                    <div class="article-title" v-show="is_article"> {{ media_title }} </div>
+                    <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
+                </a>
+            </div>
+        </transition>
 
         <div class="date-wrapper" v-if="dateLabel">
             <div :class="dateType" class="mdl-color-text--grey-500"> {{ dateLabel }}</div>
@@ -20,7 +23,7 @@
 
         <transition name="slide-out">
             <div class="sent-wrapper" v-if="sending">
-                    <div class="sending mdl-color-text--grey-500">Sending...</div>
+                <div class="sending mdl-color-text--grey-500">Sending...</div>
             </div>
         </transition>
     </div>
@@ -159,7 +162,7 @@ export default {
 
             // Construct data url
             const data_prefix = "data:" + this.mime + ";base64,";
-            
+
             // Set data
             this.media_thumb = data_prefix + blob;
             this.media_link = data_prefix + blob;
@@ -397,6 +400,14 @@ export default {
     .slide-out-enter, .slide-out-leave-to {
         transform: translateY(-30px);
         opacity: 0;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .3s;
+    }
+
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
     }
 
     body.dark {
