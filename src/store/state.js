@@ -27,9 +27,9 @@ export const state = {
     conversations: JSON.parse( window.localStorage.getItem(KEYS.CONVERSATIONS) || '{}' ),
 
     theme_base: JSON.parse( window.localStorage.getItem(KEYS.THEME.BASE) || "\"light\"" ),
-    theme_global_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#2196f3\"" ),
-    theme_global_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#1565c0\"" ),
-    theme_global_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#448aff\"" ),
+    theme_global_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#009688\"" ),
+    theme_global_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#00695C\"" ),
+    theme_global_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#FFAB40\"" ),
     theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
 

@@ -465,7 +465,7 @@ export default {
 
 <style lang="scss">
 
-    @import "./assets/scss/material.blue-pink.min.css";
+    @import "./assets/scss/material.teal-orange.min.css";
     @import "./assets/scss/_vars.scss";
 
     body {

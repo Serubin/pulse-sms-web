@@ -7,11 +7,7 @@
                     Refresh settings from phone
                 </div>
                 <div class="mdl-color-text--grey-600">
-                    These settings are pulled from the app, when you click this preference.
-                </div>
-                <br>
-                <div class="mdl-color-text--grey-600">
-                    If they don't seem to be getting updated, change them to something else on the phone, then change them back to what you want.
+                    These settings are pulled from the app, when you click this preference. You can also change them manually, from this page.
                 </div>
             </div>
             <!-- End Refresh settings button -->

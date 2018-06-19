@@ -1,10 +1,10 @@
 <template>
     <div class="mdl-card mdl-shadow--6dp" id="login-pane" v-mdl>
         <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-            <h2 class="mdl-card__title-text"> {{ $store.state.title }}</h2>
+            <h2 class="mdl-card__title-text">Pulse SMS</h2>
         </div>
         <div class="mdl-card__supporting-text">
-            <p>First, sign up for an account from the <b>Text from any device</b> option in the navigation drawer of the phone app.</p>
+            <p>First, <a href="https://messenger.klinkerapps.com/overview/signup.html" target="_blank">sign up</a> for an account from the <b>Text from any device</b> option in the navigation drawer of the phone app.</p>
             <p v-if="error" class="error">Email or Password incorrect</p>
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
@@ -17,9 +17,9 @@
                 </div>
             </form>
 
-            <a href="https://messenger.klinkerapps.com/forgot_password.html">Forgot your password?</a>
+            <a href="https://messenger.klinkerapps.com/forgot_password.html" target="_blank">Forgot your password?</a>
             <br>
-            <a href="https://messenger.klinkerapps.com/overview/platform-ios.html">Have an <i>iPhone</i>?</a>
+            <a href="https://messenger.klinkerapps.com/overview/platform-ios.html" target="_blank">Have an <i>iPhone</i>?</a>
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="login" @click="doLogin">Log in</button>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 import Vue from 'vue'
@@ -55,7 +56,7 @@ export default {
 
     data () {
         return {
-            title: "PulseClient",
+            title: "",
             username: '',
             password: '',
             loading: false,
