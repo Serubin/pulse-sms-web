@@ -554,6 +554,41 @@ export default {
             margin-left: 15px;
             margin-top: 12px;
         }
+
+        #toolbar-title {
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @media screen and (min-width: 150px) {
+            .mdl-layout-title {
+                max-width: 200px;
+            }
+        }
+
+        @media screen and (min-width: 350px) {
+            .mdl-layout-title {
+                max-width: 160px;
+            }
+        }
+
+        @media screen and (min-width: 600px) {
+            .mdl-layout-title {
+                max-width: 420px;
+            }
+        }
+
+        @media screen and (min-width: 720px) {
+            .mdl-layout-title {
+                max-width: 520px;
+            }
+        }
+
+        @media screen and (min-width: 1025px) {
+            .mdl-layout-title {
+                max-width: 720px;
+            }
+        }
     }
 
 

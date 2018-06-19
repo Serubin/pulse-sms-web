@@ -363,9 +363,6 @@ export default {
             .media {
                 width: 310px;
             }
-            .mdl-layout-title {
-                max-width: 160px;
-            }
         }
 
         @media screen and (min-width: 600px) {
