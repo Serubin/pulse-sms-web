@@ -27,7 +27,7 @@ export default {
     props: ['small', 'archive'],
 
     mounted () {
-
+        console.log("mounted");
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
         this.$store.state.msgbus.$on('conversationRead', this.updateRead)
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations)
@@ -43,10 +43,15 @@ export default {
     },
 
     beforeDestroy () {
+        // when coming from a thread, back to the conversation list, this beforeDestory
+        // was getting called after the mounted callback, which erased the bus functionality.
+        // when it is mounted, it is overriding the old action, anyways.
 
-        this.$store.state.msgbus.$off('newMessage')
-        this.$store.state.msgbus.$off('conversationRead')
-        this.$store.state.msgbus.$off('refresh-btn');
+        if (!this.small) {
+            this.$store.state.msgbus.$off('newMessage')
+            this.$store.state.msgbus.$off('conversationRead')
+            this.$store.state.msgbus.$off('refresh-btn');
+        }
     },
 
     methods: {
@@ -113,15 +118,15 @@ export default {
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
 
-//            if (!conv || !conv_index) {
-//                // if the conversation doesn't exist, we have a problem, or it is a new conversation.
-//                // invalidate the refresh the list from the API.
-//                // It is better to fix the actual problem and update the messages correctly though, without the refresh.
-//                Api.conversations = null;
-//                this.fetchConversations();
+            if (!conv || !conv_index) {
+                // if the conversation doesn't exist, we have a problem, or it is a new conversation.
+                // invalidate the refresh the list from the API.
+                // It is better to fix the actual problem and update the messages correctly though, without the refresh.
+                Api.conversations = null;
+                this.fetchConversations();
 
-//                return false;
-//            }
+                return false;
+            }
 
             if(!conv || !conv_index)
                 return false; // TODO Add new message
