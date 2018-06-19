@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 import ImageCompressor from '@xkeshi/image-compressor';
 import ReconnectingWebsocket from 'reconnecting-websocket'
 
-import { Util, Url, Crypto } from '@/utils/'
+import { Util, Url, Crypto, SessionCache } from '@/utils/'
 
 export default class Api {
 
@@ -96,39 +96,40 @@ export default class Api {
             message = Crypto.decryptMessage(message);
 
             this.notify(message);
-            this.cacheMessage(message);
+            SessionCache.cacheMessage(message);
             store.state.msgbus.$emit('newMessage', message);
         } else if (operation == "read_conversation") {
             const id = json.message.content.id;
 
-            this.readConversation('index_unarchived');
-            this.readConversation('index_archived');
+            SessionCache.readConversation('index_unarchived');
+            SessionCache.readConversation('index_archived');
+
             store.state.msgbus.$emit('conversationRead', id);
         } else if (operation == "update_message_type") {
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;
 
-            this.updateMessageType(id, message_type);
+            SessionCache.updateMessageType(id, message_type);
             store.state.msgbus.$emit('updateMessageType', { id, message_type });
         } else if (operation == "added_conversation") {
             const id = json.message.content.id;
 
-            Api.conversations['index_unarchived'] = null;
+            SessionCache.invalidateConversations('index_unarchived');
             store.state.msgbus.$emit('addedConversation', { id });
         } else if (operation == "removed_conversation") {
             const id = json.message.content.id;
 
-            this.removeConversation(id, 'index_unarchived');
+            SessionCache.removeConversation(id, 'index_unarchived');
             store.state.msgbus.$emit('removedConversation', { id });
         } else if (operation == "archive_conversation") {
             const id = json.message.content.id;
 
             if (json.message.content.archive) {
-                this.removeConversation(id, 'index_unarchived');
-                Api.conversations['index_archived'] = null;
+                SessionCache.removeConversation(id, 'index_unarchived');
+                SessionCache.invalidateConversations('index_archived');
             } else {
-                this.removeConversation(id, 'index_archived');
-                Api.conversations['index_unarchived'] = null;
+                SessionCache.removeConversation(id, 'index_archived');
+                SessionCache.invalidateConversations('index_unarchived');
             }
 
             store.state.msgbus.$emit('removedConversation', { id });
@@ -168,75 +169,6 @@ export default class Api {
         }
     }
 
-    /**
-     * Removes the cached conversation.
-     * @param conversation_id - conversation to remove.
-     * @param index - the index of the cached conversation list. Usually 'index_unarchived' or 'index_archived'.
-     */
-    removeConversation (conversation_id, index = 'index_unarchived') {
-        if (Api.conversations[index] == null) {
-            return;
-        }
-
-        for (var i = 0; i < Api.conversations[index].length; i++) {
-            if (Api.conversations[index] != null && Api.conversations[index][i].device_id == conversation_id) {
-                Api.conversations[index].splice(i, 1);
-                return;
-            }
-        }
-    }
-
-    /**
-     * Mark the conversation as read.
-     * @param conversation_id - the conversation to mark read.
-     * @param index - the index of the cached conversation list. Usually 'index_unarchived' or 'index_archived'.
-     */
-    readConversation (conversation_id, index = 'index_unarchived') {
-        if (Api.conversations[index] == null) {
-            return;
-        }
-
-        for (var i = 0; i < Api.conversations[index].length; i++) {
-            if (Api.conversations[index] != null && Api.conversations[index][i].device_id == conversation_id) {
-                Api.conversations[index][i].read = true;
-                return;
-            }
-        }
-    }
-
-    /**
-     * Add a new message to the cached data.
-     * @param message - the message to add.
-     */
-    cacheMessage (message) {
-        if (Api.messages == null || Api.messages[message.conversation_id] == null) {
-            return;
-        }
-
-        Api.messages[message.conversation_id].unshift(message)
-    }
-
-    /**
-     * Add a new message to the cached data.
-     * @param message - the message to add.
-     */
-    updateMessageType (message_id, new_type) {
-        if (Api.messages == null) {
-            return;
-        }
-
-        for (var conversation_id in Api.messages) {
-            if (Api.messages.hasOwnProperty(conversation_id)) {
-                for (var i = 0; i < Api.messages[conversation_id].length; i++) {
-                    if (Api.messages[conversation_id] != null && Api.messages[conversation_id][i].device_id == message_id) {
-                        Api.messages[conversation_id][i].message_type = new_type;
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
     static login (username, password) {
         const promise = new Promise((resolve, reject) => {
             const constructed_url = Url.get('login')
@@ -255,15 +187,11 @@ export default class Api {
     }
 
     static fetchConversations (index) {
-        if (Api.conversations == null) {
-            Api.conversations = { };
-        }
-
         const constructed_url =
             Url.get('conversations') + index + Url.getAccountParam()
 
         const promise = new Promise((resolve, reject) => {
-            if (Api.conversations[index] == null) {
+            if (!SessionCache.hasConversations(index)) {
                 Vue.http.get( constructed_url )
                     .then(response => {
                         response = response.data
@@ -271,12 +199,12 @@ export default class Api {
                         for(let i = 0; i < response.length; i++)
                             response[i] = Crypto.decryptConversation(response[i]);
 
-                        Api.conversations[index] = response;
+                        SessionCache.putConversations(response, index);
                         resolve(response); // Resolve response
                     })
                     .catch( response => Api.rejectHandler(response, reject) );
             } else {
-                resolve(Api.conversations[index]);
+                resolve(SessionCache.getConversations(index));
             }
         });
 
@@ -284,35 +212,31 @@ export default class Api {
     }
 
     static fetchThread (conversation_id, offset = 0) {
-        if (Api.messages == null) {
-            Api.messages = { };
-        }
-
         const limit = 70;
-
         const constructed_url =
             Url.get('messages') + Url.getAccountParam()
                 + "&conversation_id=" + conversation_id + "&limit=" + limit
                 + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
-            if (Api.messages[conversation_id] == null || offset > 0) {
+            if (!SessionCache.hasMessages(conversation_id) || offset > 0) {
                 Vue.http.get( constructed_url )
                     .then(response => {
                         response = response.data
+
                         // Decrypt Conversations items
                         for(let i = 0; i < response.length; i++)
                             response[i] = Crypto.decryptMessage(response[i]);
 
                         if (offset == 0) {
-                            Api.messages[conversation_id] = response;
+                            SessionCache.putMessages(response, conversation_id);
                         }
 
-                        resolve(response); // Resolve response
+                        resolve(response);
                     })
                     .catch( response => Api.rejectHandler(response, reject) );
             } else {
-                resolve(Api.messages[conversation_id]);
+                resolve(SessionCache.getMessages(conversation_id));
             }
         });
 
@@ -338,7 +262,6 @@ export default class Api {
     }
 
     static sendMessage (data, mime_type, thread_id, message_id=null) {
-
         let account_id = store.state.account_id;
 
         let id = message_id || Api.generateId();

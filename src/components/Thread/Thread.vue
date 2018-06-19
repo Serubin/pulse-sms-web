@@ -18,7 +18,7 @@
 import Vue from 'vue'
 import jump from 'jump.js'
 
-import { Util, Api } from '@/utils'
+import { Util, Api, SessionCache } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
 import Message from './Message.vue'
@@ -422,8 +422,8 @@ export default {
          * Force refresh messages - fetches from server
          */
         refresh () {
-            Api.conversations = null;
-            Api.messages[this.conversation_id + ''] = null;
+            SessionCache.invalidateAllConversations();
+            SessionCache.invalidateMessages(this.conversation_id + '');
 
             this.offset = 0; // Clear offset
             this.messages = []; // Clear messages

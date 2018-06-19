@@ -17,7 +17,7 @@
 <script>
 import Vue from 'vue';
 import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
+import { Util, Api, SessionCache } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
 import DayLabel from './DayLabel.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -121,7 +121,7 @@ export default {
                 // if the conversation doesn't exist, we have a problem, or it is a new conversation.
                 // invalidate the refresh the list from the API.
                 // It is better to fix the actual problem and update the messages correctly though, without the refresh.
-                Api.conversations = null;
+                SessionCache.invalidateAllConversations();
                 this.fetchConversations();
 
                 return false;
@@ -209,7 +209,7 @@ export default {
             if (!this.small) // Don't clear list if using sidebar list
                 this.conversations = [];
 
-            Api.conversations = null;
+            SessionCache.invalidateAllConversations();
             this.fetchConversations();
         },
 

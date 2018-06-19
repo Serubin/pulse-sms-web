@@ -3,11 +3,13 @@ import Crypto from '@/utils/crypto.js'
 import Url from '@/utils/url.js'
 import Api from '@/utils/api_manager.js'
 import MediaLoader from '@/utils/media.js'
+import SessionCache from '@/utils/cache_manager.js'
 
 export {
     Util,
     Crypto,
     Url,
     Api,
-    MediaLoader
+    MediaLoader,
+    SessionCache
 }
