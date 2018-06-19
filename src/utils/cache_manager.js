@@ -10,6 +10,28 @@ export default class SessionCache {
         return SessionCache.getAllConversations()[index];
     }
 
+    static getConversation (conversation_id) {
+        let conversations = SessionCache.getConversations('index_unarchived')
+        if (conversations != null) {
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == conversation_id) {
+                    return conversations[i];
+                }
+            }
+        }
+
+        conversations = SessionCache.getConversations('index_archived')
+        if (conversations != null) {
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == conversation_id) {
+                    return conversations[i];
+                }
+            }
+        }
+
+        return null;
+    }
+
     static getAllMessages () {
         return store.state.session_messages;
     }
@@ -37,7 +59,14 @@ export default class SessionCache {
     }
 
     static hasMessages (conversation_id) {
-        return SessionCache.getMessages(conversation_id) != null;
+        let conversation = SessionCache.getConversation(conversation_id)
+        let messages = SessionCache.getMessages(conversation_id);
+
+        if (conversation == null || messages == null || messages.length == 0) {
+            return false;
+        }
+
+        return messages[0].timestamp >= conversation.timestamp - 2000
     }
 
     static invalidateConversations (index = 'index_unarchived') {
