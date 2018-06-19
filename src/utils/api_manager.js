@@ -21,13 +21,11 @@ export default class Api {
      * Open reconnecting websocket.
      */
     openWebSocket () {
-
         const this_ = this;
 
         this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
 
         this.socket.addEventListener('open', () => {
-
             if (this.has_disconnected) {
                 store.state.msgbus.$emit('refresh-btn');
                 Util.snackbar("And we're back!");
@@ -41,14 +39,13 @@ export default class Api {
                     "channel": "NotificationsChannel"
                 })
             });
-            this.socket.send(subscribe);
 
+            this.socket.send(subscribe);
         });
 
         this.socket.addEventListener('message', (e) => this.handleMessage(e));
 
         this.socket.addEventListener('close', (e) => {
-
             if (e.wasClean || e.code == 1001) // If not an error, ignore
                 return
 
@@ -63,7 +60,7 @@ export default class Api {
      * Perminently close socket
      */
     closeWebSocket() {
-        this.socket.close(1000, '', {keepClosed: true});
+        this.socket.close(1000, '', { keepClosed: true });
     }
 
     /**
@@ -71,7 +68,6 @@ export default class Api {
      * @param e - socket event
      */
     handleMessage (e) {
-
         if (e.data.indexOf("ping") != -1) { // Is keep alive event
             // Store last ping to maintain data connection
             store.commit('last_ping', Date.now() / 1000 >> 0);
@@ -137,7 +133,6 @@ export default class Api {
 
             store.state.msgbus.$emit('removedConversation', { id });
         }
-
     }
 
     /**
@@ -145,7 +140,6 @@ export default class Api {
      * @param message  - message object
      */
     notify(message) {
-
         if (Notification.permission != "granted" && !store.state.notifications)
             return
 
@@ -172,7 +166,6 @@ export default class Api {
             window.focus()
             router.push(link);
         }
-
     }
 
     /**
@@ -259,7 +252,6 @@ export default class Api {
         });
 
         return promise
-
     }
 
     static fetchConversations (index) {
@@ -304,7 +296,7 @@ export default class Api {
                 + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
-            if (Api.messages[conversation_id] == null) {
+            if (Api.messages[conversation_id] == null || offset > 0) {
                 Vue.http.get( constructed_url )
                     .then(response => {
                         response = response.data
@@ -312,7 +304,10 @@ export default class Api {
                         for(let i = 0; i < response.length; i++)
                             response[i] = Crypto.decryptMessage(response[i]);
 
-                        Api.messages[conversation_id] = response;
+                        if (offset == 0) {
+                            Api.messages[conversation_id] = response;
+                        }
+
                         resolve(response); // Resolve response
                     })
                     .catch( response => Api.rejectHandler(response, reject) );
@@ -368,7 +363,6 @@ export default class Api {
             seen: true
         };
 
-
         let conversationRequest = {
             account_id: account_id,
             read: true,
@@ -398,11 +392,9 @@ export default class Api {
         }
 
         store.state.msgbus.$emit('newMessage', event_object);
-
     }
 
     static loadFile(file, compress=null) {
-
         if (!file.type.startsWith("image/"))
             return Util.snackbar("File type not supported")
 
@@ -425,8 +417,7 @@ export default class Api {
         }
 
         store.commit('loaded_media', file);
-        Vue.nextTick(() =>Util.scrollToBottom(250))
-
+        Vue.nextTick(() => Util.scrollToBottom(250))
     }
 
     static sendFile(file, thread_id) {
@@ -463,7 +454,6 @@ export default class Api {
     }
 
     static markAsRead (thread_id) {
-
         // Read conversation
         let constructed_url = Url.get('read') + thread_id + Url.getAccountParam();
         Vue.http.post(constructed_url)
@@ -517,8 +507,6 @@ export default class Api {
         store.commit('theme_use_global', response.use_global_theme);
         store.commit('theme_global', colors);
         store.commit('colors', colors);
-
-
     }
 
     static updateSetting (setting, type, value) {
@@ -570,6 +558,5 @@ export default class Api {
 
         if (callback)
             return callback(e);
-
     }
 }
