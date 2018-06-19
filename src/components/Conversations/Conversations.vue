@@ -27,7 +27,6 @@ export default {
     props: ['small', 'archive'],
 
     mounted () {
-        console.log("mounted");
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
         this.$store.state.msgbus.$on('conversationRead', this.updateRead)
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations)

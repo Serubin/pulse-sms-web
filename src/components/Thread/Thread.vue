@@ -422,6 +422,9 @@ export default {
          * Force refresh messages - fetches from server
          */
         refresh () {
+            Api.conversations = null;
+            Api.messages[this.conversation_id + ''] = null;
+
             this.offset = 0; // Clear offset
             this.messages = []; // Clear messages
             this.fetchMessages(); // Fetch messages
