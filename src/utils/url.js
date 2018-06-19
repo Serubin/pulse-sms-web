@@ -12,6 +12,7 @@ export default class Url {
         "read":                 "conversations/read/",
         "archive":              "conversations/archive/",
         "unarchive":            "conversations/unarchive/",
+        "delete":               "conversations/remove/",
         "dismiss":              "accounts/dismissed_notification/",
         "settings":             "accounts/settings/",
         "websocket":            "stream",

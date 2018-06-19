@@ -44,6 +44,9 @@ export default {
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
 
+        this.$store.state.msgbus.$on('delete-btn', this.delete);
+        this.$store.state.msgbus.$on('blacklist-btn', this.blacklist);
+
 
         // Fetch dom
         this.html = document.querySelector("html");
@@ -54,7 +57,6 @@ export default {
 
         // Window focus event
         let events = Util.addEventListeners(['focus'], (e) => {
-
             // Mark as read on focus
             this.markAsRead();
             // Focus cursor on message entry
@@ -64,6 +66,7 @@ export default {
             e.stopPropagation();
             return false;
         });
+
         this.listeners.extend(events);
 
         // Snackbar Clean up
@@ -469,15 +472,35 @@ export default {
             this.push_archive_url();
         },
 
+        /**
+         * Delete conversations
+         */
+        delete () {
+            const _this = this;
+
+            Api.deleter(this.conversation_id);
+
+            // Snackbar the user
+            Util.snackbar({
+                message: "Conversation has been deleted",
+                timeout: 6 * 1000
+            })
+
+            // Awful terrible fix for thread snackbar clean up events
+            this.snackbar.MaterialSnackbar.active = false;
+
+            this.$router.push('/');
+        },
+
         push_archive_url () {
             // Construct push URL
             const constructed_url = (this.$route.path.replace("archived", "") // Remove archive
                 + (!this.isArchived ? "/archived" : "/")) // Add archive or /
                 .replace("//", "/"); // Double slash fix
             // Push to archived/normal route
-            this.$router.push( constructed_url )
+            this.$router.push(constructed_url);
         },
-
+        
         /**
          * Determine text color for messages
          * Determines color "darkness" & returns black/white for text color

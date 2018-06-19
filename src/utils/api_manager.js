@@ -401,6 +401,11 @@ export default class Api {
         Vue.http.post(constructed_url);
     }
 
+    static deleter (conversation) {
+        let constructed_url = Url.get('delete') + conversation + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+    }
+
     static fetchSettings () {
         let constructed_url = Url.get('settings') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
