@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 import ImageCompressor from '@xkeshi/image-compressor';
 import ReconnectingWebsocket from 'reconnecting-websocket'
 
-import { Util, Url, Crypto } from '@/utils/'
+import { Util, Url, Crypto, SessionCache } from '@/utils/'
 
 export default class Api {
 
@@ -21,13 +21,11 @@ export default class Api {
      * Open reconnecting websocket.
      */
     openWebSocket () {
-
         const this_ = this;
 
         this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
 
         this.socket.addEventListener('open', () => {
-
             if (this.has_disconnected) {
                 store.state.msgbus.$emit('refresh-btn');
                 Util.snackbar("And we're back!");
@@ -41,14 +39,13 @@ export default class Api {
                     "channel": "NotificationsChannel"
                 })
             });
-            this.socket.send(subscribe);
 
+            this.socket.send(subscribe);
         });
 
         this.socket.addEventListener('message', (e) => this.handleMessage(e));
 
         this.socket.addEventListener('close', (e) => {
-
             if (e.wasClean || e.code == 1001) // If not an error, ignore
                 return
 
@@ -63,7 +60,7 @@ export default class Api {
      * Perminently close socket
      */
     closeWebSocket() {
-        this.socket.close(1000, '', {keepClosed: true});
+        this.socket.close(1000, '', { keepClosed: true });
     }
 
     /**
@@ -71,7 +68,6 @@ export default class Api {
      * @param e - socket event
      */
     handleMessage (e) {
-
         if (e.data.indexOf("ping") != -1) { // Is keep alive event
             // Store last ping to maintain data connection
             store.commit('last_ping', Date.now() / 1000 >> 0);
@@ -94,30 +90,50 @@ export default class Api {
             );
 
 
-        if (operation == "added_message") { // Handles new messages
-
+        if (operation == "added_message") {
             let message = json.message.content;
-
-            // Translate api naming (naming shim)
             message.message_from = message.from;
-
-            // Decrypt
             message = Crypto.decryptMessage(message);
 
-            // Call notify
             this.notify(message);
-
-            // Emit to bus
+            SessionCache.cacheMessage(message);
             store.state.msgbus.$emit('newMessage', message);
-        } else if (operation == "read_conversation") { // Handles convo updates
+        } else if (operation == "read_conversation") {
             const id = json.message.content.id;
+
+            SessionCache.readConversation('index_unarchived');
+            SessionCache.readConversation('index_archived');
+
             store.state.msgbus.$emit('conversationRead', id);
-        } else if (operation == "update_message_type") { // Messages updates
+        } else if (operation == "update_message_type") {
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;
-            store.state.msgbus.$emit('updateMessageType', {id, message_type});
-        }
 
+            SessionCache.updateMessageType(id, message_type);
+            store.state.msgbus.$emit('updateMessageType', { id, message_type });
+        } else if (operation == "added_conversation") {
+            const id = json.message.content.id;
+
+            SessionCache.invalidateConversations('index_unarchived');
+            store.state.msgbus.$emit('addedConversation', { id });
+        } else if (operation == "removed_conversation") {
+            const id = json.message.content.id;
+
+            SessionCache.removeConversation(id, 'index_unarchived');
+            store.state.msgbus.$emit('removedConversation', { id });
+        } else if (operation == "archive_conversation") {
+            const id = json.message.content.id;
+
+            if (json.message.content.archive) {
+                SessionCache.removeConversation(id, 'index_unarchived');
+                SessionCache.invalidateConversations('index_archived');
+            } else {
+                SessionCache.removeConversation(id, 'index_archived');
+                SessionCache.invalidateConversations('index_unarchived');
+            }
+
+            store.state.msgbus.$emit('removedConversation', { id });
+        }
     }
 
     /**
@@ -125,7 +141,6 @@ export default class Api {
      * @param message  - message object
      */
     notify(message) {
-
         if (Notification.permission != "granted" && !store.state.notifications)
             return
 
@@ -152,7 +167,6 @@ export default class Api {
             window.focus()
             router.push(link);
         }
-
     }
 
     static login (username, password) {
@@ -170,50 +184,60 @@ export default class Api {
         });
 
         return promise
-
     }
-
 
     static fetchConversations (index) {
         const constructed_url =
             Url.get('conversations') + index + Url.getAccountParam()
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then(response => {
-                    response = response.data
-                    // Decrypt Conversations items
-                    for(let i = 0; i < response.length; i++)
-                        response[i] = Crypto.decryptConversation(response[i]);
+            if (!SessionCache.hasConversations(index)) {
+                Vue.http.get( constructed_url )
+                    .then(response => {
+                        response = response.data
+                        // Decrypt Conversations items
+                        for(let i = 0; i < response.length; i++)
+                            response[i] = Crypto.decryptConversation(response[i]);
 
-                    resolve(response); // Resolve response
-                })
-                .catch( response => Api.rejectHandler(response, reject) );
+                        SessionCache.putConversations(response, index);
+                        resolve(response); // Resolve response
+                    })
+                    .catch( response => Api.rejectHandler(response, reject) );
+            } else {
+                resolve(SessionCache.getConversations(index));
+            }
         });
 
         return promise
     }
 
-    static fetchThread (conversation_id, offset=0) {
-
+    static fetchThread (conversation_id, offset = 0) {
         const limit = 70;
-
         const constructed_url =
             Url.get('messages') + Url.getAccountParam()
                 + "&conversation_id=" + conversation_id + "&limit=" + limit
                 + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then(response => {
-                    response = response.data
-                    // Decrypt Conversations items
-                    for(let i = 0; i < response.length; i++)
-                        response[i] = Crypto.decryptMessage(response[i]);
+            if (!SessionCache.hasMessages(conversation_id) || offset > 0) {
+                Vue.http.get( constructed_url )
+                    .then(response => {
+                        response = response.data
 
-                    resolve(response); // Resolve response
-                })
-                .catch( response => Api.rejectHandler(response, reject) );
+                        // Decrypt Conversations items
+                        for(let i = 0; i < response.length; i++)
+                            response[i] = Crypto.decryptMessage(response[i]);
+
+                        if (offset == 0) {
+                            SessionCache.putMessages(response, conversation_id);
+                        }
+
+                        resolve(response);
+                    })
+                    .catch( response => Api.rejectHandler(response, reject) );
+            } else {
+                resolve(SessionCache.getMessages(conversation_id));
+            }
         });
 
         return promise
@@ -238,7 +262,6 @@ export default class Api {
     }
 
     static sendMessage (data, mime_type, thread_id, message_id=null) {
-
         let account_id = store.state.account_id;
 
         let id = message_id || Api.generateId();
@@ -263,7 +286,6 @@ export default class Api {
             seen: true
         };
 
-
         let conversationRequest = {
             account_id: account_id,
             read: true,
@@ -280,7 +302,6 @@ export default class Api {
         Vue.http.post(constructed_url, conversationRequest, {'Content-Type': 'application/json'})
             .catch(response => console.log(response));
 
-
         // Submit event
         let event_object = {
             device_id: id,
@@ -294,11 +315,9 @@ export default class Api {
         }
 
         store.state.msgbus.$emit('newMessage', event_object);
-
     }
 
     static loadFile(file, compress=null) {
-
         if (!file.type.startsWith("image/"))
             return Util.snackbar("File type not supported")
 
@@ -321,8 +340,7 @@ export default class Api {
         }
 
         store.commit('loaded_media', file);
-        Vue.nextTick(() =>Util.scrollToBottom(250))
-
+        Vue.nextTick(() => Util.scrollToBottom(250))
     }
 
     static sendFile(file, thread_id) {
@@ -359,7 +377,6 @@ export default class Api {
     }
 
     static markAsRead (thread_id) {
-
         // Read conversation
         let constructed_url = Url.get('read') + thread_id + Url.getAccountParam();
         Vue.http.post(constructed_url)
@@ -413,8 +430,6 @@ export default class Api {
         store.commit('theme_use_global', response.use_global_theme);
         store.commit('theme_global', colors);
         store.commit('colors', colors);
-
-
     }
 
     static updateSetting (setting, type, value) {
@@ -466,6 +481,5 @@ export default class Api {
 
         if (callback)
             return callback(e);
-
     }
 }

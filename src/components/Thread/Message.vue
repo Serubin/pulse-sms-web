@@ -159,6 +159,7 @@ export default {
 
             // Construct data url
             const data_prefix = "data:" + this.mime + ";base64,";
+            
             // Set data
             this.media_thumb = data_prefix + blob;
             this.media_link = data_prefix + blob;

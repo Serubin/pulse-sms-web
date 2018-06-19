@@ -37,12 +37,12 @@ export const state = {
     aes: '',
     full_theme: true,
     sidebar_open: true,
-    title: "PulseClient",
+    title: "Pulse SMS",
     loading: true,
 
-    colors_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#2196f3\"" ),
-    colors_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#1565c0\"" ),
-    colors_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#448aff\"" ),
+    colors_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#009688\"" ),
+    colors_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#00695C\"" ),
+    colors_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#FFAB40\"" ),
     colors_text: "#ffffff",
 
     msgbus: new Vue(),
@@ -54,6 +54,9 @@ export const state = {
     offline: !navigator.onLine,
 
     last_ping: null,
+
+    session_conversations: { },
+    session_messages: { },
 }
 
 export const getters = {
@@ -66,28 +69,29 @@ export const getters = {
 }
 
 export const mutations = {
-
-    title: (state, title ) => state.title = title,
-    loading: (state, loading ) => state.loading = loading,
-    full_theme: (state, full_theme ) => state.full_theme = full_theme,
-    sidebar_open: (state, sidebar_open ) => state.sidebar_open = sidebar_open,
-    account_id: (state, account_id ) => state.account_id = account_id,
-    hash: (state, hash ) => state.hash = hash,
-    salt: (state, salt ) => state.salt = salt,
-    aes: (state, aes ) => state.aes = aes,
-    theme_base: (state, theme_base ) => state.theme_base = theme_base,
-    theme_global_default: (state, theme_global_default ) => state.theme_global_default = theme_global_default,
-    theme_global_dark: (state, theme_global_dark ) => state.theme_global_dark = theme_global_dark,
-    theme_global_accent: (state, theme_global_accent ) => state.theme_global_accent = theme_global_accent,
-    theme_use_global: (state, theme_use_global ) => state.theme_use_global = theme_use_global,
+    title: (state, title) => state.title = title,
+    loading: (state, loading) => state.loading = loading,
+    full_theme: (state, full_theme) => state.full_theme = full_theme,
+    sidebar_open: (state, sidebar_open) => state.sidebar_open = sidebar_open,
+    account_id: (state, account_id) => state.account_id = account_id,
+    hash: (state, hash) => state.hash = hash,
+    salt: (state, salt) => state.salt = salt,
+    aes: (state, aes) => state.aes = aes,
+    theme_base: (state, theme_base) => state.theme_base = theme_base,
+    theme_global_default: (state, theme_global_default) => state.theme_global_default = theme_global_default,
+    theme_global_dark: (state, theme_global_dark) => state.theme_global_dark = theme_global_dark,
+    theme_global_accent: (state, theme_global_accent) => state.theme_global_accent = theme_global_accent,
+    theme_use_global: (state, theme_use_global) => state.theme_use_global = theme_use_global,
     notifications: (state, notifications) => state.notifications = notifications,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
-    colors_default: (state, colors_default ) => state.colors_default = colors_default,
-    colors_dark: (state, colors_dark ) => state.colors_dark = colors_dark,
-    colors_accent: (state, colors_accent ) => state.colors_accent = colors_accent,
-    loaded_media: (state, loaded_media ) => state.loaded_media = loaded_media,
-    media_sending: (state, media_sending ) => state.media_sending = media_sending,
-    last_ping: (state, last_ping ) => state.last_ping = last_ping,
+    colors_default: (state, colors_default) => state.colors_default = colors_default,
+    colors_dark: (state, colors_dark) => state.colors_dark = colors_dark,
+    colors_accent: (state, colors_accent) => state.colors_accent = colors_accent,
+    loaded_media: (state, loaded_media) => state.loaded_media = loaded_media,
+    media_sending: (state, media_sending) => state.media_sending = media_sending,
+    last_ping: (state, last_ping) => state.last_ping = last_ping,
+    session_conversations: (state, session_conversations) => state.session_conversations = session_conversations,
+    session_messages: (state, session_messages) => state.session_messages = session_messages,
     theme_global: (state, colors) => {
         state.theme_global_default = colors.default;
         state.theme_global_dark = colors.dark;

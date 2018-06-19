@@ -17,7 +17,7 @@
 <script>
 import Vue from 'vue';
 import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
+import { Util, Api, SessionCache } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
 import DayLabel from './DayLabel.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -27,9 +27,9 @@ export default {
     props: ['small', 'archive'],
 
     mounted () {
-
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
         this.$store.state.msgbus.$on('conversationRead', this.updateRead)
+        this.$store.state.msgbus.$on('removedConversation', this.fetchConversations)
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         this.fetchConversations();
@@ -42,10 +42,15 @@ export default {
     },
 
     beforeDestroy () {
+        // when coming from a thread, back to the conversation list, this beforeDestory
+        // was getting called after the mounted callback, which erased the bus functionality.
+        // when it is mounted, it is overriding the old action, anyways.
 
-        this.$store.state.msgbus.$off('newMessage')
-        this.$store.state.msgbus.$off('conversationRead')
-        this.$store.state.msgbus.$off('refresh-btn');
+        if (!this.small) {
+            this.$store.state.msgbus.$off('newMessage')
+            this.$store.state.msgbus.$off('conversationRead')
+            this.$store.state.msgbus.$off('refresh-btn');
+        }
     },
 
     methods: {
@@ -112,9 +117,18 @@ export default {
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
 
+            if (!conv || !conv_index) {
+                // if the conversation doesn't exist, we have a problem, or it is a new conversation.
+                // invalidate the refresh the list from the API.
+                // It is better to fix the actual problem and update the messages correctly though, without the refresh.
+                SessionCache.invalidateAllConversations();
+                this.fetchConversations();
+
+                return false;
+            }
+
             if(!conv || !conv_index)
                 return false; // TODO Add new message
-
 
             // Generate new snippet
             let new_snippet = Util.generateSnippet(event_obj)
@@ -123,7 +137,6 @@ export default {
             conv.read = event_obj.read;
 
             conv.hash = Hash(conv);
-
 
             // Get start index (index after pinned items)
             let startIndex = 0;
@@ -195,6 +208,8 @@ export default {
         refresh () {
             if (!this.small) // Don't clear list if using sidebar list
                 this.conversations = [];
+
+            SessionCache.invalidateAllConversations();
             this.fetchConversations();
         },
 
