@@ -47,6 +47,8 @@ export default {
         this.$store.state.msgbus.$on('delete-btn', this.delete);
         this.$store.state.msgbus.$on('blacklist-btn', this.blacklist);
 
+        this.$store.state.msgbus.$on('conversation-information-btn', this.conversationInformation);
+        this.$store.state.msgbus.$on('conversation-settings-btn', this.conversationSettings);
 
         // Fetch dom
         this.html = document.querySelector("html");
@@ -154,6 +156,9 @@ export default {
 
         this.$store.state.msgbus.$off('delete-btn', this.delete);
         this.$store.state.msgbus.$off('blacklist-btn', this.blacklist);
+
+        this.$store.state.msgbus.$off('conversation-information-btn', this.conversationInformation);
+        this.$store.state.msgbus.$off('conversation-settings-btn', this.conversationSettings);
 
         // Restore last title
         this.$store.commit('title', this.previous_title);
@@ -476,6 +481,15 @@ export default {
             this.push_archive_url();
         },
 
+        push_archive_url () {
+            // Construct push URL
+            const constructed_url = (this.$route.path.replace("archived", "") // Remove archive
+                + (!this.isArchived ? "/archived" : "/")) // Add archive or /
+                .replace("//", "/"); // Double slash fix
+            // Push to archived/normal route
+            this.$router.push(constructed_url);
+        },
+
         /**
          * Delete conversations
          */
@@ -502,27 +516,56 @@ export default {
         blacklist () {
             const _this = this;
 
-            Api.createBlacklist(this.conversation_data.phone_number);
-            Api.archiver(true, this.conversation_id);
+            if (this.conversation_data.phone_number.indexOf(",") < 0) {
+                Api.createBlacklist(this.conversation_data.phone_number);
+                Api.archiver(true, this.conversation_id);
 
-            // Snackbar the user
-            Util.snackbar({
-                message: "Contact has been blacklisted",
-                timeout: 6 * 1000
-            })
+                // Snackbar the user
+                Util.snackbar({
+                    message: "Contact has been blacklisted",
+                    timeout: 6 * 1000
+                })
+
+                this.$router.push('/');
+            } else {
+                Util.snackbar({
+                    message: "Cannot blacklist group conversations",
+                    timeout: 6 * 1000
+                })
+            }
 
             // Awful terrible fix for thread snackbar clean up events
             this.snackbar.MaterialSnackbar.active = false;
-
-            this.$router.push('/');
         },
 
-        push_archive_url () {
-            // Construct push URL
-            const constructed_url = (this.$route.path.replace("archived", "") // Remove archive
-                + (!this.isArchived ? "/archived" : "/")) // Add archive or /
-                .replace("//", "/"); // Double slash fix
-            // Push to archived/normal route
+        /**
+         * Conversation Information
+         */
+        conversationInformation () {
+            // Just a way to give the user the phone number for the conversation
+            const baseText = this.conversation_data.phone_number.indexOf(",") < 0 ? "Phone numbers: " : "Phone number: "
+            Util.snackbar({
+                message: baseText + this.conversation_data.phone_number,
+                actionText: "Copy",
+                actionHandler: (e) =>  {
+                    var dummy = document.createElement("input");
+                    document.body.appendChild(dummy);
+                    dummy.setAttribute('value', this.conversation_data.phone_number);
+                    dummy.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(dummy);
+
+                    e.target.parentElement.MaterialSnackbar.cleanup_();
+                },
+                timeout: 10 * 1000
+            })
+        },
+
+        /**
+         * Conversation Settings
+         */
+        conversationSettings () {
+            const constructed_url = "/conversation_settings/" + this.conversation_id;
             this.$router.push(constructed_url);
         },
 

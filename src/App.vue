@@ -247,11 +247,13 @@ export default {
             // On thread add Delete, Blacklist, & Archive/unarchive
             if (this.$route.name.includes('thread'))
                 items.unshift(
+                    { "name": "conversation-information", 'title': "Conversation Information"},
+                    { "name": "blacklist", 'title': "Blacklist Contact"},
                     { 'name': "delete", 'title': "Delete Conversation" },
                     ( !this.$route.path.includes("archived") ?
                         { 'name': "archive", 'title': "Archive Conversation" } :
                         {'name': "unarchive", 'title': "Unarchive Conversation" }),
-                    { "name": "blacklist", 'title': "Blacklist Contact"},
+                    { "name": "conversation-settings", 'title': "Conversation Settings"}
                 );
             else  // Otherwise just Account & Help
                 items.unshift(
