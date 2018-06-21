@@ -77,6 +77,14 @@
                     </span>
                 </label>
             </div>
+            <div class="label-item">
+                <label for="enter-to-send" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
+                    <input id="enter-to-send" class="mdl-switch__input" type="checkbox" v-model="enter_to_send">
+                    <span class="mdl-switch__label mdl-color-text--grey-900">
+                        Use Enter to Send Messages
+                    </span>
+                </label>
+            </div>
         </div>
     </div>
 </template>
@@ -97,14 +105,12 @@ export default {
         this.$store.commit('title', this.title);
         this.$store.state.msgbus.$on('refresh-btn', this.refreshSettings);
 
-
         let theme_menu_el = this.$el.querySelector("#base-theme-menu")
         this.theme_menu = theme_menu_el.MaterialMenu;
 
         this.color_dialog = this.$el.querySelector(".mdl-dialog");
         if (! this.color_dialog.showModal)
             dialogPolyfill.registerDialog(this.color_dialog)
-
     },
 
     data () {
@@ -112,6 +118,7 @@ export default {
             title: "Settings",
             global_theme: this.$store.state.theme_use_global,
             show_notifications: this.$store.state.notifications,
+            enter_to_send: this.$store.state.enter_to_send,
             theme: this.$store.state.theme_base,
             theme_default: this.rgbaToHex(this.$store.state.theme_global_default),
             theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark),
@@ -206,11 +213,9 @@ export default {
             this.$store.commit('theme_global_dark', Util.expandColor(theme_dark))
             this.$store.commit('theme_global_accent', Util.expandColor(theme_accent))
 
-
             this.$store.commit('colors_default', Util.expandColor(theme_default))
             this.$store.commit('colors_dark', Util.expandColor(theme_dark))
             this.$store.commit('colors_accent', Util.expandColor(theme_accent))
-
 
             this.color_dialog.close()
         }
@@ -219,6 +224,9 @@ export default {
     watch: {
         'show_notifications' () {
             this.$store.commit('notifications', this.show_notifications);
+        },
+        'enter_to_send' () {
+            this.$store.commit('enter_to_send', this.enter_to_send);
         },
         'global_theme' () {
             this.$store.commit('theme_use_global', this.global_theme)

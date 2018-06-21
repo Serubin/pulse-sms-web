@@ -7,6 +7,7 @@ export const KEYS  = {
     CONTACTS: 'contacts',
     CONVERSATIONS: 'conversations',
     NOTIFICATIONS: 'notifications',
+    ENTER_TO_SEND: 'enter_to_send',
     THEME: {
         BASE: 'theme_base',
         GLOBAL_DEFAULT: 'theme_global_default',
@@ -32,6 +33,7 @@ export const state = {
     theme_global_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#FFAB40\"" ),
     theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
+    enter_to_send: JSON.parse( window.localStorage.getItem(KEYS.ENTER_TO_SEND) || "true" ),
 
     /* Per session */
     aes: '',
@@ -83,6 +85,7 @@ export const mutations = {
     theme_global_accent: (state, theme_global_accent) => state.theme_global_accent = theme_global_accent,
     theme_use_global: (state, theme_use_global) => state.theme_use_global = theme_use_global,
     notifications: (state, notifications) => state.notifications = notifications,
+    enter_to_send: (state, enter_to_send) => state.enter_to_send = enter_to_send,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
     colors_default: (state, colors_default) => state.colors_default = colors_default,
     colors_dark: (state, colors_dark) => state.colors_dark = colors_dark,

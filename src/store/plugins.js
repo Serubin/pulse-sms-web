@@ -16,6 +16,7 @@ const localStoreSync = store => {
         'theme_global_accent': KEYS.THEME.GLOBAL_ACCENT,
         'theme_use_global': KEYS.THEME.USE_GLOBAL,
         'notifications': KEYS.NOTIFICATIONS,
+        'enter_to_send': KEYS.ENTER_TO_SEND,
     }
 
     // called after every mutation.

@@ -78,8 +78,7 @@ export default {
          * @param e - event object
          */
         dispatchSend(e) { // Dispatch send message when clicked
-
-            if (e.shiftKey) {
+            if (e instanceof KeyboardEvent && (e.shiftKey || !this.$store.state.enter_to_send)) {
                 // Get start/end of selection for insert location
                 const start = e.target.selectionStart;
                 const end =  e.target.selectionEnd;
