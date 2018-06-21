@@ -4,7 +4,7 @@ import * as firebase from 'firebase';
 export default class Util {
     /**
      * Expand color to full RGBA string
-     * 
+     *
      * @param raw rgba value
      * @return RGBA string
      */
@@ -43,7 +43,7 @@ export default class Util {
         let mime_type = object.mime_type || "text/plain";
 
 
-        snippet = mime_type == "text/plain" ? (snippet) : "<i>Photo</i>";
+        snippet = mime_type == "text/plain" ? (snippet) : "<i>Picture Message</i>";
 
         if (type != 0 && type != 6 && type != 3 && type != 5)
             snippet = "You: " + snippet;
@@ -174,7 +174,7 @@ export default class Util {
 
     static addEventListeners(events, listener, object=window) {
         return events.map(
-            (i) => { 
+            (i) => {
                 object.addEventListener(i, listener)
 
                 return { event: i, listener, object }
@@ -221,10 +221,9 @@ Array.prototype.contains = function(element) {
 */
 Array.prototype.containsObjKey = function(key, element) {
 
-    for (let i = 0; i < this.length; i++) 
+    for (let i = 0; i < this.length; i++)
         if (this[i][key] === element)
             return this[i]
 
     return false
 }
-

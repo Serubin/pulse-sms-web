@@ -285,6 +285,8 @@ export default {
             background: #fafafa;
             max-height: 300px;
             overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 10px;
 
             .overlay {
                 background: linear-gradient(to bottom, rgba(250,250,250,0) 95%,rgba(250,250,250,1) 100%);

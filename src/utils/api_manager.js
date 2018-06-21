@@ -266,7 +266,7 @@ export default class Api {
 
         let id = message_id || Api.generateId();
 
-        let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Photo</i>";
+        let snippet = mime_type == "text/plain" ? ("You: " + data) : "<i>Picture Message</i>";
 
         let encrypted = Crypto.encrypt(data);
         let snippetEncrypted = Crypto.encrypt(snippet);
