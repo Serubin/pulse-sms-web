@@ -184,10 +184,6 @@ export default {
         },
         openImage (e) {
             if (this.mime.indexOf('image') > -1) {
-                this.$router.push({
-                    name: 'image', params: { messageId: this.id, type: this.mime }
-                });
-
                 const MediaLoader = this.$store.state.media_loader; // get loader
                 Util.displayImage(MediaLoader, this.id, this.mime);
 

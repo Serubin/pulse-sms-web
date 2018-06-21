@@ -1,7 +1,15 @@
 <template>
+  <transition name="fade">
     <div class="fullscreen-image">
         <img class="full-image" alt="Image">
+        <button id="close-button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="close">
+            <i class="material-icons material-icons-white">cancel</i>
+        </button>
+        <button id="download-button" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="download">
+            <i class="material-icons material-icons-white">save</i>
+        </button>
     </div>
+  </transition>
 </template>
 
 <script>
@@ -14,6 +22,27 @@ export default {
     data () {
         return {
             image_data: ""
+        }
+    },
+
+    methods: {
+        close () {
+            document.querySelector('.fullscreen-image').style.display = 'none';
+        },
+
+        download () {
+            let uri = document.querySelector('.full-image').src;
+            this.downloadUri(uri, "pulse-image.jpg")
+        },
+
+        downloadUri (uri, name) {
+            var link = document.createElement("a");
+            link.download = name;
+            link.href = uri;
+            document.body.appendChild(link);
+
+            link.click();
+            document.body.removeChild(link);
         }
     }
 }
@@ -36,8 +65,23 @@ export default {
 
     .full-image {
         margin: auto;
-        margin-top: 100px;
-        max-height: 70%;
+        max-height: 100%;
+    }
+
+    #download-button {
+        float: right;
+        margin-right: 10px;
+        margin-top: 20px;
+        color: white;
+        z-index: 1001;
+    }
+
+    #close-button {
+        float: right;
+        margin-right: 20px;
+        margin-top: 20px;
+        color: white;
+        z-index: 1001;
     }
 
 </style>
