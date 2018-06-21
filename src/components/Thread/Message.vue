@@ -64,6 +64,16 @@ export default {
                 break;
             }
 
+            case "video": {
+                this.content = "<i>Video not yet supported.</i>";
+                break;
+            }
+
+            case "audio": {
+                this.content = "<i>Audio not yet supported.</i>";
+                break;
+            }
+
             case "media": {
                 this.is_media = true;
                 this.is_article = true;
@@ -165,7 +175,6 @@ export default {
             // Set data
             this.media_thumb = data_prefix + blob;
             this.media_link = data_prefix + blob;
-
         },
         updateType (id, type) {
             if (this.id != id)
