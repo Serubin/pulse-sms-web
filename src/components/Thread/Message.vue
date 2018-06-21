@@ -10,7 +10,7 @@
 
                 <!-- Media -->
                 <a :href="media_link" target="_blank" v-show="is_media">
-                    <img class="media" :src="media_thumb" alt="Thumbnail">
+                    <img class="media" :src="media_thumb" alt="Thumbnail" @click="openImage">
                     <div class="article-title" v-show="is_article"> {{ media_title }} </div>
                     <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
                 </a>
@@ -181,6 +181,19 @@ export default {
                 return;
 
             this.type = type;
+        },
+        openImage (e) {
+            if (this.mime.indexOf('image') > -1) {
+                this.$router.push({
+                    name: 'image', params: { messageId: this.id, type: this.mime }
+                });
+
+                const MediaLoader = this.$store.state.media_loader; // get loader
+                Util.displayImage(MediaLoader, this.id, this.mime);
+
+                e.stopPropagation();
+                e.preventDefault();
+            }
         }
 
     },

@@ -144,6 +144,23 @@ export default class Util {
     }
 
     /**
+     * Display snackbar
+     *
+     * @param message - either a string, or data object
+     */
+    static displayImage(mediaLoader, messageId, type) {
+        mediaLoader.getMedia(messageId, type)
+              .then((blob) => {
+                  const fullscreenViewer = document.querySelector('.fullscreen-image');
+                  fullscreenViewer.style.display = 'block';
+
+                  const data_prefix = "data:" + this.mime + ";base64,";
+                  const image = document.querySelector('.full-image');
+                  image.src = data_prefix + blob;
+              });
+    }
+
+    /**
      * Color Change with Material Animations
      *
      * @param $el element

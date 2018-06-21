@@ -6,7 +6,7 @@ import store from '@/store/'
 import Login from '@/components/Login.vue'
 import Settings from '@/components/Settings.vue'
 import Thread from '@/components/Thread/'
-import Compose from '@/components/Compose'
+import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
 
 Vue.use(VueRouter)

@@ -50,6 +50,7 @@
             <splash v-if="$store.state.loading"></splash>
         </transition> -->
         <Snackbar />
+        <ImageViewer />
 
         <div class="file-drag"></div>
     </div>
@@ -68,6 +69,7 @@ import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
 import Splash from '@/components/Splash.vue'
 import Snackbar from '@/components/Snackbar.vue'
+import ImageViewer from '@/components/ImageViewer.vue'
 
 export default {
     name: 'app',
@@ -458,7 +460,8 @@ export default {
         Sidebar,
         Conversations,
         Splash,
-        Snackbar
+        Snackbar,
+        ImageViewer
     }
 }
 </script>
