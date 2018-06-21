@@ -50,15 +50,52 @@
 <script>
 
 import Conversations from '@/components/Conversations/'
+import { Util } from '@/utils'
 
 export default {
     name: 'sidebar',
+
+    mounted () {
+        let sidebar = this.$el.querySelector("#sidebar");
+        let events = Util.addEventListeners(['mousewheel', 'DOMMouseScroll'], (e) => {
+            var scrollTop = sidebar.scrollTop,
+                scrollHeight = sidebar.scrollHeight,
+                height = sidebar.offsetHeight,
+                delta = e.wheelDelta,
+                up = delta > 0;
+
+            var prevent = function() {
+                e.stopPropagation();
+                e.preventDefault();
+                e.returnValue = false;
+                return false;
+            }
+
+            if (!up && -delta > scrollHeight - height - scrollTop) {
+                // Scrolling down, but this will take us past the bottom.
+                sidebar.scrollTop = scrollHeight;
+                return prevent();
+            } else if (up && delta > scrollTop) {
+                // Scrolling up, but this will take us past the top.
+                sidebar.scrollTop = 0;
+                return prevent();
+            }
+        }, sidebar);
+
+        this.listeners.extend(events);
+    },
+
+    beforeDestroy () {
+        Util.removeEventListeners(this.listeners);
+    },
+
     data () {
         return {
             links: {
                 'conversations': { name: 'conversations-list'},
                 'archive': { name: 'conversations-list-archived'}
-            }
+            },
+            listeners: []
         }
     },
 
