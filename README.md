@@ -1,8 +1,10 @@
 # Pulse SMS - Vue.js Web App
 
+![header](artwork/header.png)
+
 The Pulse community is pretty great. This web app started out as a [third party, alternative client](https://github.com/Serubin/PulseClient), to the official Pulse SMS web app. It is built on [Vue.js](https://vuejs.org/). Big thanks to [Solomon Rubin](https://github.com/Serubin) for creating an awesome base.
 
-This version of the web app will be taking over as the official version, in the coming weeks/months. As an open-source client, anyone is free to contribute and help improve the Pulse experience. This web app has improved performance/load times, a cleaner architecture, and will be vastly easier to work with than the legacy web app.
+This version of the web app will be taking over as the official version, in the coming weeks/months. As an open-source client, anyone is free to contribute and help improve the Pulse experience. This web app has improved performance/load times, a cleaner architecture, and new features. It will be much easier to work with or improve, than the legacy web app.
 
 To get started, you should create a Pulse account from the [Android app](https://play.google.com/store/apps/details?id=xyz.klinker.messenger). To log in to the web version:
 
