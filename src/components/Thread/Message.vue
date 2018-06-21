@@ -50,7 +50,6 @@ export default {
         switch ( this.mime.split("/")[0] ) {
             /* SMS Text message */
             case "text": {
-                this.content = Util.entityEncode(this.content);
                 break;
             }
 

@@ -19,7 +19,6 @@ export default class Util {
     }
 
     static entityEncode (string) {
-
         while (string.indexOf("<") !== -1) {
             string = string.replace("<", "&lt;");
         }
@@ -38,7 +37,7 @@ export default class Util {
         if(typeof object.snippet != "undefined")
             return object.snippet;
 
-        let snippet = object.snippet || object.data;
+        let snippet = object.snippet || object.dataNoEmoji || object.data;
         let type = object.message_type || object.type;
         let mime_type = object.mime_type || "text/plain";
 

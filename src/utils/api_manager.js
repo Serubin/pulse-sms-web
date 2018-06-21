@@ -309,7 +309,7 @@ export default class Api {
             timestamp: timestamp,
             mime_type: mime_type,
             message_type: 2,
-            data: data,
+            data: emojione.unicodeToImage(Util.entityEncode(data)),
             read: true,
             snippet: snippet
         }

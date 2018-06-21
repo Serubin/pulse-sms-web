@@ -698,6 +698,18 @@ export default {
         color: white;
     }
 
+    .emojione {
+        height: 16px;
+        width: 16px;
+    }
+
+    .message {
+        .emojione {
+            height: 24px;
+            width: 24px;
+        }
+    }
+
     body.dark {
         background-color: $bg-dark;
         color: #fff;

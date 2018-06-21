@@ -3,6 +3,7 @@ import '@/lib/hmacsha1.js'
 
 import Hash from 'object-hash'
 import store from '@/store'
+import emojione from 'emojione'
 import { Util } from '@/utils'
 
 export default class Crypto {
@@ -33,11 +34,12 @@ export default class Crypto {
         convo.timestamp = convo.timestamp * 1000; // Add back zero timestamp
 
         // Handle title and snippet
-        try { 
-            convo.title = Crypto.decrypt(convo.title);
+        try {
+            convo.titleNoEmoji = Crypto.decrypt(convo.title);
+            convo.title = emojione.unicodeToImage(Util.entityEncode(convo.titleNoEmoji));
 
-            convo.snippet = Crypto.decrypt(convo.snippet);
-            convo.snippet = convo.snippet;
+            convo.snippetNoEmoji = Crypto.decrypt(convo.snippet).replace(/\n/g, " ");
+            convo.snippet = emojione.unicodeToImage(Util.entityEncode(convo.snippetNoEmoji));
         } catch (err) {
             return null
         }
@@ -50,8 +52,6 @@ export default class Crypto {
         }
 
         convo.color = Util.expandColor(convo.color);
-
-
         convo.hash = Hash(convo);
 
         return convo;
@@ -73,7 +73,8 @@ export default class Crypto {
         try {
             message.mime_type = Crypto.decrypt(message.mime_type);
 
-            message.data = Crypto.decrypt(message.data)
+            message.dataNoEmoji = Crypto.decrypt(message.data);
+            message.data = emojione.unicodeToImage(Util.entityEncode(message.dataNoEmoji));
 
             message.message_from = Crypto.decrypt(message.message_from);
         } catch (err) {
@@ -194,4 +195,3 @@ export default class Crypto {
             random16Hex() + random16Hex() + random16Hex() + random16Hex();
     }
 }
-
