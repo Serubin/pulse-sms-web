@@ -144,9 +144,7 @@ export default class Util {
     }
 
     /**
-     * Display snackbar
-     *
-     * @param message - either a string, or data object
+     * Display an image in the full screen viewer
      */
     static displayImage(mediaLoader, messageId, type) {
         mediaLoader.getMedia(messageId, type)
