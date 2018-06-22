@@ -1,5 +1,6 @@
 import jump from 'jump.js'
 import * as firebase from 'firebase';
+import store from '@/store/';
 
 export default class Util {
     /**
@@ -147,15 +148,7 @@ export default class Util {
      * Display an image in the full screen viewer
      */
     static displayImage(mediaLoader, messageId, type) {
-        mediaLoader.getMedia(messageId, type)
-              .then((blob) => {
-                  const fullscreenViewer = document.querySelector('.fullscreen-image');
-                  fullscreenViewer.style.display = 'block';
-
-                  const data_prefix = "data:" + this.mime + ";base64,";
-                  const image = document.querySelector('.full-image');
-                  image.src = data_prefix + blob;
-              });
+        store.state.msgbus.$emit('showImage', { messageId: messageId, type: type });
     }
 
     /**

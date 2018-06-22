@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
     <div class="fullscreen-image">
-        <img class="full-image" alt="Image">
+        <img class="full-image" :src="image_data" alt="Image">
         <button id="close-button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="close">
             <i class="material-icons material-icons-white">cancel</i>
         </button>
@@ -15,9 +15,14 @@
 <script>
 
 import Vue from 'vue'
+import store from '@/store/'
 
 export default {
     name: 'imageviewer',
+
+    mounted () {
+        store.state.msgbus.$on('showImage', this.showImage);
+    },
 
     data () {
         return {
@@ -28,21 +33,33 @@ export default {
     methods: {
         close () {
             document.querySelector('.fullscreen-image').style.display = 'none';
+            this.image_data = "";
         },
 
         download () {
-            let uri = document.querySelector('.full-image').src;
-            this.downloadUri(uri, "pulse-image.jpg")
-        },
-
-        downloadUri (uri, name) {
             var link = document.createElement("a");
-            link.download = name;
-            link.href = uri;
+            link.download = "pulse-image.jpg";
+            link.href = document.querySelector('.full-image').src;
             document.body.appendChild(link);
 
             link.click();
             document.body.removeChild(link);
+        },
+
+        downloadUri (uri, name) {
+
+        },
+
+        showImage (event_obj) {
+            const MediaLoader = store.state.media_loader;
+            MediaLoader.getMedia(event_obj.messageId, event_obj.type)
+                .then((blob) => {
+                    const fullscreenViewer = document.querySelector('.fullscreen-image');
+                    fullscreenViewer.style.display = 'block';
+
+                    const data_prefix = "data:" + this.mime + ";base64,";
+                    this.image_data = data_prefix + blob;
+                });
         }
     }
 }
