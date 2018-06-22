@@ -1,14 +1,21 @@
 <template>
-  <transition name="fade">
-    <div class="fullscreen-image">
-        <img class="full-image" :src="image_data" alt="Image">
-        <button id="close-button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="close">
-            <i class="material-icons material-icons-white">cancel</i>
-        </button>
-        <button id="download-button" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="download">
-            <i class="material-icons material-icons-white">save</i>
-        </button>
-    </div>
+    <transition name="fade">
+        <div class="lightbox-wrapper" v-if="display">
+            <div class="lightbox-toolbar">
+                <button id="close-button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="close">
+                    <i class="material-icons material-icons-white">cancel</i>
+                </button>
+                <button id="download-button" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="download">
+                    <i class="material-icons material-icons-white">save</i>
+                </button>
+            </div>
+
+            <div class="lightbox-overlay" @click="close()">
+                <div class="image-wrap" @click.prevent.stop>
+                    <img class="full-image" :src="image_data" alt="Image">
+                </div>
+            </div>
+        </div>
   </transition>
 </template>
 
@@ -26,13 +33,14 @@ export default {
 
     data () {
         return {
-            image_data: ""
+            image_data: "",
+            display: false,
         }
     },
 
     methods: {
         close () {
-            document.querySelector('.fullscreen-image').style.display = 'none';
+            this.display = false;
             this.image_data = "";
         },
 
@@ -54,8 +62,7 @@ export default {
             const MediaLoader = store.state.media_loader;
             MediaLoader.getMedia(event_obj.messageId, event_obj.type)
                 .then((blob) => {
-                    const fullscreenViewer = document.querySelector('.fullscreen-image');
-                    fullscreenViewer.style.display = 'block';
+                    this.display = true;
 
                     const data_prefix = "data:" + this.mime + ";base64,";
                     this.image_data = data_prefix + blob;
@@ -67,22 +74,36 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+    .lightbox-toolbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 1001;
+    }
 
-    .fullscreen-image {
+    .lightbox-overlay {
         text-align: center;
-        background-color: black;
+        background-color: rgba(0,0,0,0.7);
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         z-index: 1000;
-        display: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-wrap {
+        display: flex;
+
     }
 
     .full-image {
         margin: auto;
-        max-height: 100%;
+        width: 100%;
+        height: fit-content;
     }
 
     #download-button {
