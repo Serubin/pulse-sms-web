@@ -1,8 +1,10 @@
 <template>
      <div id="settings" >
          <div class="page-content" id="account-list" v-mdl>
+            <h4>Theme Settings</h4>
+
              <!-- Refresh Settings Button -->
-            <div class="click-item mdl-js-button mdl-js-ripple-effect" id="refresh_settings" @click="refreshSettings">
+            <div class="click-item mdl-js-button mdl-js-ripple-effect" id="refresh_settings" @click="refreshSettings" v-if="showSettingsRefresh">
                 <div class="mdl-color-text--grey-900">
                     Refresh settings from phone
                 </div>
@@ -61,13 +63,13 @@
                 <label for="global-theme" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="global-theme" class="mdl-switch__input" type="checkbox" v-model="global_theme">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Apply Theme Globally
+                        Apply to all Conversations
                     </span>
                 </label>
             </div> <!-- End Global Theme -->
 
             <br />
-            <h4>Web Settings</h4>
+            <h4>Web Specific Settings</h4>
             <br />
             <div class="label-item">
                 <label for="show-notifications" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
@@ -161,6 +163,12 @@ export default {
 
         use_global_theme () {
             return this.boolToStr(this.$store.state.theme_use_global);
+        },
+
+        showSettingsRefresh () {
+            // I don't want to remove this completely, it could be useful in the future, but we are refreshing the user's settings
+            // each time the app is loaded, so this isn't necessary.
+            return false;
         }
     },
 

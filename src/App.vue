@@ -163,11 +163,16 @@ export default {
         applicationStart () {
             // Setup the API (Open websocket)
             this.mm = new Api();
+
             // Fetch contacts for cache
             Api.fetchContacts().then((resp) => this.processContacts(resp));
 
+            // Grab user settings from server and store in local storage
+            Api.fetchSettings();
+
             // Populate the dropdown menu
             this.populateMenuItems();
+            
             // Setup and store the medialoader (MMS)
             this.$store.commit('media_loader', new MediaLoader());
 

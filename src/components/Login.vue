@@ -94,9 +94,6 @@ export default {
 
             this.loading = false;
 
-            // Grab user settings from server and store in local storage
-            Api.fetchSettings();
-
             // Start app
             this.$store.state.msgbus.$emit('start-app');
 
