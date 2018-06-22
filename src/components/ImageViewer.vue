@@ -11,9 +11,7 @@
             </div>
 
             <div class="lightbox-overlay" @click="close()">
-                <div class="image-wrap" @click.prevent.stop>
-                    <img class="full-image" :src="image_data" alt="Image">
-                </div>
+                <img class="full-image" :src="image_data" alt="Image">
             </div>
         </div>
   </transition>
@@ -81,6 +79,10 @@ export default {
         z-index: 1001;
     }
 
+    .lightbox-wrapper {
+        height: 100%;
+    }
+
     .lightbox-overlay {
         text-align: center;
         background-color: rgba(0,0,0,0.7);
@@ -95,15 +97,12 @@ export default {
         align-items: center;
     }
 
-    .image-wrap {
-        display: flex;
-
-    }
-
     .full-image {
-        margin: auto;
-        width: 100%;
-        height: fit-content;
+        display: flex;
+        height: auto;
+        width: auto;
+        max-height: 100%;
+        max-width: 100%;
     }
 
     #download-button {
