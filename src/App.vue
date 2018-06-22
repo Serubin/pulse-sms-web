@@ -63,7 +63,7 @@ import Vue from 'vue'
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 
-import { Util, Crypto, Api, MediaLoader } from '@/utils'
+import { Util, Crypto, Api, MediaLoader, SessionCache } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
@@ -164,10 +164,8 @@ export default {
             // Setup the API (Open websocket)
             this.mm = new Api();
             // Fetch contacts for cache
-            Api.fetchContacts()
-                .then((resp) => this.processContacts(resp));
-            // Grab user settings from server and store in local storage
-            Api.fetchSettings();
+            Api.fetchContacts().then((resp) => this.processContacts(resp));
+
             // Populate the dropdown menu
             this.populateMenuItems();
             // Setup and store the medialoader (MMS)
@@ -311,6 +309,9 @@ export default {
             this.$store.commit('aes', "");
             this.$store.commit('clearContacts', {});
 
+            SessionCache.invalidateAllConversations();
+            SessionCache.invalidateAllMessages();
+
             // Clear local storage (browser)
             window.localStorage.clear();
             // Close socket
@@ -423,15 +424,11 @@ export default {
         },
 
         default_toolbar_color () { // Determine default colors
-            const theme = this.theme_str; // Theme string
-
-            if (theme == "light") // Light theme
-                return "#f3f3f3"
-            else if(theme == "dark") // Dark theme
-                return "#202B30"
-            else if(theme == "day_night") // Day night
-                return this.is_night ? "#202b30" : "#f3f3f3"
-
+            if (this.$store.state.theme_global_default) {
+                return this.$store.state.theme_global_default;
+            } else {
+                return "#009688";
+            }
         },
 
         text_color () { // Determines toolbar text color

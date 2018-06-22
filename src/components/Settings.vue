@@ -144,9 +144,19 @@ export default {
             const dark = this.$store.state.theme_global_dark;
             const accent = this.$store.state.theme_global_accent;
 
-            return this.rgbaToHex(defaul)
-                + ", " + this.rgbaToHex(dark)
-                + ", " + this.rgbaToHex(accent);
+            if (!defaul && !dark && !accent) {
+                return "#009688, #00695C, #FFAB40"
+            } else {
+                const defaultHex = this.rgbaToHex(defaul);
+                const darkHex = this.rgbaToHex(dark);
+                const accentHex = this.rgbaToHex(accent);
+
+                const defaultString = defaultHex.length == 1 ? defaultHex : "#009688";
+                const darkString = darkHex.length == 1 ? darkHex : "#00695C";
+                const accentString = accentHex.length == 1 ? accentHex : "#FFAB40";
+
+                return defaultString + ", " + darkString + ", " + accentString;
+            }
         },
 
         use_global_theme () {
@@ -237,13 +247,28 @@ export default {
             Api.updateSetting("base_theme", "string", this.theme)
         },
         '$store.state.theme_global_default' () {
-            this.theme_default = this.rgbaToHex(this.$store.state.theme_global_default);
+            const color = this.$store.state.theme_global_default;
+            if (!color) {
+                this.theme_default = "#009688";
+            } else {
+                this.theme_default = this.rgbaToHex(color);
+            }
         },
         '$store.state.theme_global_dark' () {
-            this.theme_dark = this.rgbaToHex(this.$store.state.theme_global_dark);
+            const color = this.$store.state.theme_global_dark;
+            if (!color) {
+                this.theme_dark = "#00695C";
+            } else {
+                this.theme_dark = this.rgbaToHex(color);
+            }
         },
         '$store.state.theme_global_accent' () {
-            this.theme_accent = this.rgbaToHex(this.$store.state.theme_global_accent);
+            const color = this.$store.state.theme_global_accent;
+            if (!color) {
+                this.theme_accent = "#FFAB40";
+            } else {
+                this.theme_accent = this.rgbaToHex(color);
+            }
         }
     }
 }

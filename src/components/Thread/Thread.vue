@@ -610,10 +610,16 @@ export default {
          * @return color
          */
         getColor (message) {
-            if (message.message_from) // If multiple senders, get specific color
-                return this.colors_from[message.message_from]; // Get color from cached colors
-            else
+            if (message.message_from) { // If multiple senders, get specific color
+                const color = this.colors_from[message.message_from]; // Get color from cached colors
+                if (color) {
+                    return color;
+                } else {
+                    return this.color;
+                }
+            } else {
                 return this.color // Otherwise return conversation default
+            }
         },
 
         /**
