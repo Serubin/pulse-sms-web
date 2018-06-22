@@ -84,6 +84,7 @@ export default {
             // Create hash
             let derived_key = sjcl.misc.pbkdf2(this.password, data.salt2, 10000, 256, hmacSHA1);
             let base64_hash = sjcl.codec.base64.fromBits(derived_key);
+
             // Save data
             this.$store.commit('account_id', data.account_id);
             this.$store.commit('hash', base64_hash);
@@ -93,11 +94,13 @@ export default {
 
             this.loading = false;
 
+            // Grab user settings from server and store in local storage
+            Api.fetchSettings();
+
             // Start app
             this.$store.state.msgbus.$emit('start-app');
 
             this.$router.push({ name: 'conversations-list'});
-
         },
 
         handleError(data) {

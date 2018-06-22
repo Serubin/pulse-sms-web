@@ -188,7 +188,7 @@ export default class Api {
 
     static fetchConversations (index) {
         const constructed_url =
-            Url.get('conversations') + index + Url.getAccountParam()
+            Url.get('conversations') + index + Url.getAccountParam() + "&limit=75"
 
         const promise = new Promise((resolve, reject) => {
             if (!SessionCache.hasConversations(index)) {
@@ -196,8 +196,11 @@ export default class Api {
                     .then(response => {
                         response = response.data
                         // Decrypt Conversations items
-                        for(let i = 0; i < response.length; i++)
-                            response[i] = Crypto.decryptConversation(response[i]);
+                        for(let i = 0; i < response.length; i++) {
+                            const convo = Crypto.decryptConversation(response[i]);
+                            if (convo != null)
+                                response[i] = convo;
+                        }
 
                         SessionCache.putConversations(response, index);
                         resolve(response); // Resolve response
@@ -225,8 +228,11 @@ export default class Api {
                         response = response.data
 
                         // Decrypt Conversations items
-                        for(let i = 0; i < response.length; i++)
-                            response[i] = Crypto.decryptMessage(response[i]);
+                        for(let i = 0; i < response.length; i++) {
+                            const message = Crypto.decryptMessage(response[i]);
+                            if (message != null)
+                                response[i] = message;
+                        }
 
                         if (offset == 0) {
                             SessionCache.putMessages(response, conversation_id);
@@ -440,6 +446,12 @@ export default class Api {
             'dark': Util.expandColor(response.color_dark),
             'accent': Util.expandColor(response.color_accent),
         };
+
+        if (colors.default == 'rgba(255,255,255,1)' && colors.dark == 'rgba(255,255,255,1)' && colors.accent == 'rgba(255,255,255,1)') {
+            colors.default = store.theme_global_default;
+            colors.dark = store.theme_global_dark;
+            colors.accent = store.theme_global_default_accent;
+        }
 
         store.commit('theme_base', response.base_theme);
         store.commit('theme_use_global', response.use_global_theme);
