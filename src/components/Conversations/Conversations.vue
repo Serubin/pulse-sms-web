@@ -37,9 +37,15 @@ export default {
         this.fetchConversations();
 
         if (!this.small) {
-            this.$store.commit('colors_default', this.$store.state.theme_global_default)
-            this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
-            this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
+            // Construct colors object from saved global theme
+            const colors = {
+                'default': this.$store.state.theme_global_default,
+                'dark': this.$store.state.theme_global_dark,
+                'accent': this.$store.state.theme_global_accent,
+            };
+
+            // Commit them to current application colors
+            this.$store.commit('colors', colors);
         }
     },
 

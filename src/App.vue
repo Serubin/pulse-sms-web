@@ -146,7 +146,7 @@ export default {
             margin: 0,
             loading: this.$store.state.loading,
             mm: null,
-            toolbar_color: this.$store.state.colors_default,
+            toolbar_color: this.$store.state.theme_global_default,
             menu_items: [],
             hour: null,
         }

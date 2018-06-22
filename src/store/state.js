@@ -99,6 +99,15 @@ export const mutations = {
         state.theme_global_default = colors.default;
         state.theme_global_dark = colors.dark;
         state.theme_global_accent = colors.accent;
+
+        // this mutation wasn't getting pushed through the plugin to write to the local storage
+        // so the global theme was being queried every time.
+
+        if (colors.default && colors.dark && colors.accent) {
+            window.localStorage.setItem("theme_global_default", JSON.stringify(colors.default));
+            window.localStorage.setItem("theme_global_dark", JSON.stringify(colors.dark));
+            window.localStorage.setItem("theme_global_accent", JSON.stringify(colors.accent));
+        }
     },
     colors: (state, colors) => {
         state.colors_default = colors.default;
