@@ -434,6 +434,11 @@ export default class Api {
         return promise
     }
 
+    static removeBlacklist (id) {
+        let constructed_url = Url.get('remove_blacklist') + id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+    }
+
     static createBlacklist (phone_number) {
         let request = {
             account_id: store.state.account_id,
