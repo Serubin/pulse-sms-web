@@ -21,7 +21,7 @@
                             Scheduled Messages
                         </div>
                     </li>
-                    <li id="blacklist-link" @click="routeTo">
+                    <li id="blacklist-link" @click="routeTo('blacklists')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon blacklist">
                             Blacklist
@@ -93,7 +93,8 @@ export default {
         return {
             links: {
                 'conversations': { name: 'conversations-list'},
-                'archive': { name: 'conversations-list-archived'}
+                'archive': { name: 'conversations-list-archived'},
+                'blacklists': { name: 'blacklists'}
             },
             listeners: []
         }

@@ -8,6 +8,7 @@ import Settings from '@/components/Settings.vue'
 import Thread from '@/components/Thread/'
 import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
+import Blacklists from '@/components/Blacklists'
 
 Vue.use(VueRouter)
 
@@ -52,6 +53,11 @@ let router = new VueRouter({
             path: '/settings',
             name: 'settings',
             component: Settings,
+        },
+        {
+            path: '/blacklists',
+            name: 'blacklists',
+            component: Blacklists,
         },
     ],
 })

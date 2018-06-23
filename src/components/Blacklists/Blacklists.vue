@@ -1,0 +1,136 @@
+<template>
+    <div id="blacklists-list" class="page-content">
+
+        <!-- Spinner On load -->
+        <spinner class="spinner" v-if="blacklists.length == 0"></spinner>
+
+        <!-- Conversation items -->
+        <transition-group name="flip-list" tag="div">
+            <component v-for="blacklist in blacklists" :is="'BlacklistItem'" :blacklist-data="blacklist" :key="blacklist.hash"/>
+        </transition-group>
+
+        <button tag="button" class="create-blacklist mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="createBlacklist" :style="{ background: $store.state.colors_accent }" v-mdl>
+            <i class="material-icons md-light">add</i>
+        </button>
+    </div>
+</template>
+
+<script>
+import Vue from 'vue';
+import Hash from 'object-hash'
+import { Util, Api, SessionCache } from '@/utils'
+import BlacklistItem from './BlacklistItem.vue'
+import Spinner from '@/components/Spinner.vue'
+
+export default {
+    name: 'blacklists',
+
+    mounted () {
+        this.$store.state.msgbus.$on('refresh-btn', this.refresh);
+
+        this.fetchBlacklists();
+
+        if (!this.small) {
+            // Construct colors object from saved global theme
+            const colors = {
+                'default': this.$store.state.theme_global_default,
+                'dark': this.$store.state.theme_global_dark,
+                'accent': this.$store.state.theme_global_accent,
+            };
+
+            // Commit them to current application colors
+            this.$store.commit('colors', colors);
+        }
+    },
+
+    beforeDestroy () {
+        // when coming from a thread, back to the conversation list, this beforeDestory
+        // was getting called after the mounted callback, which erased the bus functionality.
+        // when it is mounted, it is overriding the old action, anyways.
+
+        if (!this.small) {
+            this.$store.state.msgbus.$off('refresh-btn');
+        }
+    },
+
+    methods: {
+
+        fetchBlacklists () {
+            Api.fetchBlacklists()
+                .then(response => this.processBlacklists(response));
+        },
+
+        processBlacklists (response) {
+            const renderList = [];
+
+            for(let i = 0; i < response.length; i++) {
+                const item = response[i];
+                item.hash = Hash(item);
+
+                renderList.push(item);
+            }
+
+            this.blacklists = renderList;
+
+            if (!this.small) {
+                this.$store.commit("loading", false);
+                this.$store.commit('title', this.title);
+            }
+        },
+
+        refresh () {
+            this.fetchBlacklists();
+        },
+
+        createBlacklist () {
+            // TODO: Add a new blacklist
+        }
+    },
+
+    data () {
+        return {
+            title: "Blacklist",
+            blacklists: [],
+        }
+    },
+
+    components: {
+        BlacklistItem,
+        Spinner
+    }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped>
+    @import "../../assets/scss/_vars.scss";
+
+    .create-blacklist {
+        position: fixed;
+        bottom: 0%;
+        right: 0%;
+        z-index: 3;
+        margin: 24px;
+    }
+
+    #blacklists-list {
+        width: 100%;
+        margin-top: 36px !important;
+
+        .spinner {
+            margin-top: 100px;
+        }
+    }
+
+    .flip-list-enter, .flip-list-leave-to	{
+        opacity: 0;
+    }
+
+    .flip-list-leave-active {
+        position: absolute;
+    }
+
+    .flip-list-move {
+        transition: transform $anim-time;
+    }
+</style>

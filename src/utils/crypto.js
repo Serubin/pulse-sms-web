@@ -93,7 +93,7 @@ export default class Crypto {
     /**
      * decryptContact
      *
-     * Decryptes message object
+     * Decryptes contact object
      * @param contact - contact object
      * @return decrypted contact or null
      */
@@ -109,6 +109,27 @@ export default class Crypto {
         }
 
         return contact;
+    }
+
+    /**
+     * decryptBlacklist
+     *
+     * Decryptes blacklist object
+     * @param blacklist - blacklist object
+     * @return decrypted blacklist or null
+     */
+    static decryptBlacklist (blacklist) {
+        try {
+            blacklist.phone_number = Crypto.decrypt(blacklist.phone_number);
+        } catch (err) {
+            return null;
+        }
+
+        if (blacklist.phone_number.length == 0) {
+            return null;
+        }
+
+        return blacklist;
     }
 
     /**

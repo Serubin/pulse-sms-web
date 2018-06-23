@@ -412,6 +412,28 @@ export default class Api {
         Vue.http.post(constructed_url);
     }
 
+    static fetchBlacklists () {
+        let constructed_url = Url.get('blacklists') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    response = response.data
+
+                    // Decrypt Conversations items
+                    for(let i = 0; i < response.length; i++) {
+                        const blacklist = Crypto.decryptBlacklist(response[i]);
+                        if (blacklist != null)
+                            response[i] = blacklist;
+                    }
+
+                    resolve(response);
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
     static createBlacklist (phone_number) {
         let request = {
             account_id: store.state.account_id,

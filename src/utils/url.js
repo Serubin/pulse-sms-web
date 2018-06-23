@@ -18,6 +18,8 @@ export default class Url {
         "websocket":            "stream",
         "media":                "media/",
         "contacts":             "contacts/simple/",
+        "blacklists":           "blacklists",
+        "remove_blacklist":     "blacklists/remove/",
         "create_blacklist":     "blacklists/add/",
     }
 
