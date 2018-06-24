@@ -6,7 +6,7 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="archive" :small="small" :key="conversation.hash"/>
+            <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="isArchive" :small="small" :key="conversation.hash"/>
         </transition-group>
 
         <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="{ background: $store.state.colors_accent }" v-if="!small" v-mdl>
@@ -26,9 +26,19 @@ import emojione from 'emojione'
 
 export default {
     name: 'conversations',
-    props: ['small', 'archive'],
+    props: ['small', 'index'],
 
     mounted () {
+        if (this.index == "index_private") {
+            let lastPasscodeEntry = this.$store.state.last_passcode_entry;
+
+            // no recent passcode entry
+            if (lastPasscodeEntry == null || lastPasscodeEntry < (Date.now() - (15 * 1000))) {
+                this.$router.push('/passcode');
+                return;
+            }
+        }
+
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
         this.$store.state.msgbus.$on('conversationRead', this.updateRead)
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations)
@@ -283,8 +293,8 @@ export default {
     },
 
     computed: {
-        index () {
-            return "index_" + ( this.archive ? "archived" : "unarchived" );
+        isArchive () {
+            return this.index == "index_archived";
         }
     },
 

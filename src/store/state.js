@@ -56,6 +56,7 @@ export const state = {
     offline: !navigator.onLine,
 
     last_ping: null,
+    last_passcode_entry: null,
 
     session_conversations: { },
     session_messages: { },
@@ -93,6 +94,7 @@ export const mutations = {
     loaded_media: (state, loaded_media) => state.loaded_media = loaded_media,
     media_sending: (state, media_sending) => state.media_sending = media_sending,
     last_ping: (state, last_ping) => state.last_ping = last_ping,
+    last_passcode_entry: (state, last_passcode_entry) => state.last_passcode_entry = last_passcode_entry,
     session_conversations: (state, session_conversations) => state.session_conversations = session_conversations,
     session_messages: (state, session_messages) => state.session_messages = session_messages,
     theme_global: (state, colors) => {

@@ -195,14 +195,18 @@ export default class Api {
                 Vue.http.get( constructed_url )
                     .then(response => {
                         response = response.data
-                        // Decrypt Conversations items
-                        for(let i = 0; i < response.length; i++) {
-                            const convo = Crypto.decryptConversation(response[i]);
-                            if (convo != null)
-                                response[i] = convo;
-                        }
 
-                        SessionCache.putConversations(response, index);
+                        if (response != null) {
+                            // Decrypt Conversations items
+                            for(let i = 0; i < response.length; i++) {
+                                const convo = Crypto.decryptConversation(response[i]);
+                                if (convo != null)
+                                    response[i] = convo;
+                            }
+
+                            SessionCache.putConversations(response, index);
+                        }
+                        
                         resolve(response); // Resolve response
                     })
                     .catch( response => Api.rejectHandler(response, reject) );

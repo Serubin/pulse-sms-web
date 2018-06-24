@@ -6,13 +6,25 @@
                     <li id="conversations-link" @click="routeTo('conversations')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon conversations">
-                        Conversations
+                            Conversations
+                        </div>
+                    </li>
+                    <li id="private-link" @click="routeTo('private')">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon private">
+                            Private Conversations
                         </div>
                     </li>
                     <li id="archive-link" @click="routeTo('archive')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon archive">
                             Archive
+                        </div>
+                    </li>
+                    <li id="folder-link" @click="routeTo('folders')">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon folders">
+                            Folders
                         </div>
                     </li>
                     <li id="scheduled-messages-link" @click="routeTo">
@@ -94,7 +106,9 @@ export default {
             links: {
                 'conversations': { name: 'conversations-list'},
                 'archive': { name: 'conversations-list-archived'},
-                'blacklists': { name: 'blacklists'}
+                'blacklists': { name: 'blacklists'},
+                'private': { name: 'conversations-list-private' },
+                'folders': { name: 'folders' }
             },
             listeners: []
         }
@@ -169,6 +183,14 @@ export default {
 
             &.archive {
                 background: url(../assets/images/vector/archive-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.private {
+                background: url(../assets/images/vector/private-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.folders {
+                background: url(../assets/images/vector/folder-dark.svg) 0 0 no-repeat !important;
             }
 
             &.blacklist {
@@ -246,6 +268,14 @@ export default {
 
                     &.archive {
                         background: url(../assets/images/vector/archive.svg) 0 0 no-repeat;
+                    }
+
+                    &.private {
+                        background: url(../assets/images/vector/private.svg) 0 0 no-repeat;
+                    }
+
+                    &.folders {
+                        background: url(../assets/images/vector/folder.svg) 0 0 no-repeat;
                     }
 
                     &.scheduled_messages {

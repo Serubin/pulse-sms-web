@@ -5,6 +5,7 @@ import store from '@/store/'
 
 import Login from '@/components/Login.vue'
 import Settings from '@/components/Settings.vue'
+import Passcode from '@/components/Passcode.vue'
 import Thread from '@/components/Thread/'
 import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
@@ -19,13 +20,19 @@ let router = new VueRouter({
             path: '/',
             name: 'conversations-list',
             component: Conversations,
-            props: { 'archive': false, 'small': false },
+            props: { 'index': 'index_unarchived', 'small': false },
         },
         {
             path: '/archived',
             name: 'conversations-list-archived',
             component: Conversations,
-            props: { 'archive': true, 'small': false },
+            props: { 'index': 'index_archived', 'small': false },
+        },
+        {
+            path: '/private',
+            name: 'conversations-list-private',
+            component: Conversations,
+            props: { 'index': 'index_private', 'small': false },
         },
         {
             path: '/thread/:threadId',
@@ -63,6 +70,11 @@ let router = new VueRouter({
             path: '/create-blacklist',
             name: 'create-blacklist',
             component: CreateBlacklist,
+        },
+        {
+            path: '/passcode',
+            name: 'passcode',
+            component: Passcode,
         },
     ],
 })
