@@ -1,12 +1,20 @@
 <template>
-    <div>
-        <div class="item" :id="id" v-mdl @click="menu.toggle()">{{ data }}</div>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="message-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="editMessage">Edit Message</li>
-            <li class="mdl-menu__item" @click="deleteMessage">Delete Message</li>
-        </ul>
-    </div>
+  <div class="message-wrapper" :title="stringTime">
+      <!-- <transition name="fade"> -->
+          <div class="message scheduled" :id="id">
+              <div><b>{{ to }}</b><br/></div>
+              <div>{{ data }}</div>
+          </div>
+          <div class="date-wrapper">
+              <div class="date mdl-color-text--grey-500">{{ stringTime }}</div>
+          </div>
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
+              id="message-menu" :data-mdl-for="id">
+              <li class="mdl-menu__item" @click="editMessage">Edit Message</li>
+              <li class="mdl-menu__item" @click="deleteMessage">Delete Message</li>
+          </ul>
+      <!-- </transition> -->
+  </div>
 </template>
 
 <script>
@@ -31,7 +39,7 @@ export default {
             to: this.messageData.to,
             data: this.messageData.data,
             title: this.messageData.title,
-            time: this.messageData.time,
+            timestamp: this.messageData.timestamp,
             mime_type: this.messageData.mime_type,
             menu: null,
         }
@@ -51,6 +59,12 @@ export default {
         }
     },
 
+    computed: {
+        stringTime () {
+            return new Date(this.timestamp).toLocaleString()
+        }
+    }
+
 }
 </script>
 
@@ -58,23 +72,81 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
 
-    body.dark {
-        .item:hover {
-        	  background: #202020;
+    .date-wrapper {
+        clear: both;
+
+        .date {
+            float: right;
+            margin-right: 36px;
         }
     }
 
-    .item {
-    	height: 40px;
-    	line-height: 40px;
-    	width: 100%;
-    	padding-left: 16px;
+    .message-wrapper {
+        user-select: text;
+        clear: both;
+        display: block;
+
+        .message {
+            position: relative;
+            padding: 16px;
+            margin: 4px 8px 4px 8px;
+            max-width: 310px;
+            border-radius: 15px;
+            box-shadow: -1px 2px 4px rgba(0, 0, 0, .1);
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            min-width: 18px;
+        }
+
+        .message:after {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            border-style: solid;
+            display: block;
+            top: 0px;
+            bottom: auto;
+        }
+
+        .scheduled {
+            float: right;
+            color: black;
+            margin-right: 28px;
+            background: #fff;
+
+            &:after {
+                right: -8px;
+                border-width: 15px 10px 0 0;
+                border-color: #fff transparent;
+            }
+
+            a {
+                color: black;
+            }
+        }
+
+        @media screen and (min-width: 600px) {
+            .message {
+                max-width: 372px;
+            }
+        }
+
+        @media screen and (min-width: 720px) {
+            .message {
+                max-width: 436px;
+            }
+        }
     }
 
-    .item:hover {
-    	background: #E0E0E0;
-    	cursor: pointer;
-    }
+    body.dark {
+        .scheduled {
+            background: $bg-darker;
+            color: #fff;
 
+            &:after {
+                border-color: $bg-darker transparent;
+            }
+        }
+    }
 
 </style>

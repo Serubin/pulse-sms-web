@@ -37,7 +37,7 @@ import Spinner from '@/components/Spinner.vue'
 
 export default {
     name: 'create-scheduled-message',
-    props: [ 'messageId' ],
+    props: [ 'message_id' ],
 
     mounted () {
         this.$store.commit("loading", false);
@@ -60,7 +60,7 @@ export default {
 
             this.loading = true;
 
-            Api.removeScheduledMessage(this.messageId)
+            Api.removeScheduledMessage(this.message_id)
             Api.createScheduledMessage(this.to, this.message, Date.now(), "Title")
                 .then((data) => this.handleCreated(data.data));
         },
