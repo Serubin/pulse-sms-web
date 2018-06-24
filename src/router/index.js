@@ -9,6 +9,7 @@ import Passcode from '@/components/Passcode.vue'
 import Thread from '@/components/Thread/'
 import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
+import Folders from '@/components/Folders/'
 import { Blacklists, CreateBlacklist } from '@/components/Blacklists/'
 
 Vue.use(VueRouter)
@@ -33,6 +34,12 @@ let router = new VueRouter({
             name: 'conversations-list-private',
             component: Conversations,
             props: { 'index': 'index_private', 'small': false },
+        },
+        {
+            path: '/folder/:folderId',
+            name: 'conversations-list-folder',
+            component: Conversations,
+            props: true,
         },
         {
             path: '/thread/:threadId',
@@ -60,6 +67,11 @@ let router = new VueRouter({
             path: '/settings',
             name: 'settings',
             component: Settings,
+        },
+        {
+            path: '/folders',
+            name: 'folders',
+            component: Folders,
         },
         {
             path: '/blacklists',

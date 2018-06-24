@@ -1,34 +1,30 @@
 <template>
-    <div id="blacklists-list" class="page-content">
+    <div id="folders-list" class="page-content">
 
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="blacklists.length == 0"></spinner>
+        <spinner class="spinner" v-if="folders.length == 0"></spinner>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="blacklist in blacklists" :is="'BlacklistItem'" :blacklist-data="blacklist" :key="blacklist.hash"/>
+            <component v-for="folder in folders" :is="'FolderItem'" :folder-data="folder" :key="folder.hash"/>
         </transition-group>
-
-        <button tag="button" class="create-blacklist mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="createBlacklist" :style="{ background: $store.state.colors_accent }" v-mdl>
-            <i class="material-icons md-light">add</i>
-        </button>
     </div>
 </template>
 
 <script>
 import Vue from 'vue';
 import Hash from 'object-hash'
-import { Util, Api, SessionCache } from '@/utils'
-import BlacklistItem from './BlacklistItem.vue'
+import { Util, Api } from '@/utils'
+import FolderItem from './FolderItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'blacklists',
+    name: 'folders',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
-        this.fetchBlacklists();
+        this.fetchFolders();
 
         // Construct colors object from saved global theme
         const colors = {
@@ -47,12 +43,12 @@ export default {
 
     methods: {
 
-        fetchBlacklists () {
-            Api.fetchBlacklists()
-                .then(response => this.processBlacklists(response));
+        fetchFolders () {
+            Api.fetchFolders()
+                .then(response => this.processFolders(response));
         },
 
-        processBlacklists (response) {
+        processFolders (response) {
             const renderList = [];
 
             for(let i = 0; i < response.length; i++) {
@@ -62,30 +58,26 @@ export default {
                 renderList.push(item);
             }
 
-            this.blacklists = renderList;
+            this.folders = renderList;
 
             this.$store.commit("loading", false);
             this.$store.commit('title', this.title);
         },
 
         refresh () {
-            this.fetchBlacklists();
-        },
-
-        createBlacklist () {
-            this.$router.push({ name: 'create-blacklist'});
+            this.fetchFolders();
         }
     },
 
     data () {
         return {
-            title: "Blacklist",
-            blacklists: [],
+            title: "Folders",
+            folders: [],
         }
     },
 
     components: {
-        BlacklistItem,
+        FolderItem,
         Spinner
     }
 }
@@ -95,15 +87,7 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
 
-    .create-blacklist {
-        position: fixed;
-        bottom: 0%;
-        right: 0%;
-        z-index: 3;
-        margin: 24px;
-    }
-
-    #blacklists-list {
+    #folders-list {
         width: 100%;
         margin-top: 36px !important;
 

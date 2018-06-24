@@ -26,7 +26,7 @@ import emojione from 'emojione'
 
 export default {
     name: 'conversations',
-    props: ['small', 'index'],
+    props: ['small', 'index', 'folderId', 'folderName'],
 
     mounted () {
         if (this.index == "index_private") {
@@ -75,7 +75,7 @@ export default {
 
         fetchConversations () {
             // Start query
-            Api.fetchConversations(this.index)
+            Api.fetchConversations(this.index, this.folderId)
                 .then(response => this.processConversations(response));
         },
 
@@ -125,7 +125,7 @@ export default {
 
             if (!this.small) {
                 this.$store.commit("loading", false);
-                this.$store.commit('title', this.title);
+                this.$store.commit('title', this.index == 'folder' ? this.folderName : this.title);
             }
 
         },

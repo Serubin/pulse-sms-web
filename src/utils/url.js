@@ -7,6 +7,7 @@ export default class Url {
         "messages":             "messages/",
         "add_message":          "messages/add/",
         "new_thread":           "messages/forward_to_phone",
+        "folders":              "folders/",
         "conversations":        "conversations/",
         "update_conversation":  "conversations/update/",
         "read":                 "conversations/read/",

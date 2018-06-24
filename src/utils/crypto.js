@@ -125,11 +125,24 @@ export default class Crypto {
             return null;
         }
 
-        if (blacklist.phone_number.length == 0) {
+        return blacklist;
+    }
+
+    /**
+     * decryptFolder
+     *
+     * Decryptes folder object
+     * @param folder - folder object
+     * @return decrypted folder or null
+     */
+    static decryptFolder (folder) {
+        try {
+            folder.name = Crypto.decrypt(folder.name);
+        } catch (err) {
             return null;
         }
 
-        return blacklist;
+        return folder;
     }
 
     /**

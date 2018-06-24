@@ -150,8 +150,8 @@ export default {
             return this.$store.state.full_theme;
         },
         showConversations () {
-            return this.$route.name.indexOf('conversations-list') < 0
-            && this.$store.state.account_id != '';
+            return this.$route.name != 'conversations-list'
+                && this.$store.state.account_id != '';
         }
     },
 

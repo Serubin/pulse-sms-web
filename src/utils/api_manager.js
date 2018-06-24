@@ -186,8 +186,12 @@ export default class Api {
         return promise
     }
 
-    static fetchConversations (index) {
-        const constructed_url =
+    static fetchConversations (index, folderId) {
+        if (index == 'folder') {
+            index = index + "/" + folderId;
+        }
+
+        let constructed_url =
             Url.get('conversations') + index + Url.getAccountParam() + "&limit=75"
 
         const promise = new Promise((resolve, reject) => {
@@ -206,7 +210,7 @@ export default class Api {
 
                             SessionCache.putConversations(response, index);
                         }
-                        
+
                         resolve(response); // Resolve response
                     })
                     .catch( response => Api.rejectHandler(response, reject) );
@@ -416,6 +420,28 @@ export default class Api {
         Vue.http.post(constructed_url);
     }
 
+    static fetchFolders () {
+        let constructed_url = Url.get('folders') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    response = response.data
+
+                    // Decrypt Folder items
+                    for(let i = 0; i < response.length; i++) {
+                        const folder = Crypto.decryptFolder(response[i]);
+                        if (folder != null)
+                            response[i] = folder;
+                    }
+
+                    resolve(response);
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
     static fetchBlacklists () {
         let constructed_url = Url.get('blacklists') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
@@ -423,7 +449,7 @@ export default class Api {
                 .then( response => {
                     response = response.data
 
-                    // Decrypt Conversations items
+                    // Decrypt Blacklist items
                     for(let i = 0; i < response.length; i++) {
                         const blacklist = Crypto.decryptBlacklist(response[i]);
                         if (blacklist != null)
