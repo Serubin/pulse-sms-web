@@ -8,7 +8,7 @@
           <div class="date-wrapper">
               <div class="date mdl-color-text--grey-500">{{ stringTime }}</div>
           </div>
-          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--right"
               id="message-menu" :data-mdl-for="id">
               <li class="mdl-menu__item" @click="editMessage">Edit Message</li>
               <li class="mdl-menu__item" @click="deleteMessage">Delete Message</li>
