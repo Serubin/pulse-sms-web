@@ -172,7 +172,7 @@ export default {
 
             // Populate the dropdown menu
             this.populateMenuItems();
-            
+
             // Setup and store the medialoader (MMS)
             this.$store.commit('media_loader', new MediaLoader());
 
@@ -563,6 +563,7 @@ export default {
         #toolbar-title {
             white-space: nowrap;
             overflow: hidden;
+            height: 48px;
         }
 
         @media screen and (min-width: 150px) {

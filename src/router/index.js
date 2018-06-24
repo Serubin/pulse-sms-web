@@ -11,6 +11,7 @@ import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
 import Folders from '@/components/Folders/'
 import { Blacklists, CreateBlacklist } from '@/components/Blacklists/'
+import { ScheduledMessages, CreateScheduledMessage, EditScheduledMessage } from '@/components/ScheduledMessages/'
 
 Vue.use(VueRouter)
 
@@ -79,7 +80,7 @@ let router = new VueRouter({
             component: Blacklists,
         },
         {
-            path: '/create-blacklist',
+            path: '/blacklists/new',
             name: 'create-blacklist',
             component: CreateBlacklist,
         },
@@ -88,6 +89,22 @@ let router = new VueRouter({
             name: 'passcode',
             component: Passcode,
         },
+        {
+            path: '/scheduled',
+            name: 'scheduled-messages',
+            component: ScheduledMessages
+        },
+        {
+            path: '/scheduled/new',
+            name: 'create-scheduled-message',
+            component: CreateScheduledMessage
+        },
+        {
+            path: '/scheduled/edit/:message_id',
+            name: 'edit-scheduled-message',
+            component: EditScheduledMessage,
+            props: true
+        }
     ],
 })
 

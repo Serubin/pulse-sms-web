@@ -27,7 +27,7 @@
                             Folders
                         </div>
                     </li>
-                    <li id="scheduled-messages-link" @click="routeTo">
+                    <li id="scheduled-messages-link" @click="routeTo('scheduled')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon scheduled_messages">
                             Scheduled Messages
@@ -108,7 +108,8 @@ export default {
                 'archive': { name: 'conversations-list-archived'},
                 'blacklists': { name: 'blacklists'},
                 'private': { name: 'conversations-list-private' },
-                'folders': { name: 'folders' }
+                'folders': { name: 'folders' },
+                'scheduled': { name: 'scheduled-messages' }
             },
             listeners: []
         }

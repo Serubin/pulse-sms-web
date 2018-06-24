@@ -22,6 +22,9 @@ export default class Url {
         "blacklists":           "blacklists",
         "remove_blacklist":     "blacklists/remove/",
         "create_blacklist":     "blacklists/add/",
+        "scheduled":            "scheduled_messages",
+        "remove_scheduled":     "scheduled_messages/remove/",
+        "create_scheduled":     "scheduled_messages/add/",
     }
 
     static getBaseUrl () {

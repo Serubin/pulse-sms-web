@@ -146,6 +146,26 @@ export default class Crypto {
     }
 
     /**
+     * decryptScheduledMessage
+     *
+     * Decryptes scheduled message object
+     * @param message - scheduled message object
+     * @return decrypted scheduled message or null
+     */
+    static decryptScheduledMessage (message) {
+        try {
+            message.title = Crypto.decrypt(message.title);
+            message.to = Crypto.decrypt(message.to);
+            message.data = Crypto.decrypt(message.data);
+            message.mime_type = Crypto.decrypt(message.mime_type);
+        } catch (err) {
+            return null;
+        }
+
+        return message;
+    }
+
+    /**
      * decrypt
      *
      * Decrypts encoded and encrypted string using stored aes
