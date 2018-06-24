@@ -186,6 +186,17 @@ export default class Api {
         return promise
     }
 
+    static fetchAccount () {
+        const constructed_url = Url.get('account_stats') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get(constructed_url)
+                .then((response) => resolve(response))
+                .catch((error) =>reject(error));
+        });
+
+        return promise
+    }
+
     static fetchConversations (index, folderId) {
         if (index == 'folder') {
             index = index + "/" + folderId;

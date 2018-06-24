@@ -119,6 +119,7 @@ export default {
 
         // Setup global button listeners
         this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
+        this.$store.state.msgbus.$on('account-btn', () => this.$router.push('/account'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
 
         // Request notification permissions if setting is on.

@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import store from '@/store/'
 
 import Login from '@/components/Login.vue'
+import Account from '@/components/Account.vue'
 import Settings from '@/components/Settings.vue'
 import Passcode from '@/components/Passcode.vue'
 import Thread from '@/components/Thread/'
@@ -63,6 +64,11 @@ let router = new VueRouter({
             path: '/login',
             name: 'login',
             component: Login,
+        },
+        {
+            path: '/account',
+            name: 'account',
+            component: Account,
         },
         {
             path: '/settings',

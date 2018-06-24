@@ -3,6 +3,7 @@ import store from '@/store'
 export default class Url {
     static urls = {
         "login":                "accounts/login/",
+        "account_stats":        "accounts/count",
         "update_setting":       "accounts/update_setting",
         "messages":             "messages/",
         "add_message":          "messages/add/",
