@@ -166,6 +166,24 @@ export default class Crypto {
     }
 
     /**
+     * decryptDraft
+     *
+     * Decrypts draft object
+     * @param draft - draft object
+     * @return decrypted draft or null
+     */
+    static decryptDraft (draft) {
+        try {
+            draft.mime_type = Crypto.decrypt(draft.mime_type);
+            draft.data = Crypto.decrypt(draft.data);
+        } catch (err) {
+            return null;
+        }
+
+        return draft;
+    }
+
+    /**
      * decrypt
      *
      * Decrypts encoded and encrypted string using stored aes

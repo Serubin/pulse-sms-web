@@ -10,7 +10,7 @@ import Thread from '@/components/Thread/'
 import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
 import Folders from '@/components/Folders/'
-import Account from '@/components/Account/'
+import { Account, Drafts } from '@/components/Account/'
 import { Blacklists, CreateBlacklist } from '@/components/Blacklists/'
 import { ScheduledMessages, CreateScheduledMessage, EditScheduledMessage } from '@/components/ScheduledMessages/'
 
@@ -66,11 +66,6 @@ let router = new VueRouter({
             component: Login,
         },
         {
-            path: '/account',
-            name: 'account',
-            component: Account,
-        },
-        {
             path: '/settings',
             name: 'settings',
             component: Settings,
@@ -110,7 +105,17 @@ let router = new VueRouter({
             name: 'edit-scheduled-message',
             component: EditScheduledMessage,
             props: true
-        }
+        },
+        {
+            path: '/account',
+            name: 'account',
+            component: Account,
+        },
+        {
+            path: '/drafts',
+            name: 'drafts',
+            component: Drafts,
+        },
     ],
 })
 

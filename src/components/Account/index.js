@@ -1,3 +1,7 @@
 import Account from './Account.vue'
+import Drafts from './Drafts/Drafts.vue'
 
-export default Account
+export {
+    Account,
+    Drafts
+}

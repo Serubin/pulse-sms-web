@@ -3,7 +3,6 @@ import store from '@/store'
 export default class Url {
     static urls = {
         "login":                "accounts/login/",
-        "account_stats":        "accounts/count",
         "update_setting":       "accounts/update_setting",
         "messages":             "messages/",
         "add_message":          "messages/add/",
@@ -26,6 +25,9 @@ export default class Url {
         "scheduled":            "scheduled_messages",
         "remove_scheduled":     "scheduled_messages/remove/",
         "create_scheduled":     "scheduled_messages/add/",
+        "account_stats":        "accounts/count",
+        "drafts":               "drafts",
+        "remove_draft":         "drafts/remove/",
     }
 
     static getBaseUrl () {

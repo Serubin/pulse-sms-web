@@ -186,18 +186,11 @@ export default class Api {
         return promise
     }
 
-    static fetchAccount () {
-        const constructed_url = Url.get('account_stats') + Url.getAccountParam();
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
-                .then((response) => resolve(response))
-                .catch((error) =>reject(error));
-        });
-
-        return promise
-    }
-
     static fetchConversations (index, folderId) {
+        if (typeof index == 'undefined') {
+            index = "index_unarchived"
+        }
+
         if (index == 'folder') {
             index = index + "/" + folderId;
         }
@@ -543,6 +536,44 @@ export default class Api {
         });
 
         return promise;
+    }
+
+    static fetchAccount () {
+        const constructed_url = Url.get('account_stats') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get(constructed_url)
+                .then((response) => resolve(response))
+                .catch((error) =>reject(error));
+        });
+
+        return promise
+    }
+
+    static fetchDrafts () {
+        let constructed_url = Url.get('drafts') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    response = response.data
+
+                    // Decrypt draft items
+                    for(let i = 0; i < response.length; i++) {
+                        const draft = Crypto.decryptDraft(response[i]);
+                        if (draft != null)
+                            draft[i] = draft;
+                    }
+
+                    resolve(response);
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
+    static removeDraftForConversation (conversation_id) {
+        let constructed_url = Url.get('remove_draft') + conversation_id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
     }
 
     static fetchSettings () {
