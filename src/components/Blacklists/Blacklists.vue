@@ -83,7 +83,7 @@ export default {
         },
 
         createBlacklist () {
-            // TODO: Add a new blacklist
+            this.$router.push({ name: 'create-blacklist'});
         }
     },
 

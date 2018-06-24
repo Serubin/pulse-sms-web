@@ -447,7 +447,13 @@ export default class Api {
         };
 
         let constructed_url = Url.get('create_blacklist');
-        Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'});
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+                .then(response => { resolve(response); });
+        });
+
+        return promise;
     }
 
     static fetchSettings () {

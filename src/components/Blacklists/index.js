@@ -1,3 +1,7 @@
 import Blacklists from './Blacklists.vue'
+import CreateBlacklist from './CreateBlacklist.vue'
 
-export default Blacklists;
+export {
+    Blacklists,
+    CreateBlacklist
+}
