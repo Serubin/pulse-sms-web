@@ -6,7 +6,7 @@
         <div class="mdl-card__supporting-text">
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" type="password" id="passcode" v-model="passcode" autofocus/>
+                    <input class="mdl-textfield__input" type="password" id="passcode" v-model="passcode" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="continueClicked"/>
                     <label class="mdl-textfield__label" for="passcode">Passcode</label>
                 </div>
             </form>
