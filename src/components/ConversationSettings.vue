@@ -116,14 +116,14 @@ export default {
 
             this.colors = {
                 default: data.color,
-                dark: data.color_dark,
-                accent: data.color_accent
+                dark: Util.expandColor(data.color_dark),
+                accent: Util.expandColor(data.color_accent)
             }
 
             this.hex = {
-                default: this.rgbaToHex(data.color),
-                dark: this.rgbaToHex(data.color_dark),
-                accent: this.rgbaToHex(data.color_accent)
+                default: this.rgbaToHex(this.colors.default),
+                dark: this.rgbaToHex(this.colors.dark),
+                accent: this.rgbaToHex(this.colors.accent)
             }
 
             if (this.pin) {

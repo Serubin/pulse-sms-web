@@ -203,7 +203,7 @@ export default {
             // this is a problem because emojis are often more than one character
             // this.message = this.message.substr(0,start)
             //     + e.native + this.message.substr(end, this.message.length)
-            
+
             // it is safer to just insert the emojis at the end...
             this.message = this.message + e.native
 
