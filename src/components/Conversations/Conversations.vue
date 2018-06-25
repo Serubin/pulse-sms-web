@@ -29,16 +29,6 @@ export default {
     props: ['small', 'index', 'folderId', 'folderName'],
 
     mounted () {
-        if (this.index == "index_private") {
-            let lastPasscodeEntry = this.$store.state.last_passcode_entry;
-
-            // no recent passcode entry
-            if (lastPasscodeEntry == null || lastPasscodeEntry < (Date.now() - (15 * 1000))) {
-                this.$router.push('/passcode');
-                return;
-            }
-        }
-
         this.$store.state.msgbus.$on('newMessage', this.updateConversation)
         this.$store.state.msgbus.$on('conversationRead', this.updateRead)
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations)
@@ -74,6 +64,16 @@ export default {
     methods: {
 
         fetchConversations () {
+            if (this.index == "index_private") {
+                let lastPasscodeEntry = this.$store.state.last_passcode_entry;
+
+                // no recent passcode entry
+                if (lastPasscodeEntry == null || lastPasscodeEntry < (Date.now() - (15 * 1000))) {
+                    this.$router.push('/passcode');
+                    return;
+                }
+            }
+
             // Start query
             Api.fetchConversations(this.index, this.folderId)
                 .then(response => this.processConversations(response));

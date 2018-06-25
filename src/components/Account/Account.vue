@@ -58,7 +58,7 @@ export default {
 
     methods: {
         fetchAccount () {
-            Api.fetchAccount().then(response => this.account_counts = response.data);
+            Api.fetchAccount().then(response => this.processAccount(response));
         },
 
         processAccount (response) {
@@ -94,6 +94,12 @@ export default {
 
     .click-item:hover {
         cursor: pointer;
+    }
+
+    body.dark {
+        .item:hover, .click-item:hover {
+            background: #202020;
+        }
     }
 
 </style>

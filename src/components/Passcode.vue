@@ -21,7 +21,7 @@
 <script>
 
 import Vue from 'vue'
-import { Crypto, Url, Api } from '@/utils/'
+import { Crypto, Util, Api } from '@/utils/'
 
 export default {
     name: 'passcode',
@@ -29,19 +29,26 @@ export default {
     mounted () {
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
+
+        Api.fetchSettings().then(response => {
+            this.stored_passcode = Crypto.decrypt(response.data.passcode);
+        })
     },
 
     data () {
         return {
             title: "",
-            passcode: ""
+            passcode: "",
+            stored_passcode: null
         }
     },
 
     methods: {
         continueClicked () {
-            if (this.passcode == '')
+            if (this.passcode != this.stored_passcode) {
+                Util.snackbar("Incorrect passcode.");
                 return;
+            }
 
             this.$store.commit('last_passcode_entry', Date.now());
             this.$router.push({ name: 'conversations-list-private'});

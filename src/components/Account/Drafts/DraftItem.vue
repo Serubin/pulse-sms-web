@@ -52,12 +52,6 @@ export default {
 <style lang="scss" scoped>
     @import "../../../assets/scss/_vars.scss";
 
-    body.dark {
-        .item:hover {
-        	  background: #202020;
-        }
-    }
-
     .item, .click-item {
         position: relative;
         width: 100%;
@@ -72,6 +66,11 @@ export default {
     .click-item:hover {
         cursor: pointer;
     }
-
+    
+    body.dark {
+        .item:hover, .click-item:hover {
+            background: #202020;
+        }
+    }
 
 </style>
