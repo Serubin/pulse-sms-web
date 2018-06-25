@@ -29,6 +29,15 @@ export default class SessionCache {
             }
         }
 
+        conversations = SessionCache.getConversations('index_private')
+        if (conversations != null) {
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == conversation_id) {
+                    return conversations[i];
+                }
+            }
+        }
+
         return null;
     }
 
