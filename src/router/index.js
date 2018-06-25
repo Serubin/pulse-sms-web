@@ -6,6 +6,7 @@ import store from '@/store/'
 import Login from '@/components/Login.vue'
 import Settings from '@/components/Settings.vue'
 import Passcode from '@/components/Passcode.vue'
+import HelpFeedback from '@/components/HelpFeedback.vue'
 import Thread from '@/components/Thread/'
 import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
@@ -105,6 +106,11 @@ let router = new VueRouter({
             name: 'edit-scheduled-message',
             component: EditScheduledMessage,
             props: true
+        },
+        {
+            path: '/help_feedback',
+            name: 'help-feedback',
+            component: HelpFeedback,
         },
         {
             path: '/account',

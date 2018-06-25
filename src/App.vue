@@ -120,6 +120,7 @@ export default {
         // Setup global button listeners
         this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
         this.$store.state.msgbus.$on('account-btn', () => this.$router.push('/account'));
+        this.$store.state.msgbus.$on('help-feedback-btn', () => this.$router.push('/help_feedback'));
         this.$store.state.msgbus.$on('logout-btn', this.logout);
 
         // Request notification permissions if setting is on.
@@ -251,7 +252,7 @@ export default {
             const items = [ ]
 
             // On thread add Delete, Blacklist, & Archive/unarchive
-            if (this.$route.name.includes('thread'))
+            if (this.$route.name.includes('thread')) {
                 items.unshift(
                     { "name": "conversation-information", 'title': "Conversation Information"},
                     { "name": "blacklist", 'title': "Blacklist Contact"},
@@ -261,15 +262,15 @@ export default {
                         {'name': "unarchive", 'title': "Unarchive Conversation" }),
                     { "name": "conversation-settings", 'title': "Conversation Settings"}
                 );
-            else  // Otherwise just Account & Help
+            } else {
                 items.unshift(
                     { 'name': "account", 'title': "My Account" },
-                    { 'name': "help", 'title': "Help and Feedback" },
+                    { 'name': "help-feedback", 'title': "Help and Feedback" },
                     { 'name': "settings", 'title': "Settings" },
                     { 'name': "logout", 'title': "Logout" }
                 )
+            }
 
-            // Set menu_items
             return this.menu_items = items;
         },
 
@@ -380,7 +381,7 @@ export default {
 
                 contacts_cache.push(contact_data);
             }
-            
+
             this.$store.commit('contacts', contacts_cache);
         },
 
