@@ -12,10 +12,10 @@
             <div class="click-item" v-mdl @click="routeTo('password')">Update Email or Password</div>
             <div class="click-item" v-mdl @click="routeTo('devices')">{{ account_counts.device_count }} Devices</div>
             <div class="click-item" v-mdl @click="routeTo('drafts')">{{ account_counts.draft_count }} Drafts</div>
-            <div class="click-item" v-mdl @click="routeTo('contact')">{{ account_counts.contact_count }} Contacts</div>
+            <div class="click-item" v-mdl @click="routeTo('contacts')">{{ account_counts.contact_count }} Contacts</div>
             <div class="click-item" v-mdl @click="routeTo('templates')">{{ account_counts.template_count }} Templates</div>
-            <div class="click-item" v-mdl @click="routeTo('auto_replies')">{{ account_counts.auto_reply_count }} Auto Replies</div>
-            <div class="click-item" v-mdl @click="routeTo('folders')">{{ account_counts.folder_count }} Folders</div>
+            <div class="click-item" v-mdl @click="routeTo('auto-replies')">{{ account_counts.auto_reply_count }} Auto Replies</div>
+            <div class="click-item" v-mdl @click="routeTo('account-folders')">{{ account_counts.folder_count }} Folders</div>
         </div>
 
     </div>
@@ -67,7 +67,11 @@ export default {
         },
 
         routeTo (route) {
-
+            if (route == 'password') {
+                window.open('https://messenger.klinkerapps.com/forgot_password.html','_blank');
+            } else {
+                this.$router.push({ name: route });
+            }
         }
     },
 
