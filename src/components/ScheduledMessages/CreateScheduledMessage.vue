@@ -3,6 +3,7 @@
         <div class="mdl-card__title">
             <h2 class="mdl-card__title-text">Create Scheduled Message</h2>
         </div>
+
         <div class="mdl-card__supporting-text">
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
@@ -13,8 +14,11 @@
                     <input class="mdl-textfield__input" id="message" v-model="message" autofocus/>
                     <label class="mdl-textfield__label" for="message">Message text...</label>
                 </div>
+
+                Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
             </form>
         </div>
+
         <div class="mdl-card__actions mdl-card--border">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="create" @click="create">Create</button>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancel">Cancel</button>
@@ -32,7 +36,9 @@
 <script>
 
 import Vue from 'vue'
+import 'flatpickr/dist/flatpickr.css'
 import { Crypto, Url, Api } from '@/utils/'
+import FlatPickr from 'vue-flatpickr-component'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
@@ -49,6 +55,11 @@ export default {
             to: "",
             message: "",
             loading: false,
+            timestamp: Date.now(),
+            config: {
+                enableTime: true,
+                defaultDate: Math.floor(Date.now())
+            }
         }
     },
 
@@ -59,22 +70,23 @@ export default {
 
             this.loading = true;
 
-            Api.createScheduledMessage(this.to, this.message, Date.now(), "Title")
+            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), "Title")
                 .then((data) => this.handleCreated(data.data));
         },
 
         handleCreated () {
             this.loading = false;
-            this.$router.push({ name: 'scheduled'});
+            this.$router.push({ name: 'scheduled-messages'});
         },
 
         cancel () {
-            this.$router.push({ name: 'scheduled'});
+            this.$router.push({ name: 'scheduled-messages'});
         }
     },
 
     components: {
-        Spinner
+        Spinner,
+        FlatPickr
     }
 }
 </script>
@@ -88,6 +100,14 @@ export default {
         width: 330px;
         height: 100%;
         margin: 5em auto;
+    }
+
+    .time-picker {
+        border: transparent;
+        font-size: 15px;
+        margin-left: 12px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     .loading-center {

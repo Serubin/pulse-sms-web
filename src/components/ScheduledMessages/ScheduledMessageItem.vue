@@ -98,6 +98,10 @@ export default {
             min-width: 18px;
         }
 
+        .message:hover {
+            cursor: pointer;
+        }
+
         .message:after {
             position: absolute;
             bottom: -20px;
