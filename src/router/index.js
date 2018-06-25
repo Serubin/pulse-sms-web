@@ -152,7 +152,7 @@ let router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.name == null)
-        return next({name: 'Conversations-list'});
+        return next({name: 'conversations-list'});
 
     if (to.name == 'login')
         return next();
