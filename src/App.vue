@@ -10,6 +10,9 @@
                 <span class="mdl-layout-title" id="toolbar-title">{{ $store.state.title }}</span>
                 <div id="toolbar_icons" >
                     <transition-group name="list">
+                    <button id="search-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="$route.name == 'conversations-list'" key="search" @click="openUrl('https://messenger.klinkerapps.com/search.html');">
+                       <i class="material-icons">search</i>
+                    </button>
                     <button id="add-button" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="$route.path.indexOf('thread') != -1" key="add" @click="$router.push('/compose');">
                         <i class="material-icons material-icons-white">add</i>
                     </button>
@@ -385,6 +388,9 @@ export default {
             this.$store.commit('contacts', contacts_cache);
         },
 
+        openUrl (url) {
+            window.open(url, '_blank');
+        }
     },
 
     computed: {
