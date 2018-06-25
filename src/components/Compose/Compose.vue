@@ -105,14 +105,17 @@ export default {
         * @param data, contact request result
         */
         processContacts(response) {
-            const contains = [];
+            const matchers = [];
             const duplicates = [];
 
             for (let contact of response) {
-                if (contains.indexOf(contact.name) >= 0) {
+                let matcher = Util.createIdMatcher(contact.phone_number);
+                if (matchers.indexOf(matcher) >= 0) {
                     // Track duplicates and mark for removal
                     duplicates[duplicates.length] = contact.id;
                     continue;
+                } else {
+                    matcher[matchers.length] = matcher;
                 }
 
                 // Contacts by name, index
@@ -124,6 +127,20 @@ export default {
                     'name': contact.name,
                     'phone': contact.phone_number
                 };
+            }
+
+            // Sometimes, duplicate contacts come up. Not sure why this happens,
+            // so, we just delete the duplicates instead....
+            if (duplicates.length > 0) {
+                let idString = "";
+                for (var i = 0; i < duplicates.length && i < 100; i++) {
+                    idString += duplicates[i];
+                    if (i != duplicates.length - 1) {
+                        idString += ",";
+                    }
+                }
+
+                Api.removeContact(idString);
             }
         },
         processInput (e) {
