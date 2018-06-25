@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="page-content">
         <div id="compose-head" class="mdl-card" :style="matchListHeight">
             <div class="mdl-card__title">
                 <div id="chip-insert">
