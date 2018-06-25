@@ -12,7 +12,7 @@ import Conversations from '@/components/Conversations/'
 import Folders from '@/components/Folders/'
 import { Blacklists, CreateBlacklist } from '@/components/Blacklists/'
 import { ScheduledMessages, CreateScheduledMessage, EditScheduledMessage } from '@/components/ScheduledMessages/'
-import { Account, Drafts, Devices, Contacts } from '@/components/Account/'
+import { Account, Drafts, Devices, Contacts, Templates, AutoReplies, AccountFolders } from '@/components/Account/'
 
 Vue.use(VueRouter)
 
@@ -125,6 +125,21 @@ let router = new VueRouter({
             path: '/account/contacts',
             name: 'contacts',
             component: Contacts,
+        },
+        {
+            path: '/account/templates',
+            name: 'templates',
+            component: Templates,
+        },
+        {
+            path: '/account/autoreply',
+            name: 'auto-replies',
+            component: AutoReplies,
+        },
+        {
+            path: '/account/folders',
+            name: 'account-folders',
+            component: AccountFolders,
         },
     ],
 })

@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="menu.toggle()">
-            <div class="mdl-color-text--grey-900">{{ data }}</div>
-            <div class="mdl-color-text--grey-600">Type: {{ mime_type }}</div>
+            <div class="mdl-color-text--grey-900">{{ response }}</div>
+            <div class="mdl-color-text--grey-600">Type: {{ reply_type }}</div>
         </div>
         <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="draft-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteDraft">Delete</li>
+            id="reply-menu" :data-mdl-for="id">
+            <li class="mdl-menu__item" @click="deleteReply">Delete</li>
         </ul>
     </div>
 </template>
@@ -17,11 +17,11 @@ import store from '@/store/'
 import { Util, Api } from '@/utils'
 
 export default {
-    name: 'draft-item',
-    props: [ 'draftData' ],
+    name: 'auto-reply-item',
+    props: [ 'replyData' ],
 
     mounted () {
-        let menu_el = this.$el.querySelector("#draft-menu");
+        let menu_el = this.$el.querySelector("#reply-menu");
         componentHandler.upgradeElement(menu_el);
 
         this.menu = menu_el.MaterialMenu;
@@ -29,18 +29,17 @@ export default {
 
     data () {
         return {
-            id: this.draftData.device_id,
-            conversation_id: this.draftData.device_conversation_id,
-            data: this.draftData.data,
-            mime_type: this.draftData.mime_type,
+            id: this.replyData.device_id,
+            response: this.replyData.response,
+            reply_type: this.replyData.reply_type,
             menu: null,
         }
     },
 
     methods: {
-        deleteDraft () {
-            Util.snackbar("Deleted draft: " + this.data);
-            Api.removeDraftForConversation(this.conversation_id);
+        deleteReply () {
+            Util.snackbar("Deleted auto reply: " + this.response);
+            Api.removeAutoReply(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },
@@ -57,6 +56,11 @@ export default {
         width: 100%;
         padding: 12px;
         line-height: 18px;
+
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
     }
 
     .item:hover, .click-item:hover {

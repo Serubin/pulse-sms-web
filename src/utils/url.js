@@ -8,6 +8,7 @@ export default class Url {
         "add_message":          "messages/add/",
         "new_thread":           "messages/forward_to_phone",
         "folders":              "folders/",
+        "remove_folder":        "folders/remove/",
         "conversations":        "conversations/",
         "update_conversation":  "conversations/update/",
         "read":                 "conversations/read/",
@@ -31,6 +32,10 @@ export default class Url {
         "remove_draft":         "drafts/remove/",
         "devices":              "devices",
         "remove_device":        "devices/remove/",
+        "templates":            "templates",
+        "remove_template":      "templates/remove/",
+        "auto_replies":         "auto_replies",
+        "remove_auto_reply":    "auto_replies/remove/",
     }
 
     static getBaseUrl () {

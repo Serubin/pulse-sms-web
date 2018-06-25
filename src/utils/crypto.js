@@ -184,6 +184,40 @@ export default class Crypto {
     }
 
     /**
+     * decryptTemplate
+     *
+     * Decryptes template object
+     * @param template - template object
+     * @return decrypted template or null
+     */
+    static decryptTemplate (template) {
+        try {
+            template.text = Crypto.decrypt(template.text);
+        } catch (err) {
+            return null;
+        }
+
+        return template;
+    }
+
+    /**
+     * decryptAutoReply
+     *
+     * Decrypts auto reply object
+     * @param reply - auto reply object
+     * @return decrypted reply or null
+     */
+    static decryptAutoReply (reply) {
+        try {
+            reply.response = Crypto.decrypt(reply.response);
+        } catch (err) {
+            return null;
+        }
+
+        return reply;
+    }
+
+    /**
      * decrypt
      *
      * Decrypts encoded and encrypted string using stored aes

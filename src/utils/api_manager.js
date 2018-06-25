@@ -446,6 +446,11 @@ export default class Api {
         return promise
     }
 
+    static removeFolder (id) {
+        let constructed_url = Url.get('remove_folder') + id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+    }
+
     static fetchBlacklists () {
         let constructed_url = Url.get('blacklists') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
@@ -591,6 +596,60 @@ export default class Api {
 
     static removeDevice (id) {
         let constructed_url = Url.get('remove_device') + id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+    }
+
+    static fetchTemplates () {
+        let constructed_url = Url.get('templates') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    response = response.data
+
+                    // Decrypt template items
+                    for(let i = 0; i < response.length; i++) {
+                        const template = Crypto.decryptTemplate(response[i]);
+                        if (template != null)
+                            response[i] = template;
+                    }
+
+                    resolve(response);
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
+    static removeTemplate (id) {
+        let constructed_url = Url.get('remove_template') + id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+    }
+
+    static fetchAutoReplies () {
+        let constructed_url = Url.get('auto_replies') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then( response => {
+                    response = response.data
+
+                    // Decrypt reply items
+                    for(let i = 0; i < response.length; i++) {
+                        const reply = Crypto.decryptAutoReply(response[i]);
+                        if (reply != null)
+                            response[i] = reply;
+                    }
+
+                    resolve(response);
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
+    static removeAutoReply (id) {
+        let constructed_url = Url.get('remove_auto_reply') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 

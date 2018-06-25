@@ -2,7 +2,7 @@
     <div>
         <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="menu.toggle()">
             <div class="mdl-color-text--grey-900">{{ name }}</div>
-            <div class="mdl-color-text--grey-600">Id: {{ id }}</div>
+            <div class="mdl-color-text--grey-600">ID: {{ id }}</div>
         </div>
         <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
             id="device-menu" :data-mdl-for="id">
@@ -53,7 +53,7 @@ export default {
     .item, .click-item {
         position: relative;
         width: 100%;
-        padding: 8px;
+        padding: 12px;
         line-height: 18px;
     }
 
