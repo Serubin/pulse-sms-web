@@ -52,6 +52,8 @@ export default class Crypto {
         }
 
         convo.color = Util.expandColor(convo.color);
+        convo.color_dark = Util.expandColor(convo.color_dark);
+        convo.color_accent = Util.expandColor(convo.color_accent);
         convo.hash = Hash(convo);
 
         return convo;

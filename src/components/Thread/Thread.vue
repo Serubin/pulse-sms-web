@@ -565,8 +565,9 @@ export default {
          * Conversation Settings
          */
         conversationSettings () {
-            const constructed_url = "/conversation_settings/" + this.conversation_id;
-            this.$router.push(constructed_url);
+            this.$router.push({
+                name: 'conversation-settings', params: { conversation_title: this.conversation_data.name, conversation_id: this.conversation_id }
+            });
         },
 
         /**

@@ -226,6 +226,22 @@ export default class Api {
         return promise
     }
 
+    static fetchConversation (id) {
+        let constructed_url = Url.get('conversation') + id + Url.getAccountParam()
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then(response => {
+                    response = Crypto.decryptConversation(response.data);
+                    if (response != null) {
+                        resolve(response);
+                    }
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
     static fetchThread (conversation_id, offset = 0) {
         const limit = 70;
         const constructed_url =
@@ -333,6 +349,12 @@ export default class Api {
         }
 
         store.state.msgbus.$emit('newMessage', event_object);
+    }
+
+    static updateConversation(params, conversation_id) {
+        let constructed_url = Url.get('update_conversation') + conversation_id;
+        Vue.http.post(constructed_url, params, {'Content-Type': 'application/json'})
+            .catch(response => console.log(response));
     }
 
     static loadFile(file, compress=null) {

@@ -14,7 +14,7 @@
             </div>
             <!-- End Refresh settings button -->
 
-            <div class="item mdl-js-button mdl-js-ripple-effect" id="base-theme" @click="theme_menu.toggle()"> <!-- Base theme -->
+            <div class="click-item mdl-js-button mdl-js-ripple-effect" id="base-theme" @click="theme_menu.toggle()"> <!-- Base theme -->
                 <div class="mdl-color-text--grey-900">Base Theme</div>
                 <div class="mdl-color-text--grey-600">{{ base_theme }}</div>
             </div>
@@ -26,7 +26,7 @@
                 <li class="mdl-menu__item" @click="theme='dark'">Dark</li>
             </ul><!-- End Base Theme -->
 
-            <div class="item mdl-js-button mdl-js-ripple-effect" @click="color_dialog.showModal();"> <!-- Global Colors -->
+            <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="color_dialog.showModal();"> <!-- Global Colors -->
                 <div class="mdl-color-text--grey-900">Primary Color, Primary Color Dark, Accent Color</div>
                 <div class="mdl-color-text--grey-600">{{ global_colors }}</div>
             </div> <!-- End Global Colors -->
@@ -295,6 +295,14 @@ export default {
         width: 100%;
         padding: 16px;
         line-height: 18px;
+    }
+
+    .item:hover, .click-item:hover {
+    	  background: #E0E0E0;
+    }
+
+    .click-item:hover {
+        cursor: pointer;
     }
 
     dialog {

@@ -10,6 +10,7 @@ export default class Url {
         "folders":              "folders/",
         "remove_folder":        "folders/remove/",
         "conversations":        "conversations/",
+        "conversation":         "conversations/",
         "update_conversation":  "conversations/update/",
         "read":                 "conversations/read/",
         "archive":              "conversations/archive/",

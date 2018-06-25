@@ -5,6 +5,7 @@ import store from '@/store/'
 
 import Login from '@/components/Login.vue'
 import Settings from '@/components/Settings.vue'
+import ConversationSettings from '@/components/ConversationSettings.vue'
 import Passcode from '@/components/Passcode.vue'
 import HelpFeedback from '@/components/HelpFeedback.vue'
 import Thread from '@/components/Thread/'
@@ -70,6 +71,12 @@ let router = new VueRouter({
             path: '/settings',
             name: 'settings',
             component: Settings,
+        },
+        {
+            path: '/thread/:conversation_id/settings',
+            name: 'conversation-settings',
+            component: ConversationSettings,
+            props: true
         },
         {
             path: '/folders',
