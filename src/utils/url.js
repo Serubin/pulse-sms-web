@@ -19,6 +19,7 @@ export default class Url {
         "websocket":            "stream",
         "media":                "media/",
         "contacts":             "contacts/simple/",
+        "remove_contact":       "contacts/remove_ids/",
         "blacklists":           "blacklists",
         "remove_blacklist":     "blacklists/remove/",
         "create_blacklist":     "blacklists/add/",
@@ -28,6 +29,8 @@ export default class Url {
         "account_stats":        "accounts/count",
         "drafts":               "drafts",
         "remove_draft":         "drafts/remove/",
+        "devices":              "devices",
+        "remove_device":        "devices/remove/",
     }
 
     static getBaseUrl () {

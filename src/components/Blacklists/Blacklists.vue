@@ -105,7 +105,6 @@ export default {
 
     #blacklists-list {
         width: 100%;
-        margin-top: 36px !important;
 
         .spinner {
             margin-top: 100px;

@@ -560,7 +560,7 @@ export default class Api {
                     for(let i = 0; i < response.length; i++) {
                         const draft = Crypto.decryptDraft(response[i]);
                         if (draft != null)
-                            draft[i] = draft;
+                            response[i] = draft;
                     }
 
                     resolve(response);
@@ -573,6 +573,24 @@ export default class Api {
 
     static removeDraftForConversation (conversation_id) {
         let constructed_url = Url.get('remove_draft') + conversation_id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+    }
+
+    static fetchDevices () {
+        let constructed_url = Url.get('devices') + Url.getAccountParam();
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.get( constructed_url )
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
+        });
+
+        return promise
+    }
+
+    static removeDevice (id) {
+        let constructed_url = Url.get('remove_device') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
@@ -631,11 +649,40 @@ export default class Api {
         let constructed_url = Url.get("contacts") + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
             Vue.http.get( constructed_url )
-                .then( response => resolve(response) )
-                .catch( response => Api.rejectHandler(resposne, reject) );
+                .then( response => {
+                    response = response.data
+
+                    // Decrypt contact items
+                    for(let i = 0; i < response.length; i++) {
+                        const contact = Crypto.decryptContact(response[i]);
+                        if (contact != null)
+                            response[i] = contact;
+                    }
+
+                    response.sort(function(a, b) {
+                        var nameA = a.name.toUpperCase();
+                        var nameB = b.name.toUpperCase();
+
+                        if (nameA < nameB) {
+                            return -1;
+                        } else if (nameA > nameB) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    });
+
+                    resolve(response);
+                })
+                .catch( response => Api.rejectHandler(response, reject) );
         });
 
         return promise
+    }
+
+    static removeContact (id) {
+        let constructed_url = Url.get('remove_contact') + id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
     }
 
     static fetchImage (image_id) {

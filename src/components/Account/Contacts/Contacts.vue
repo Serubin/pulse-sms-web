@@ -1,12 +1,12 @@
 <template>
-    <div id="draft-list" class="page-content">
+    <div id="contact-list" class="page-content">
 
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="drafts.length == 0"></spinner>
+        <spinner class="spinner" v-if="contacts.length == 0"></spinner>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="draft in drafts" :is="'DraftItem'" :draft-data="draft" :key="draft.hash"/>
+            <component v-for="contact in contacts" :is="'ContactItem'" :contact-data="contact" :key="contact.hash"/>
         </transition-group>
     </div>
 </template>
@@ -15,16 +15,16 @@
 import Vue from 'vue';
 import Hash from 'object-hash'
 import { Util, Api } from '@/utils'
-import DraftItem from './DraftItem.vue'
+import ContactItem from './ContactItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'drafts',
+    name: 'contacts',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
-        this.fetchDrafts();
+        this.fetchContacts();
 
         // Construct colors object from saved global theme
         const colors = {
@@ -43,12 +43,12 @@ export default {
 
     methods: {
 
-        fetchDrafts () {
-            Api.fetchDrafts()
-                .then(response => this.processDrafts(response));
+        fetchContacts () {
+            Api.fetchContacts()
+                .then(response => this.processContacts(response));
         },
 
-        processDrafts (response) {
+        processContacts (response) {
             const renderList = [];
 
             for(let i = 0; i < response.length; i++) {
@@ -58,26 +58,26 @@ export default {
                 renderList.push(item);
             }
 
-            this.drafts = renderList;
+            this.contacts = renderList;
 
             this.$store.commit("loading", false);
             this.$store.commit('title', this.title);
         },
 
         refresh () {
-            this.fetchDrafts();
+            this.fetchContacts();
         }
     },
 
     data () {
         return {
-            title: "Drafts",
-            drafts: [],
+            title: "Contacts",
+            contacts: [],
         }
     },
 
     components: {
-        DraftItem,
+        ContactItem,
         Spinner
     }
 }
@@ -87,7 +87,7 @@ export default {
 <style lang="scss" scoped>
     @import "../../../assets/scss/_vars.scss";
 
-    #draft-list {
+    #contact-list {
         width: 100%;
 
         .spinner {

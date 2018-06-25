@@ -1,12 +1,12 @@
 <template>
-    <div id="draft-list" class="page-content">
+    <div id="device-list" class="page-content">
 
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="drafts.length == 0"></spinner>
+        <spinner class="spinner" v-if="devices.length == 0"></spinner>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="draft in drafts" :is="'DraftItem'" :draft-data="draft" :key="draft.hash"/>
+            <component v-for="device in devices" :is="'DeviceItem'" :device-data="device" :key="device.hash"/>
         </transition-group>
     </div>
 </template>
@@ -15,16 +15,16 @@
 import Vue from 'vue';
 import Hash from 'object-hash'
 import { Util, Api } from '@/utils'
-import DraftItem from './DraftItem.vue'
+import DeviceItem from './DeviceItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'drafts',
+    name: 'devices',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
-        this.fetchDrafts();
+        this.fetchDevices();
 
         // Construct colors object from saved global theme
         const colors = {
@@ -43,12 +43,12 @@ export default {
 
     methods: {
 
-        fetchDrafts () {
-            Api.fetchDrafts()
-                .then(response => this.processDrafts(response));
+        fetchDevices () {
+            Api.fetchDevices()
+                .then(response => this.processDevices(response));
         },
 
-        processDrafts (response) {
+        processDevices (response) {
             const renderList = [];
 
             for(let i = 0; i < response.length; i++) {
@@ -58,26 +58,26 @@ export default {
                 renderList.push(item);
             }
 
-            this.drafts = renderList;
+            this.devices = renderList;
 
             this.$store.commit("loading", false);
             this.$store.commit('title', this.title);
         },
 
         refresh () {
-            this.fetchDrafts();
+            this.fetchDevices();
         }
     },
 
     data () {
         return {
-            title: "Drafts",
-            drafts: [],
+            title: "Devices",
+            devices: [],
         }
     },
 
     components: {
-        DraftItem,
+        DeviceItem,
         Spinner
     }
 }
@@ -87,7 +87,7 @@ export default {
 <style lang="scss" scoped>
     @import "../../../assets/scss/_vars.scss";
 
-    #draft-list {
+    #device-list {
         width: 100%;
 
         .spinner {

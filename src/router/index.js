@@ -10,9 +10,9 @@ import Thread from '@/components/Thread/'
 import Compose from '@/components/Compose/'
 import Conversations from '@/components/Conversations/'
 import Folders from '@/components/Folders/'
-import { Account, Drafts } from '@/components/Account/'
 import { Blacklists, CreateBlacklist } from '@/components/Blacklists/'
 import { ScheduledMessages, CreateScheduledMessage, EditScheduledMessage } from '@/components/ScheduledMessages/'
+import { Account, Drafts, Devices, Contacts } from '@/components/Account/'
 
 Vue.use(VueRouter)
 
@@ -112,9 +112,19 @@ let router = new VueRouter({
             component: Account,
         },
         {
-            path: '/drafts',
+            path: '/account/devices',
+            name: 'devices',
+            component: Devices,
+        },
+        {
+            path: '/account/drafts',
             name: 'drafts',
             component: Drafts,
+        },
+        {
+            path: '/account/contacts',
+            name: 'contacts',
+            component: Contacts,
         },
     ],
 })

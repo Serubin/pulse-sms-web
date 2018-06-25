@@ -364,13 +364,7 @@ export default {
         processContacts(response) {
             const contacts_cache = [];
 
-            for (let contact of response.data) {
-                // Decrypt
-                contact = Crypto.decryptContact(contact);
-
-                if (!contact)
-                    continue;
-
+            for (let contact of response) {
                 // Generate contact and add to cache list
                 let contact_data = Util.generateContact(
                     Util.createIdMatcher(contact.phone_number),
@@ -383,8 +377,10 @@ export default {
                     null, // darker
                     null // lighter
                 );
+
                 contacts_cache.push(contact_data);
             }
+            
             this.$store.commit('contacts', contacts_cache);
         },
 

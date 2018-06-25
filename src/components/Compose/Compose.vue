@@ -108,12 +108,7 @@ export default {
             const contains = [];
             const duplicates = [];
 
-            for (let contact of response.data) {
-
-                // Decrypt
-                contact.name = Crypto.decrypt(contact.name);
-                contact.phone_number = Crypto.decrypt(contact.phone_number);
-
+            for (let contact of response) {
                 if (contains.indexOf(contact.name) >= 0) {
                     // Track duplicates and mark for removal
                     duplicates[duplicates.length] = contact.id;
@@ -129,7 +124,6 @@ export default {
                     'name': contact.name,
                     'phone': contact.phone_number
                 };
-
             }
         },
         processInput (e) {
