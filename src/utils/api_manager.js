@@ -150,25 +150,28 @@ export default class Api {
         if (message.type != 0)
             return;
 
-        const contact = store.getters.getConversationData(message.conversation_id);
+        // fetch through the API instead of the session cache, since the session
+        // cache doesn't know about the mute/private settings
+        Api.fetchConversation(message.conversation_id).then(conversation => {
+            if (conversation == null || conversation.mute) {
+                return;
+            }
 
-        if (contact != null && contact.mute)
-            return;
+            const title = conversation.title;
+            const snippet = conversation.private_notifications ? "" : Util.generateSnippet(message);
 
-        const title = contact.name;
-        const snippet = contact.private_notifications ? "" : Util.generateSnippet(message);
+            const link = "/thread/" + message.conversation_id;
 
-        const link = "/thread/" + message.conversation_id;
+            const notification = new Notification(title, {
+                icon: '/static/images/android-desktop.png',
+                body: snippet
+            });
 
-        const notification = new Notification(title, {
-            icon: '/static/images/android-desktop.png',
-            body: snippet
-        });
-
-        notification.onclick = () => {
-            window.focus()
-            router.push(link);
-        }
+            notification.onclick = () => {
+                window.focus()
+                router.push(link);
+            }
+        })
     }
 
     static login (username, password) {
