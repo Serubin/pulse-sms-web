@@ -156,4 +156,42 @@ export default class SessionCache {
 
         store.commit('session_messages', messages);
     }
+
+    static updateConversation (message) {
+        let conversations = SessionCache.getConversations('index_unarchived')
+        if (conversations != null) {
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == message.conversation_id) {
+                    conversations[i].timestamp = message.timestamp;
+                    conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
+                    this.putConversations(conversations, 'index_unarchived');
+                    return;
+                }
+            }
+        }
+
+        conversations = SessionCache.getConversations('index_archived')
+        if (conversations != null) {
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == message.conversation_id) {
+                    conversations[i].timestamp = message.timestamp;
+                    conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
+                    this.putConversations(conversations, 'index_archived');
+                    return;
+                }
+            }
+        }
+
+        conversations = SessionCache.getConversations('index_private')
+        if (conversations != null) {
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == message.conversation_id) {
+                    conversations[i].timestamp = message.timestamp;
+                    conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
+                    this.putConversations(conversations, 'index_private');
+                    return;
+                }
+            }
+        }
+    }
 }

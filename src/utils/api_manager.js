@@ -96,7 +96,10 @@ export default class Api {
             message = Crypto.decryptMessage(message);
 
             this.notify(message);
+
             SessionCache.cacheMessage(message);
+            SessionCache.updateConversation(message);
+
             store.state.msgbus.$emit('newMessage', message);
         } else if (operation == "read_conversation") {
             const id = json.message.content.id;
@@ -153,8 +156,7 @@ export default class Api {
             return;
 
         const title = contact.name;
-        const snippet = contact.private_notifications
-                            ? "" : Util.generateSnippet(message);
+        const snippet = contact.private_notifications ? "" : Util.generateSnippet(message);
 
         const link = "/thread/" + message.conversation_id;
 
