@@ -5,6 +5,7 @@ export default class Url {
         "login":                "accounts/login/",
         "update_setting":       "accounts/update_setting",
         "messages":             "messages/",
+        "remove_message":       "messages/remove/",
         "add_message":          "messages/add/",
         "new_thread":           "messages/forward_to_phone",
         "folders":              "folders/",

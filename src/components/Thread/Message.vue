@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { Util } from '@/utils';
+import { Util, Api, SessionCache } from '@/utils';
 import linkify from 'linkifyjs/html';
 
 export default {
@@ -183,7 +183,10 @@ export default {
             this.displayOptions = false;
         },
         deleteMessage() {
+            Api.removeMessage(this.id);
+            SessionCache.invalidateMessages(this.messageData.device_conversation_id);
 
+            this.$store.state.msgbus.$emit('deletedMessage', this.id);
         },
         loadImage (blob) {
             this.content = ""; // Don't set content

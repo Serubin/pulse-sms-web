@@ -39,6 +39,7 @@ export default {
             this.read = false;
 
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
+        this.$store.state.msgbus.$on('deletedMessage', this.deletedMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
         this.$store.state.msgbus.$on('archive-btn', this.archive);
@@ -414,8 +415,14 @@ export default {
             Vue.nextTick(() => {            // Animate on next tick to
                 Util.scrollToBottom(250);   // avoid scrolling before render
             });
+        },
 
-
+        deletedMessage (id) {
+            for (let i = 0; i < this.messages.length; i++) {
+                if (this.messages[i].device_id == id) {
+                    this.messages.splice(i, 1);
+                }
+            }
         },
 
         /**

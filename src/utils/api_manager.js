@@ -300,6 +300,11 @@ export default class Api {
         return promise;
     }
 
+    static removeMessage (id) {
+        let constructed_url = Url.get('remove_message') + id + Url.getAccountParam();
+        Vue.http.post(constructed_url);
+    }
+
     static sendMessage (data, mime_type, thread_id, message_id=null) {
         let account_id = store.state.account_id;
 
