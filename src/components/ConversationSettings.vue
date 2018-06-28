@@ -126,16 +126,19 @@ export default {
                 accent: this.rgbaToHex(this.colors.accent)
             }
 
+            // This is a bit of a hack. I couldn't get the checkboxes to be checked, without
+            // manually changing their class.
+            
             if (this.pin) {
-                this.pin_class = "is-checked";
+                this.pin_class = "is-upgraded is-checked";
             }
 
             if (this.mute) {
-                this.mute_class = "is-checked";
+                this.mute_class = "is-upgraded is-checked";
             }
 
             if (this.private) {
-                this.private_class = "is-checked";
+                this.private_class = "is-upgraded is-checked";
             }
         },
 
