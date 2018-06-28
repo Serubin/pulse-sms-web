@@ -1,5 +1,5 @@
 <template>
-    <div class="message-wrapper" :title="stringTime">
+    <div class="message-wrapper" :title="stringTime" @mouseover="showOptions" @mouseleave="hideOptions">
         <div id="offset-marker" v-if="this.messageData.marker"></div>
 
         <transition name="fade">
@@ -15,6 +15,12 @@
                     <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
                 </a>
             </div>
+        </transition>
+
+        <transition name="fade">
+            <button id="delete-button" :class="options_class" class="message_options menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="displayOptions" @click="deleteMessage">
+               <i class="material-icons">delete</i>
+            </button>
         </transition>
 
         <div class="date-wrapper" v-if="dateLabel">
@@ -137,6 +143,7 @@ export default {
                 }
                 default: {
                     this.style_class.push('sent') //TODO add text color from global theme
+                    this.options_class.push('sent_options');
                 }
             }
         }
@@ -162,10 +169,22 @@ export default {
             media_thumb: "",
             media_title: "",
             media_content: "",
-            dateLabel: this.messageData.dateLabel
+            dateLabel: this.messageData.dateLabel,
+
+            options_class: [ ],
+            displayOptions: false
         }
     },
     methods: {
+        showOptions () {
+            this.displayOptions = true;
+        },
+        hideOptions () {
+            this.displayOptions = false;
+        },
+        deleteMessage() {
+
+        },
         loadImage (blob) {
             this.content = ""; // Don't set content
 
@@ -257,6 +276,15 @@ export default {
             overflow-wrap: break-word;
             word-wrap: break-word;
             min-width: 18px;
+        }
+
+        .message_options {
+            margin-top: 12px;
+            color: rgba(0,0,0,.25);
+        }
+
+        .sent_options {
+            float: right;
         }
 
         .media-preview {
@@ -368,6 +396,24 @@ export default {
             margin-top: 12px;
             font-size: 14px;
             font-weight: lighter;
+        }
+
+        @media screen and (max-width: 350px) {
+            .message {
+                max-width: 200px;
+            }
+        }
+
+        @media screen and (max-width: 450px) {
+            .message {
+                max-width: 270px;
+            }
+        }
+
+        @media screen and (min-width: 150px) {
+            .media {
+                width: 310px;
+            }
         }
 
         @media screen and (min-width: 150px) {
