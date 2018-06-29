@@ -482,6 +482,11 @@ export default {
                 border-color: $bg-darker transparent;
             }
         }
+
+        .message_options {
+            margin-top: 12px;
+            color: rgba(255,255,255,.25);
+        }
     }
 
 </style>

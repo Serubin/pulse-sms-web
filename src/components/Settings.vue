@@ -311,4 +311,10 @@ export default {
         transform: translate(0, -50%);
     }
 
+    body.dark {
+        .item:hover, .click-item:hover {
+        	  background: #202020;
+        }
+    }
+
 </style>

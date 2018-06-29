@@ -128,7 +128,7 @@ export default {
 
             // This is a bit of a hack. I couldn't get the checkboxes to be checked, without
             // manually changing their class.
-            
+
             if (this.pin) {
                 this.pin_class = "is-upgraded is-checked";
             }
@@ -262,6 +262,12 @@ export default {
         position: fixed;
         top: 50%;
         transform: translate(0, -50%);
+    }
+
+    body.dark {
+        .item:hover, .click-item:hover {
+        	  background: #202020;
+        }
     }
 
 </style>
