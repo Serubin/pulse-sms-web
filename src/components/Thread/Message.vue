@@ -18,7 +18,7 @@
         </transition>
 
         <transition name="fade">
-            <button id="delete-button" :class="options_class" class="message_options menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="displayOptions" @click="deleteMessage">
+            <button id="delete-button" :class="options_class" class="message_options menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="displayOptions && !is_article" @click="deleteMessage">
                <i class="material-icons">delete</i>
             </button>
         </transition>
