@@ -2,7 +2,10 @@
     <div id="blacklists-list" class="page-content">
 
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="blacklists.length == 0"></spinner>
+        <spinner class="spinner" v-if="blacklists.length == 0 && loading"></spinner>
+
+        <!-- If no Folders -->
+        <p class="empty-message" v-if="blacklists.length == 0 && !loading">No Blacklist</p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
@@ -63,12 +66,14 @@ export default {
             }
 
             this.blacklists = renderList;
+            this.loading = false;
 
             this.$store.commit("loading", false);
             this.$store.commit('title', this.title);
         },
 
         refresh () {
+            this.loading = true;
             this.fetchBlacklists();
         },
 
@@ -80,6 +85,7 @@ export default {
     data () {
         return {
             title: "Blacklist",
+            loading: true,
             blacklists: [],
         }
     },
@@ -94,6 +100,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
+
+    .empty-message {
+        color: rgba(0, 0, 0, 0.54);
+        margin: 6em auto;
+        width: 5.5em;
+    }
 
     .create-blacklist {
         position: fixed;

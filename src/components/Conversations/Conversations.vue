@@ -2,7 +2,10 @@
     <div id="conversation-list" class="page-content">
 
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="conversations.length == 0"></spinner>
+        <spinner class="spinner" v-if="conversations.length == 0 && loading"></spinner>
+
+        <!-- If no Messages -->
+        <p class="empty-message" v-if="conversations.length == 0 && !loading">No Conversations</p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
@@ -120,6 +123,7 @@ export default {
 
             }
 
+            this.loading = false;
             this.$store.commit('conversations', cache);
             this.conversations = updatedConversations;
 
@@ -224,6 +228,7 @@ export default {
             //if (!this.small) // Don't clear list if using sidebar list
                 //this.conversations = [];
 
+            this.loading = true;
             SessionCache.invalidateAllConversations();
             this.fetchConversations();
         },
@@ -288,6 +293,7 @@ export default {
     data () {
         return {
             title: "",
+            loading: true,
             conversations: [],
         }
     },
@@ -321,6 +327,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
+
+    .empty-message {
+        color: rgba(0, 0, 0, 0.54);
+        margin: 6em auto;
+        width: 8.5em;
+    }
 
     .compose {
         position: fixed;

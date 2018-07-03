@@ -2,7 +2,10 @@
     <div id="scheduled-message-list" class="page-content">
 
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="scheduled_messages.length == 0"></spinner>
+        <spinner class="spinner" v-if="scheduled_messages.length == 0 && loading"></spinner>
+
+        <!-- If no Messages -->
+        <p class="empty-message" v-if="scheduled_messages.length == 0 && !loading">No Messages</p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
@@ -63,12 +66,14 @@ export default {
             }
 
             this.scheduled_messages = renderList;
+            this.loading = false;
 
             this.$store.commit("loading", false);
             this.$store.commit('title', this.title);
         },
 
         refresh () {
+            this.loading = true;
             this.fetchScheduledMessages();
         },
 
@@ -80,6 +85,7 @@ export default {
     data () {
         return {
             title: "Scheduled Messages",
+            loading: true,
             scheduled_messages: [],
         }
     },
@@ -94,6 +100,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
+
+    .empty-message {
+        color: rgba(0, 0, 0, 0.54);
+        margin: 6em auto;
+        width: 6.5em;
+    }
 
     .create-scheduled-message {
         position: fixed;
