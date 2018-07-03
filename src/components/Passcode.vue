@@ -55,7 +55,7 @@ export default {
         },
 
         cancelClicked () {
-            this.$router.push({ name: 'conversations'});
+            this.$router.push({ name: 'conversations-list'});
         }
     }
 }
