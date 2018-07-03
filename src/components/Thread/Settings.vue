@@ -237,7 +237,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    @import "../assets/scss/_vars.scss";
+    @import "../../assets/scss/_vars.scss";
 
     .label-item {
         padding-left: 15px;
@@ -251,7 +251,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+    	 background: #E0E0E0;
     }
 
     .click-item:hover {
@@ -266,7 +266,7 @@ export default {
 
     body.dark {
         .item:hover, .click-item:hover {
-        	  background: #202020;
+            background: #202020;
         }
     }
 
