@@ -251,7 +251,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	 background: #E0E0E0;
+        background: #E0E0E0;
     }
 
     .click-item:hover {
