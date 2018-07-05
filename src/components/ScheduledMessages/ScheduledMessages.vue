@@ -5,7 +5,7 @@
         <spinner class="spinner" v-if="scheduled_messages.length == 0 && loading"></spinner>
 
         <!-- If no Messages -->
-        <p class="empty-message" v-if="scheduled_messages.length == 0 && !loading">No Messages</p>
+        <p class="empty-message" v-if="scheduled_messages.length == 0 && !loading">No Scheduled Messages</p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
@@ -104,7 +104,7 @@ export default {
     .empty-message {
         color: rgba(0, 0, 0, 0.54);
         margin: 6em auto;
-        width: 6.5em;
+        width: 11.5em;
     }
 
     .create-scheduled-message {
@@ -135,5 +135,11 @@ export default {
 
     .flip-list-move {
         transition: transform $anim-time;
+    }
+
+    body.dark {
+        .empty-message {
+            color: rgba(255, 255, 255, 0.54);
+        }
     }
 </style>

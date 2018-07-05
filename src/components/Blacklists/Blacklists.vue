@@ -5,7 +5,7 @@
         <spinner class="spinner" v-if="blacklists.length == 0 && loading"></spinner>
 
         <!-- If no Folders -->
-        <p class="empty-message" v-if="blacklists.length == 0 && !loading">No Blacklist</p>
+        <p class="empty-message" v-if="blacklists.length == 0 && !loading">No Blacklisted Numbers</p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
@@ -104,7 +104,7 @@ export default {
     .empty-message {
         color: rgba(0, 0, 0, 0.54);
         margin: 6em auto;
-        width: 5.5em;
+        width: 11.5em;
     }
 
     .create-blacklist {
@@ -133,5 +133,11 @@ export default {
 
     .flip-list-move {
         transition: transform $anim-time;
+    }
+
+    body.dark {
+        .empty-message {
+            color: rgba(255, 255, 255, 0.54);
+        }
     }
 </style>
