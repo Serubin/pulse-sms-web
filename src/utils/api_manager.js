@@ -15,6 +15,7 @@ export default class Api {
         this.openWebSocket();
 
         this.has_disconnected = false;
+        this.disconnected_timeout = null;
     }
 
     /**
@@ -29,6 +30,11 @@ export default class Api {
             if (this.has_disconnected) {
                 store.state.msgbus.$emit('refresh-btn');
                 Util.snackbar("And we're back!");
+            }
+
+            if (this.disconnected_timeout != null) {
+                clearTimeout(this.disconnected_timeout);
+                this.disconnected_timeout = null;
             }
 
             this.has_disconnected = false;
@@ -49,10 +55,15 @@ export default class Api {
             if (e.wasClean || e.code == 1001) // If not an error, ignore
                 return
 
-            if (!this.has_disconnected)
-                Util.snackbar("You've been disconnected. We're trying to reconnect you...");
+            // if the websocket reconnects within 5 seconds, we won't show anything to the user
+            // if it takes longer than that, then we will notify the user that we are
+            // trying to reconnect.
+            this.disconnected_timeout = setTimeout(() => {
+                if (!this.has_disconnected)
+                    Util.snackbar("You've been disconnected. We're trying to reconnect you...");
 
-            this.has_disconnected = true;
+                this.has_disconnected = true;
+            }, 5 * 1000);
         });
     }
 
