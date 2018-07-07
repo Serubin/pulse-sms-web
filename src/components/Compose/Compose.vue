@@ -1,22 +1,16 @@
 <template>
     <div class="page-content">
-        <div id="compose-head" class="mdl-card" :style="matchListHeight">
+        <div id="compose-head" class="mdl-card" >
             <div class="mdl-card__title">
                 <div id="chip-insert">
-                    <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" :class="hilighted == selected ? 'selected' : ''"/>
+                    <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
                 </div>
                 <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                    <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @keydown.prevent.stop="processInput">
-                    <label class="mdl-textfield__label" for="recipient">Recipient...</label>
+                    <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient">
+                    <label class="mdl-textfield__label" for="recipient">Type contact...</label>
                 </div>
                 <div id="border"></div>
             </div>
-
-            <ul id="match-list" class="mdl-shadow--2dp" :style="matchListHeight">
-                <transition-group name="flip-list" tag="div">
-                    <SelectionItem v-for="match in matchList" :contact="match" :on-click="addContact" :key="match.phone" v-if="matchList.length != 0"/>
-                </transition-group>
-            </ul>
         </div>
 
         <div class="page-content">
@@ -29,6 +23,7 @@
 <script>
 import Vue from 'vue'
 
+import '@/lib/auto-complete.min.js'
 import { Api, Crypto, Util } from "@/utils/"
 import Sendbar from '../Thread/Sendbar.vue'
 import SelectionItem from './SelectionItem.vue'
@@ -48,16 +43,19 @@ export default {
 
         this.$store.commit('title', this.title);
     },
+    beforeDestroy () {
+        if (this.autocomplete != null) {
+            this.autocomplete.destroy();
+        }
+    },
     data () {
         return {
             title: 'Compose',
             contacts: {},
-            nameIndex: {},
             recipient: "",
-            matchList: [],
             selectedContacts: [],
-            hilighted: null,
             sending: false,
+            autocomplete: null,
         }
     },
     methods: {
@@ -115,13 +113,9 @@ export default {
                     duplicates[duplicates.length] = contact.id;
                     continue;
                 } else {
-                    matcher[matchers.length] = matcher;
+                    matchers[matchers.length] = matcher;
                 }
 
-                // Contacts by name, index
-                this.nameIndex[contact.name.toLowerCase()] = this.contacts.length;
-
-                // Add to cache
                 this.contacts[contact.id] = {
                     'id': contact.id,
                     'name': contact.name,
@@ -142,93 +136,39 @@ export default {
 
                 Api.removeContact(idString);
             }
-        },
-        processInput (e) {
 
-            if(e.metaKey && e.keyCode == 65) {
-                Vue.nextTick(() => {
-                    e.target.setSelectionRange(0, e.target.value.length + 1);
-                });
-            }
+            let matcher = this.matchContact;
+            let addContact = this.addContact;
 
-            if(e.metaKey)
-                return;
-
-            if (e.keyCode == 8 && e.target.selectionEnd == e.target.selectionStart)
-                this.recipient = this.recipient.substr(0,this.recipient.length - 1)
-            else if(e.key.length == 1)
-                this.recipient += e.key;
-
-            if (this.recipient == "")
-                this.matchList = []
-
-            if (this.recipient.length > 0)
-                this.matchList = this.matchContact(this.recipient);
-
-            if ( (e.keyCode == 13 && this.matchList.length == 0)
-                || (e.keyCode == 188)) {
-
-                let val = this.recipient.replace(",", "");
-
-                const contact = Object.values(this.contacts).containsObjKey('name', val);
-                if (contact) {
-                    this.recipient = "";
-                    return this.addContact(contact);
+            this.autocomplete = new autoComplete({
+                selector: this.$el.querySelector("#recipient"),
+                minChars: 2,
+                source: function(term, suggest) { suggest(matcher(term)); },
+                renderItem: function (contact, search) {
+                    return '<div class="autocomplete-suggestion" data-val="' + contact.name + '" data-id="' + contact.id + '" data-name="' + contact.name + '" data-phone="' + contact.phone + '">' + contact.name + ' (' + contact.phone + ')' + '</div>';
+                },
+                onSelect: function(e, term, rendered) {
+                    addContact({
+                        'id': rendered.getAttribute('data-id'),
+                        'name': rendered.getAttribute('data-name'),
+                        'phone': rendered.getAttribute('data-phone')
+                    });
                 }
-
-                if (!/(\d{10}|\d{3}-\d{3}-\d{4})/.test(val)) {
-                    return
-                }
-
-                this.addContact({
-                    'id': val.replace(/-/g,""),
-                    'name': val,
-                    'phone': val.replace(/-/g,""),
-                });
-
-                return false;
-            }
-
-            if ((e.keyCode == 13 || e.keyCode == 188) && this.matchList.length != 0) {
-                this.addContact(this.matchList[0])
-                this.recipient = "";
-            }
-
-            if (e.keyCode == 8 && this.recipient == "" && this.hilighted) {
-                this.removeContact(this.hilighted);
-                this.hilighted = null;
-
-                return;
-
-            }
-            if (e.keyCode == 8 && this.recipient == "") {
-                const last = this.selectedContacts.length - 1;
-                this.hilighted = this.selectedContacts[last];
-
-                return;
-            }
-
-            if (this.hilighted)
-                this.hilighted = null;
-
+            });
         },
         matchContact (input) {
-
-            // Regex 'like'
-            const reg = new RegExp(input.split('').join('\\w*').replace(/\W/, ""), 'i');
-
+            input = input.toLowerCase()
             return Object.values(this.contacts).filter((data) => {
-                if (data.name.match(reg))
+                if (data.name.toLowerCase().indexOf(input) > -1 || data.phone.indexOf(input) > -1)
                     return data;
             });
         },
         addContact (contact) {
-
             this.matchList = [];
             this.recipient = "";
 
             if (this.selectedContacts.indexOf(contact) != -1)
-                return Util.snackbar(contact.name + " has alraedy been added");
+                return Util.snackbar(contact.name + " has already been added");
 
             this.selectedContacts.push(contact);
         },
@@ -238,14 +178,6 @@ export default {
         },
     },
     computed: {
-        matchListHeight() {
-            let height = 57 * ( this.matchList.length || 1 ) + 'px'
-            return {
-                height: (this.matchList.length > 6 ?
-                    57 * 6 : 57 * this.matchList.length) + "px"
-            }
-        },
-
         is_dirty () { // Is dirty fix for mdl
             if (this.recipient.length > 0)
                 return "is-dirty";
@@ -262,11 +194,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/scss/_vars.scss";
 
-    #recipient-wrap {
-        width: 100%;
-    }
+    @import "../../assets/scss/auto-complete.css";
+    @import "../../assets/scss/_vars.scss";
 
     #recipient {
         border-bottom: 1px solid rgba(0,0,0,0);
@@ -283,11 +213,20 @@ export default {
 
         .mdl-card__title {
             padding: 0;
-            background-color: white;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
         }
 
         #recipient-wrap {
             margin: 0 10px 0 10px;
+            display: inline-block;
+        }
+
+        .mdl-textfield {
+            max-width: 600px;
+            min-width: 600px;
+            width: 600px;
         }
 
         .mdl-textfield__label::after {
@@ -316,7 +255,7 @@ export default {
             transition-duration: .2s;
             transition-timing-function: cubic-bezier(.4,0,.2,1);
             background-color: rgba(0, 0, 0, 0.12);
-            top: 56px;
+            top: 72px;
             height: 1px;
             left: 0;
             visibility: visible;
@@ -325,16 +264,6 @@ export default {
         }
 
     }
-
-    #match-list {
-        position: absolute;
-        top: 65px;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        overflow-y: scroll;
-    }
-
 
     #compose-head {
         @media (min-width: 750px) {
@@ -352,9 +281,31 @@ export default {
         @media (min-width: 900px) {
             width: 650px;
         }
+    }
 
-        @media (min-width:950px) {
-            width: 650px;
+    .mdl-textfield {
+        @media (min-width: 750px) {
+            max-width: 450px;
+            min-width: 450px;
+            width: 450px;
+        }
+
+        @media (min-width: 800px) {
+            max-width: 500px;
+            min-width: 500px;
+            width: 500px;
+        }
+
+        @media (min-width: 850px) {
+            max-width: 550px;
+            min-width: 550px;
+            width: 550px;
+        }
+
+        @media (min-width: 900px) {
+            max-width: 600px;
+            min-width: 600px;
+            width: 600px;
         }
     }
 
@@ -370,10 +321,9 @@ export default {
             }
         }
     }
-    .flip-list-enter, .flip-list-leave-to
-    /* .flip-list-leave-active below version 2.1.8 */ {
-        opacity: 0;
 
+    .flip-list-enter, .flip-list-leave-to {
+        opacity: 0;
     }
     .flip-list-leave-active {
         position: absolute;
