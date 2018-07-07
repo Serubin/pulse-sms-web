@@ -1,6 +1,6 @@
 <template>
     <div class="page-content">
-        <div id="compose-head" class="mdl-card" >
+        <div id="compose-head">
             <div class="mdl-card__title">
                 <div id="chip-insert">
                     <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
@@ -12,10 +12,7 @@
                 <div id="border"></div>
             </div>
         </div>
-
-        <div class="page-content">
-        </div>
-
+        <div class="page-content"></div>
         <Sendbar :onSend="sendMessage" :loading="sending"/>
     </div>
 </template>
@@ -26,7 +23,6 @@ import Vue from 'vue'
 import '@/lib/auto-complete.min.js'
 import { Api, Crypto, Util } from "@/utils/"
 import Sendbar from '../Thread/Sendbar.vue'
-import SelectionItem from './SelectionItem.vue'
 import ContactChip from './ContactChip.vue'
 
 export default {
@@ -186,7 +182,6 @@ export default {
     },
     components: {
         Sendbar,
-        SelectionItem,
         ContactChip,
     }
 
@@ -204,9 +199,6 @@ export default {
 
     #compose-head {
         width: 100%;
-        height: 20em;
-        margin-top: 40px;
-        min-height: 0px;
         overflow: visible;
         transition: ease-in-out width 0.5s;
         background: transparent;
@@ -255,14 +247,13 @@ export default {
             transition-duration: .2s;
             transition-timing-function: cubic-bezier(.4,0,.2,1);
             background-color: rgba(0, 0, 0, 0.12);
-            top: 72px;
+            top: 156px;
             height: 1px;
-            left: 0;
+            left: 8px;
             visibility: visible;
             width: calc(100% - 2em);
             margin: 0 1em 0 1em;
         }
-
     }
 
     #compose-head {
