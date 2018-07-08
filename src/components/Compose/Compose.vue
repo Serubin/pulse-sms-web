@@ -1,7 +1,6 @@
 <template>
     <div class="page-content">
         <RecipientBar :onContactListChanged="onContactListChanged"/>
-        <div class="page-content"></div>
         <Sendbar :onSend="sendMessage" :loading="sending" />
     </div>
 </template>
@@ -35,7 +34,6 @@ export default {
 
     methods: {
         onContactListChanged(list) {
-            console.log("contact list changed");
             this.selectedContacts = list;
         },
         sendMessage(message) {

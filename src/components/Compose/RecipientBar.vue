@@ -5,7 +5,7 @@
                 <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
             </div>
             <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="onBlur">
+                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips">
                 <label class="mdl-textfield__label" for="recipient">Type contact...</label>
             </div>
             <div id="border"></div>
@@ -112,13 +112,24 @@ export default {
                     return data;
             });
         },
-        onBlur () {
+        /**
+         * This takes in the input that is currently in the input box, and converts it to chips.
+         * This function runs when the input box loses focus.
+         * The separators are ";" and "," (semi-colon or comma).
+         */
+        inputToChips () {
             let enteredText = this.$el.querySelector("#recipient").value;
             if (enteredText.length > 0) {
-                this.addContact({
-                    'id': enteredText,
-                    'name': enteredText,
-                    'phone': enteredText
+                let split = enteredText.split(/;|,/g); // split using ";" or ","
+                split.forEach((contact, i) => {
+                    if (contact.length > 0) {
+                        contact = contact.replace(/ /g, "");
+                        this.addContact({
+                            'id': contact,
+                            'name': contact,
+                            'phone': contact
+                        });
+                    }
                 });
             }
 
