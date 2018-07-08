@@ -1,11 +1,11 @@
 <template>
     <div id="compose-head">
-        <div class="mdl-card__title">
+        <div class="mdl-card__title" >
             <div id="chip-insert">
                 <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
             </div>
             <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient">
+                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="onBlur">
                 <label class="mdl-textfield__label" for="recipient">Type contact...</label>
             </div>
             <div id="border"></div>
@@ -112,6 +112,17 @@ export default {
                     return data;
             });
         },
+        onBlur () {
+            let enteredText = this.$el.querySelector("#recipient").value;
+            if (enteredText.length > 0) {
+                this.addContact({
+                    'id': enteredText,
+                    'name': enteredText,
+                    'phone': enteredText
+                });
+            }
+
+        },
         addContact (contact) {
             this.matchList = [];
             this.recipient = "";
@@ -129,7 +140,7 @@ export default {
 
             this.notifyContactListUpdated();
         },
-        notifyContactListUpdated() {
+        notifyContactListUpdated () {
             this.onContactListChanged(this.selectedContacts);
         }
     },
