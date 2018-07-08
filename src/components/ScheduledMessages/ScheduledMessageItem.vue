@@ -2,7 +2,7 @@
   <div class="message-wrapper" :title="stringTime">
       <!-- <transition name="fade"> -->
           <div class="message scheduled" :id="id">
-              <div><b>{{ to }}</b><br/></div>
+              <div><b>{{ title }}</b><br/></div>
               <div>{{ data }}</div>
           </div>
           <div class="date-wrapper">

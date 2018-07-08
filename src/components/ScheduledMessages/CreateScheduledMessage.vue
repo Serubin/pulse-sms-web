@@ -5,25 +5,18 @@
         </div>
 
         <div class="mdl-card__supporting-text">
-            <form>
-                <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" id="to" v-model="to" autofocus/>
-                    <label class="mdl-textfield__label" for="to">Contact names...</label>
-                </div>
-                <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" id="message" v-model="message" autofocus/>
-                    <label class="mdl-textfield__label" for="message">Message text...</label>
-                </div>
-
-                Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
-            </form>
+            <RecipientBar :onContactListChanged="onContactListChanged"/>
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" id="message" v-model="message" autofocus/>
+                <label class="mdl-textfield__label" for="message">Message text...</label>
+            </div>
+            Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
         </div>
 
         <div class="mdl-card__actions mdl-card--border">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="create" @click="create">Create</button>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancel">Cancel</button>
         </div>
-
 
         <transition name="loading-fade">
             <div class="loading-center" v-if="loading">
@@ -40,6 +33,7 @@ import 'flatpickr/dist/flatpickr.css'
 import { Crypto, Url, Api } from '@/utils/'
 import FlatPickr from 'vue-flatpickr-component'
 import Spinner from '@/components/Spinner.vue'
+import RecipientBar from '../Compose/RecipientBar.vue'
 
 export default {
     name: 'create-scheduled-message',
@@ -53,6 +47,7 @@ export default {
         return {
             title: "",
             to: "",
+            to_title: "",
             message: "",
             loading: false,
             timestamp: Date.now(),
@@ -64,13 +59,27 @@ export default {
     },
 
     methods: {
+        onContactListChanged (list) {
+            this.to = "";
+            this.to_title = "";
+
+            list.forEach((item, index) => {
+                if (index == list.length - 1) {
+                    this.to += item.phone;
+                    this.to_title += item.name;
+                } else {
+                    this.to += item.phone + ",";
+                    this.to_title += item.name + ", ";
+                }
+            });
+        },
         create () {
             if (this.to == '' || this.message == '')
                 return;
 
             this.loading = true;
 
-            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), "Title")
+            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.to_title)
                 .then((data) => this.handleCreated(data.data));
         },
 
@@ -86,7 +95,8 @@ export default {
 
     components: {
         Spinner,
-        FlatPickr
+        FlatPickr,
+        RecipientBar
     }
 }
 </script>

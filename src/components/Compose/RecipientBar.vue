@@ -191,7 +191,6 @@ export default {
         }
 
         #recipient-wrap {
-            margin: 0 10px 0 10px;
             display: inline-block;
         }
 
@@ -207,11 +206,11 @@ export default {
 
         #chip-insert {
             display: inline-flex;
-            margin-left: 10px;
+            margin-left: 0px;
         }
 
         .mdl-chip {
-            margin-right: 5px;
+            margin-right: 8px;
 
             &.selected {
                 background-color: #b3d4fc;
@@ -227,9 +226,9 @@ export default {
             transition-duration: .2s;
             transition-timing-function: cubic-bezier(.4,0,.2,1);
             background-color: rgba(0, 0, 0, 0.12);
-            top: 156px;
+            top: 136px;
             height: 1px;
-            left: 8px;
+            left: 0px;
             visibility: visible;
             width: calc(100% - 2em);
             margin: 0 1em 0 1em;
