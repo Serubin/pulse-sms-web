@@ -5,7 +5,7 @@
                 <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
             </div>
             <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips">
+                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" autofocus>
                 <label class="mdl-textfield__label" for="recipient">Type contact...</label>
             </div>
             <div id="border"></div>

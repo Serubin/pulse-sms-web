@@ -5,18 +5,11 @@
         </div>
 
         <div class="mdl-card__supporting-text">
-            <form>
-                <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" id="to" v-model="to" autofocus/>
-                    <label class="mdl-textfield__label" for="to">Contact names...</label>
-                </div>
-                <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" id="message" v-model="message" autofocus/>
-                    <label class="mdl-textfield__label" for="message">Message text...</label>
-                </div>
-
-                Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
-            </form>
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" id="message" v-model="message" autofocus/>
+                <label class="mdl-textfield__label" for="message">Message text...</label>
+            </div>
+            Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
         </div>
 
         <div class="mdl-card__actions mdl-card--border">
@@ -43,20 +36,20 @@ import FlatPickr from 'vue-flatpickr-component'
 
 export default {
     name: 'create-scheduled-message',
-    props: [ 'message_id' ],
+    props: [ 'message_id', 'original_data', 'original_timestamp', 'original_to', 'original_title' ],
 
     mounted () {
         this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
+        this.$store.commit('title', "");
     },
 
     data () {
         return {
-            title: "",
-            to: "",
-            message: "",
             loading: false,
-            timestamp: Date.now(),
+            timestamp: this.original_timestamp,
+            message: this.original_data,
+            to: this.original_to,
+            title: this.original_title,
             config: {
                 enableTime: true,
                 defaultDate: Math.floor(Date.now())
@@ -72,7 +65,7 @@ export default {
             this.loading = true;
 
             Api.removeScheduledMessage(this.message_id)
-            Api.createScheduledMessage(this.to, this.message, Date.now(), "Title")
+            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title)
                 .then((data) => this.handleSave(data.data));
         },
 

@@ -7,7 +7,7 @@
         <div class="mdl-card__supporting-text">
             <RecipientBar :onContactListChanged="onContactListChanged"/>
             <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" id="message" v-model="message" autofocus/>
+                <input class="mdl-textfield__input" id="message" v-model="message"/>
                 <label class="mdl-textfield__label" for="message">Message text...</label>
             </div>
             Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
@@ -30,7 +30,7 @@
 
 import Vue from 'vue'
 import 'flatpickr/dist/flatpickr.css'
-import { Crypto, Url, Api } from '@/utils/'
+import { Crypto, Url, Api, Util } from '@/utils/'
 import FlatPickr from 'vue-flatpickr-component'
 import Spinner from '@/components/Spinner.vue'
 import RecipientBar from '../Compose/RecipientBar.vue'
@@ -40,14 +40,13 @@ export default {
 
     mounted () {
         this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
+        this.$store.commit('title', "");
     },
 
     data () {
         return {
-            title: "",
             to: "",
-            to_title: "",
+            title: "",
             message: "",
             loading: false,
             timestamp: Date.now(),
@@ -61,25 +60,30 @@ export default {
     methods: {
         onContactListChanged (list) {
             this.to = "";
-            this.to_title = "";
+            this.title = "";
 
             list.forEach((item, index) => {
                 if (index == list.length - 1) {
                     this.to += item.phone;
-                    this.to_title += item.name;
+                    this.title += item.name;
                 } else {
                     this.to += item.phone + ",";
-                    this.to_title += item.name + ", ";
+                    this.title += item.name + ", ";
                 }
             });
         },
         create () {
-            if (this.to == '' || this.message == '')
+            if (this.to == '') {
+                Util.snackbar("Please input a contact!");
                 return;
+            } else if (this.message == '') {
+                Util.snackbar("Please input a message!");
+                return;
+            }
 
             this.loading = true;
 
-            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.to_title)
+            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title)
                 .then((data) => this.handleCreated(data.data));
         },
 
