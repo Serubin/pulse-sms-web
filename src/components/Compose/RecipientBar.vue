@@ -5,7 +5,7 @@
                 <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
             </div>
             <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" autofocus>
+                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" @keydown.delete="deleteKey" autofocus>
                 <label class="mdl-textfield__label" for="recipient">Type contact...</label>
             </div>
             <div id="border"></div>
@@ -132,7 +132,17 @@ export default {
                     }
                 });
             }
+        },
+        /**
+         * When the delete key is pressed, and there is no text inputted, delete the last chip.
+         */
+        deleteKey () {
+            let textLength = this.$el.querySelector("#recipient").value.length;
+            let contactsLength = this.selectedContacts.length;
 
+            if (textLength == 0 && contactsLength > 0) {
+                this.removeContact(this.selectedContacts[contactsLength - 1])
+            }
         },
         addContact (contact) {
             this.matchList = [];
