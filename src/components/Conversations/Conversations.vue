@@ -95,7 +95,7 @@ export default {
 
                 const title = this.calculateTitle(item);
 
-                if (!titles.includes(title)) {
+                if (titles.indexOf(title) == -1) {
                     titles.push(title);
 
                     updatedConversations.push({

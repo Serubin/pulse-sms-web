@@ -255,14 +255,14 @@ export default {
             const items = [ ]
 
             // On thread add Delete, Blacklist, & Archive/unarchive
-            if (this.$route.name.includes('thread')) {
+            if (this.$route.name.indexOf('thread') > -1) {
                 items.unshift(
                     { "name": "conversation-information", 'title': "Conversation Information"},
                     { "name": "blacklist", 'title': "Blacklist Contact"},
                     { 'name': "delete", 'title': "Delete Conversation" },
-                    ( !this.$route.path.includes("archived") ?
+                    ( this.$route.path.indexOf("archived") == -1 ?
                         { 'name': "archive", 'title': "Archive Conversation" } :
-                        {'name': "unarchive", 'title': "Unarchive Conversation" }),
+                        { 'name': "unarchive", 'title': "Unarchive Conversation" }),
                     { "name": "conversation-settings", 'title': "Conversation Settings"}
                 );
             } else {

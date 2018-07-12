@@ -205,7 +205,7 @@ export default {
         },
 
         isArchived () {
-            return this.$route.path.includes("archived");
+            return this.$route.path.indexOf("archived") > -1;
         },
     },
 
