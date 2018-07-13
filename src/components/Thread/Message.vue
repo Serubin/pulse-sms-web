@@ -402,8 +402,11 @@ export default {
         }
 
         @media screen and (max-width: 350px) {
-            .message {
+            .message, .media {
                 max-width: 200px;
+            }
+            .media {
+                width: 200px;
             }
         }
 
@@ -411,23 +414,8 @@ export default {
             .message {
                 max-width: 270px;
             }
-        }
-
-        @media screen and (min-width: 150px) {
             .media {
-                width: 310px;
-            }
-        }
-
-        @media screen and (min-width: 150px) {
-            .media {
-                width: 310px;
-            }
-        }
-
-        @media screen and (min-width: 350px) {
-            .media {
-                width: 310px;
+                width: 270px;
             }
         }
 
