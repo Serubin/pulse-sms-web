@@ -293,7 +293,27 @@ export default class Api {
         return promise
     }
 
-    static createThread (to, message) {
+    static createThreadWithImage (to, messageId, mimeType) {
+        const constructed_url = Url.get("new_thread");
+
+        const request = {
+            account_id: store.state.account_id,
+            to: to,
+            message: "firebase -1",
+            mime_type: mimeType,
+            message_id: messageId
+        }
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            .then( response  => resolve(response) )
+            .catch( response => Api.rejectHandler(response, reject) )
+        });
+
+        return promise;
+    }
+
+    static createThread (to, message, messageId = null) {
         const constructed_url = Url.get("new_thread");
 
         const request = {
@@ -404,7 +424,7 @@ export default class Api {
         Vue.nextTick(() => Util.scrollToBottom(250))
     }
 
-    static sendFile(file, thread_id) {
+    static sendFile(file, send) {
         store.commit('media_sending', true);
 
         const reader = new FileReader()
@@ -422,7 +442,7 @@ export default class Api {
             // Add to firebase
             messageRef.put(encryptedFile).then((snapshot) => {
                 // Send message
-                Api.sendMessage("firebase -1", file.type, thread_id, id);
+                send(file, id);
 
                 // Make url
                 const constructed_url = Url.get('media') + id + Url.getAccountParam();

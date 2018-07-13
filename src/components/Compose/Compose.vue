@@ -37,11 +37,10 @@ export default {
             this.selectedContacts = list;
         },
         sendMessage(message) {
-            var to = "";
+            let to = "";
 
             if (this.selectedContacts.length <= 0)
                 return Util.Snackbar("No recipient");
-
 
             this.selectedContacts.map((value) => { // Concat selected contacts
                 to += value.phone + ",";
@@ -49,6 +48,18 @@ export default {
 
             to = to.slice(0, to.length - 1); // Remove trailing comma
             this.sending = true;
+
+            // send image, if one is attached
+            if (this.$store.state.loaded_media) {
+                let _this = this;
+                Api.sendFile(this.$store.state.loaded_media, (file, messageId) => {
+                    Api.createThreadWithImage(to, messageId, file.type);
+                });
+            }
+
+            if (message.length <= 0) {
+                return;
+            }
 
             Api.createThread(to, message);
 

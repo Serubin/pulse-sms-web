@@ -220,11 +220,12 @@ export default {
          * @param message - string message
          */
         sendMessage (message) {
-
             // Send stored media if laoded
             if (this.$store.state.loaded_media) {
-                Api.sendFile(this.$store.state.loaded_media, this.conversation_id);
-                this.$store.commit('loaded_media', null); // Remove from store
+                let _this = this;
+                Api.sendFile(this.$store.state.loaded_media, (file, messageId) => {
+                    Api.sendMessage("firebase -1", file.type, _this.conversation_id, messageId);
+                });
             }
 
             // If message is empty, we're done
@@ -232,8 +233,7 @@ export default {
                 return false;
 
             // Otherwise send any corrisponding message
-            Api.sendMessage(message, "text/plain", this.conversation_id)
-
+            Api.sendMessage(message, "text/plain", this.conversation_id);
         },
 
         /**
