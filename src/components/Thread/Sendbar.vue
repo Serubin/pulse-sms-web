@@ -292,6 +292,7 @@ export default {
             overflow: hidden;
             border-radius: 15px;
             margin-bottom: 10px;
+            box-shadow: -0px -0px 3px rgba(0, 0, 0, .15);
 
             .overlay {
                 background: linear-gradient(to bottom, rgba(250,250,250,0) 95%,rgba(250,250,250,1) 100%);

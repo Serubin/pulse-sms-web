@@ -57,11 +57,9 @@ export default {
                 });
             }
 
-            if (message.length <= 0) {
-                return;
+            if (message.length > 0) {
+                Api.createThread(to, message);
             }
-
-            Api.createThread(to, message);
 
             setTimeout(() => {
                 Api.fetchConversations("index_unarchived")
