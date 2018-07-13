@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import router from '@/router/'
-import store from '@/store/'
-import emojione from 'emojione'
+import Vue from 'vue';
+import router from '@/router/';
+import store from '@/store/';
+import emojione from 'emojione';
 import * as firebase from 'firebase';
 import ImageCompressor from '@xkeshi/image-compressor';
-import ReconnectingWebsocket from 'reconnecting-websocket'
+import ReconnectingWebsocket from 'reconnecting-websocket';
 
 import { Util, Url, Crypto, SessionCache } from '@/utils/'
 

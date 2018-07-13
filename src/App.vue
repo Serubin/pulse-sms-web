@@ -66,7 +66,7 @@ import Vue from 'vue'
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 
-import { Util, Crypto, Api, MediaLoader, SessionCache } from '@/utils'
+import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys} from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
@@ -168,6 +168,9 @@ export default {
         applicationStart () {
             // Setup the API (Open websocket)
             this.mm = new Api();
+
+            // Start listening for shortcut keys
+            this.shortcuts = new ShortcutKeys();
 
             // Fetch contacts for cache
             Api.fetchContacts().then((resp) => this.processContacts(resp));

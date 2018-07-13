@@ -51,6 +51,9 @@ export default {
         this.$store.state.msgbus.$on('conversation-information-btn', this.conversationInformation);
         this.$store.state.msgbus.$on('conversation-settings-btn', this.conversationSettings);
 
+        this.$store.state.msgbus.$on('hotkey-page-previous', this.pageToPrevious);
+        this.$store.state.msgbus.$on('hotkey-page-next', this.pageToNext);
+
         // Fetch dom
         this.html = document.querySelector("html");
         this.body = document.querySelector("body");
@@ -431,7 +434,6 @@ export default {
          * Thread will keep track of it's own read state (estimated)
          */
         markAsRead () {
-
             if(this.read) // if already read, stop
                 return;
 
@@ -575,6 +577,38 @@ export default {
             this.$router.push({
                 name: 'conversation-settings', params: { conversation_title: this.conversation_data.name, conversation_id: this.conversation_id }
             });
+        },
+
+        pageToNext () {
+            let conversations = SessionCache.getConversations()
+            let index = -1;
+
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == this.conversation_id) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index != -1 && index < conversations.length - 1) {
+                this.$router.push('/thread/' + conversations[index + 1].device_id);
+            }
+        },
+
+        pageToPrevious () {
+            let conversations = SessionCache.getConversations()
+            let index = -1;
+
+            for (let i = 0; i < conversations.length; i++) {
+                if (conversations[i].device_id == this.conversation_id) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index > 0) {
+                this.$router.push('/thread/' + conversations[index - 1].device_id);
+            }
         },
 
         /**

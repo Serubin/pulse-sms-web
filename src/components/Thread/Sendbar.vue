@@ -50,6 +50,8 @@ export default {
             // document.querySelector("#emoji").src = "../../assets/images/ic_mood_white.png";
             // document.querySelector("#attach").src = "../../assets/images/ic_attach_white.png";
         }
+
+        this.$store.state.msgbus.$on('hotkey-emoji', this.toggleEmoji);
     },
 
     data () {

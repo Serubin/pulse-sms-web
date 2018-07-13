@@ -27,6 +27,7 @@ export default {
 
     mounted () {
         store.state.msgbus.$on('showImage', this.showImage);
+        store.state.msgbus.$on('hotkey-esc', this.close);
     },
 
     data () {
