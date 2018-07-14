@@ -89,10 +89,12 @@ export default {
             const cache = [];
             const titles = [];
 
-
             for(let i in response) {
                 const item = response[i]
-
+                if (typeof item == "function") {
+                    continue;
+                }
+                
                 const title = this.calculateTitle(item);
 
                 if (titles.indexOf(title) == -1) {
