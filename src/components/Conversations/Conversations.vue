@@ -9,7 +9,7 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="isArchive" :small="small" :key="conversation.hash"/>
+            <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="isArchive" :small="small" :key="conversation.hash ? conversation.hash : Api.generateId()"/>
         </transition-group>
 
         <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="{ background: $store.state.colors_accent }" v-if="!small" v-mdl>
@@ -94,7 +94,7 @@ export default {
                 if (typeof item == "function") {
                     continue;
                 }
-                
+
                 const title = this.calculateTitle(item);
 
                 if (titles.indexOf(title) == -1) {
