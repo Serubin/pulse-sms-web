@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 import ImageCompressor from '@xkeshi/image-compressor';
 import ReconnectingWebsocket from 'reconnecting-websocket';
 
-import { Util, Url, Crypto, SessionCache } from '@/utils/'
+import { Util, Url, Crypto, SessionCache, Platform } from '@/utils/'
 
 export default class Api {
 
@@ -301,7 +301,8 @@ export default class Api {
             to: to,
             message: "firebase -1",
             mime_type: mimeType,
-            message_id: messageId
+            message_id: messageId,
+            sent_device: Platform.getPlatformIdentifier()
         }
 
         const promise = new Promise((resolve, reject) => {
@@ -319,7 +320,8 @@ export default class Api {
         const request = {
             account_id: store.state.account_id,
             to: to,
-            message: message
+            message: message,
+            sent_device: Platform.getPlatformIdentifier()
         }
 
         const promise = new Promise((resolve, reject) => {
@@ -358,7 +360,8 @@ export default class Api {
             timestamp: timestamp,
             mime_type: Crypto.encrypt(mime_type),
             read: true,
-            seen: true
+            seen: true,
+            sent_device: Platform.getPlatformIdentifier()
         };
 
         let conversationRequest = {

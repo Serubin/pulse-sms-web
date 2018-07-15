@@ -5,6 +5,7 @@ import Api from '@/utils/api_manager.js'
 import MediaLoader from '@/utils/media.js'
 import SessionCache from '@/utils/cache_manager.js'
 import ShortcutKeys from '@/utils/shortcuts.js'
+import Platform from '@/utils/platform.js'
 
 export {
     Util,
@@ -13,5 +14,6 @@ export {
     Api,
     MediaLoader,
     SessionCache,
-    ShortcutKeys
+    ShortcutKeys,
+    Platform
 }

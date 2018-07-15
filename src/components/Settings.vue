@@ -71,7 +71,7 @@
             <br />
             <h4>Web Specific Settings</h4>
             <br />
-            <div class="label-item">
+            <div class="label-item" v-if="showNotification">
                 <label for="show-notifications" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="show-notifications" class="mdl-switch__input" type="checkbox" v-model="show_notifications">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { Api, Util } from '@/utils/'
+import { Api, Util, Platform } from '@/utils/'
 import dialogPolyfill from 'dialog-polyfill'
 
 export default {
@@ -169,6 +169,10 @@ export default {
             // I don't want to remove this completely, it could be useful in the future, but we are refreshing the user's settings
             // each time the app is loaded, so this isn't necessary.
             return false;
+        },
+
+        showNotification () {
+            return Platform.isWebsite()
         }
     },
 
