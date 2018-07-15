@@ -470,4 +470,18 @@ export default {
         }
     }
 
+    body.black {
+        .preview {
+            background: rgb(0,0,0);
+
+            .overlay {
+                background: linear-gradient(to bottom, rgba(0,0,0,0) 95%,rgba(0,0,0,1) 100%);
+            }
+        }
+
+        .send-bar-inner {
+            background: #000000;
+        }
+    }
+
 </style>

@@ -24,6 +24,7 @@
                 <li class="mdl-menu__item" @click="theme='day_night'">Day / Night</li>
                 <li class="mdl-menu__item" @click="theme='light'">Light</li>
                 <li class="mdl-menu__item" @click="theme='dark'">Dark</li>
+                <li class="mdl-menu__item" @click="theme='black'">Black</li>
             </ul><!-- End Base Theme -->
 
             <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="color_dialog.showModal();"> <!-- Global Colors -->

@@ -138,6 +138,29 @@ export default {
         }
     }
 
+    body.black .conversation-card {
+        background: $bg-black;
+
+        &.mdl-card {
+            background: $bg-black;
+        }
+
+
+        &.small.mdl-card {
+            background: $bg-black;
+        }
+
+        .conversation-text {
+            .conversation-title {
+                color: white;
+            }
+
+            .conversation-snippet {
+                color: rgba(255,255,255,.77);
+            }
+        }
+    }
+
     .conversation-card {
         &.mdl-card {
             display: block;

@@ -421,6 +421,9 @@ export default {
             if (theme == "day_night")
                 return this.is_night ? "dark" : "";
 
+            if (theme == "black")
+                return 'dark black';
+
             return theme; // Otherwise return stored theme
         },
 
@@ -759,6 +762,16 @@ export default {
 
         .link-sent {
             color: white;
+        }
+    }
+
+    body.black {
+        background-color: $bg-black;
+
+        #toolbar {
+            border-bottom: solid 1px #000000;
+            background-color: $bg-black;
+            border-color: #000000;
         }
     }
 

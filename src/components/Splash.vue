@@ -60,6 +60,11 @@ export default {
         color: #fff;
     }
 
+    body.black .splash {
+        background: $bg-black;
+        color: #fff;
+    }
+
     body.dark #offline h4 {
         background: #545f65;
     }

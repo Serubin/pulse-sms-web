@@ -200,6 +200,15 @@ export default {
         }
     }
 
+    body.black #sidebar {
+        background-color: $bg-black;
+
+        #drawer-links li .link-card {
+            background-color: $bg-black;
+            color: #fff;
+        }
+    }
+
     #sidebar {
         transition: ease-in-out margin-left $anim-time;
         float: left;
