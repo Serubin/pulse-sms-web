@@ -172,7 +172,7 @@ export default {
         },
 
         showNotification () {
-            return Platform.isWebsite()
+            return Platform.isWebsite();
         }
     },
 

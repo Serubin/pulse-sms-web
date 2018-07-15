@@ -1,12 +1,12 @@
 export default class Platform {
 
     static isNativeDesktop() {
-        var userAgent = navigator.userAgent.toLowerCase();
+        let userAgent = navigator.userAgent.toLowerCase();
         return userAgent.indexOf("electron") > 0 && userAgent.indexOf("pulse-sms") > 0;
     }
 
     static isChromeExtension() {
-        return window.chrome && chrome && chrome.runtime && chrome.runtime.id !== undefined;
+        return window.chrome && chrome.runtime && chrome.runtime.id !== undefined;
     }
 
     static isChromeApp() {
