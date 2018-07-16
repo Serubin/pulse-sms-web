@@ -161,6 +161,10 @@ export default class Api {
         if (message.type != 0)
             return;
 
+        if (!Platform.isWebsite()) {
+            return;
+        }
+
         // fetch through the API instead of the session cache, since the session
         // cache doesn't know about the mute/private settings
         Api.fetchConversation(message.conversation_id).then(conversation => {
