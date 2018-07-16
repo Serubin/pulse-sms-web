@@ -136,4 +136,31 @@ export default {
         opacity: 0;
     }
 
+    body.dark {
+        #edit-scheduled-pane {
+            background: $bg-darker;
+
+            .mdl-card__title {
+                color: #fff;
+            }
+
+            .mdl-textfield__input, .mdl-textfield__label, .mdl-card__supporting-text {
+                color: #fff;
+            }
+
+            .time-picker {
+                background: $bg-darker;
+                color: #fff;
+            }
+
+            .mdl-button {
+                color: #fff;
+            }
+        }
+
+        .loading-center {
+            background: $bg-darker;
+        }
+    }
+
 </style>
