@@ -232,10 +232,18 @@ export default {
             if (this.is_article || this.is_media)
                 media = "padding-bottom:10px;"
 
-            return "background: " + this.color + ";"
-                + "border-color: " + this.color
-                + " transparent;" + media
-                + "color:" + this.textColor + ";";
+            if (this.$store.state.theme_use_global) {
+                let color = this.$store.state.theme_global_default;
+                return "background: " + color + ";"
+                    + "border-color: " + color
+                    + " transparent;" + media
+                    + "color:" + this.textColor + ";";
+            } else {
+                return "background: " + this.color + ";"
+                    + "border-color: " + this.color
+                    + " transparent;" + media
+                    + "color:" + this.textColor + ";";
+            }
         },
         dateType () {
             if (this.type == 0 || this.type == 6)
