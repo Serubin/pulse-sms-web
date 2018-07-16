@@ -204,7 +204,11 @@ export default {
         },
 
         color () {
-            return this.conversation_data.colors.default;
+            if (this.$store.state.theme_use_global) {
+                return this.$store.state.theme_global_default
+            } else {
+                return this.conversation_data.colors.default;
+            }
         },
 
         isArchived () {
