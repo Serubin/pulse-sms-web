@@ -465,6 +465,13 @@ export default {
                 const toolbar = this.$el.querySelector("#toolbar");
                 Util.materialColorChange(toolbar, to);
             })
+        },
+        '$store.state.title' (to) {
+            if (to.length > 0) {
+                document.title = to;
+            } else {
+                document.title = "Pulse SMS";
+            }
         }
 
     },
