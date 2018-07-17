@@ -66,7 +66,7 @@ import Vue from 'vue'
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 
-import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys} from '@/utils'
+import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys, Platform } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
 import Conversations from '@/components/Conversations/'
@@ -392,7 +392,11 @@ export default {
         },
 
         openUrl (url) {
-            window.open(url, '_blank');
+            if (Platform.isWebsite()) {
+                window.open(url, '_blank');
+            } else {
+                window.open(url);
+            }
         }
     },
 
