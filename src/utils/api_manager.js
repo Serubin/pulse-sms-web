@@ -124,7 +124,7 @@ export default class Api {
             const message_type = json.message.content.message_type;
 
             SessionCache.updateMessageType(id, message_type);
-            store.state.msgbus.$emit('updateMessageType', { id, message_type });
+            store.state.msgbus.$emit('updateMessageType-' + id, { message_type });
         } else if (operation == "added_conversation") {
             const id = json.message.content.id;
 

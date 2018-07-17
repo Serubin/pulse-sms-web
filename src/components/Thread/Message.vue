@@ -47,8 +47,8 @@ export default {
         if ( this.messageData.marker )
             return;
 
-        this.$store.state.msgbus.$on('updateMessageType',
-            (payload) => this.updateType(payload.id, payload.message_type));
+        this.$store.state.msgbus.$on('updateMessageType-' + this.id,
+            (payload) => this.updateType(payload.message_type));
 
         const MediaLoader = this.$store.state.media_loader; // get loader
         this.style_class.push('message');
@@ -152,6 +152,10 @@ export default {
         this.content = linkify(this.content, { className: linkClass })
     },
 
+    beforeDestroy () {
+        this.$store.state.msgbus.$off('updateMessageType-' + this.id);
+    },
+
     data () {
         return {
             id: this.messageData.device_id,
@@ -198,10 +202,7 @@ export default {
             this.media_thumb = data_prefix + blob;
             this.media_link = data_prefix + blob;
         },
-        updateType (id, type) {
-            if (this.id != id)
-                return;
-
+        updateType (type) {
             this.type = type;
         },
         openImage (e) {
