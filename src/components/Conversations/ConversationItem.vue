@@ -102,7 +102,12 @@ export default {
             }
 
             try {
-                return this.title.split('')[0].toUpperCase()
+                let letter = this.title.split('')[0].toUpperCase();
+                if (!letter.match(/[A-Z]/i)) {
+                    return "";
+                } else {
+                    return letter;
+                }
             } catch (e) { // Edge case for message with no title ??
                 return ""
             }
