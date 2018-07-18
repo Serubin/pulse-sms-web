@@ -25,7 +25,7 @@ let router = new VueRouter({
             path: '/',
             name: 'conversations-list',
             component: Conversations,
-            props: { 'index': 'index_unarchived', 'small': false },
+            props: { 'index': 'index_public_unarchived', 'small': false },
         },
         {
             path: '/archived',

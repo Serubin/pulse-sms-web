@@ -115,7 +115,7 @@ export default class Api {
         } else if (operation == "read_conversation") {
             const id = json.message.content.id;
 
-            SessionCache.readConversation('index_unarchived');
+            SessionCache.readConversation('index_public_unarchived');
             SessionCache.readConversation('index_archived');
 
             store.state.msgbus.$emit('conversationRead', id);
@@ -128,22 +128,22 @@ export default class Api {
         } else if (operation == "added_conversation") {
             const id = json.message.content.id;
 
-            SessionCache.invalidateConversations('index_unarchived');
+            SessionCache.invalidateConversations('index_public_unarchived');
             store.state.msgbus.$emit('addedConversation', { id });
         } else if (operation == "removed_conversation") {
             const id = json.message.content.id;
 
-            SessionCache.removeConversation(id, 'index_unarchived');
+            SessionCache.removeConversation(id, 'index_public_unarchived');
             store.state.msgbus.$emit('removedConversation', { id });
         } else if (operation == "archive_conversation") {
             const id = json.message.content.id;
 
             if (json.message.content.archive) {
-                SessionCache.removeConversation(id, 'index_unarchived');
+                SessionCache.removeConversation(id, 'index_public_unarchived');
                 SessionCache.invalidateConversations('index_archived');
             } else {
                 SessionCache.removeConversation(id, 'index_archived');
-                SessionCache.invalidateConversations('index_unarchived');
+                SessionCache.invalidateConversations('index_public_unarchived');
             }
 
             store.state.msgbus.$emit('removedConversation', { id });
@@ -208,7 +208,7 @@ export default class Api {
 
     static fetchConversations (index, folderId) {
         if (typeof index == 'undefined') {
-            index = "index_unarchived"
+            index = "index_public_unarchived"
         }
 
         if (index == 'folder') {

@@ -62,23 +62,7 @@ export default {
             }
 
             setTimeout(() => {
-                Api.fetchConversations("index_unarchived")
-                    .then((resp) => {
-                        this.$router.push('/');
-
-                        // This worked well to push you to the first conversation in the list, but what if
-                        // the user has pinned conversations? It is difficult to know which one you just sent
-                        // the message to, especially considering that there is no guarentee that Firebase
-                        // delivered the message to the phone, the phone sent it, and the backend updated
-                        // within this second and a half.
-                        // it is safer to push to the base index, instead of a thread.
-
-                        // const thread_id = resp[0].device_id;
-                        //
-                        // this.$router.push({
-                        //     name:  'thread', params: { threadId: thread_id, isRead: true }
-                        // });
-                    });
+                this.$router.push('/');
             }, 1500);
         }
     },
