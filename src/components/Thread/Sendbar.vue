@@ -189,8 +189,8 @@ export default {
                 margin = (width - MAIN_CONTENT_SIZE) / 2;
             }
 
-            // Set margin + sidebar
-            this.emojiStyle.left = (270  + margin) + "px";
+            let sidebar = this.$store.state.full_theme ? 270 : 0;
+            this.emojiStyle.left = (sidebar  + margin) + "px";
         },
         /**
          * Inserts Emoji to curser location
