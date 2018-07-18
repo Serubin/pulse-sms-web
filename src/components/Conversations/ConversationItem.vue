@@ -26,7 +26,7 @@ export default {
     data () {
         return {
             conversation_id: this.conversationData.device_id,
-            title: this.conversationData.title,
+            title: this.conversationData.titleNoEmoji,
             snippet: this.conversationData.snippet,
             read: this.conversationData.read,
             timestamp: this.conversationData.timestamp,
