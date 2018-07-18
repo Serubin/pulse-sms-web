@@ -190,7 +190,7 @@ export default {
             }
 
             let sidebar = this.$store.state.full_theme ? 270 : 0;
-            this.emojiStyle.left = (sidebar  + margin) + "px";
+            this.emojiStyle.left = (sidebar + margin) + "px";
         },
         /**
          * Inserts Emoji to curser location
