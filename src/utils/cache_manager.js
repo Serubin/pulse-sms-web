@@ -164,7 +164,7 @@ export default class SessionCache {
                 if (conversations[i].device_id == message.conversation_id) {
                     conversations[i].timestamp = message.timestamp;
                     conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
-                    this.putConversations(conversations, 'index_public_unarchived');
+                    this.putConversations(this.resortConversations(conversations), 'index_public_unarchived');
                     return;
                 }
             }
@@ -176,7 +176,7 @@ export default class SessionCache {
                 if (conversations[i].device_id == message.conversation_id) {
                     conversations[i].timestamp = message.timestamp;
                     conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
-                    this.putConversations(conversations, 'index_archived');
+                    this.putConversations(this.resortConversations(conversations), 'index_archived');
                     return;
                 }
             }
@@ -188,10 +188,44 @@ export default class SessionCache {
                 if (conversations[i].device_id == message.conversation_id) {
                     conversations[i].timestamp = message.timestamp;
                     conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
-                    this.putConversations(conversations, 'index_private');
+                    this.putConversations(this.resortConversations(conversations), 'index_private');
                     return;
                 }
             }
+        }
+    }
+
+    static resortConversations(convos) {
+        var pinned = [];
+        var normal = [];
+
+        for (let i = 0; i < convos.length; i++) {
+            if (convos[i].pinned) {
+                pinned.push(convos[i]);
+            } else {
+                normal.push(convos[i]);
+            }
+        }
+
+        pinned.sort(compare);
+        normal.sort(compare);
+
+        for (let i = 0; i < normal.length; i++) {
+            pinned.push(normal[i]);
+        }
+
+        return pinned;
+
+        function compare(a, b) {
+            if (a.timestamp > b.timestamp) {
+                return -1;
+            }
+
+            if (a.timestamp < b.timestamp) {
+                return 1;
+            }
+
+            return 0;
         }
     }
 }
