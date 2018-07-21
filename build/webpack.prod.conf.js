@@ -65,6 +65,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new ScriptExtHtmlWebpackPlugin({
+      sync: /vendor\..*\.js/,
       defaultAttribute: 'async'
     }),
     // split vendor js into its own file
