@@ -392,11 +392,7 @@ export default {
         },
 
         openUrl (url) {
-            if (Platform.isWebsite()) {
-                window.open(url, '_blank');
-            } else {
-                window.open(url);
-            }
+            window.open(url, '_blank');
         }
     },
 
