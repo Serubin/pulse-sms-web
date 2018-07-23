@@ -52,6 +52,35 @@ export default {
         }
 
         this.$store.state.msgbus.$on('hotkey-emoji', this.toggleEmoji);
+
+        document.documentElement.addEventListener('paste', function(event) {
+            var clipboardData, found;
+            found = false;
+            clipboardData = event.clipboardData;
+
+            return Array.prototype.forEach.call(clipboardData.types, function(type, i) {
+                var file, reader;
+                if (found) {
+                    return;
+                }
+
+                if (type.match(/image.*/) || clipboardData.items[i].type.match(/image.*/)) {
+                    file = clipboardData.items[i].getAsFile();
+                    reader = new FileReader();
+
+                    reader.onload = function(evt) {
+                        return Api.loadFile(file);
+                    };
+
+                    reader.readAsDataURL(file);
+                    return found = true;
+                }
+            });
+        });
+    },
+
+    destroy () {
+        document.documentElement.removeEventListener('paste');
     },
 
     data () {
