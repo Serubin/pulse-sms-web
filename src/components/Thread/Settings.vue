@@ -67,7 +67,6 @@
 
 <script>
 import { Api, Util, SessionCache } from '@/utils/'
-import dialogPolyfill from 'dialog-polyfill'
 
 export default {
     name: 'conversation-settings',

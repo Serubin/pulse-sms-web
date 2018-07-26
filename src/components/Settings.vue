@@ -94,7 +94,6 @@
 
 <script>
 import { Api, Util, Platform } from '@/utils/'
-import dialogPolyfill from 'dialog-polyfill'
 
 export default {
     name: 'settings',
