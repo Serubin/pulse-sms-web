@@ -27,35 +27,35 @@
                 <li class="mdl-menu__item" @click="theme='black'">Black</li>
             </ul><!-- End Base Theme -->
 
-            <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="color_dialog.showModal();"> <!-- Global Colors -->
+            <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showColorDialog"> <!-- Global Colors -->
                 <div class="mdl-color-text--grey-900">Primary Color, Primary Color Dark, Accent Color</div>
                 <div class="mdl-color-text--grey-600">{{ global_colors }}</div>
             </div> <!-- End Global Colors -->
 
-            <dialog class="mdl-dialog">
-                <div class="mdl-dialog__content">
+            <div class="mdl-dialog" v-if="showColorSettings">
+                <div class="mdl-dialog__content mdl-dialog-card mdl-card">
                     <h4>Update Theme Colors</h4>
                     <div class="mdl-textfield mdl-js-textfield">
                         Primary Color
                         <input class="mdl-textfield__input" type="text" id="theme-default" v-model="theme_default"/>
-                        <label class="mdl-textfield__label" for="theme-default">Default Color</label>
+                        <label class="mdl-textfield__label" for="theme-default"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
                         Dark Color
                         <input class="mdl-textfield__input" type="text" id="theme-dark" v-model="theme_dark"/>
-                        <label class="mdl-textfield__label" for="theme-dark">Dark Color</label>
+                        <label class="mdl-textfield__label" for="theme-dark"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
                         Accent Color
                         <input class="mdl-textfield__input" type="text" id="theme-accent" v-model="theme_accent"/>
-                        <label class="mdl-textfield__label" for="theme-accent">Accent Color</label>
+                        <label class="mdl-textfield__label" for="theme-accent"></label>
+                    </div>
+                    <div class="mdl-dialog__actions">
+                        <button type="button" class="mdl-button close" @click="saveColors">Save</button>
+                        <button type="button" class="mdl-button close" @click="closeColorDialog">Close</button>
                     </div>
                 </div>
-                <div class="mdl-dialog__actions">
-                    <button type="button" class="mdl-button close" @click="saveColors()">Save</button>
-                    <button type="button" class="mdl-button close" @click="color_dialog.close()">Close</button>
-                </div>
-            </dialog>
+            </div>
 
             <br />
 
@@ -110,10 +110,6 @@ export default {
 
         let theme_menu_el = this.$el.querySelector("#base-theme-menu")
         this.theme_menu = theme_menu_el.MaterialMenu;
-
-        this.color_dialog = this.$el.querySelector(".mdl-dialog");
-        if (! this.color_dialog.showModal)
-            dialogPolyfill.registerDialog(this.color_dialog)
     },
 
     data () {
@@ -127,7 +123,7 @@ export default {
             theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : "#00695C",
             theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : "#FFAB40",
             theme_menu: null,
-            color_dialog: null
+            showColorSettings: false
         }
     },
 
@@ -181,6 +177,14 @@ export default {
         refreshSettings () {
             Api.fetchSettings();
             Util.snackbar("Settings Refreshed")
+        },
+
+        showColorDialog () {
+            this.showColorSettings = true;
+        },
+
+        closeColorDialog () {
+            this.showColorSettings = false;
         },
 
         /**
@@ -240,7 +244,7 @@ export default {
             this.$store.commit('colors_dark', Util.expandColor(theme_dark))
             this.$store.commit('colors_accent', Util.expandColor(theme_accent))
 
-            this.color_dialog.close()
+            this.closeColorDialog();
         }
 
     },
@@ -310,16 +314,32 @@ export default {
         cursor: pointer;
     }
 
-    dialog {
-        position: fixed;
-        top: 50%;
-        transform: translate(0, -50%);
-    }
-
     body.dark {
         .item:hover, .click-item:hover {
         	  background: #202020;
         }
+    }
+
+    .mdl-dialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+    }
+
+    .mdl-dialog-card {
+        width: 300px;
+        min-height: 120px;
+        margin: auto;
+        margin-top: 100px;
+        text-align: left;
+    }
+
+    .mdl-dialog-button-bar {
+      	margin-left: auto;
+      	margin-right: 24px;
     }
 
 </style>
