@@ -4,6 +4,12 @@
         <!-- Spinner On load -->
         <spinner class="spinner" v-if="conversations.length == 0 && loading"></spinner>
 
+        <div id="quick_find" v-if="showSearch">
+           <div>
+             <input v-model="searchQuery" id="search-bar" class="quick_find fixed_pos" type="text text_box" placeholder="Search conversations..." autocomplete="off" autocorrect="off" spellcheck="false">
+           </div>
+         </div>
+
         <!-- If no Messages -->
         <p class="empty-message" v-if="conversations.length == 0 && !loading">No Conversations</p>
 
@@ -37,6 +43,7 @@ export default {
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
         this.$store.state.msgbus.$on('newMargin', this.updateMargin);
+        this.$store.state.msgbus.$on('search-btn', this.toggleSearch);
 
         this.fetchConversations();
 
@@ -62,6 +69,7 @@ export default {
             this.$store.state.msgbus.$off('newMessage')
             this.$store.state.msgbus.$off('conversationRead')
             this.$store.state.msgbus.$off('refresh-btn');
+            this.$store.state.msgbus.$off('search-btn');
             this.$store.state.msgbus.$off('newMargin');
         }
     },
@@ -84,7 +92,11 @@ export default {
                 .then(response => this.processConversations(response));
         },
 
-        processConversations (response) {
+        processConversations (response, updateUnfiltered = true) {
+            if (updateUnfiltered) {
+                // used for searching
+                this.unFilteredAllConversations = response;
+            }
 
             const updatedConversations = [];
 
@@ -140,6 +152,11 @@ export default {
 
         updateConversation (event_obj) {
 
+            if (this.searchClicked) {
+                this.processConversations(this.unFilteredAllConversations);
+                this.searchClicked = false;
+            }
+
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
 
@@ -190,12 +207,12 @@ export default {
 
                     // Push label and conversation
                     this.conversations.splice(startIndex, 0, label, conv)
-
                 } else { // Else, just push the converstation to index 1 (below label)
-
                     this.conversations.splice(startIndex + 1, 0, conv)
                 }
             }
+
+            this.conversations = this.conversations;
         },
 
         updateRead (id) {
@@ -239,6 +256,16 @@ export default {
 
         updateMargin (margin) {
             this.margin = margin;
+        },
+
+        toggleSearch () {
+            this.searchClicked = !this.searchClicked;
+
+            if (this.searchClicked) {
+                this.$el.querySelector('#search-bar').focus();
+            } else {
+                this.searchQuery = "";
+            }
         },
 
         calculateTitle (conversation) {
@@ -303,7 +330,10 @@ export default {
             title: "",
             loading: true,
             conversations: [],
-            margin: 0
+            unFilteredAllConversations: [],
+            margin: 0,
+            searchClicked: false,
+            searchQuery: ""
         }
     },
 
@@ -315,6 +345,10 @@ export default {
         composeStyle () {
             return "background: " + this.$store.state.colors_accent + "; " +
                     "marginRight: " + (this.margin + 36) + "px;";
+        },
+
+        showSearch() {
+            return this.searchClicked && !this.small;
         }
     },
 
@@ -324,9 +358,31 @@ export default {
             // Only update if list page
             if (to.name != from.name && to.name.indexOf('conversations-list') >= 0) {
                 this.conversations = [];
+                this.unFilteredAllConversations = [];
+
                 this.fetchConversations();
             }
 
+        },
+
+        "searchQuery" (to, from) {
+            to = to.toLowerCase();
+            let filteredConversations = [];
+
+            for (let i in this.unFilteredAllConversations) {
+                let conversation = this.unFilteredAllConversations[i];
+
+                if (typeof conversation == "function") {
+                    continue;
+                }
+
+                if (conversation.title.toLowerCase().indexOf(to) > -1 ||
+                        conversation.snippet.toLowerCase().indexOf(to) > -1) {
+                    filteredConversations.push(conversation);
+                }
+            }
+
+            this.processConversations(filteredConversations, false);
         }
     },
 
@@ -365,6 +421,39 @@ export default {
         }
     }
 
+    #quick_find {
+      white-space: nowrap;
+      padding-top: 5px;
+      text-align: right;
+    }
+
+    .quick_find {
+      width: 215px;
+      margin-top: 3px;
+      border: 0px solid white;
+      border-radius: 2px;
+      font-size: 15px;
+      background-color: white;
+      color: black;
+      background-position: 10px 10px;
+      background-repeat: no-repeat;
+      padding: 12px 16px 12px 16px;
+      -webkit-transition: width 0.4s ease-in-out;
+      transition: width 0.4s ease-in-out;
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, .3);
+    }
+
+    .quick_find:focus {
+      width: 400px;
+      outline: none !important;
+    }
+
+    @media (max-width:450px) {
+      .quick_find:focus {
+        width: 250px;
+      }
+    }
+
     .flip-list-enter, .flip-list-leave-to	{
         opacity: 0;
     }
@@ -380,6 +469,12 @@ export default {
     body.dark {
         .empty-message {
             color: rgba(255, 255, 255, 0.54);
+        }
+
+        .quick_find {
+          border: 0px solid $bg-darker;
+          background-color: $bg-darker;
+          color: white;
         }
     }
 </style>
