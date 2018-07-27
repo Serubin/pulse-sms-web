@@ -6,7 +6,7 @@
 
         <div id="quick_find" v-if="showSearch">
            <div>
-             <input v-model="searchQuery" class="quick_find fixed_pos" type="text text_box" placeholder="Search conversations..." autocomplete="off" autocorrect="off" spellcheck="false">
+             <input v-model="searchQuery" id="search-bar" class="quick_find fixed_pos" type="text text_box" placeholder="Search conversations..." autocomplete="off" autocorrect="off" spellcheck="false">
            </div>
          </div>
 
@@ -92,7 +92,11 @@ export default {
                 .then(response => this.processConversations(response));
         },
 
-        processConversations (response) {
+        processConversations (response, updateUnfiltered = true) {
+            if (updateUnfiltered) {
+                // used for searching
+                this.unFilteredAllConversations = response;
+            }
 
             const updatedConversations = [];
 
@@ -138,7 +142,6 @@ export default {
             this.loading = false;
             this.$store.commit('conversations', cache);
             this.conversations = updatedConversations;
-            this.unFilteredAllConversations = updatedConversations;
 
             if (!this.small) {
                 this.$store.commit("loading", false);
@@ -148,6 +151,11 @@ export default {
         },
 
         updateConversation (event_obj) {
+
+            if (this.searchClicked) {
+                this.processConversations(this.unFilteredAllConversations);
+                this.searchClicked = false;
+            }
 
             // Find conversation
             let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
@@ -172,8 +180,8 @@ export default {
 
             // Get start index (index after pinned items)
             let startIndex = 0;
-            if (this.unFilteredAllConversations[0].label == "Pinned" && !conv.pinned) { // If there are any pinned items
-                this.unFilteredAllConversations.some( (conv, i) => {
+            if (this.conversations[0].label == "Pinned" && !conv.pinned) { // If there are any pinned items
+                this.conversations.some( (conv, i) => {
                     if (typeof conv.label != "undefined" // Loop until we find a label
                         && conv.label != "Pinned") { // That is not "pinned"
 
@@ -185,12 +193,12 @@ export default {
 
             // Move conversation if required
             if (conv_index != startIndex + 1) {
-                conv = this.unFilteredAllConversations.splice(conv_index, 1)[0]
+                conv = this.conversations.splice(conv_index, 1)[0]
 
                 // If top label is not "Today"
                 // This isn't elegant, but it works
-                if (this.unFilteredAllConversations[startIndex].label != "Today"
-                    && this.unFilteredAllConversations[startIndex].label != "Pinned") {
+                if (this.conversations[startIndex].label != "Today"
+                    && this.conversations[startIndex].label != "Pinned") {
                     const title = "Today"; // Define title
                     const label = {        // And Define Label
                         label: title,
@@ -198,13 +206,13 @@ export default {
                     }
 
                     // Push label and conversation
-                    this.unFilteredAllConversations.splice(startIndex, 0, label, conv)
+                    this.conversations.splice(startIndex, 0, label, conv)
                 } else { // Else, just push the converstation to index 1 (below label)
-                    this.unFilteredAllConversations.splice(startIndex + 1, 0, conv)
+                    this.conversations.splice(startIndex + 1, 0, conv)
                 }
             }
 
-            this.conversations = this.unFilteredAllConversations;
+            this.conversations = this.conversations;
         },
 
         updateRead (id) {
@@ -223,8 +231,8 @@ export default {
             let conv_index = null;
             let conv = null;
 
-            for(conv_index in this.unFilteredAllConversations) {
-                conv = this.unFilteredAllConversations[conv_index];
+            for(conv_index in this.conversations) {
+                conv = this.conversations[conv_index];
 
                 if(id == conv.device_id)
                     return  { conv, conv_index };
@@ -252,6 +260,12 @@ export default {
 
         toggleSearch () {
             this.searchClicked = !this.searchClicked;
+
+            if (this.searchClicked) {
+                this.$el.querySelector('#search-bar').focus();
+            } else {
+                this.searchQuery = "";
+            }
         },
 
         calculateTitle (conversation) {
@@ -352,7 +366,23 @@ export default {
         },
 
         "searchQuery" (to, from) {
-            console.log("search query: " + to);
+            to = to.toLowerCase();
+            let filteredConversations = [];
+
+            for (let i in this.unFilteredAllConversations) {
+                let conversation = this.unFilteredAllConversations[i];
+
+                if (typeof conversation == "function") {
+                    continue;
+                }
+
+                if (conversation.title.toLowerCase().indexOf(to) > -1 ||
+                        conversation.snippet.toLowerCase().indexOf(to) > -1) {
+                    filteredConversations.push(conversation);
+                }
+            }
+
+            this.processConversations(filteredConversations, false);
         }
     },
 
