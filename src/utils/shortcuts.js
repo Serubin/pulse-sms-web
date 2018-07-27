@@ -28,6 +28,10 @@ export default class ShortcutKeys {
             _this.finish(event, "open compose page", () => { router.push('/compose') });
         });
 
+        hotkeys("control+shift+s,command+shift+s,alt+shift+s,ctrl+shift+s", function(event) {
+            _this.finish(event, "open search bar", () => { store.state.msgbus.$emit("search-btn") });
+        });
+
         hotkeys('control+e,command+e,alt+e,ctrl+e', function(event) {
             _this.finish(event, "opened the emoji input", () => { store.state.msgbus.$emit("hotkey-emoji") });
         });
