@@ -12,7 +12,7 @@
             <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="isArchive" :small="small" :key="conversation.hash ? conversation.hash : conversation.label"/>
         </transition-group>
 
-        <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="{ background: $store.state.colors_accent }" v-if="!small" v-mdl>
+        <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="composeStyle" v-if="!small" v-mdl>
             <i class="material-icons md-light">add</i>
         </button>
     </div>
@@ -32,10 +32,11 @@ export default {
     props: ['small', 'index', 'folderId', 'folderName'],
 
     mounted () {
-        this.$store.state.msgbus.$on('newMessage', this.updateConversation)
-        this.$store.state.msgbus.$on('conversationRead', this.updateRead)
-        this.$store.state.msgbus.$on('removedConversation', this.fetchConversations)
+        this.$store.state.msgbus.$on('newMessage', this.updateConversation);
+        this.$store.state.msgbus.$on('conversationRead', this.updateRead);
+        this.$store.state.msgbus.$on('removedConversation', this.fetchConversations);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
+        this.$store.state.msgbus.$on('newMargin', this.updateMargin);
 
         this.fetchConversations();
 
@@ -61,6 +62,7 @@ export default {
             this.$store.state.msgbus.$off('newMessage')
             this.$store.state.msgbus.$off('conversationRead')
             this.$store.state.msgbus.$off('refresh-btn');
+            this.$store.state.msgbus.off('newMargin');
         }
     },
 
@@ -235,6 +237,10 @@ export default {
             this.fetchConversations();
         },
 
+        updateMargin (margin) {
+            this.margin = margin;
+        },
+
         calculateTitle (conversation) {
             if (conversation.pinned)
                 return "Pinned";
@@ -297,12 +303,18 @@ export default {
             title: "",
             loading: true,
             conversations: [],
+            margin: 0
         }
     },
 
     computed: {
         isArchive () {
             return this.index == "index_archived";
+        },
+
+        composeStyle () {
+            return "background: " + this.$store.state.colors_accent + "; " +
+                    "marginRight: " + (this.margin + 36) + "px;";
         }
     },
 

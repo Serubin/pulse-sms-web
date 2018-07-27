@@ -244,6 +244,7 @@ export default {
 
             // Set margin
             this.margin = margin
+            this.$store.state.msgbus.$emit('newMargin', margin);
         },
 
         /**

@@ -360,42 +360,42 @@ export default {
 
         @media (min-width: 750px) {
             & {
-                width: 500px;
+                width: 450px;
             }
         }
         @media (min-width: 800px) {
             & {
-                width: 540px;
+                width: 490px;
             }
         }
         @media (min-width: 820px) {
             & {
-                width: 555px;
+                width: 505px;
             }
         }
         @media (min-width: 850px) {
             & {
-                width: 580px;
+                width: 530px;
             }
         }
         @media (min-width: 870px) {
             & {
-                width: 600px;
+                width: 550px;
             }
         }
         @media (min-width: 890px) {
             & {
-                width: 620px;
+                width: 570px;
             }
         }
         @media (min-width: 920px) {
             & {
-                width: 650px;
+                width: 600px;
             }
         }
         @media (min-width:950px) {
             & {
-                width: 680px;
+                width: 630px;
             }
         }
     }

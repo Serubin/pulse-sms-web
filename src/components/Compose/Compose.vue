@@ -1,5 +1,5 @@
 <template>
-    <div class="page-content">
+    <div class="page-content" :style="{ height: pageHeight + 'px' }">
         <RecipientBar :onContactListChanged="onContactListChanged"/>
         <Sendbar :onSend="sendMessage" :loading="sending" />
     </div>
@@ -22,6 +22,13 @@ export default {
 
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
+
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize(); // Get initial margin size
+    },
+
+    beforeDestroy () {
+        window.removeEventListener('resize', this.handleResize);
     },
 
     data () {
@@ -29,6 +36,7 @@ export default {
             title: 'Compose',
             sending: false,
             selectedContacts: [],
+            pageHeight: 0
         }
     },
 
@@ -64,6 +72,11 @@ export default {
             setTimeout(() => {
                 this.$router.push('/');
             }, 1500);
+        },
+
+        handleResize () {
+            const height = document.documentElement.clientHeight;
+            this.pageHeight = height;
         }
     },
 
