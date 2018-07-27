@@ -62,7 +62,7 @@ export default {
             this.$store.state.msgbus.$off('newMessage')
             this.$store.state.msgbus.$off('conversationRead')
             this.$store.state.msgbus.$off('refresh-btn');
-            this.$store.state.msgbus.off('newMargin');
+            this.$store.state.msgbus.$off('newMargin');
         }
     },
 
