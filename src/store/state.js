@@ -60,6 +60,7 @@ export const state = {
 
     session_conversations: { },
     session_messages: { },
+    session_contacts: { },
 }
 
 export const getters = {
@@ -97,6 +98,7 @@ export const mutations = {
     last_passcode_entry: (state, last_passcode_entry) => state.last_passcode_entry = last_passcode_entry,
     session_conversations: (state, session_conversations) => state.session_conversations = session_conversations,
     session_messages: (state, session_messages) => state.session_messages = session_messages,
+    session_contacts: (state, session_contacts) => state.session_contacts = session_contacts,
     theme_global: (state, colors) => {
         // this mutation wasn't getting pushed through the plugin to write to the local storage
         // so the global theme was being queried every time.

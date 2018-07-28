@@ -49,6 +49,10 @@ export default class SessionCache {
         return SessionCache.getAllMessages()[conversation_id];
     }
 
+    static getContacts () {
+        return store.state.session_contacts;
+    }
+
     static putConversations (conversations, index = 'index_public_unarchived') {
         let sessionConversations = SessionCache.getAllConversations();
         sessionConversations[index] = conversations;
@@ -61,6 +65,10 @@ export default class SessionCache {
         sessionMessages[conversation_id] = messages;
 
         store.commit('session_messages', sessionMessages);
+    }
+
+    static putContacts (contacts) {
+        store.commit('session_contacts', contacts);
     }
 
     static hasConversations (index = 'index_public_unarchived') {
@@ -78,6 +86,10 @@ export default class SessionCache {
         return messages[0].timestamp >= conversation.timestamp - 2000
     }
 
+    static hasContacts () {
+        return SessionCache.getContacts().length > 0
+    }
+
     static invalidateConversations (index = 'index_public_unarchived') {
         SessionCache.putConversations(null, index);
     }
@@ -92,6 +104,10 @@ export default class SessionCache {
 
     static invalidateAllMessages() {
         store.commit('session_messages', { });
+    }
+
+    static invalidateContacts() {
+        store.commit('session_contacts', { });
     }
 
     static removeConversation (conversation_id, index = 'index_public_unarchived') {

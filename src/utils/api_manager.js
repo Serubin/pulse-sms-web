@@ -777,9 +777,13 @@ export default class Api {
     static fetchContacts () {
         let constructed_url = Url.get("contacts") + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-
             let contacts = [];
-            queryContacts(500, 3000);
+            
+            if (!SessionCache.hasContacts()) {
+                queryContacts(500, 3000);
+            } else {
+                resolve(SessionCache.getContacts());
+            }
 
             function queryContacts(pageLimit, totalLimit) {
                 Vue.http.get(constructed_url + "&limit=" + pageLimit + "&offset=" + contacts.length).then(response => {
@@ -814,6 +818,7 @@ export default class Api {
                     }
                 });
 
+                SessionCache.putContacts(contacts);
                 resolve(contacts);
             }
         });
