@@ -778,9 +778,9 @@ export default class Api {
         let constructed_url = Url.get("contacts") + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
             let contacts = [];
-            
+
             if (!SessionCache.hasContacts()) {
-                queryContacts(500, 3000);
+                queryContacts(50, 3000);
             } else {
                 resolve(SessionCache.getContacts());
             }
@@ -797,14 +797,14 @@ export default class Api {
                     }
 
                     if (response.length == pageLimit && contacts.length < totalLimit) {
-                        queryContacts(pageLimit, totalLimit, finishedCallback)
+                        queryContacts(pageLimit, totalLimit);
                     } else {
-                        finishQuery(contacts)
+                        finishQuery(contacts);
                     }
                 }).catch(response => Api.rejectHandler(response, reject));
             }
 
-            function finishQuery(contacts, finishedCallback) {
+            function finishQuery(contacts) {
                 contacts.sort(function(a, b) {
                     let nameA = a.name.toUpperCase();
                     let nameB = b.name.toUpperCase();
