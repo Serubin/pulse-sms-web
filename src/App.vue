@@ -86,6 +86,9 @@ export default {
         else
             this.$router.push('login');
 
+        navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+            console.log('Registered SW with scope: ', registration.scope);
+        });
     },
 
     mounted () { // Add window event listener
