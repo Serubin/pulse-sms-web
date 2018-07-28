@@ -40,6 +40,7 @@ export default class Crypto {
             // convo.title = emojione.unicodeToImage(convo.titleNoEmoji);
 
             convo.snippetNoEmoji = Crypto.decrypt(convo.snippet).replace(/\n/g, " ");
+            convo.snippetNoEmoji = convo.snippetNoEmoji.replace("<i>", "").replace("</i>", "");
             convo.snippet = emojione.unicodeToImage(Util.entityEncode(convo.snippetNoEmoji));
         } catch (err) {
             return null
