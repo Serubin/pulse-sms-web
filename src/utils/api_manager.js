@@ -777,33 +777,45 @@ export default class Api {
     static fetchContacts () {
         let constructed_url = Url.get("contacts") + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
-                    response = response.data
+
+            let contacts = [];
+            queryContacts(500, 3000);
+
+            function queryContacts(pageLimit, totalLimit) {
+                Vue.http.get(constructed_url + "&limit=" + pageLimit + "&offset=" + contacts.length).then(response => {
+                    response = response.data;
 
                     // Decrypt contact items
                     for(let i = 0; i < response.length; i++) {
                         const contact = Crypto.decryptContact(response[i]);
                         if (contact != null)
-                            response[i] = contact;
+                            contacts.push(contact);
                     }
 
-                    response.sort(function(a, b) {
-                        var nameA = a.name.toUpperCase();
-                        var nameB = b.name.toUpperCase();
+                    if (response.length == pageLimit && contacts.length < totalLimit) {
+                        queryContacts(pageLimit, totalLimit, finishedCallback)
+                    } else {
+                        finishQuery(contacts)
+                    }
+                }).catch(response => Api.rejectHandler(response, reject));
+            }
 
-                        if (nameA < nameB) {
-                            return -1;
-                        } else if (nameA > nameB) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    });
+            function finishQuery(contacts, finishedCallback) {
+                contacts.sort(function(a, b) {
+                    let nameA = a.name.toUpperCase();
+                    let nameB = b.name.toUpperCase();
 
-                    resolve(response);
-                })
-                .catch( response => Api.rejectHandler(response, reject) );
+                    if (nameA < nameB) {
+                        return -1;
+                    } else if (nameA > nameB) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+
+                resolve(contacts);
+            }
         });
 
         return promise
