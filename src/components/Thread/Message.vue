@@ -44,11 +44,8 @@ export default {
     props: [ 'messageData', 'threadColor', 'textColor' ],
 
     mounted () {
-        if ( this.messageData.marker )
+        if (this.messageData.marker)
             return;
-
-        this.$store.state.msgbus.$on('updateMessageType-' + this.id,
-            (payload) => this.updateType(payload.message_type));
 
         const MediaLoader = this.$store.state.media_loader; // get loader
         this.style_class.push('message');
@@ -125,7 +122,7 @@ export default {
 
         let linkClass = 'link-sent'
         if (!this.is_article) {
-            switch ( this.type ) {
+            switch (this.type) {
                 case 0:
                 case 6: {
                     linkClass = 'link-received'
@@ -146,6 +143,11 @@ export default {
                     this.options_class.push('sent_options');
                 }
             }
+        }
+
+        if (this.sending) {
+            this.$store.state.msgbus.$on('updateMessageType-' + this.id,
+                (payload) => this.updateType(payload.message_type));
         }
 
         // Add links
