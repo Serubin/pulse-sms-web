@@ -89,6 +89,22 @@ export default {
         navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js').then((registration) => {
             console.log('Registered SW with scope: ', registration.scope);
         });
+
+        let accountId = this.$store.state.account_id;
+        let hash = this.$store.state.hash;
+        let salt = this.$store.state.salt;
+
+        addEventListener('message', function(e) {
+            if (e.origin.startsWith("chrome-extension://")) {
+                if (e.data == "requesting account id") {
+                    e.source.postMessage("account id: " + accountId, e.origin);
+                } else if (e.data == "requesting hash") {
+                    e.source.postMessage("hash: " + hash, e.origin);
+                } else if (e.data == "requesting salt") {
+                    e.source.postMessage("salt: " + salt, e.origin);
+                }
+            }
+        });
     },
 
     mounted () { // Add window event listener
