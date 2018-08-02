@@ -248,7 +248,11 @@ export default {
 
     computed: {
         send_color () {
-            return this.$store.state.colors_accent
+            if (this.$store.state.theme_use_global) {
+                return this.$store.state.theme_global_accent;
+            } else {
+                return this.$store.state.colors_accent;
+            }
         },
         is_dirty () { // Is dirty fix for mdl
             if (this.message.length > 0)
