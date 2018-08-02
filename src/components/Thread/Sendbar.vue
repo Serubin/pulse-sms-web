@@ -10,8 +10,8 @@
             <img :src="media_blob" />
         </div>
         <div class="send-bar-inner" id="sendbar">
-            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" @click.prevent="attachMedia"/>
-            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" @click="toggleEmoji"/>
+            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia"/>
+            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji"/>
             <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
                     <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" />
             </div>
