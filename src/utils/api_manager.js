@@ -780,7 +780,7 @@ export default class Api {
             let contacts = [];
 
             if (!SessionCache.hasContacts()) {
-                queryContacts(50, 3000);
+                queryContacts(300, 3000);
             } else {
                 resolve(SessionCache.getContacts());
             }
