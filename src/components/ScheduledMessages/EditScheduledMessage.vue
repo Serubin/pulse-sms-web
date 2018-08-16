@@ -6,7 +6,7 @@
 
         <div class="mdl-card__supporting-text">
             <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" id="message" v-model="message" autofocus/>
+                <textarea class="mdl-textfield__input" id="message" v-model="message" autofocus/>
                 <label class="mdl-textfield__label" for="message">Message text...</label>
             </div>
             Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
