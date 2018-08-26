@@ -13,7 +13,8 @@ export const KEYS  = {
         GLOBAL_DEFAULT: 'theme_global_default',
         GLOBAL_DARK: 'theme_global_dark',
         GLOBAL_ACCENT: 'theme_global_accent',
-        USE_GLOBAL: 'theme_use_global'
+        USE_GLOBAL: 'theme_use_global',
+        APPLY_APPBAR_COLOR: 'theme_apply_appbar_color'
     }
 }
 
@@ -32,6 +33,7 @@ export const state = {
     theme_global_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#00695C\"" ),
     theme_global_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#FFAB40\"" ),
     theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
+    theme_apply_appbar_color: JSON.parse( window.localStorage.getItem(KEYS.THEME.APPLY_APPBAR_COLOR) || "true" ),
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
     enter_to_send: JSON.parse( window.localStorage.getItem(KEYS.ENTER_TO_SEND) || "true" ),
 
@@ -86,6 +88,7 @@ export const mutations = {
     theme_global_dark: (state, theme_global_dark) => state.theme_global_dark = theme_global_dark,
     theme_global_accent: (state, theme_global_accent) => state.theme_global_accent = theme_global_accent,
     theme_use_global: (state, theme_use_global) => state.theme_use_global = theme_use_global,
+    theme_apply_appbar_color: (state, theme_apply_appbar_color) => state.theme_apply_appbar_color = theme_apply_appbar_color,
     notifications: (state, notifications) => state.notifications = notifications,
     enter_to_send: (state, enter_to_send) => state.enter_to_send = enter_to_send,
     media_loader: (state, media_loader) => state.media_loader = media_loader,

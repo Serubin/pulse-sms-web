@@ -70,6 +70,18 @@
             </div> <!-- End Global Theme -->
 
             <br />
+
+            <!-- Apply Primary Color to App Bar -->
+            <div class="label-item">
+                <label for="theme-appbar" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
+                    <input id="theme-appbar" class="mdl-switch__input" type="checkbox" v-model="theme_appbar">
+                    <span class="mdl-switch__label mdl-color-text--grey-900">
+                        Apply Primary Color to App Bar
+                    </span>
+                </label>
+            </div> <!-- End Apply Primary Color to App Bar -->
+
+            <br />
             <h4>Web Specific Settings</h4>
             <br />
             <div class="label-item" v-if="showNotification">
@@ -115,6 +127,7 @@ export default {
         return {
             title: "Settings",
             global_theme: this.$store.state.theme_use_global,
+            theme_appbar: this.$store.state.theme_apply_appbar_color,
             show_notifications: this.$store.state.notifications,
             enter_to_send: this.$store.state.enter_to_send,
             theme: this.$store.state.theme_base,
@@ -159,6 +172,10 @@ export default {
 
         use_global_theme () {
             return this.boolToStr(this.$store.state.theme_use_global);
+        },
+
+        apply_primary_color_to_appbar () {
+            return this.boolToStr(this.$store.state.theme_apply_appbar_color);
         },
 
         showSettingsRefresh () {
@@ -257,6 +274,10 @@ export default {
         'global_theme' () {
             this.$store.commit('theme_use_global', this.global_theme)
             Api.updateSetting("apply_theme_globally", "boolean", this.global_theme)
+        },
+        'theme_appbar' () {
+            this.$store.commit('theme_apply_appbar_color', this.theme_appbar)
+            Api.updateSetting("apply_primary_color_toolbar", "boolean", this.theme_appbar)
         },
         'theme' () {
             this.$store.commit('theme_base', this.theme),
