@@ -325,6 +325,10 @@ export default {
          * @param color - rgb/hex color string.
          */
         updateTheme (color) {
+            // Ignore if toolbar theme is false
+            if (!this.$store.state.theme_apply_appbar_color)
+                return false;
+
             this.toolbar_color = color;
         },
 
@@ -419,10 +423,10 @@ export default {
     computed: {
         icon_class () {
             return {
-                'logo': false,
-                'logo_dark': this.full_theme,
-                'menu_toggle': false,
-                'menu_toggle_dark': !this.full_theme,
+                'logo': this.full_theme && !this.$store.state.theme_apply_appbar_color,
+                'logo_dark': this.full_theme && this.$store.state.theme_apply_appbar_color,
+                'menu_toggle': !this.full_theme && !this.$store.state.theme_apply_appbar_color,
+                'menu_toggle_dark': !this.full_theme && this.$store.state.theme_apply_appbar_color,
             }
         },
 
@@ -452,6 +456,9 @@ export default {
         },
 
         theme_toolbar () { // Determine toolbar color
+            if (!this.$store.state.theme_apply_appbar_color)  // If not color toolbar
+                return this.default_toolbar_color;
+
             if (this.$store.state.theme_use_global) // If use global
                 return this.$store.state.theme_global_default;
 
@@ -459,7 +466,15 @@ export default {
         },
 
         default_toolbar_color () { // Determine default colors
-            if (this.$store.state.theme_global_default) {
+            if (!this.$store.state.theme_apply_appbar_color) {
+                if (this.theme_str.indexOf('black') >= 0) {
+                    return "#000000";
+                } else if (this.theme_str.indexOf('dark') >= 0) {
+                    return "#202b30";
+                } else {
+                    return "#FFFFFF";
+                }
+            } else if (this.$store.state.theme_global_default) {
                 return this.$store.state.theme_global_default;
             } else {
                 return "#009688";
@@ -467,7 +482,8 @@ export default {
         },
 
         text_color () { // Determines toolbar text color
-            return "#fff";
+            if (this.$store.state.theme_apply_appbar_color)
+                return "#fff";
         }
     },
     watch: {

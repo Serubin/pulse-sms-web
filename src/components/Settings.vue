@@ -64,7 +64,7 @@
                 <label for="global-theme" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="global-theme" class="mdl-switch__input" type="checkbox" v-model="global_theme">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Apply to all Conversations
+                        Apply Colors to all Conversations
                     </span>
                 </label>
             </div> <!-- End Global Theme -->
@@ -92,6 +92,9 @@
                     </span>
                 </label>
             </div>
+
+            <br />
+
             <div class="label-item">
                 <label for="enter-to-send" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="enter-to-send" class="mdl-switch__input" type="checkbox" v-model="enter_to_send">
