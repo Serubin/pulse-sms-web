@@ -50,7 +50,7 @@ export default class SessionCache {
     }
 
     static getContacts () {
-        return store.state.session_contacts;
+        return store.state.compose_contacts;
     }
 
     static putConversations (conversations, index = 'index_public_unarchived') {
@@ -68,7 +68,7 @@ export default class SessionCache {
     }
 
     static putContacts (contacts) {
-        store.commit('session_contacts', contacts);
+        store.commit('compose_contacts', contacts);
     }
 
     static hasConversations (index = 'index_public_unarchived') {
@@ -107,7 +107,7 @@ export default class SessionCache {
     }
 
     static invalidateContacts() {
-        store.commit('session_contacts', { });
+        store.commit('compose_contacts', { });
     }
 
     static removeConversation (conversation_id, index = 'index_public_unarchived') {

@@ -5,6 +5,7 @@ export const KEYS  = {
     HASH: 'hash',
     SALT: 'salt',
     CONTACTS: 'contacts',
+    COMPOSE_CONTACTS: 'compose_contacts',
     CONVERSATIONS: 'conversations',
     NOTIFICATIONS: 'notifications',
     ENTER_TO_SEND: 'enter_to_send',
@@ -26,6 +27,7 @@ export const state = {
     hash: JSON.parse( window.localStorage.getItem(KEYS.HASH) || empty_str ),
     salt: JSON.parse( window.localStorage.getItem(KEYS.SALT) || empty_str ),
     contacts: JSON.parse( window.localStorage.getItem(KEYS.CONTACTS) || '{}' ),
+    compose_contacts: JSON.parse( window.localStorage.getItem(KEYS.COMPOSE_CONTACTS) || '{}' ),
     conversations: JSON.parse( window.localStorage.getItem(KEYS.CONVERSATIONS) || '{}' ),
 
     theme_base: JSON.parse( window.localStorage.getItem(KEYS.THEME.BASE) || "\"light\"" ),
@@ -61,8 +63,7 @@ export const state = {
     last_passcode_entry: null,
 
     session_conversations: { },
-    session_messages: { },
-    session_contacts: { },
+    session_messages: { }
 }
 
 export const getters = {
@@ -83,6 +84,7 @@ export const mutations = {
     hash: (state, hash) => state.hash = hash,
     salt: (state, salt) => state.salt = salt,
     aes: (state, aes) => state.aes = aes,
+    compose_contacts: (state, compose_contacts) => state.compose_contacts = compose_contacts,
     theme_base: (state, theme_base) => state.theme_base = theme_base,
     theme_global_default: (state, theme_global_default) => state.theme_global_default = theme_global_default,
     theme_global_dark: (state, theme_global_dark) => state.theme_global_dark = theme_global_dark,
@@ -101,7 +103,6 @@ export const mutations = {
     last_passcode_entry: (state, last_passcode_entry) => state.last_passcode_entry = last_passcode_entry,
     session_conversations: (state, session_conversations) => state.session_conversations = session_conversations,
     session_messages: (state, session_messages) => state.session_messages = session_messages,
-    session_contacts: (state, session_contacts) => state.session_contacts = session_contacts,
     theme_global: (state, colors) => {
         // this mutation wasn't getting pushed through the plugin to write to the local storage
         // so the global theme was being queried every time.
@@ -137,7 +138,7 @@ export const mutations = {
     },
     clearContacts: (state, payload) => {
         state.contacts = {};
-    },
+    }
 }
 
 export const actions = {
