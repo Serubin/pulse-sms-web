@@ -796,7 +796,7 @@ export default class Api {
                             contacts.push(contact);
                     }
 
-                    if (response.length == pageLimit && contacts.length < totalLimit) {
+                    if (response.length == pageLimit/* && contacts.length < totalLimit*/) {
                         queryContacts(pageLimit, totalLimit);
                     } else {
                         finishQuery(contacts);

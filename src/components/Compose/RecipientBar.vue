@@ -18,21 +18,23 @@ import Vue from 'vue'
 
 import '@/lib/auto-complete.min.js'
 import ContactChip from './ContactChip.vue'
-import { Api, Crypto, Util } from "@/utils/"
+import { Api, Crypto, Util, SessionCache } from "@/utils/"
 
 export default {
     name: 'RecipientBar',
     props: ['onContactListChanged'],
 
     mounted () {
-        Api.fetchContacts()
-            .then((resp) => this.processContacts(resp));
+        this.queryContacts();
+        this.$store.state.msgbus.$on('refresh-btn', this.refresh);
     },
 
     beforeDestroy () {
         if (this.autocomplete != null) {
             this.autocomplete.destroy();
         }
+
+        this.$store.state.msgbus.$off('refresh-btn');
     },
 
     data () {
@@ -45,6 +47,21 @@ export default {
     },
 
     methods: {
+        refresh() {
+            console.log("refresh compose");
+            this.queryContacts(true);
+        },
+        /**
+         * query contacts from backend or cache.
+         */
+        queryContacts (clearCache = false) {
+            if (clearCache) {
+                Util.snackbar("Downloading contacts... This may take a minute.");
+                SessionCache.invalidateContacts();
+            }
+
+            Api.fetchContacts().then((resp) => this.processContacts(resp));
+        },
         /**
         * Process contacts received from server
         * Saves contacts in contacts array
@@ -94,23 +111,36 @@ export default {
                 minChars: 2,
                 source: function(term, suggest) { suggest(matcher(term)); },
                 renderItem: function (contact, search) {
-                    return '<div class="autocomplete-suggestion" data-val="' + contact.name + '" data-id="' + contact.id + '" data-name="' + contact.name + '" data-phone="' + contact.phone + '">' + contact.name + ' (' + contact.phone + ')' + '</div>';
+                    if (contact.id == null) {
+                        return '<div class="autocomplete-suggestion">Can\'t find your contact?</div>';
+                    } else {
+                        return '<div class="autocomplete-suggestion" data-val="' + contact.name + '" data-id="' + contact.id + '" data-name="' + contact.name + '" data-phone="' + contact.phone + '">' + contact.name + ' (' + contact.phone + ')' + '</div>';
+                    }
                 },
                 onSelect: function(e, term, rendered) {
-                    addContact({
-                        'id': rendered.getAttribute('data-id'),
-                        'name': rendered.getAttribute('data-name'),
-                        'phone': rendered.getAttribute('data-phone')
-                    });
+                    let id = rendered.getAttribute('data-id');
+                    if (id == null) {
+                        window.open("https://github.com/klinker-apps/messenger-issues/issues/740", '_blank');
+                    } else {
+                        addContact({
+                            'id': id,
+                            'name': rendered.getAttribute('data-name'),
+                            'phone': rendered.getAttribute('data-phone')
+                        });
+                    }
                 }
             });
         },
         matchContact (input) {
             input = input.toLowerCase()
-            return Object.values(this.contacts).filter((data) => {
+            let list = Object.values(this.contacts).filter((data) => {
                 if (data.name.toLowerCase().indexOf(input) > -1 || data.phone.indexOf(input) > -1)
                     return data;
             });
+
+            // the blank object will be used to tell the search to add the "Can't find your contact?" text
+            list[list.length] = { }
+            return list;
         },
         /**
          * This takes in the input that is currently in the input box, and converts it to chips.

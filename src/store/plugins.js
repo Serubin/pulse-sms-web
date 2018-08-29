@@ -4,6 +4,7 @@ import { KEYS, state } from '@/store/state.js'
 // called when the store is initialize
 const localStoreSync = store => {
     const local_items = {
+        'compose_contacts': KEYS.COMPOSE_CONTACTS,
         'contacts': KEYS.CONTACTS,
         'conversations': KEYS.CONVERSATIONS,
         'clearContacts': KEYS.CONTACTS,
