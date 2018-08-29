@@ -18,21 +18,23 @@ import Vue from 'vue'
 
 import '@/lib/auto-complete.min.js'
 import ContactChip from './ContactChip.vue'
-import { Api, Crypto, Util } from "@/utils/"
+import { Api, Crypto, Util, SessionCache } from "@/utils/"
 
 export default {
     name: 'RecipientBar',
     props: ['onContactListChanged'],
 
     mounted () {
-        Api.fetchContacts()
-            .then((resp) => this.processContacts(resp));
+        this.queryContacts();
+        this.$store.state.msgbus.$on('refresh-btn', this.refresh);
     },
 
     beforeDestroy () {
         if (this.autocomplete != null) {
             this.autocomplete.destroy();
         }
+
+        this.$store.state.msgbus.$off('refresh-btn');
     },
 
     data () {
@@ -45,6 +47,21 @@ export default {
     },
 
     methods: {
+        refresh() {
+            console.log("refresh compose");
+            this.queryContacts(true);
+        },
+        /**
+         * query contacts from backend or cache.
+         */
+        queryContacts (clearCache = false) {
+            if (clearCache) {
+                Util.snackbar("Downloading contacts... This may take a minute.");
+                SessionCache.invalidateContacts();
+            }
+
+            Api.fetchContacts().then((resp) => this.processContacts(resp));
+        },
         /**
         * Process contacts received from server
         * Saves contacts in contacts array
