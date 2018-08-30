@@ -109,7 +109,19 @@ export default {
          * @param e - event object
          */
         dispatchSend(e) { // Dispatch send message when clicked
-            if (e instanceof KeyboardEvent && (e.shiftKey || !this.$store.state.enter_to_send)) {
+
+            // the shift key will be used to toggle between the send and return functionality, based
+            // on the users "enter to send" preference, in settings.
+
+            // case one: enter to send=off, no shift key -> return line
+            // case two: enter to send=off, shift key -> send message
+            // case three: enter to send=on, no shift key -> send message
+            // case four: enter to send=on, shift key -> return line
+
+            if (e instanceof KeyboardEvent && (
+                  (e.shiftKey && this.$store.state.enter_to_send) ||
+                  (!e.shiftKey && !this.$store.state.enter_to_send))) { // return line
+
                 // Get start/end of selection for insert location
                 const start = e.target.selectionStart;
                 const end =  e.target.selectionEnd;
@@ -128,7 +140,7 @@ export default {
             }
 
             // If message is empty, we're done
-            if (this.message.length <= 0 && !this.$store.state.loaded_media )
+            if (this.message.length <= 0 && !this.$store.state.loaded_media)
                 return false;
 
             // Send message to handler
