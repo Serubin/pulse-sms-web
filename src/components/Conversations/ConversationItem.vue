@@ -1,5 +1,5 @@
 <template>
-    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small, 'mdl-shadow--2dp': !small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
+    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small" :class="{ small: small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
@@ -172,6 +172,9 @@ export default {
             min-height: 80px;
             width: 100%;
             cursor: pointer;
+            box-shadow: 0px 3px 4px rgba(0, 0, 0, .25);
+            margin-top: -1px;
+            border-radius: 2px;
         }
 
         .contact-img {
@@ -219,6 +222,8 @@ export default {
             min-height: 56px;
             height: 56px;
             background: $bg-light;
+            box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+            margin-top: 0px;
 
             .contact-img {
                 width: 25px;
