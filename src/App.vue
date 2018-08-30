@@ -191,17 +191,19 @@ export default {
             // Start listening for shortcut keys
             this.shortcuts = new ShortcutKeys();
 
-            // Fetch contacts for cache
-            Api.fetchContacts().then((resp) => this.processContacts(resp));
-
-            // Grab user settings from server and store in local storage
-            Api.fetchSettings();
-
             // Populate the dropdown menu
             this.populateMenuItems();
 
             // Setup and store the medialoader (MMS)
             this.$store.commit('media_loader', new MediaLoader());
+
+            setTimeout(() => {
+                // Fetch contacts for cache
+                Api.fetchContacts().then((resp) => this.processContacts(resp));
+
+                // Grab user settings from server and store in local storage
+                Api.fetchSettings();
+            }, 1500);
 
             // Interval check to maintain socket
             setInterval(() => {
