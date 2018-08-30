@@ -4,7 +4,6 @@
 
         <transition name="fade">
             <div :class="style_class" :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
-                <div v-show="message_from"> <b> {{ message_from }} </b> <br /> </div>
                 <div v-html="content"></div>
                 <!-- Content is inserted via v-html -->
 
@@ -36,7 +35,7 @@
 </template>
 
 <script>
-import { Util, Api, SessionCache } from '@/utils';
+import { Util, Api, SessionCache, TimeUtils } from '@/utils';
 import linkify from 'linkifyjs/html';
 
 export default {
@@ -175,7 +174,6 @@ export default {
             media_thumb: "",
             media_title: "",
             media_content: "",
-            dateLabel: this.messageData.dateLabel,
 
             options_class: [ ],
             displayOptions: false
@@ -224,7 +222,7 @@ export default {
             return this.type == 2 && (new Date().getTime() - this.timestamp) < 1000 * 60 ? true : false;
         },
         stringTime () {
-            return new Date(this.timestamp).toLocaleString()
+            return TimeUtils.fullTimestamp(new Date(this.timestamp));
         },
         styleGenerator () {
             // Only style recieved and media
@@ -244,6 +242,18 @@ export default {
             if (this.type == 0 || this.type == 6)
                 return "date-received"
             return "date-sent"
+        },
+        dateLabel () {
+            let from = this.messageData.fromLabel;
+            let dateLabel = this.messageData.dateLabel;
+
+            if (from != null && from.length > 0 && dateLabel != null) {
+                return from + " - " + dateLabel;
+            } else if (from != null && from.length > 0) {
+                return from;
+            } else {
+                return dateLabel;
+            }
         }
     }
 }
