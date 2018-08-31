@@ -226,9 +226,8 @@ export default {
         sendMessage (message) {
             // Send stored media if laoded
             if (this.$store.state.loaded_media) {
-                let _this = this;
                 Api.sendFile(this.$store.state.loaded_media, (file, messageId) => {
-                    Api.sendMessage("firebase -1", file.type, _this.conversation_id, messageId);
+                    Api.sendMessage("firebase -1", file.type, this.conversation_id, messageId);
                 });
             }
 
@@ -463,8 +462,6 @@ export default {
          * Archive conversation
          */
         archive () {
-            const _this = this;
-
             // Archive conversation on the server
             Api.archiver(!this.isArchived, this.conversation_id);
 
@@ -507,8 +504,6 @@ export default {
          * Delete conversations
          */
         delete () {
-            const _this = this;
-
             Api.deleter(this.conversation_id);
 
             // Snackbar the user
@@ -527,8 +522,6 @@ export default {
          * Blacklist contact
          */
         blacklist () {
-            const _this = this;
-
             if (this.conversation_data.phone_number.indexOf(",") < 0) {
                 Api.createBlacklist(this.conversation_data.phone_number);
                 Api.archiver(true, this.conversation_id);
