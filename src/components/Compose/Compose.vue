@@ -59,7 +59,6 @@ export default {
 
             // send image, if one is attached
             if (this.$store.state.loaded_media) {
-                let _this = this;
                 Api.sendFile(this.$store.state.loaded_media, (file, messageId) => {
                     Api.createThreadWithImage(to, messageId, file.type);
                 });
