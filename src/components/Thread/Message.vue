@@ -60,9 +60,12 @@ export default {
                 this.content = "<i style='line-height:250px;'> Loading MMS </i>";
                 this.is_media = true;
 
-                // Fetch media
-                MediaLoader.getMedia(this.id, this.mime)
-                    .then(blob => this.loadImage(blob));
+                let randomComp = Math.floor((Math.random() * 500) + 1);
+                setTimeout(() => {
+                    // Fetch media
+                    MediaLoader.getMedia(this.id, this.mime).then(blob => this.loadImage(blob));
+                }, 750 + randomComp);
+
                 break;
             }
 
