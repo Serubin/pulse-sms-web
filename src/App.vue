@@ -609,6 +609,10 @@ export default {
 
         }
 
+        .mdl-menu__outline {
+            border-radius: 10px;
+        }
+
         .mdl-layout-title {
             float: left;
             margin-left: 15px;
