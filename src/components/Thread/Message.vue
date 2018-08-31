@@ -8,7 +8,7 @@
                 <!-- Content is inserted via v-html -->
 
                 <!-- Media -->
-                <a :href="media_link" target="_blank" v-show="is_media">
+                <a :href="media_link" target="_blank" v-show="is_media && !media_loading">
                     <img class="media" :src="media_thumb" alt="Thumbnail" @click="openImage">
                     <div class="article-title" v-show="is_article"> {{ media_title }} </div>
                     <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
@@ -57,12 +57,19 @@ export default {
 
             /* MMS Image Message */
             case "image": {
-                this.content = "<i style='line-height:250px;'> Loading MMS </i>";
+                this.content = `
+                <div style="width:436px;text-align:center;">
+                    <i style="line-height:250px"> Loading MMS </i>
+                </div>`;
                 this.is_media = true;
 
-                // Fetch media
-                MediaLoader.getMedia(this.id, this.mime)
-                    .then(blob => this.loadImage(blob));
+                let randomComp = Math.floor((Math.random() * 500) + 1);
+                setTimeout(() => {
+                    // Fetch media
+                    MediaLoader.getMedia(this.id, this.mime).then(blob => this.loadImage(blob));
+
+                }, 750 + randomComp);
+
                 break;
             }
 
@@ -95,16 +102,19 @@ export default {
                     this.media_link = googleMaps;
                     this.media_title = "";
                     this.media_content = "";
+                    this.media_loading = false;
                 } else if (this.mime == "media/youtube-v2") {
                     this.media_thumb = media.thumbnail;
                     this.media_link = media.url;
                     this.media_title =  media.title;
                     this.media_content = "";
+                    this.media_loading = false;
                 } else if (this.mime == "media/web") {
                     this.media_thumb = media.image_url;
                     this.media_link = media.web_url;
                     this.media_title =  media.title;
                     this.media_content = media.description;
+                    this.media_loading = false;
                 }
 
                 this.content = "";
@@ -170,6 +180,7 @@ export default {
             style_class: [ ],
             is_media: false,
             is_article: false,
+            media_loading: true,
             media_link: "",
             media_thumb: "",
             media_title: "",
@@ -201,6 +212,7 @@ export default {
             // Set data
             this.media_thumb = data_prefix + blob;
             this.media_link = data_prefix + blob;
+            this.media_loading = false;
         },
         updateType (type) {
             this.type = type;
