@@ -22,7 +22,7 @@
 import Vue from 'vue'
 import jump from 'jump.js'
 
-import { Util, Api, SessionCache } from '@/utils'
+import { Util, Api, SessionCache, TimeUtils } from '@/utils'
 
 import Spinner from '@/components/Spinner.vue'
 import Message from './Message.vue'
@@ -305,8 +305,16 @@ export default {
 
                         // Compare current time stamp with the next (previous chronological)
                         response[i].dateLabel = this.compareTimestamps(
-                            new Date(response[i].timestamp), nextTimestamp, 15
+                            new Date(response[i].timestamp), nextTimestamp
                         );
+
+                        response[i].fromLabel = response[i].message_from;
+                        if (response[i].message_from && i > 0) {
+                            if (response[i - 1].message_from == response[i].message_from) {
+                                response[i].fromLabel = "";
+                            }
+                        }
+
                         // Push to list
                         new_messages.push(response[i]);
                     }
@@ -377,7 +385,7 @@ export default {
             const lastTimestamp = new Date(lastMessage.timestamp);
 
             lastMessage.dateLabel = this.compareTimestamps(
-                new Date(event_obj.timestamp), lastTimestamp, 15
+                new Date(event_obj.timestamp), lastTimestamp
             );
 
             this.messages.push(event_obj);
@@ -682,14 +690,15 @@ export default {
          * @param nextDate - next date
          * @param length - time in minutes
          */
-        compareTimestamps(date, nextDate, length) {
+        compareTimestamps(date, nextDate) {
+            let length = 15; // minutes
 
-            // If the dates are length a part, return date string
-            if (nextDate.getTime() > date.getTime() + (1000 * 60 * length))
-                return date.toLocaleString();
-            else  // Otherwise null
+            // If the dates are "length" a part, return date string
+            if (nextDate.getTime() > date.getTime() + (1000 * 60 * length)) {
+                return TimeUtils.formatTimestamp(date.getTime(), Date.now())
+            } else {
                 return null;
-
+            }
         },
 
         handleShowMore() {

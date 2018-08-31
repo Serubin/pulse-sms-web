@@ -1,5 +1,5 @@
 <template>
-    <div class="label mdl-color-text--grey-500"> {{conversationData.label}} </div>
+    <div class="label mdl-color-text--grey-600"> {{conversationData.label}} </div>
 </template>
 
 <script>
@@ -14,9 +14,10 @@ export default {
     @import "../../assets/scss/_vars.scss";
 
     .label {
-        margin-left: 6px;
+        margin-left: 16px;
         font-size: 12px;
-        margin-top: 8px;
-        margin-bottom: 8px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-weight: bold;
     }
 </style>

@@ -27,7 +27,7 @@
 <script>
 import Vue from 'vue';
 import Hash from 'object-hash'
-import { Util, Api, SessionCache } from '@/utils'
+import { Util, Api, SessionCache, TimeUtils } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
 import DayLabel from './DayLabel.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -271,57 +271,16 @@ export default {
         calculateTitle (conversation) {
             if (conversation.pinned)
                 return "Pinned";
-            else if (isToday(conversation.timestamp))
+            else if (TimeUtils.isToday(conversation.timestamp))
                 return "Today";
-            else if (isYesterday(conversation.timestamp))
+            else if (TimeUtils.isYesterday(conversation.timestamp))
                 return "Yesterday";
-            else if (isLastWeek(conversation.timestamp))
+            else if (TimeUtils.isLastWeek(conversation.timestamp))
                 return "This Week";
-            else if (isLastMonth(conversation.timestamp))
+            else if (TimeUtils.isLastMonth(conversation.timestamp))
                 return "This Month";
             else
                 return "Older";
-
-
-            function isToday(timestamp) {
-                let current = new Date();
-                zeroDate(current);
-
-                let time = new Date(timestamp);
-                zeroDate(time);
-
-                return current.getTime() == time.getTime();
-            }
-
-            function isYesterday(timestamp) {
-                let yesterday = new Date();
-                zeroDate(yesterday);
-                yesterday = new Date(yesterday.getTime() - 1000 * 60 * 60 * 24)
-
-                let time = new Date(timestamp);
-                zeroDate(time);
-
-                return yesterday.getTime() == time.getTime();
-            }
-
-            function isLastWeek(timestamp) {
-                let lastWeek = new Date();
-                zeroDate(lastWeek);
-                lastWeek = new Date(lastWeek.getTime() - 1000 * 60 * 60 * 24 * 7)
-
-                return timestamp > lastWeek.getTime() && timestamp < (new Date().getTime());
-            }
-
-            function isLastMonth(timestamp) {
-                return new Date().getMonth() == new Date(timestamp).getMonth();
-            }
-
-            function zeroDate(date) {
-                date.setHours(0);
-                date.setMinutes(0);
-                date.setSeconds(0);
-                date.setMilliseconds(0);
-            }
         }
     },
 
