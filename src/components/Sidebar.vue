@@ -305,9 +305,9 @@ export default {
                     }
 
                     img {
-                        margin-left: 3px;
+                        margin-left: 12px;
                         margin-top: -4px;
-                        margin-right: 18px;
+                        margin-right: 9px;
                     }
                 }
                 /* Icons */
