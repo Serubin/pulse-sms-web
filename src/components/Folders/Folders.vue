@@ -76,7 +76,7 @@ export default {
 
     data () {
         return {
-            title: "Folders",
+            title: "",
             loading: true,
             folders: [],
         }
