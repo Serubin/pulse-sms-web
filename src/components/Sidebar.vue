@@ -301,7 +301,7 @@ export default {
 
                     &.active {
                         background-color: rgba(255,255,255,0.98);
-                        border-radius: 0 20px 20px 0;
+                        border-radius: 4px 20px 20px 4px;
                     }
 
                     img {
