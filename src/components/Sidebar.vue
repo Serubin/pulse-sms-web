@@ -304,7 +304,7 @@ export default {
                     padding: 7px 0;
 
                     img {
-                        margin-left: 3px;
+                        margin-left: 12px;
                         margin-top: -4px;
                         margin-right: 9px;
                     }
@@ -313,10 +313,6 @@ export default {
                         background-color: rgba(255,255,255,0.98);
                         border-radius: 4px 20px 20px 4px;
                         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-
-                        img {
-                            margin-left: 12px;
-                        }
                     }
 
                 }
