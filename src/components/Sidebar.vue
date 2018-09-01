@@ -136,8 +136,11 @@ export default {
                 this.$store.commit('sidebar_open', false);
         },
 
+        /**
+         * is active
+         * Determines if a link is active based on route
+         */
         is_active(route) {
-            console.log(route, this.$route.name);
             if (route == 'conversations' &&
                 (this.$route.name == 'conversations-list' || this.$route.name == 'thread'))
                 return true;
