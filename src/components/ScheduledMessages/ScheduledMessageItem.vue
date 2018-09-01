@@ -1,7 +1,7 @@
 <template>
   <div class="message-wrapper" :title="stringTime">
       <!-- <transition name="fade"> -->
-          <div class="message scheduled mdl-shadow--2dp" :id="id">
+          <div class="message scheduled shadow" :id="id">
               <div><b>{{ title }}</b><br/></div>
               <div>{{ data }}</div>
           </div>

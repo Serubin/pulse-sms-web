@@ -1,5 +1,5 @@
 <template>
-    <div class="mdl-card mdl-shadow--2dp" id="passcode-pane" v-mdl>
+    <div class="mdl-card shadow" id="passcode-pane" v-mdl>
         <div class="mdl-card__title">
             <h2 class="mdl-card__title-text">Enter Passcode</h2>
         </div>

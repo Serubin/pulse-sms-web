@@ -727,6 +727,10 @@ export default {
         }
     }
 
+    .shadow {
+        box-shadow: 0px 2px 2px 0 rgba(0, 0, 0, 0.25);
+    }
+
 
     #refresh-button.rotate {
         transition: transform .3s ease-in;

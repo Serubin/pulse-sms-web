@@ -1,5 +1,5 @@
 <template>
-    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small mdl-shadow--2dp" :class="{ small: small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
+    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
