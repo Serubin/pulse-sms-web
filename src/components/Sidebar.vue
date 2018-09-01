@@ -272,7 +272,7 @@ export default {
         }
 
         #drawer-holder {
-            width: 230px;
+            width: 245px;
             padding-bottom: 30px;
         }
 
@@ -292,6 +292,7 @@ export default {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
+                padding: 2px;
 
 
                 .link-card {
@@ -302,16 +303,22 @@ export default {
                     background-color: $bg-light;
                     padding: 7px 0;
 
-                    &.active {
-                        background-color: rgba(255,255,255,0.98);
-                        border-radius: 4px 20px 20px 4px;
-                    }
-
                     img {
-                        margin-left: 12px;
+                        margin-left: 3px;
                         margin-top: -4px;
                         margin-right: 9px;
                     }
+
+                    &.active {
+                        background-color: rgba(255,255,255,0.98);
+                        border-radius: 4px 20px 20px 4px;
+                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+                        img {
+                            margin-left: 12px;
+                        }
+                    }
+
                 }
                 /* Icons */
                 .icon {
