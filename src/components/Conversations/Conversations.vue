@@ -262,7 +262,9 @@ export default {
             this.searchClicked = !this.searchClicked;
 
             if (this.searchClicked) {
-                this.$el.querySelector('#search-bar').focus();
+                Vue.nextTick(() => { // Wait item to render
+                    this.$el.querySelector('#search-bar').focus();
+                });
             } else {
                 this.searchQuery = "";
             }
