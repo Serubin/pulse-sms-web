@@ -4,37 +4,37 @@
             <div id="drawer-holder">
                 <ul id="drawer-links">
                     <li id="conversations-link" @click="routeTo('conversations')">
-                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('conversations') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon conversations">
                             Conversations
                         </div>
                     </li>
                     <li id="private-link" @click="routeTo('private')">
-                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('private') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon private">
                             Private Conversations
                         </div>
                     </li>
                     <li id="archive-link" @click="routeTo('archive')">
-                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('archive') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon archive">
                             Archive
                         </div>
                     </li>
                     <li id="folder-link" @click="routeTo('folders')">
-                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('folders') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon folders">
                             Folders
                         </div>
                     </li>
                     <li id="scheduled-messages-link" @click="routeTo('scheduled')">
-                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('scheduled') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon scheduled_messages">
                             Scheduled Messages
                         </div>
                     </li>
                     <li id="blacklist-link" @click="routeTo('blacklists')">
-                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('blacklists') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon blacklist">
                             Blacklist
                         </div>
@@ -134,6 +134,38 @@ export default {
         close_drawer() {
             if(!this.full_theme)
                 this.$store.commit('sidebar_open', false);
+        },
+
+        /**
+         * is active
+         * Determines if a link is active based on route
+         */
+        is_active(route) {
+            if (route == 'conversations' &&
+                (this.$route.name == 'conversations-list' || this.$route.name == 'thread'))
+                return true;
+
+            if (route == 'private' &&
+                (this.$route.name == 'passcode' || this.$route.name == 'conversations-list-private'))
+                return true;
+
+            if (route == 'archive' &&
+                (this.$route.name == 'conversations-list-archived' || this.$route.name == 'thread-archived'))
+                return true;
+
+            if (route == 'folders' &&
+                (this.$route.name == 'folders' || this.$route.name == 'conversations-list-folder'))
+                return true;
+
+            if (route == 'scheduled' &&
+                (this.$route.name == 'scheduled-messages' || this.$route.name == 'create-scheduled-message' || this.$route.name == 'edit-scheduled-message'))
+                return true;
+
+            if (route == 'blacklists' &&
+                (this.$route.name == 'blacklists' || this.$route.name == 'create-blacklist'))
+                return true;
+
+            return false;
         }
     },
 
@@ -171,6 +203,10 @@ export default {
         #drawer-links li .link-card {
             background-color: $bg-dark;
             color: #fff;
+
+            &.active {
+                background-color: rgba(0,0,0,0.35);
+            }
         }
 
         .icon {
@@ -206,6 +242,10 @@ export default {
         #drawer-links li .link-card {
             background-color: $bg-black;
             color: #fff;
+
+            &.active {
+                background-color: rgb(35,35,35);
+            }
         }
     }
 
@@ -232,7 +272,7 @@ export default {
         }
 
         #drawer-holder {
-            width: 230px;
+            width: 245px;
             padding-bottom: 30px;
         }
 
@@ -252,6 +292,8 @@ export default {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
+                padding: 2px;
+
 
                 .link-card {
                     display: block;
@@ -262,10 +304,17 @@ export default {
                     padding: 7px 0;
 
                     img {
-                        margin-left: 3px;
+                        margin-left: 12px;
                         margin-top: -4px;
-                        margin-right: 18px;
+                        margin-right: 9px;
                     }
+
+                    &.active {
+                        background-color: rgba(255,255,255,0.98);
+                        border-radius: 4px 20px 20px 4px;
+                        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                    }
+
                 }
                 /* Icons */
                 .icon {

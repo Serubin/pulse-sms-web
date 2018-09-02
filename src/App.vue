@@ -609,6 +609,10 @@ export default {
 
         }
 
+        .mdl-menu__outline {
+            border-radius: 10px;
+        }
+
         .mdl-layout-title {
             float: left;
             margin-left: 15px;
@@ -721,6 +725,10 @@ export default {
                 }
             }
         }
+    }
+
+    .shadow {
+        box-shadow: 0px 2px 2px 0 rgba(0, 0, 0, 0.25);
     }
 
 

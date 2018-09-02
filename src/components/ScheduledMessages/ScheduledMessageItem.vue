@@ -1,7 +1,7 @@
 <template>
   <div class="message-wrapper" :title="stringTime">
       <!-- <transition name="fade"> -->
-          <div class="message scheduled" :id="id">
+          <div class="message scheduled shadow" :id="id">
               <div><b>{{ title }}</b><br/></div>
               <div>{{ data }}</div>
           </div>
@@ -92,7 +92,6 @@ export default {
             margin: 4px 8px 4px 8px;
             max-width: 310px;
             border-radius: 15px;
-            box-shadow: -1px 2px 4px rgba(0, 0, 0, .1);
             overflow-wrap: break-word;
             word-wrap: break-word;
             min-width: 18px;

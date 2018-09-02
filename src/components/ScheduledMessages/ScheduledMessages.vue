@@ -84,7 +84,7 @@ export default {
 
     data () {
         return {
-            title: "Scheduled Messages",
+            title: "",
             loading: true,
             scheduled_messages: [],
         }

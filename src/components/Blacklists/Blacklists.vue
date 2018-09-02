@@ -84,7 +84,7 @@ export default {
 
     data () {
         return {
-            title: "Blacklist",
+            title: "",
             loading: true,
             blacklists: [],
         }
