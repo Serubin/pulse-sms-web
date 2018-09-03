@@ -220,7 +220,7 @@ export default {
                 // Else, open new API and force refresh
                 this.mm.closeWebSocket()
                 this.mm = new Api();
-                this.$store.state.msgbus.$emit('refresh-btn');
+                this.mm.has_diconnected = true; // Initialize new api with has disconnected
 
                 this.calculateHour();
 
