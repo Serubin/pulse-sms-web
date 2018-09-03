@@ -59,7 +59,7 @@ export default {
             case "image": {
                 this.content = `
                 <div style="width:436px;text-align:center;">
-                    <i style="line-height:250px"> Loading MMS </i>
+                    <i style="line-height:254px"> Loading MMS </i>
                 </div>`;
                 this.is_media = true;
 
