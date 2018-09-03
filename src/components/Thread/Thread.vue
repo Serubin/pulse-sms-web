@@ -321,6 +321,7 @@ export default {
 
                     if (offset > 0) // Create marker for scroll back
                         new_messages.push({
+                            device_id: Api.generateId(),
                             marker: true
                         });
 
