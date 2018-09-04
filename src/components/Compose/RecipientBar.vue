@@ -5,7 +5,7 @@
                 <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
             </div>
             <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" @keydown.delete="deleteKey" autofocus>
+                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" @keydown.delete="deleteKey">
                 <label class="mdl-textfield__label" for="recipient">Type contact...</label>
             </div>
             <div id="border"></div>
@@ -27,6 +27,10 @@ export default {
     mounted () {
         this.queryContacts();
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
+
+        Vue.nextTick(() => { // Wait item to render
+            this.$el.querySelector('#recipient').focus();
+        });
     },
 
     beforeDestroy () {

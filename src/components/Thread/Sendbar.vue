@@ -16,7 +16,7 @@
                     <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" />
             </div>
             <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
-                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
+                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">Type message...</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
@@ -41,6 +41,12 @@ export default {
 
     mounted () {
         let autogrow = new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
+
+        if (this.$route.name != 'Compose') {
+            Vue.nextTick(() => { // Wait item to render
+                this.$el.querySelector('#message-entry').focus();
+            });
+        }
 
         window.addEventListener('resize', this.updateEmojiMargin)
         this.$wrapper = document.querySelector("#wrapper");
