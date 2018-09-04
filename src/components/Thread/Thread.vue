@@ -65,6 +65,7 @@ export default {
         let events = Util.addEventListeners(['focus'], (e) => {
             // Mark as read on focus
             this.markAsRead();
+
             // Focus cursor on message entry
             this.$el.querySelector('#message-entry').focus();
 
@@ -254,7 +255,13 @@ export default {
             this.colors_from = {};
 
             // Focus
-            this.$el.querySelector('#message-entry').focus();
+            if (!this.$store.state.hotkey_navigation) {
+                Vue.nextTick(() => { // Wait item to render
+                    this.$el.querySelector('#message-entry').focus();
+                });
+            } else {
+                this.$store.commit('hotkey_navigation', false);
+            }
 
             // Remove media if needed
             if (this.$store.state.loaded_media)

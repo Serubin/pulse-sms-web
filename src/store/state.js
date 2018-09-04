@@ -45,6 +45,7 @@ export const state = {
     sidebar_open: true,
     title: "Pulse SMS",
     loading: true,
+    hotkey_navigation: false,
 
     colors_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#009688\"" ),
     colors_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#00695C\"" ),
@@ -78,6 +79,7 @@ export const getters = {
 export const mutations = {
     title: (state, title) => state.title = title,
     loading: (state, loading) => state.loading = loading,
+    hotkey_navigation: (state, hotkey_navigation) => state.hotkey_navigation = hotkey_navigation,
     full_theme: (state, full_theme) => state.full_theme = full_theme,
     sidebar_open: (state, sidebar_open) => state.sidebar_open = sidebar_open,
     account_id: (state, account_id) => state.account_id = account_id,

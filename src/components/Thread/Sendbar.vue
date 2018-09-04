@@ -42,20 +42,9 @@ export default {
     mounted () {
         let autogrow = new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
 
-        if (this.$route.name != 'Compose') {
-            Vue.nextTick(() => { // Wait item to render
-                this.$el.querySelector('#message-entry').focus();
-            });
-        }
-
         window.addEventListener('resize', this.updateEmojiMargin)
         this.$wrapper = document.querySelector("#wrapper");
         this.$sendbar = document.querySelector("#message-entry");
-
-        if (this.$store.state.theme_global_dark) {
-            // document.querySelector("#emoji").src = "../../assets/images/ic_mood_white.png";
-            // document.querySelector("#attach").src = "../../assets/images/ic_attach_white.png";
-        }
 
         this.$store.state.msgbus.$on('hotkey-emoji', this.toggleEmoji);
 

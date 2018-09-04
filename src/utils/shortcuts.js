@@ -13,10 +13,12 @@ export default class ShortcutKeys {
         let _this = this;
 
         hotkeys('control+shift+left,command+shift+left,alt+shift+left,ctrl+shift+left', function(event) {
+            store.commit('hotkey_navigation', true);
             _this.finish(event, "page to previous conversation", () => { store.state.msgbus.$emit("hotkey-page-previous") });
         });
 
         hotkeys('control+shift+right,command+shift+right,alt+shift+right,ctrl+shift+right', function(event) {
+            store.commit('hotkey_navigation', true);
             _this.finish(event, "page to next conversation", () => { store.state.msgbus.$emit("hotkey-page-next") });
         });
 
