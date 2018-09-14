@@ -52,6 +52,10 @@ export default {
         switch ( this.mime.split("/")[0] ) {
             /* SMS Text message */
             case "text": {
+                if (this.mime.indexOf("card") > -1) {
+                    this.content = "<i>Contact Card</i>";
+                }
+
                 break;
             }
 
