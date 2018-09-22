@@ -13,7 +13,7 @@
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia"/>
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji"/>
             <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
-                    <Picker set="emojione" :style="emojiStyle" :set="set" :per-line="perLine" :skins="skin" @select="insertEmoji" />
+                    <Picker set="emojione" :style="emojiStyle"  :set="set" :per-line="perLine" :skins="skin" :onItemClick="insertEmoji" />
             </div>
             <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
                 <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
@@ -31,8 +31,8 @@
 import Vue from 'vue'
 import AutoGrow from '@/lib/textarea-autogrow.js'
 import emojione from 'emojione'
-import 'emoji-mart-vue/css/emoji-mart.css'
-import { Picker } from 'emoji-mart-vue'
+import 'vue-emoji-mart/css/emoji-mart.css'
+import { Picker } from 'vue-emoji-mart'
 import { Api } from '@/utils'
 
 export default {
