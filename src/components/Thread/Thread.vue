@@ -281,8 +281,8 @@ export default {
                         const id = Util.createIdMatcher(i)
                         const contact = this.$store.getters.getContact(id); // Get contact
 
-                        if (!contact.colors.default)
-                            return this.colors_from[i] = this.color();
+                        if (!contact || !contact.colors.default)
+                            return this.colors_from[i] = this.color;
                         // Map name to color
                         this.colors_from[contact.name] = contact.colors.default;
                     }
