@@ -315,6 +315,8 @@ export default {
                             new Date(response[i].timestamp), nextTimestamp
                         );
 
+
+                        // Apply fromLabel
                         response[i].fromLabel = response[i].message_from;
                         if (response[i].message_from && i > 0) {
                             if (response[i - 1].message_from == response[i].message_from) {
@@ -395,6 +397,14 @@ export default {
             lastMessage.dateLabel = this.compareTimestamps(
                 new Date(event_obj.timestamp), lastTimestamp
             );
+
+            // Apply fromLabel
+            event_obj.fromLabel = event_obj.message_from;
+            if (event_obj.message_from && this.messages.length > 0) {
+                if (lastMessage.message_from == event_obj.message_from) {
+                    lastMessage.fromLabel = "";
+                }
+            }
 
             this.messages.push(event_obj);
 
