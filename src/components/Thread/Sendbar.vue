@@ -13,7 +13,7 @@
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia"/>
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji"/>
             <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
-                    <Picker set="emojione" :style="emojiStyle" :set="set" :per-line="perLine" :skins="skin" @select="insertEmoji" />
+                    <Picker :style="emojiStyle" :set="set" :sheetSize="sheetSize" :per-line="perLine" :skins="skin" @select="insertEmoji" />
             </div>
             <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
                 <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
@@ -88,7 +88,8 @@ export default {
                 width: "18em",
             },
             perLine: 6,
-            set: 'emojione',
+            set: 'twitter',
+            sheetSize: 32,
             skin: 3,
             show_emoji: false,
             $wrapper: null,
