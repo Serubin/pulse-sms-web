@@ -1,34 +1,34 @@
 <template>
      <div id="settings" >
          <div class="page-content" id="account-list" v-mdl>
-            <h4>Theme Settings</h4>
+             <h4>{{ $t('settings.theme') }}</h4>
 
              <!-- Refresh Settings Button -->
             <div class="click-item mdl-js-button mdl-js-ripple-effect" id="refresh_settings" @click="refreshSettings" v-if="showSettingsRefresh">
                 <div class="mdl-color-text--grey-900">
-                    Refresh settings from phone
+                    {{ $t('settings.refresh') }}
                 </div>
                 <div class="mdl-color-text--grey-600">
-                    These settings are pulled from the app, when you click this preference. You can also change them manually, from this page.
+                    {{ $t('settings.explanatory_intro') }}
                 </div>
             </div>
             <!-- End Refresh settings button -->
 
             <div class="click-item mdl-js-button mdl-js-ripple-effect" id="base-theme" @click="theme_menu.toggle()"> <!-- Base theme -->
-                <div class="mdl-color-text--grey-900">Base Theme</div>
+                <div class="mdl-color-text--grey-900">{{ $t('settings.base') }}</div>
                 <div class="mdl-color-text--grey-600">{{ base_theme }}</div>
             </div>
 
             <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
                 id="base-theme-menu" data-mdl-for="base-theme">
-                <li class="mdl-menu__item" @click="theme='day_night'">Day / Night</li>
-                <li class="mdl-menu__item" @click="theme='light'">Light</li>
-                <li class="mdl-menu__item" @click="theme='dark'">Dark</li>
-                <li class="mdl-menu__item" @click="theme='black'">Black</li>
+                <li class="mdl-menu__item" @click="theme='day_night'">{{ $t('settings.daynight') }}</li>
+                <li class="mdl-menu__item" @click="theme='light'"> {{ $t('settings.light') }}</li>
+                <li class="mdl-menu__item" @click="theme='dark'">{{ $t('settings.dark') }}</li>
+                <li class="mdl-menu__item" @click="theme='black'">{{ $t('settings.black') }}k</li>
             </ul><!-- End Base Theme -->
 
             <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showColorDialog"> <!-- Global Colors -->
-                <div class="mdl-color-text--grey-900">Primary Color, Primary Color Dark, Accent Color</div>
+                <div class="mdl-color-text--grey-900">{{ $t('settings.primary')}}, {{ $t('settings.darkprimary')}}, {{ $t('settings.accent') }}</div>
                 <div class="mdl-color-text--grey-600">{{ global_colors }}</div>
             </div> <!-- End Global Colors -->
 
@@ -36,23 +36,23 @@
                 <div class="mdl-dialog__content mdl-dialog-card mdl-card">
                     <h4>Update Theme Colors</h4>
                     <div class="mdl-textfield mdl-js-textfield">
-                        Primary Color
+                        {{ $t('settings.primary') }}
                         <input class="mdl-textfield__input" type="text" id="theme-default" v-model="theme_default"/>
                         <label class="mdl-textfield__label" for="theme-default"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        Dark Color
+                        {{ $t('settings.darkprimary') }}
                         <input class="mdl-textfield__input" type="text" id="theme-dark" v-model="theme_dark"/>
                         <label class="mdl-textfield__label" for="theme-dark"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        Accent Color
+                        {{ $t('settings.accent') }}
                         <input class="mdl-textfield__input" type="text" id="theme-accent" v-model="theme_accent"/>
                         <label class="mdl-textfield__label" for="theme-accent"></label>
                     </div>
                     <div class="mdl-dialog__actions">
-                        <button type="button" class="mdl-button close" @click="saveColors">Save</button>
-                        <button type="button" class="mdl-button close" @click="closeColorDialog">Close</button>
+                        <button type="button" class="mdl-button close" @click="saveColors">{{ $t('dialog.save') }}</button>
+                        <button type="button" class="mdl-button close" @click="closeColorDialog">{{ $t('dialog.close') }}</button>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                 <label for="global-theme" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="global-theme" class="mdl-switch__input" type="checkbox" v-model="global_theme">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Apply Colors to all Conversations
+                        {{ $t('settings.applyeverywhere') }}
                     </span>
                 </label>
             </div> <!-- End Global Theme -->
@@ -76,19 +76,19 @@
                 <label for="theme-appbar" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="theme-appbar" class="mdl-switch__input" type="checkbox" v-model="theme_appbar">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Apply Primary Color to App Bar
+                        {{ $t('settings.applyprimary') }}
                     </span>
                 </label>
             </div> <!-- End Apply Primary Color to App Bar -->
 
             <br />
-            <h4>Web Specific Settings</h4>
+            <h4>{{ $t('settings.webspecific') }}</h4>
             <br />
             <div class="label-item" v-if="showNotification">
                 <label for="show-notifications" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="show-notifications" class="mdl-switch__input" type="checkbox" v-model="show_notifications">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Show Notifications
+                        {{ $t('settings.shownotifs') }}
                     </span>
                 </label>
             </div>
@@ -99,7 +99,7 @@
                 <label for="enter-to-send" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="enter-to-send" class="mdl-switch__input" type="checkbox" v-model="enter_to_send">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
-                        Use Enter to Send Messages
+                        {{ $t('settings.entersend') }}
                     </span>
                 </label>
             </div>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { Api, Util, Platform } from '@/utils/'
+import { Api, Util, Platform, i18n } from '@/utils/'
 
 export default {
     name: 'settings',
@@ -240,7 +240,7 @@ export default {
          * Bool to Yes/No
          */
         boolToStr (bool) {
-            return bool ? "Yes" : "No";
+            return bool ? i18n.t('settings.yes') : i18n.t('settings.no')
         },
         saveColors () {
 

@@ -1,19 +1,19 @@
 <template>
     <div class="mdl-card mdl-shadow--6dp" id="create-blacklist-pane" v-mdl>
         <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Create Blacklist</h2>
+            <h2 class="mdl-card__title-text">{{ $t('blacklist.create') }}</h2>
         </div>
         <div class="mdl-card__supporting-text">
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
                     <input class="mdl-textfield__input" id="phone" v-model="phone" autofocus/>
-                    <label class="mdl-textfield__label" for="phone">Phone Number</label>
+                    <label class="mdl-textfield__label" for="phone">{{ $t('blacklist.phone') }}</label>
                 </div>
             </form>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="create" @click="create">Create</button>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancel">Cancel</button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="create" @click="create"> {{ $t('dialog.create') }}</button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancel">{{ $t('dialog.cancel') }}</button>
         </div>
 
 

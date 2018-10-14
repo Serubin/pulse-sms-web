@@ -7,6 +7,7 @@ import SessionCache from '@/utils/cache_manager.js'
 import ShortcutKeys from '@/utils/shortcuts.js'
 import Platform from '@/utils/platform.js'
 import TimeUtils from '@/utils/time_utils.js'
+import { i18n } from '@/utils/translations.js'
 
 export {
     Util,
@@ -17,5 +18,6 @@ export {
     SessionCache,
     ShortcutKeys,
     Platform,
-    TimeUtils
+    TimeUtils,
+    i18n
 }

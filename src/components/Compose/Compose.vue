@@ -7,6 +7,7 @@
 
 <script>
 import Vue from 'vue'
+import { i18n } from '@/utils'
 
 import { Api, Crypto, Util } from "@/utils/"
 import Sendbar from '../Thread/Sendbar.vue'
@@ -40,7 +41,7 @@ export default {
             let to = "";
 
             if (this.selectedContacts.length <= 0)
-                return Util.Snackbar("No recipient");
+                return Util.Snackbar(i18n.t('compose.norecipient'));
 
             this.selectedContacts.map((value) => { // Concat selected contacts
                 to += value.phone + ",";

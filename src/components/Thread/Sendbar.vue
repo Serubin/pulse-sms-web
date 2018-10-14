@@ -17,7 +17,7 @@
             </div>
             <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
                 <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
-                <label class="mdl-textfield__label" for="message-entry">Type message...</label>
+                <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
             <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" id="send-button" @click="dispatchSend">

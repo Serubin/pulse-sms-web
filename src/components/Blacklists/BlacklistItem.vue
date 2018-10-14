@@ -3,7 +3,7 @@
         <div class="item" :id="id" v-mdl @click="menu.toggle()">{{ phone_number }}</div>
         <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
             id="blacklist-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteBlacklist">Delete</li>
+            <li class="mdl-menu__item" @click="deleteBlacklist">{{ $t('dialog.delete') }}</li>
         </ul>
     </div>
 </template>

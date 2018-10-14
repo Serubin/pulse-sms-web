@@ -6,7 +6,7 @@
             </div>
             <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
                 <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" @keydown.delete="deleteKey">
-                <label class="mdl-textfield__label" for="recipient">Type contact...</label>
+                <label class="mdl-textfield__label" for="recipient">{{ $t('compose.type') }}</label>
             </div>
             <div id="border"></div>
         </div>
@@ -15,6 +15,7 @@
 
 <script>
 import Vue from 'vue'
+import { i18n } from '@/utils'
 
 import '@/lib/auto-complete.min.js'
 import ContactChip from './ContactChip.vue'
@@ -60,7 +61,7 @@ export default {
          */
         queryContacts (clearCache = false) {
             if (clearCache) {
-                Util.snackbar("Downloading contacts... This may take a minute.");
+                Util.snackbar(i18n.t('compose.downloading'));
                 SessionCache.invalidateContacts();
             }
 
@@ -116,7 +117,7 @@ export default {
                 source: function(term, suggest) { suggest(matcher(term)); },
                 renderItem: function (contact, search) {
                     if (contact.id == null) {
-                        return '<div class="autocomplete-suggestion">Can\'t find your contact?</div>';
+                        return `<div class="autocomplete-suggestion">${i18n.t('compose.cantfind')}</div>`;
                     } else {
                         return '<div class="autocomplete-suggestion" data-val="' + contact.name + '" data-id="' + contact.id + '" data-name="' + contact.name + '" data-phone="' + contact.phone + '">' + contact.name + ' (' + contact.phone + ')' + '</div>';
                     }
@@ -183,7 +184,7 @@ export default {
             this.recipient = "";
 
             if (this.selectedContacts.indexOf(contact) != -1)
-                return Util.snackbar(contact.name + " has already been added");
+                return Util.snackbar(i18n.t('compose.alreadyadded', {name: contact.name}));
 
             this.selectedContacts.push(contact);
 
