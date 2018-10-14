@@ -55,9 +55,6 @@ export const i18n = new VueI18n({
             },
             thread: {
                 settings: {
-                    primary: 'Primary Color',
-                    darkprimary: 'Primary Color Dark',
-                    accent: 'Accent Color',
                     updatecolors: 'Update Theme Colors',
                     pin: 'Pin Conversation',
                     mute: 'Mute Conversation',
@@ -86,6 +83,26 @@ export const i18n = new VueI18n({
                 none: 'No Blacklisted Numbers',
                 phone: 'Phone Number',
                 create: 'Create Blacklist'
+            },
+            settings: {
+                theme: 'Theme Settings',
+                refresh: 'Refresh settings from phone',
+                explanatory_intro: 'These settings are pulled from the app, when you click this preference. You can also change them manually, from this page.',
+                base: 'Base Theme',
+                daynight: 'Day / Night',
+                light: 'Light',
+                dark: 'Dark',
+                black: 'Black',
+                primary: 'Primary Color',
+                darkprimary: 'Primary Color Dark',
+                accent: 'Accent Color',
+                applyeverywhere: 'Apply Colors to all Conversations',
+                applyprimary: 'Apply Primary Color to App Bar',
+                webspecific: 'Web Specific Settings',
+                shownotifs: 'Show Notifications',
+                entersend: 'Use Enter to Send Messages',
+                yes: 'Yes',
+                no: 'No'
             }
         },
         fr: {
@@ -136,9 +153,6 @@ export const i18n = new VueI18n({
             },
             thread: {
                 settings: {
-                    primary: 'Couleur primaire',
-                    darkprimary: 'Couleur primaire foncée',
-                    accent: 'Couleur secondaire',
                     updatecolors: 'Changer les couleurs',
                     pin: 'Épingler la conversation',
                     mute: 'Rendre muet',
@@ -167,7 +181,26 @@ export const i18n = new VueI18n({
                 none: 'Liste noire vide',
                 phone: 'Numéro de téléphone',
                 create: 'Ajouter un blocage'
+            },
+            settings: {
+                theme: 'Paramètre d\'apparence',
+                refresh: 'Récupérer les paramètres du téléphone',
+                explanatory_intro: 'Ces paramètres sont récupérés depuis l\'application, lorsque vous cliquez dessus. Vous pouvez aussi les changer manuellement depuis cette page.',
+                base: 'Thème de base',
+                daynight: 'Jour / Nuit',
+                light: 'Clair',
+                dark: 'Sombre',
+                black: 'Noir',
+                primary: 'Couleur primaire',
+                darkprimary: 'Couleur primaire foncée',
+                accent: 'Couleur secondaire',
+                applyeverywhere: 'Appliquer ces couleurs pour toutes les conversations',
+                applyprimary: 'Appliquer la couleur primaire à la barre de navigation',
+                webspecific: 'Paramètres spécifiques au web',
+                shownotifs: 'Afficher les notifications',
+                entersend: 'La touche entrée envoie le message',
+                yes: 'Oui',
+                no: 'Non'
             }
-
         }
     }});

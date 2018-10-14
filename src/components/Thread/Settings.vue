@@ -3,7 +3,7 @@
          <div class="page-content" id="account-list" v-mdl>
 
             <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showColorDialog"> <!-- Global Colors -->
-         <div class="mdl-color-text--grey-900">{{ $t('thread.settings.primary')}}, {{ $t('thread.settings.darkprimary')}}, {{ $t('thread.settings.accent') }}</div>
+         <div class="mdl-color-text--grey-900">{{ $t('settings.primary')}}, {{ $t('settings.darkprimary')}}, {{ $t('settings.accent') }}</div>
                 <div class="mdl-color-text--grey-600">{{ hex.default }}, {{ hex.dark }}, {{ hex.accent }}</div>
             </div>
 
@@ -11,17 +11,17 @@
                 <div class="mdl-dialog__content mdl-dialog-card mdl-card">
                     <h4>{{ $t('thread.settings.updatecolors') }}</h4>
                     <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('thread.settings.primary') }}
+                        {{ $t('settings.primary') }}
                         <input class="mdl-textfield__input" type="text" id="theme-default" v-model="hex.default"/>
                         <label class="mdl-textfield__label" for="theme-default"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('thread.settings.darkprimary') }}
+                        {{ $t('settings.darkprimary') }}
                         <input class="mdl-textfield__input" type="text" id="theme-dark" v-model="hex.dark"/>
                         <label class="mdl-textfield__label" for="theme-dark"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('thread.settings.accent') }}
+                        {{ $t('settings.accent') }}
                         <input class="mdl-textfield__input" type="text" id="theme-accent" v-model="hex.accent"/>
                         <label class="mdl-textfield__label" for="theme-accent"></label>
                     </div>
