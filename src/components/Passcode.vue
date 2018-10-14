@@ -1,19 +1,19 @@
 <template>
     <div class="mdl-card shadow" id="passcode-pane" v-mdl>
         <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Enter Passcode</h2>
+            <h2 class="mdl-card__title-text">{{ $t('passcode.enter') }}</h2>
         </div>
         <div class="mdl-card__supporting-text">
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
                     <input class="mdl-textfield__input" type="password" id="passcode" v-model="passcode" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="continueClicked"/>
-                    <label class="mdl-textfield__label" for="passcode">Passcode</label>
+                    <label class="mdl-textfield__label" for="passcode">{{ $t('passcode.passcode') }}</label>
                 </div>
             </form>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="continue" @click="continueClicked">Continue</button>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancelClicked">Cancel</button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="continue" @click="continueClicked">{{ $t('dialog.continue') }} </button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancelClicked">{{ $t('dialog.cancel') }}</button>
         </div>
     </div>
 </template>

@@ -62,6 +62,7 @@
 <script>
 
 import Vue from 'vue'
+import { i18n } from '@/utils'
 
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
@@ -282,20 +283,20 @@ export default {
             // On thread add Delete, Blacklist, & Archive/unarchive
             if (this.$route.name.indexOf('thread') > -1) {
                 items.unshift(
-                    { "name": "conversation-information", 'title': "Conversation Information"},
-                    { "name": "blacklist", 'title': "Blacklist Contact"},
-                    { 'name': "delete", 'title': "Delete Conversation" },
+                    { "name": "conversation-information", 'title': i18n.t('menus.convinfo')},
+                    { "name": "blacklist", 'title': i18n.t('menus.blacklist')},
+                    { 'name': "delete", 'title': i18n.t('menus.delete')},
                     ( this.$route.path.indexOf("archived") == -1 ?
-                        { 'name': "archive", 'title': "Archive Conversation" } :
-                        { 'name': "unarchive", 'title': "Unarchive Conversation" }),
-                    { "name": "conversation-settings", 'title': "Conversation Settings"}
+                        { 'name': "archive", 'title': i18n.t('menus.archive')} :
+                        { 'name': "unarchive", 'title': i18n.t('menus.unarchive')}),
+                    { "name": "conversation-settings", 'title': i18n.t('menus.convsettings')}
                 );
             } else {
                 items.unshift(
-                    { 'name': "account", 'title': "My Account" },
-                    { 'name': "help-feedback", 'title': "Help and Feedback" },
-                    { 'name': "settings", 'title': "Settings" },
-                    { 'name': "logout", 'title': "Logout" }
+                    { 'name': "account", 'title': i18n.t('menus.account') },
+                    { 'name': "help-feedback", 'title': i18n.t('menus.help') },
+                    { 'name': "settings", 'title': i18n.t('menus.settings')},
+                    { 'name': "logout", 'title': i18n.t('menus.logout')}
                 )
             }
 

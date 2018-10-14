@@ -6,37 +6,37 @@
                     <li id="conversations-link" @click="routeTo('conversations')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('conversations') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon conversations">
-                            Conversations
+                            {{ $t('sidebar.conversations') }}
                         </div>
                     </li>
                     <li id="private-link" @click="routeTo('private')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('private') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon private">
-                            Private Conversations
+                            {{ $t('sidebar.privateconversations') }}
                         </div>
                     </li>
                     <li id="archive-link" @click="routeTo('archive')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('archive') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon archive">
-                            Archive
+                            {{ $t('sidebar.archive') }}
                         </div>
                     </li>
                     <li id="folder-link" @click="routeTo('folders')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('folders') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon folders">
-                            Folders
+                            {{ $t('sidebar.folders') }}
                         </div>
                     </li>
                     <li id="scheduled-messages-link" @click="routeTo('scheduled')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('scheduled') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon scheduled_messages">
-                            Scheduled Messages
+                            {{ $t('sidebar.scheduled') }}
                         </div>
                     </li>
                     <li id="blacklist-link" @click="routeTo('blacklists')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('blacklists') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon blacklist">
-                            Blacklist
+                            {{ $t('sidebar.blacklist') }}
                         </div>
                     </li>
                 </ul>

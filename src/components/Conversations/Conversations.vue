@@ -11,7 +11,7 @@
          </div>
 
         <!-- If no Messages -->
-        <p class="empty-message" v-if="conversations.length == 0 && !loading">No Conversations</p>
+        <p class="empty-message" v-if="conversations.length == 0 && !loading">{{ $t('conversations.noconv') }}</p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
@@ -26,6 +26,7 @@
 
 <script>
 import Vue from 'vue';
+import { i18n } from '@/utils'
 import Hash from 'object-hash'
 import { Util, Api, SessionCache, TimeUtils } from '@/utils'
 import ConversationItem from './ConversationItem.vue'
@@ -272,17 +273,17 @@ export default {
 
         calculateTitle (conversation) {
             if (conversation.pinned)
-                return "Pinned";
+                return i18n.t('conversations.pinned');
             else if (TimeUtils.isToday(conversation.timestamp))
-                return "Today";
+                return i18n.t('conversations.today');
             else if (TimeUtils.isYesterday(conversation.timestamp))
-                return "Yesterday";
+                return i18n.t('conversations.yesterday');
             else if (TimeUtils.isLastWeek(conversation.timestamp))
-                return "This Week";
+                return i18n.t('conversations.thisweek');
             else if (TimeUtils.isLastMonth(conversation.timestamp))
-                return "This Month";
+                return i18n.t('conversations.thismonth');
             else
-                return "Older";
+                return i18n.t('conversations.older');
         }
     },
 
@@ -362,7 +363,7 @@ export default {
     .empty-message {
         color: rgba(0, 0, 0, 0.54);
         margin: 6em auto;
-        width: 8.5em;
+        width: 9.5em;
     }
 
     .compose {

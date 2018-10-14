@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { i18n } from '@/utils'
 import router from '@/router/';
 import store from '@/store/';
 import emojione from 'emojione';
@@ -29,7 +30,7 @@ export default class Api {
         this.socket.addEventListener('open', () => {
             if (this.has_disconnected) {
                 store.state.msgbus.$emit('refresh-btn');
-                Util.snackbar("And we're back!");
+                Util.snackbar(i18n.t('api.back'));
             }
 
             if (this.disconnected_timeout != null) {
@@ -60,7 +61,7 @@ export default class Api {
             // trying to reconnect.
             this.disconnected_timeout = setTimeout(() => {
                 if (!this.has_disconnected)
-                    Util.snackbar("You've been disconnected. We're trying to reconnect you...");
+                    Util.snackbar(i18n.t('api.disconnected'));
 
                 this.has_disconnected = true;
             }, 5 * 1000);

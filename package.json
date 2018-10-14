@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@xkeshi/image-compressor": "^0.5.2",
+    "emoji-mart-vue": "2.5.3",
     "emojione": "^3.1.7",
     "firebase": "^5.4.2",
     "hotkeys-js": "^3.3.5",
@@ -27,9 +28,9 @@
     "object-hash": "^1.1.8",
     "reconnecting-websocket": "^3.2.2",
     "vue": "^2.3.3",
-    "emoji-mart-vue": "2.5.3",
     "vue-flatpickr-component": "^7.0.4",
     "vue-h-ajax": "^0.1.2",
+    "vue-i18n": "^8.2.0",
     "vue-router": "^2.6.0",
     "vuex": "^2.3.1"
   },
