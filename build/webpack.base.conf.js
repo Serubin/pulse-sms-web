@@ -77,9 +77,10 @@ module.exports = {
     new SWPrecacheWebpackPlugin({
       cacheId: 'pulse-sms',
       filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css}'],
+      staticFileGlobs: ['dist/**/*.{js,css}', '/'],
       minify: true,
-      stripPrefix: 'dist/'
+      stripPrefix: 'dist/',
+      dontCacheBustUrlsMatching: /\.\w{6}\./
     })
   ]
 }
