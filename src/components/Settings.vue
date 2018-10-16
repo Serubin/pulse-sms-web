@@ -24,7 +24,7 @@
                 <li class="mdl-menu__item" @click="theme='day_night'">{{ $t('settings.daynight') }}</li>
                 <li class="mdl-menu__item" @click="theme='light'"> {{ $t('settings.light') }}</li>
                 <li class="mdl-menu__item" @click="theme='dark'">{{ $t('settings.dark') }}</li>
-                <li class="mdl-menu__item" @click="theme='black'">{{ $t('settings.black') }}k</li>
+                <li class="mdl-menu__item" @click="theme='black'">{{ $t('settings.black') }}</li>
             </ul><!-- End Base Theme -->
 
             <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showColorDialog"> <!-- Global Colors -->
