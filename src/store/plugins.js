@@ -19,6 +19,7 @@ const localStoreSync = store => {
         'theme_apply_appbar_color': KEYS.THEME.APPLY_APPBAR_COLOR,
         'notifications': KEYS.NOTIFICATIONS,
         'enter_to_send': KEYS.ENTER_TO_SEND,
+        'larger_app_bar': KEYS.LARGER_APP_BAR,
     }
 
     // called after every mutation.

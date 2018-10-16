@@ -103,6 +103,11 @@ export const i18n = new VueI18n({
                 entersend: 'Use Enter to Send Messages',
                 yes: 'Yes',
                 no: 'No'
+            },
+            experiments: {
+                disclaimer: 'Disclaimer',
+                explanatory_intro: 'These preferences come with no support and no guarentee that they will continue to exist. As an open source app, they will be useful to test new features and provide developers with the means of implementing their own tweaks into the app. Use with caution and do not rely on them, unless you are maintaining them. They are meant to be experiments.',
+                larger_app_bar: 'Display Larger App Bar',
             }
         },
         fr: {

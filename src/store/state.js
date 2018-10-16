@@ -9,6 +9,7 @@ export const KEYS  = {
     CONVERSATIONS: 'conversations',
     NOTIFICATIONS: 'notifications',
     ENTER_TO_SEND: 'enter_to_send',
+    LARGER_APP_BAR: 'larger_app_bar',
     THEME: {
         BASE: 'theme_base',
         GLOBAL_DEFAULT: 'theme_global_default',
@@ -38,6 +39,7 @@ export const state = {
     theme_apply_appbar_color: JSON.parse( window.localStorage.getItem(KEYS.THEME.APPLY_APPBAR_COLOR) || "true" ),
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
     enter_to_send: JSON.parse( window.localStorage.getItem(KEYS.ENTER_TO_SEND) || "true" ),
+    larger_app_bar: JSON.parse( window.localStorage.getItem(KEYS.LARGER_APP_BAR) || "false" ),
 
     /* Per session */
     aes: '',
@@ -95,6 +97,7 @@ export const mutations = {
     theme_apply_appbar_color: (state, theme_apply_appbar_color) => state.theme_apply_appbar_color = theme_apply_appbar_color,
     notifications: (state, notifications) => state.notifications = notifications,
     enter_to_send: (state, enter_to_send) => state.enter_to_send = enter_to_send,
+    larger_app_bar: (state, larger_app_bar) => state.larger_app_bar = larger_app_bar,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
     colors_default: (state, colors_default) => state.colors_default = colors_default,
     colors_dark: (state, colors_dark) => state.colors_dark = colors_dark,
