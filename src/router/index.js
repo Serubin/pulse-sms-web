@@ -5,6 +5,7 @@ import store from '@/store/'
 
 import Login from '@/components/Login.vue'
 import Settings from '@/components/Settings.vue'
+import Experiments from '@/components/Experiments.vue'
 import ConversationSettings from '@/components/Thread/Settings.vue'
 import Passcode from '@/components/Passcode.vue'
 import HelpFeedback from '@/components/HelpFeedback.vue'
@@ -71,6 +72,11 @@ let router = new VueRouter({
             path: '/settings',
             name: 'settings',
             component: Settings,
+        },
+        {
+            path: '/experiments',
+            name: 'experiments',
+            component: Experiments,
         },
         {
             path: '/thread/:conversation_id/settings',
