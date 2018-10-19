@@ -109,7 +109,7 @@ export default {
     },
 
     mounted () { // Add window event listener
-
+        this.applyExperiments(); // Apply experiments...
         this.calculateHour(); // Calculate the next hour (for day/night theme)
         this.updateBodyClass(this.theme_str, ""); // Enables global theme
 
@@ -418,8 +418,23 @@ export default {
             this.$store.commit('contacts', contacts_cache);
         },
 
+        /**
+         * Open url in new window
+         * @param url
+         */
         openUrl (url) {
             window.open(url, '_blank');
+        },
+
+        /**
+         * Apply Experiments
+         */
+        applyExperiments () {
+            const body = this.$el.parentElement; // Select body (apparently)
+            const LARGER_APP_BAR = "larger_app_bar";
+            if (this.$store.state.larger_app_bar && !body.className.includes(LARGER_APP_BAR))
+                body.className += ` ${LARGER_APP_BAR} `;
+
         }
     },
 
@@ -558,7 +573,7 @@ export default {
     }
 
     #toolbar {
-        height: 55px;
+        height: 43px;
         top: 0;
         position: fixed;
         z-index: 4;
@@ -572,7 +587,6 @@ export default {
     #toolbar_inner {
         max-width: 950px;
         height: 100%;
-        margin-top: 7px;
         position: relative;
         z-index: 6;
         transition: ease-in-out margin-left $anim-time;
@@ -610,10 +624,6 @@ export default {
 
         }
 
-        .menu_icon {
-            margin: auto 5px;
-        }
-
         .mdl-menu__outline {
             border-radius: 10px;
         }
@@ -638,7 +648,7 @@ export default {
 
         @media screen and (min-width: 350px) {
             .mdl-layout-title {
-                max-width: 161px;
+                max-width: 160px;
             }
         }
 
@@ -820,6 +830,26 @@ export default {
 
         .link-sent {
             color: white;
+        }
+    }
+
+    body.larger_app_bar {
+        #toolbar {
+            height: 55px;
+        }
+
+        #toolbar_inner {
+            margin-top: 7px;
+        }
+
+        .menu_icon {
+            margin: auto 5px;
+        }
+
+        @media screen and (min-width: 350px) {
+            .mdl-layout-title {
+                max-width: 161px;
+            }
         }
     }
 
