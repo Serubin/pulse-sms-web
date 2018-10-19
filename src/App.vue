@@ -558,7 +558,7 @@ export default {
     }
 
     #toolbar {
-        height: 43px;
+        height: 55px;
         top: 0;
         position: fixed;
         z-index: 4;
@@ -567,12 +567,12 @@ export default {
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
         background-color: $bg-light;
         border-color: #e3e3e3;
-
     }
 
     #toolbar_inner {
         max-width: 950px;
         height: 100%;
+        margin-top: 7px;
         position: relative;
         z-index: 6;
         transition: ease-in-out margin-left $anim-time;
@@ -610,6 +610,10 @@ export default {
 
         }
 
+        .menu_icon {
+            margin: auto 5px;
+        }
+
         .mdl-menu__outline {
             border-radius: 10px;
         }
@@ -634,7 +638,7 @@ export default {
 
         @media screen and (min-width: 350px) {
             .mdl-layout-title {
-                max-width: 160px;
+                max-width: 161px;
             }
         }
 
@@ -675,7 +679,7 @@ export default {
 
     #wrapper {
         transition: ease-in-out margin-left $anim-time;
-
+        padding-top: 15px;
     }
 
     #content {
