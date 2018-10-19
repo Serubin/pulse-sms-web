@@ -38,7 +38,7 @@ export default {
     },
 
     methods: {
-        refreshSettings () {
+        refreshExperiments () {
 
         },
     },
@@ -66,7 +66,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+          background: #E0E0E0;
     }
 
     .click-item:hover {
@@ -75,7 +75,7 @@ export default {
 
     body.dark {
         .item:hover, .click-item:hover {
-        	  background: #202020;
+            background: #202020;
         }
     }
 
