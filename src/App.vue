@@ -109,7 +109,7 @@ export default {
     },
 
     mounted () { // Add window event listener
-
+        this.applyExperiments(); // Apply experiments...
         this.calculateHour(); // Calculate the next hour (for day/night theme)
         this.updateBodyClass(this.theme_str, ""); // Enables global theme
 
@@ -418,8 +418,23 @@ export default {
             this.$store.commit('contacts', contacts_cache);
         },
 
+        /**
+         * Open url in new window
+         * @param url
+         */
         openUrl (url) {
             window.open(url, '_blank');
+        },
+
+        /**
+         * Apply Experiments
+         */
+        applyExperiments () {
+            const body = this.$el.parentElement; // Select body (apparently)
+            const LARGER_APP_BAR = "larger_app_bar";
+            if (this.$store.state.larger_app_bar && !body.className.includes(LARGER_APP_BAR))
+                body.className += ` ${LARGER_APP_BAR} `;
+
         }
     },
 
@@ -567,7 +582,6 @@ export default {
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
         background-color: $bg-light;
         border-color: #e3e3e3;
-
     }
 
     #toolbar_inner {
@@ -675,7 +689,7 @@ export default {
 
     #wrapper {
         transition: ease-in-out margin-left $anim-time;
-
+        padding-top: 15px;
     }
 
     #content {
@@ -816,6 +830,26 @@ export default {
 
         .link-sent {
             color: white;
+        }
+    }
+
+    body.larger_app_bar {
+        #toolbar {
+            height: 55px;
+        }
+
+        #toolbar_inner {
+            margin-top: 7px;
+        }
+
+        .menu_icon {
+            margin: auto 5px;
+        }
+
+        @media screen and (min-width: 350px) {
+            .mdl-layout-title {
+                max-width: 161px;
+            }
         }
     }
 
