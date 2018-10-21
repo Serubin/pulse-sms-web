@@ -40,3 +40,11 @@ npm run build --report
 Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/messenger-web/pulls). Features can be requested using [issues](https://github.com/klinker-apps/messenger-issues/issues) on the Pulse SMS issue tracker/roadmap, rather than on the issues for this repo. I know there are some issues on this repo, right now. They will be migrated (or finished), as the app moves in to the production state.
 
 Any code, comments, and critiques are appreciated.
+
+### Pulse Experiments
+
+From an end-user perspective, I am not a big fan of just filling out the settings menu. Little "tweak" preferences that the majority of users will not find helpful, probably will not be added to the app. Making new preferences means a much higher overhead for new users, and a more complicated experience for current users. Many users will not understand "one-off" preferences and they will just confuse them, which is a bad user experience.
+
+However, as an open source app, I want developers to be able to customize their experince, the way they want. I have made a `/experiments` page that can hold any number of settings and preferences that other people want to add into the app and maintain. If you have a suggestion for the web app, feel free to implement it there, create a PR, then we can test it and roll it out to everyone if it will be useful for the majority of people.
+
+This `/experiments` page will never be advertised to end-users. No one should assume that the preferences there will work or request support on them. This page is simply for developers to test new ideas/concepts that they would like to see in the app. It could also be a good place to A/B test new changes.
