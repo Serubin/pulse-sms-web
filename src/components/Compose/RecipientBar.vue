@@ -207,6 +207,27 @@ export default {
             return "";
         },
     },
+    watch: {
+        'recipient' (string) {
+            const lastchar = string.substr(string.length - 1, string.length);
+
+            if (lastchar != ',')
+                return;
+
+
+            string = string.substr(0, string.length - 1); // Remove comma
+
+            if (!/(\d{10}|\d{3}-\d{3}-\d{4})|\d{5}/.test(string))
+                return;
+
+            this.addContact({
+                'id': string,
+                'name': string,
+                'phone': string
+            });
+
+        }
+    },
     components: {
         ContactChip,
     }
