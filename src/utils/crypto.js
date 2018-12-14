@@ -76,7 +76,12 @@ export default class Crypto {
             message.mime_type = Crypto.decrypt(message.mime_type);
 
             message.dataNoEmoji = Crypto.decrypt(message.data);
-            message.data = emojione.unicodeToImage(Util.entityEncode(message.dataNoEmoji));
+
+            if (message.mime_type.indexOf("media") > -1) {
+                message.data = Util.entityEncode(message.dataNoEmoji);
+            } else {
+                message.data = emojione.unicodeToImage(Util.entityEncode(message.dataNoEmoji));
+            }
 
             message.message_from = Crypto.decrypt(message.message_from);
         } catch (err) {
