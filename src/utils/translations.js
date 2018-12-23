@@ -77,7 +77,8 @@ export const i18n = new VueI18n({
                 norecipient: 'No Recipient',
                 type: 'Type contact...',
                 cantfind: 'Can\'t find your contact?',
-                alreadyadded: '{name} has already been added'
+                alreadyadded: '{name} has already been added',
+                downloading: 'Downloading contacts...'
             },
             blacklist: {
                 none: 'No Blacklisted Numbers',
