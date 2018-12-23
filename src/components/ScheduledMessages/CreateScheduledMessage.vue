@@ -67,7 +67,7 @@ export default {
                     this.to += item.phone;
                     this.title += item.name;
                 } else {
-                    this.to += item.phone + ",";
+                    this.to += item.phone + ", ";
                     this.title += item.name + ", ";
                 }
             });
