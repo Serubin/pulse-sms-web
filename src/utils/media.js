@@ -113,7 +113,7 @@ export default class MediaLoader {
                     // good image size:         40,125
                     // good image size:        124,914
 
-                    if (data.data.length > 25000000) {
+                    if (data.data.length > 2000000) {
                         reject(null)
                         return
                     }
