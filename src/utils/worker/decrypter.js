@@ -4,6 +4,7 @@ import '@/lib/hmacSHA1-worker.js'
 
 onmessage = function(message) {
 
+    console.log("decrypting media");
     sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
 
     const imageData = message.data.imageData;

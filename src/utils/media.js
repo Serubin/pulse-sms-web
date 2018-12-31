@@ -1,6 +1,6 @@
 import { Api } from '@/utils'
 import store from '@/store'
-import Worker from "worker-loader?name=media.worker.js!./worker";
+import Worker from "worker-loader?name=decrypt.worker.js!./worker/decrypter";
 
 // IndexedDB
 const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
@@ -107,7 +107,7 @@ export default class MediaLoader {
             Api.fetchImage(id)
                 .then(data => {
 
-                    console.log("fetched image from web")
+                    console.log("fetching media from web");
 
                     // One user was having issues with the web app freezing. It was coming from decrypting images...
                     // with data.length on the blob:
