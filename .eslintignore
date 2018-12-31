@@ -1,3 +1,4 @@
 build/*.js
 config/*.js
 src/lib/*.js
+src/utils/worker.js

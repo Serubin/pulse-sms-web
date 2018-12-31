@@ -1,4 +1,6 @@
-import { Api, Crypto } from '@/utils'
+import { Api } from '@/utils'
+import store from '@/store'
+import Worker from "worker-loader?name=media.worker.js!./worker";
 
 // IndexedDB
 const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
@@ -105,6 +107,8 @@ export default class MediaLoader {
             Api.fetchImage(id)
                 .then(data => {
 
+                    console.log("fetched image from web")
+
                     // One user was having issues with the web app freezing. It was coming from decrypting images...
                     // with data.length on the blob:
 
@@ -112,6 +116,7 @@ export default class MediaLoader {
                     // good image size:         40,125
                     // good image size:        124,914
 
+                    // TODO: Now that we are loading things off on the worker thread, can this restriction be removed?
                     if (data.data.length > 2000000) {
                         reject(null)
                         return
@@ -124,14 +129,35 @@ export default class MediaLoader {
                     if (imageData == "" || imageData == null)
                         reject(null);
 
+                    // We are offloading the decryption to a web worker, because it can be extremely intensive and lock up the UI
+                    // https://github.com/klinker-apps/messenger-web/issues/28
+
+                    const database = this.db;
+                    const getTransactionFunction = this.getTransaction;
+                    const storeMediaFunction = this.storeMedia;
+                    function handleWorkerCompletion(message) {
+                        if (message.data.command == "done") {
+                            // Store blob
+                            storeMediaFunction(id, message.data.image, getTransactionFunction(database));
+
+                            // Send back blob
+                            resolve(message.data.image);
+
+                            // unregister listener
+                            worker.removeEventListener("message", handleWorkerCompletion);
+                        }
+                    }
+
+                    const worker = new Worker;
+                    worker.addEventListener("message", handleWorkerCompletion, false);
+
                     // Decrypt blob
-                    const decryptedData = Crypto.decryptToBase64(imageData);
-
-                    // Store blob
-                    this.storeMedia(id, decryptedData);
-
-                    // Send back blob
-                    resolve(decryptedData);
+                    worker.postMessage({
+                        "imageData": imageData,
+                        "accountId": store.state.account_id,
+                        "hash": store.state.hash,
+                        "salt": store.state.salt
+                    });
                 });
         });
     }
@@ -142,11 +168,11 @@ export default class MediaLoader {
      * @param id - device id
      * @param media_blob - data blob
      */
-    storeMedia (id, media_blob) {
+    storeMedia (id, media_blob, trans) {
 
         // Put the blob into the dabase
         //
-        const transaction = this.getTransaction();
+        const transaction = trans ? trans : this.getTransaction();
         transaction.objectStore(storeName).put(media_blob, id);
     }
 
@@ -154,10 +180,10 @@ export default class MediaLoader {
      * getTransaction - get db transaction for storeObject
      * @return transaction object
      */
-    getTransaction () {
+    getTransaction (db) {
         // Open a transaction to the database
         const readWriteMode = typeof IDBTransaction.READ_WRITE == "undefined" ? "readwrite" : IDBTransaction.READ_WRITE;
-        return this.db.transaction([storeName], readWriteMode);
+        return db ? db.transaction([storeName], readWriteMode) : this.db.transaction([storeName], readWriteMode);
     }
     /**
      * createObjectStore - create ObjectStore in indexDb
