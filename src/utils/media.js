@@ -117,7 +117,7 @@ export default class MediaLoader {
                     // good image size:        124,914
 
                     // TODO: Now that we are loading things off on the worker thread, can this restriction be removed?
-                    if (data.data.length > 2000000) {
+                    if (data.data.length > 10000000) {
                         reject(null)
                         return
                     }
