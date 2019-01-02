@@ -67,12 +67,8 @@ export default {
                 </div>`;
                 this.is_media = true;
 
-                let randomComp = Math.floor((Math.random() * 500) + 1);
-                setTimeout(() => {
-                    // Fetch media
-                    MediaLoader.getMedia(this.id, this.mime).then(blob => this.loadImage(blob));
-
-                }, 750 + randomComp);
+                // Fetch media
+                MediaLoader.getMedia(this.id, this.mime).then(blob => this.loadImage(blob));
 
                 break;
             }

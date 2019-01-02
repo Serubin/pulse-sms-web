@@ -18,7 +18,8 @@ module.exports = {
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+      : config.dev.assetsPublicPath,
+    globalObject: 'this'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -71,6 +72,11 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
+        include: [resolve('src'), resolve('test')]
       }
     ]
   },
