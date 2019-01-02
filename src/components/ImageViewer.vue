@@ -86,7 +86,7 @@ export default {
 
     .lightbox-overlay {
         text-align: center;
-        background-color: rgba(0,0,0,0.7);
+        background-color: rgba(0,0,0,1);
         position: fixed;
         top: 0;
         left: 0;
@@ -121,5 +121,13 @@ export default {
         color: white;
         z-index: 1001;
     }
+
+    // .fade-enter-active, .fade-leave-active {
+    //   transition: opacity .3s;
+    // }
+
+    // .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    //   opacity: 0;
+    // }
 
 </style>
