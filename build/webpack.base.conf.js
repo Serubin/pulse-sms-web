@@ -3,6 +3,7 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+var VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -81,6 +82,7 @@ module.exports = {
       minify: true,
       stripPrefix: 'dist/',
       dontCacheBustUrlsMatching: /\.\w{6}\./
-    })
+    }),
+    new VueLoaderPlugin()
   ]
 }

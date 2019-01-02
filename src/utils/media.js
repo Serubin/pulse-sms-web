@@ -58,7 +58,6 @@ export default class MediaLoader {
      * @return Promise
      */
     getMedia(id, mime) {
-
         return new Promise((resolve, reject) => {
             this.getMediaFromStore(id) // Atempt to get media from local store
                 .then(response => resolve(response))
@@ -119,20 +118,20 @@ export default class MediaLoader {
                     }
 
                     // get data out of json response
-                    data = data.data;
+                    const imageData = data.data;
 
                     // Reject empty response
-                    if (data == "" || data == null)
+                    if (imageData == "" || imageData == null)
                         reject(null);
 
                     // Decrypt blob
-                    data = Crypto.decryptToBase64(data);
+                    const decryptedData = Crypto.decryptToBase64(imageData);
 
                     // Store blob
-                    this.storeMedia(id, data);
+                    this.storeMedia(id, decryptedData);
 
-                    // Send back blog
-                    resolve(data);
+                    // Send back blob
+                    resolve(decryptedData);
                 });
         });
     }
