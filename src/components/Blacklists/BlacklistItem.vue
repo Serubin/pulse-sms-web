@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="item" :id="id" v-mdl @click="menu.toggle()">{{ phone_number }}</div>
+        <div class="item" :id="id" v-mdl @click="menu.toggle()">{{ phone_number || phrase }}</div>
         <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
             id="blacklist-menu" :data-mdl-for="id">
             <li class="mdl-menu__item" @click="deleteBlacklist">{{ $t('dialog.delete') }}</li>
@@ -28,13 +28,14 @@ export default {
         return {
             id: this.blacklistData.device_id,
             phone_number: this.blacklistData.phone_number,
+            phrase: this.blacklistData.phrase,
             menu: null,
         }
     },
 
     methods: {
         deleteBlacklist () {
-            Util.snackbar("Deleted blacklist: " + this.phone_number);
+            Util.snackbar("Deleted blacklist: " + (this.phone_number || this.phrase));
             Api.removeBlacklist(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
