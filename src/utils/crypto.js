@@ -127,7 +127,14 @@ export default class Crypto {
      */
     static decryptBlacklist (blacklist) {
         try {
-            blacklist.phone_number = Crypto.decrypt(blacklist.phone_number);
+            // phrase and phone number are optional, since it could be either/or.
+            if (blacklist.phone_number) {
+                blacklist.phone_number = Crypto.decrypt(blacklist.phone_number);
+            }
+
+            if (blacklist.phrase) {
+                blacklist.phrase = Crypto.decrypt(blacklist.phrase)
+            }
         } catch (err) {
             return null;
         }
