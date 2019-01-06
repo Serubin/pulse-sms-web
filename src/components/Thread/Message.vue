@@ -291,6 +291,8 @@ export default {
 
     .message-wrapper {
         user-select: text;
+        -moz-user-select: text; 
+        -ms-user-select: text;
         clear: both;
         display: block;
 
