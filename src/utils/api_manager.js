@@ -135,6 +135,8 @@ export default class Api {
             const id = json.message.content.id;
 
             SessionCache.removeConversation(id, 'index_public_unarchived');
+            SessionCache.removeConversation(id, 'index_archived');
+            SessionCache.removeConversation(id, 'index_private');
             store.state.msgbus.$emit('removedConversation', { id });
         } else if (operation == "archive_conversation") {
             const id = json.message.content.id;
