@@ -549,7 +549,7 @@ export default {
          */
         blacklist () {
             if (this.conversation_data.phone_number.indexOf(",") < 0) {
-                Api.createBlacklist(this.conversation_data.phone_number);
+                Api.createBlacklistPhone(this.conversation_data.phone_number);
                 Api.archiver(true, this.conversation_id);
 
                 // Snackbar the user

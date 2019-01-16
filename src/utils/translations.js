@@ -83,7 +83,9 @@ export const i18n = new VueI18n({
             blacklist: {
                 none: 'No Blacklisted Numbers',
                 phone: 'Phone Number',
-                create: 'Create Blacklist'
+                create_phone: 'Blacklist by Phone',
+                create_phrase: 'Blacklist by Phrase',
+                phrase: 'Phrase'
             },
             settings: {
                 theme: 'Theme Settings',
