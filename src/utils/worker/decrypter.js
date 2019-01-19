@@ -1,6 +1,5 @@
-// import { Crypto } from '@/utils'
 import '@/lib/sjcl-worker.js'
-import '@/lib/hmacSHA1-worker.js'
+import '@/lib/hmacsha1-worker.js'
 
 onmessage = function(message) {
 
