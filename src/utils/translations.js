@@ -80,6 +80,13 @@ export const i18n = new VueI18n({
                 alreadyadded: '{name} has already been added',
                 downloading: 'Downloading contacts...'
             },
+            contact: {
+                group: 'Group',
+                mobile: 'Mobile',
+                home: 'Home',
+                work: 'Work',
+                other: 'Other'
+            },
             blacklist: {
                 none: 'No Blacklisted Numbers',
                 phone: 'Phone Number',
