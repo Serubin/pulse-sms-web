@@ -127,10 +127,10 @@ export default {
                                     display = display + ' (' + i18n.t('contact.group') + ')';
                                     break;
                                 case 1:
-                                    display = display + ' (' + i18n.t('contact.mobile') + ')';
+                                    display = display + ' (' + i18n.t('contact.home') + ')';
                                     break;
                                 case 2:
-                                    display = display + ' (' + i18n.t('contact.home') + ')';
+                                    display = display + ' (' + i18n.t('contact.mobile') + ')';
                                     break;
                                 case 3: 
                                     display = display + ' (' + i18n.t('contact.work') + ')';
