@@ -90,7 +90,8 @@ export default {
                 this.contacts[contact.id] = {
                     'id': contact.id,
                     'name': contact.name,
-                    'phone': contact.phone_number
+                    'phone': contact.phone_number,
+                    'type': contact.contact_type
                 };
             }
 
@@ -138,7 +139,6 @@ export default {
                                     display = display + ' (' + i18n.t('contact.other') + ')';
                                     break;
                             }
-                            
                         }
 
                         return `<div class="autocomplete-suggestion" data-val="${contact.name}" data-id="${contact.id}" data-name="${contact.name}" data-phone="${contact.phone}">${display}</div>`;
