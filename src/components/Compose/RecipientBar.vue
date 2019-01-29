@@ -123,6 +123,8 @@ export default {
                         let display = contact.name + ' ' + contact.phone;
                         if (contact.type) {
                             switch (contact.type) {
+                                case -1: 
+                                    break;
                                 case 0: 
                                     display = display + ' (' + i18n.t('contact.group') + ')';
                                     break;
