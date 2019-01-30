@@ -8,8 +8,9 @@ import store from '@/store'
 import router from '@/router'
 import { i18n } from '@/utils'
 
-import '@/lib/material.min.js'
 import 'vuejs-dialog/dist/vuejs-dialog.min.css';
+import '@/lib/dialog.min.css';
+import '@/lib/material.min.js'
 
 Vue.config.productionTip = false
 
