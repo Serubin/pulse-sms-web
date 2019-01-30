@@ -113,6 +113,10 @@ export default class Api {
             SessionCache.updateConversation(message);
 
             store.state.msgbus.$emit('newMessage', message);
+        } else if (operation == "removed_message") {
+            let message = json.message.content;
+
+            store.state.msgbus.$emit('deletedMessage', message.id);
         } else if (operation == "read_conversation") {
             const id = json.message.content.id;
 

@@ -419,7 +419,7 @@ export default {
                 if (!this.snackbar.MaterialSnackbar.active) {
                     let timeoutId;
                     const data = {
-                        message: 'New Message',
+                        message: this.$t('thread.newmessage'),
                         actionHandler: (e) => {
                             this.snackbar.MaterialSnackbar.cleanup_(); // Hide snackbar
 
@@ -429,7 +429,7 @@ export default {
                                 Util.scrollToBottom(250);   // avoid scrolling before render
                             });
                         },
-                        actionText: 'Show',
+                        actionText: this.$t('thread.show'),
                         timeout: 60*60*60 // Hour timeout
                     };
                     Util.snackbar(data);
@@ -453,6 +453,7 @@ export default {
             for (let i = 0; i < this.messages.length; i++) {
                 if (this.messages[i].device_id == id) {
                     this.messages.splice(i, 1);
+                    SessionCache.invalidateMessages(this.conversation_id);
                 }
             }
         },

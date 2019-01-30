@@ -59,7 +59,15 @@ export const i18n = new VueI18n({
                     pin: 'Pin Conversation',
                     mute: 'Mute Conversation',
                     private: 'Private Conversation'
-                }
+                },
+                delete: {
+                    delete: 'Delete',
+                    cancel: 'Cancel',
+                    thread: 'Are you sure that you want to delete this conversation?',
+                    message: 'Are you sure that you want to delete this message?'
+                },
+                newmessage: 'New Message',
+                show: 'Show'
             },
             menus: {
                 account: 'My Account',
