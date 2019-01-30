@@ -531,18 +531,20 @@ export default {
          * Delete conversations
          */
         delete () {
-            Api.deleter(this.conversation_id);
+            let options = {
+                okText: this.$t('thread.delete.delete'),
+                cancelText: this.$t('thread.delete.cancel'),
+                animation: 'fade'
+            }
 
-            // Snackbar the user
-            Util.snackbar({
-                message: "Conversation has been deleted",
-                timeout: 6 * 1000
-            })
-
-            // Awful terrible fix for thread snackbar clean up events
-            this.snackbar.MaterialSnackbar.active = false;
+            const id = this.conversation_id;
+            const apiUtils = Api;
 
             this.$router.push('/');
+            this.$dialog.confirm(this.$t('thread.delete.thread'), options)
+                .then(function(dialog) {
+                    apiUtils.deleter(id);
+                }).catch(function() { });
         },
 
         /**
