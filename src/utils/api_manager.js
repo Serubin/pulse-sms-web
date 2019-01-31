@@ -616,7 +616,7 @@ export default class Api {
         Vue.http.post(constructed_url);
     }
 
-    static createScheduledMessage (to, message, time, title) {
+    static createScheduledMessage (to, message, time, title, repeat) {
         let request = {
             account_id: store.state.account_id,
             device_id: Api.generateId(),
@@ -624,7 +624,8 @@ export default class Api {
             data: Crypto.encrypt(message),
             mime_type: Crypto.encrypt("text/plain"),
             title: Crypto.encrypt(title.trim().length == 0 ? to : title.trim()),
-            timestamp: time
+            timestamp: time,
+            repeat: repeat
         };
 
         let constructed_url = Url.get('create_scheduled');
