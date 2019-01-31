@@ -54,7 +54,14 @@ export default {
 
         editMessage () {
             this.$router.push({
-                name: 'edit-scheduled-message', params: { message_id: this.id, original_to: this.to, original_title: this.title, original_data: this.data, original_timestamp: this.timestamp }
+                name: 'edit-scheduled-message', params: { 
+                    message_id: this.id, 
+                    original_to: this.to, 
+                    original_title: this.title, 
+                    original_data: this.data, 
+                    original_timestamp: this.timestamp, 
+                    original_repeat: this.repeat
+                }
             });
         }
     },

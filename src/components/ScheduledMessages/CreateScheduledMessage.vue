@@ -67,7 +67,6 @@ export default {
                 { text: this.$t('scheduled.repeat.monthly'), value: '3' },
                 { text: this.$t('scheduled.repeat.yearly'), value: '4' }
             ]
-
         }
     },
 
