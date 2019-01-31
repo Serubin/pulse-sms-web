@@ -2,7 +2,7 @@
   <div class="message-wrapper" :title="stringTime">
       <!-- <transition name="fade"> -->
           <div class="message scheduled shadow" :id="id">
-              <div>{{ data }}</div>
+              <div>{{ displayText }}</div>
           </div>
           <div class="date-wrapper">
               <div class="date mdl-color-text--grey-500">{{ timestampText }}</div>
@@ -67,6 +67,13 @@ export default {
     },
 
     computed: {
+        displayText () {
+            if (this.mime_type != 'text/plain') {
+                return this.$t('scheduled.media');
+            } else {
+                return this.data
+            }
+        },
         timestampText () {
             const time = new Date(this.timestamp).toLocaleString();
             const name = this.title;
