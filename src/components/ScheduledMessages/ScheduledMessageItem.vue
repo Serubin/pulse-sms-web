@@ -2,11 +2,10 @@
   <div class="message-wrapper" :title="stringTime">
       <!-- <transition name="fade"> -->
           <div class="message scheduled shadow" :id="id">
-              <div><b>{{ title }}</b><br/></div>
-              <div>{{ data }}</div>
+              <div>{{ displayText }}</div>
           </div>
           <div class="date-wrapper">
-              <div class="date mdl-color-text--grey-500">{{ stringTime }}</div>
+              <div class="date mdl-color-text--grey-500">{{ timestampText }}</div>
           </div>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--right"
               id="message-menu" :data-mdl-for="id">
@@ -41,6 +40,7 @@ export default {
             title: this.messageData.title,
             timestamp: this.messageData.timestamp,
             mime_type: this.messageData.mime_type,
+            repeat: this.messageData.repeat || 0,
             menu: null,
         }
     },
@@ -54,14 +54,51 @@ export default {
 
         editMessage () {
             this.$router.push({
-                name: 'edit-scheduled-message', params: { message_id: this.id, original_to: this.to, original_title: this.title, original_data: this.data, original_timestamp: this.timestamp }
+                name: 'edit-scheduled-message', params: { 
+                    message_id: this.id, 
+                    original_to: this.to, 
+                    original_title: this.title, 
+                    original_data: this.data, 
+                    original_timestamp: this.timestamp, 
+                    original_repeat: this.repeat
+                }
             });
         }
     },
 
     computed: {
-        stringTime () {
-            return new Date(this.timestamp).toLocaleString()
+        displayText () {
+            if (this.mime_type != 'text/plain') {
+                return this.$t('scheduled.media');
+            } else {
+                return this.data
+            }
+        },
+        timestampText () {
+            const time = new Date(this.timestamp).toLocaleString();
+            const name = this.title;
+
+            if (this.repeat == 0) {
+                return `${name} - ${time}`
+            } else {
+                let repeatText = ""
+                switch (this.repeat) {
+                    case 1:
+                        repeatText = this.$t('scheduled.repeat.daily');
+                        break;
+                    case 2:
+                        repeatText = this.$t('scheduled.repeat.weekly');
+                        break;
+                    case 3:
+                        repeatText = this.$t('scheduled.repeat.monthly');
+                        break;
+                    case 4:
+                        repeatText = this.$t('scheduled.repeat.yearly');
+                        break;
+                }
+
+                return `${name} - ${time} (${repeatText})`
+            }
         }
     }
 

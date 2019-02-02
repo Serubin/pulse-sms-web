@@ -102,6 +102,16 @@ export const i18n = new VueI18n({
                 create_phrase: 'Blacklist by Phrase',
                 phrase: 'Phrase'
             },
+            scheduled: {
+                repeat: {
+                    never: 'Do not repeat',
+                    daily: 'Repeat daily',
+                    weekly: 'Repeat weekly',
+                    monthly: 'Repeat monthly',
+                    yearly: 'Repeat yearly'
+                },
+                media: 'Media, within a scheduled message, can only be viewed on the phone app.'
+            },
             settings: {
                 theme: 'Theme Settings',
                 refresh: 'Refresh settings from phone',

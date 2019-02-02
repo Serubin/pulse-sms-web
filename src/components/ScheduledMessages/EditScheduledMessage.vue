@@ -10,6 +10,11 @@
                 <label class="mdl-textfield__label" for="message">Message text...</label>
             </div>
             Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
+            <select class="repeat" v-model="repeat">
+                <option v-for="option in repeatOptions" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
         </div>
 
         <div class="mdl-card__actions mdl-card--border">
@@ -36,7 +41,7 @@ import FlatPickr from 'vue-flatpickr-component'
 
 export default {
     name: 'create-scheduled-message',
-    props: [ 'message_id', 'original_data', 'original_timestamp', 'original_to', 'original_title' ],
+    props: [ 'message_id', 'original_data', 'original_timestamp', 'original_to', 'original_title', 'original_repeat' ],
 
     mounted () {
         this.$store.commit("loading", false);
@@ -53,7 +58,15 @@ export default {
             config: {
                 enableTime: true,
                 defaultDate: Math.floor(Date.now())
-            }
+            },
+            repeat: this.original_repeat,
+            repeatOptions: [
+                { text: this.$t('scheduled.repeat.never'), value: '0' },
+                { text: this.$t('scheduled.repeat.daily'), value: '1' },
+                { text: this.$t('scheduled.repeat.weekly'), value: '2' },
+                { text: this.$t('scheduled.repeat.monthly'), value: '3' },
+                { text: this.$t('scheduled.repeat.yearly'), value: '4' }
+            ]
         }
     },
 
@@ -65,7 +78,7 @@ export default {
             this.loading = true;
 
             Api.removeScheduledMessage(this.message_id)
-            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title)
+            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
                 .then((data) => this.handleSave(data.data));
         },
 

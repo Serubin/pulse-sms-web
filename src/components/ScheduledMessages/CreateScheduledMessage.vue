@@ -11,6 +11,11 @@
                 <label class="mdl-textfield__label" for="message">Message text...</label>
             </div>
             Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
+            <select class="repeat" v-model="repeat">
+                <option v-for="option in repeatOptions" v-bind:value="option.value">
+                    {{ option.text }}
+                </option>
+            </select>
         </div>
 
         <div class="mdl-card__actions mdl-card--border">
@@ -53,7 +58,15 @@ export default {
             config: {
                 enableTime: true,
                 defaultDate: Math.floor(Date.now())
-            }
+            },
+            repeat: '0',
+            repeatOptions: [
+                { text: this.$t('scheduled.repeat.never'), value: '0' },
+                { text: this.$t('scheduled.repeat.daily'), value: '1' },
+                { text: this.$t('scheduled.repeat.weekly'), value: '2' },
+                { text: this.$t('scheduled.repeat.monthly'), value: '3' },
+                { text: this.$t('scheduled.repeat.yearly'), value: '4' }
+            ]
         }
     },
 
@@ -83,7 +96,7 @@ export default {
 
             this.loading = true;
 
-            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title)
+            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
                 .then((data) => this.handleCreated(data.data));
         },
 
@@ -120,6 +133,11 @@ export default {
         border: transparent;
         font-size: 15px;
         margin-left: 12px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .repeat {
         margin-top: 10px;
         margin-bottom: 10px;
     }
