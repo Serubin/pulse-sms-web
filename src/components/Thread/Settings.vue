@@ -75,7 +75,7 @@ export default {
     mounted () {
         SessionCache.invalidateAllConversations();
 
-        Api.fetchConversation(this.conversation_id)
+        Api.conversations.getById(this.conversation_id)
             .then(response => this.processConversation(response))
 
         this.$store.commit("loading", false);
@@ -188,7 +188,7 @@ export default {
                 color_accent: theme_accent
             };
 
-            Api.updateConversation(request, this.conversation_id);
+            Api.conversations.update(this.conversation_id, request);
             this.closeColorDialog();
         }
 
@@ -216,21 +216,21 @@ export default {
                 account_id: this.$store.state.account_id,
                 pinned: this.pin,
             };
-            Api.updateConversation(request, this.conversation_id);
+            Api.conversations.update(this.conversation_id, request);
         },
         'mute' () {
             let request = {
                 account_id: this.$store.state.account_id,
                 mute: this.mute
             };
-            Api.updateConversation(request, this.conversation_id);
+            Api.conversations.update(this.conversation_id, request);
         },
         'private' () {
             let request = {
                 account_id: this.$store.state.account_id,
                 private_notifications: this.private
             };
-            Api.updateConversation(request, this.conversation_id);
+            Api.conversations.update(this.conversation_id, request);
         }
     }
 }

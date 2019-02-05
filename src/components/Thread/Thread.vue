@@ -467,7 +467,7 @@ export default {
             if(this.read) // if already read, stop
                 return;
 
-            Api.markAsRead(this.conversation_id);
+            Api.conversations.read(this.conversation_id);
             this.read = true; // Set thread to read
         },
 
@@ -490,7 +490,7 @@ export default {
          */
         archive () {
             // Archive conversation on the server
-            Api.archiver(!this.isArchived, this.conversation_id);
+            Api.conversations.archive(this.conversation_id, !this.isArchived);
 
             // Snackbar the user
             Util.snackbar({
@@ -499,7 +499,7 @@ export default {
                 actionText: "Undo",
                 actionHandler: (e) =>  {
                     // Construct push URL
-                    Api.archiver(!this.isArchived, this.conversation_id);
+                    Api.conversations.archive(this.conversation_id, !this.isArchived);
                     this.push_archive_url();
 
                     e.target.innerHTML = '<i class="material-icons">done</i>';
@@ -543,7 +543,7 @@ export default {
             this.$router.push('/');
             this.$dialog.confirm(this.$t('thread.delete.thread'), options)
                 .then(function(dialog) {
-                    apiUtils.deleter(id);
+                    apiUtils.conversations.delete(id);
                 }).catch(function() { });
         },
 
@@ -553,7 +553,7 @@ export default {
         blacklist () {
             if (this.conversation_data.phone_number.indexOf(",") < 0) {
                 Api.createBlacklistPhone(this.conversation_data.phone_number);
-                Api.archiver(true, this.conversation_id);
+                Api.conversations.archive(this.conversation_id, true);
 
                 // Snackbar the user
                 Util.snackbar({

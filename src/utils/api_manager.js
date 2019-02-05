@@ -12,10 +12,10 @@ import { Util, Url, Crypto, SessionCache, Platform } from '@/utils/'
 export default class Api {
 
     static stream = class {
-        constructor () {
+        constructor() {
             this.socket = null;
             this.open();
-            
+
             this.has_disconnected = false;
             this.disconnected_timeout = null;
         }
@@ -23,7 +23,7 @@ export default class Api {
         /**
          * Open reconnecting websocket.
          */
-        open () {
+        open() {
             const this_ = this;
 
             this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
@@ -72,7 +72,7 @@ export default class Api {
         /**
          * Perminently close socket
          */
-        close () {
+        close() {
             this.socket.close(1000, '', { keepClosed: true });
         }
 
@@ -80,7 +80,7 @@ export default class Api {
          * Handle incoming socket data
          * @param e - socket event
          */
-        handleMessage (e) {
+        handleMessage(e) {
             if (e.data.indexOf("ping") != -1) { // Is keep alive event
                 // Store last ping to maintain data connection
                 store.commit('last_ping', Date.now() / 1000 >> 0);
@@ -198,7 +198,7 @@ export default class Api {
         }
     }
 
-    static login (username, password) {
+    static login(username, password) {
         const promise = new Promise((resolve, reject) => {
             const constructed_url = Url.get('login')
             const request = {
@@ -206,86 +206,119 @@ export default class Api {
                 password
             };
 
-            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then((response) => resolve(response))
-                .catch((error) =>reject(error));
+                .catch((error) => reject(error));
 
         });
 
         return promise
     }
 
-    static fetchConversations (index, folderId) {
-        if (typeof index == 'undefined') {
-            index = "index_public_unarchived"
-        }
+    static conversations = {
+        getList: (index, folderId) => {
+            if (typeof index == 'undefined') {
+                index = "index_public_unarchived"
+            }
 
-        if (index == 'folder') {
-            index = index + "/" + folderId;
-        }
+            if (index == 'folder') {
+                index = index + "/" + folderId;
+            }
 
-        let constructed_url =
-            Url.get('conversations') + index + Url.getAccountParam() + "&limit=75"
+            let constructed_url =
+                Url.get('conversations') + index + Url.getAccountParam() + "&limit=75"
 
-        const promise = new Promise((resolve, reject) => {
-            if (!SessionCache.hasConversations(index)) {
-                Vue.http.get( constructed_url )
-                    .then(response => {
-                        response = response.data
+            const promise = new Promise((resolve, reject) => {
+                if (!SessionCache.hasConversations(index)) {
+                    Vue.http.get(constructed_url)
+                        .then(response => {
+                            response = response.data
 
-                        if (response != null) {
-                            // Decrypt Conversations items
-                            for(let i = 0; i < response.length; i++) {
-                                const convo = Crypto.decryptConversation(response[i]);
-                                if (convo != null)
-                                    response[i] = convo;
+                            if (response != null) {
+                                // Decrypt Conversations items
+                                for (let i = 0; i < response.length; i++) {
+                                    const convo = Crypto.decryptConversation(response[i]);
+                                    if (convo != null)
+                                        response[i] = convo;
+                                }
+
+                                SessionCache.putConversations(response, index);
                             }
 
-                            SessionCache.putConversations(response, index);
+                            resolve(response); // Resolve response
+                        })
+                        .catch(response => Api.rejectHandler(response, reject));
+                } else {
+                    resolve(SessionCache.getConversations(index));
+                }
+            });
+
+            return promise
+        },
+        getById: (id) => {
+            let constructed_url = Url.get('conversation') + id + Url.getAccountParam()
+            const promise = new Promise((resolve, reject) => {
+                Vue.http.get(constructed_url)
+                    .then(response => {
+                        response = Crypto.decryptConversation(response.data);
+                        if (response != null) {
+                            resolve(response);
                         }
-
-                        resolve(response); // Resolve response
                     })
-                    .catch( response => Api.rejectHandler(response, reject) );
+                    .catch(response => Api.rejectHandler(response, reject));
+            });
+
+            return promise
+        },
+        update: (conversation_id, params) => {
+            let constructed_url = Url.get('update_conversation') + conversation_id;
+            Vue.http.post(constructed_url, params, { 'Content-Type': 'application/json' })
+                .catch(response => console.log(response));
+        },
+        read: (conversation_id) => {
+            // Read conversation
+            let constructed_url = Url.get('read') + conversation_id + Url.getAccountParam();
+            Vue.http.post(constructed_url)
+                .catch((e) => Api.rejectHandler(e));
+
+            // Dismiss notifiction
+            constructed_url = Url.get('dismiss') + Url.getAccountParam()
+                + "&id=" + conversation_id;
+            Vue.http.post(constructed_url);
+        },
+        archive: (conversation_id, archive) => {
+            let constructed_url;
+
+            if (archive) {
+                constructed_url = Url.get('archive')
             } else {
-                resolve(SessionCache.getConversations(index));
+                constructed_url = Url.get('unarchive')
             }
-        });
 
-        return promise
+            constructed_url += conversation_id + Url.getAccountParam();
+            Vue.http.post(constructed_url);
+        },
+        delete: (conversation_id) => {
+            let constructed_url = Url.get('delete') + conversation_id + Url.getAccountParam();
+            Vue.http.post(constructed_url);
+        }
     }
 
-    static fetchConversation (id) {
-        let constructed_url = Url.get('conversation') + id + Url.getAccountParam()
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then(response => {
-                    response = Crypto.decryptConversation(response.data);
-                    if (response != null) {
-                        resolve(response);
-                    }
-                })
-                .catch( response => Api.rejectHandler(response, reject) );
-        });
-
-        return promise
-    }
-
-    static fetchThread (conversation_id, offset = 0) {
+    static fetchThread(conversation_id, offset = 0) {
         const limit = 70;
         const constructed_url =
             Url.get('messages') + Url.getAccountParam()
-                + "&conversation_id=" + conversation_id + "&limit=" + limit
-                + "&web=true&offset=" + offset;
+            + "&conversation_id=" + conversation_id + "&limit=" + limit
+            + "&web=true&offset=" + offset;
 
         const promise = new Promise((resolve, reject) => {
             if (!SessionCache.hasMessages(conversation_id) || offset > 0) {
-                Vue.http.get( constructed_url )
+                Vue.http.get(constructed_url)
                     .then(response => {
                         response = response.data
 
                         // Decrypt Conversations items
-                        for(let i = 0; i < response.length; i++) {
+                        for (let i = 0; i < response.length; i++) {
                             const message = Crypto.decryptMessage(response[i]);
                             if (message != null)
                                 response[i] = message;
@@ -297,7 +330,7 @@ export default class Api {
 
                         resolve(response);
                     })
-                    .catch( response => Api.rejectHandler(response, reject) );
+                    .catch(response => Api.rejectHandler(response, reject));
             } else {
                 resolve(SessionCache.getMessages(conversation_id));
             }
@@ -306,7 +339,7 @@ export default class Api {
         return promise
     }
 
-    static createThreadWithImage (to, messageId, mimeType) {
+    static createThreadWithImage(to, messageId, mimeType) {
         const constructed_url = Url.get("new_thread");
 
         const request = {
@@ -319,15 +352,15 @@ export default class Api {
         }
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
-            .then( response  => resolve(response) )
-            .catch( response => Api.rejectHandler(response, reject) )
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
+                .then(response => resolve(response))
+                .catch(response => Api.rejectHandler(response, reject))
         });
 
         return promise;
     }
 
-    static createThread (to, message, messageId = null) {
+    static createThread(to, message, messageId = null) {
         const constructed_url = Url.get("new_thread");
 
         const request = {
@@ -338,20 +371,20 @@ export default class Api {
         }
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
-            .then( response  => resolve(response) )
-            .catch( response => Api.rejectHandler(response, reject) )
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
+                .then(response => resolve(response))
+                .catch(response => Api.rejectHandler(response, reject))
         });
 
         return promise;
     }
 
-    static removeMessage (id) {
+    static removeMessage(id) {
         let constructed_url = Url.get('remove_message') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static sendMessage (data, mime_type, thread_id, message_id=null) {
+    static sendMessage(data, mime_type, thread_id, message_id = null) {
         let account_id = store.state.account_id;
 
         let id = message_id || Api.generateId();
@@ -386,11 +419,11 @@ export default class Api {
 
         // Update on servers
         let constructed_url = Url.get('add_message');
-        Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+        Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
             .catch(response => console.log(response));
 
         constructed_url = Url.get('update_conversation') + thread_id;
-        Vue.http.post(constructed_url, conversationRequest, {'Content-Type': 'application/json'})
+        Vue.http.post(constructed_url, conversationRequest, { 'Content-Type': 'application/json' })
             .catch(response => console.log(response));
 
         // Submit event
@@ -408,13 +441,7 @@ export default class Api {
         store.state.msgbus.$emit('newMessage', event_object);
     }
 
-    static updateConversation(params, conversation_id) {
-        let constructed_url = Url.get('update_conversation') + conversation_id;
-        Vue.http.post(constructed_url, params, {'Content-Type': 'application/json'})
-            .catch(response => console.log(response));
-    }
-
-    static loadFile(file, compress=null) {
+    static loadFile(file, compress = null) {
         if (!file.type.startsWith("image/"))
             return Util.snackbar("File type not supported")
 
@@ -424,7 +451,7 @@ export default class Api {
         if (compress == null)
             compress = 0.6
 
-         // Disallow large non-image files
+        // Disallow large non-image files
         if ((file.type.startsWith("image/") || !file.type === "image/gif")
             && file.size > 1024 * 1024) {
             return new ImageCompressor(file, {
@@ -473,45 +500,17 @@ export default class Api {
         reader.readAsArrayBuffer(file);
     }
 
-    static markAsRead (thread_id) {
-        // Read conversation
-        let constructed_url = Url.get('read') + thread_id + Url.getAccountParam();
-        Vue.http.post(constructed_url)
-            .catch((e) => Api.rejectHandler(e));
 
-        // Dismiss notifiction
-        constructed_url = Url.get('dismiss') + Url.getAccountParam()
-                + "&id=" + thread_id;
-        Vue.http.post(constructed_url);
-    }
 
-    static archiver (archive, conversation) {
-        let constructed_url;
-
-        if (archive)
-            constructed_url = Url.get('archive')
-        else
-            constructed_url = Url.get('unarchive')
-
-        constructed_url += conversation + Url.getAccountParam();
-
-        Vue.http.post(constructed_url);
-    }
-
-    static deleter (conversation) {
-        let constructed_url = Url.get('delete') + conversation + Url.getAccountParam();
-        Vue.http.post(constructed_url);
-    }
-
-    static fetchFolders () {
+    static fetchFolders() {
         let constructed_url = Url.get('folders') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
+            Vue.http.get(constructed_url)
+                .then(response => {
                     response = response.data
 
                     // Decrypt Folder items
-                    for(let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
                         const folder = Crypto.decryptFolder(response[i]);
                         if (folder != null)
                             response[i] = folder;
@@ -519,26 +518,26 @@ export default class Api {
 
                     resolve(response);
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static removeFolder (id) {
+    static removeFolder(id) {
         let constructed_url = Url.get('remove_folder') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static fetchBlacklists () {
+    static fetchBlacklists() {
         let constructed_url = Url.get('blacklists') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
+            Vue.http.get(constructed_url)
+                .then(response => {
                     response = response.data
 
                     // Decrypt Blacklist items
-                    for(let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
                         const blacklist = Crypto.decryptBlacklist(response[i]);
                         if (blacklist != null)
                             response[i] = blacklist;
@@ -546,18 +545,18 @@ export default class Api {
 
                     resolve(response);
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static removeBlacklist (id) {
+    static removeBlacklist(id) {
         let constructed_url = Url.get('remove_blacklist') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static createBlacklistPhone (phone_number) {
+    static createBlacklistPhone(phone_number) {
         let request = {
             account_id: store.state.account_id,
             device_id: Api.generateId(),
@@ -567,14 +566,14 @@ export default class Api {
         let constructed_url = Url.get('create_blacklist');
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then(response => { resolve(response); });
         });
 
         return promise;
     }
 
-    static createBlacklistPhrase (phrase) {
+    static createBlacklistPhrase(phrase) {
         let request = {
             account_id: store.state.account_id,
             device_id: Api.generateId(),
@@ -584,22 +583,22 @@ export default class Api {
         let constructed_url = Url.get('create_blacklist');
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then(response => { resolve(response); });
         });
 
         return promise;
     }
 
-    static fetchScheduledMessages () {
+    static fetchScheduledMessages() {
         let constructed_url = Url.get('scheduled') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
+            Vue.http.get(constructed_url)
+                .then(response => {
                     response = response.data
 
                     // Decrypt Scheduled Message items
-                    for(let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
                         const message = Crypto.decryptScheduledMessage(response[i]);
                         if (message != null)
                             response[i] = message;
@@ -607,18 +606,18 @@ export default class Api {
 
                     resolve(response);
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static removeScheduledMessage (id) {
+    static removeScheduledMessage(id) {
         let constructed_url = Url.get('remove_scheduled') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static createScheduledMessage (to, message, time, title, repeat) {
+    static createScheduledMessage(to, message, time, title, repeat) {
         let request = {
             account_id: store.state.account_id,
             device_id: Api.generateId(),
@@ -633,33 +632,33 @@ export default class Api {
         let constructed_url = Url.get('create_scheduled');
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, {'Content-Type': 'application/json'})
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then(response => { resolve(response); });
         });
 
         return promise;
     }
 
-    static fetchAccount () {
+    static fetchAccount() {
         const constructed_url = Url.get('account_stats') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
             Vue.http.get(constructed_url)
                 .then((response) => resolve(response))
-                .catch((error) =>reject(error));
+                .catch((error) => reject(error));
         });
 
         return promise
     }
 
-    static fetchDrafts () {
+    static fetchDrafts() {
         let constructed_url = Url.get('drafts') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
+            Vue.http.get(constructed_url)
+                .then(response => {
                     response = response.data
 
                     // Decrypt draft items
-                    for(let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
                         const draft = Crypto.decryptDraft(response[i]);
                         if (draft != null)
                             response[i] = draft;
@@ -667,44 +666,44 @@ export default class Api {
 
                     resolve(response);
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static removeDraftForConversation (conversation_id) {
+    static removeDraftForConversation(conversation_id) {
         let constructed_url = Url.get('remove_draft') + conversation_id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static fetchDevices () {
+    static fetchDevices() {
         let constructed_url = Url.get('devices') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
+            Vue.http.get(constructed_url)
                 .then(response => {
                     resolve(response.data);
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static removeDevice (id) {
+    static removeDevice(id) {
         let constructed_url = Url.get('remove_device') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static fetchTemplates () {
+    static fetchTemplates() {
         let constructed_url = Url.get('templates') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
+            Vue.http.get(constructed_url)
+                .then(response => {
                     response = response.data
 
                     // Decrypt template items
-                    for(let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
                         const template = Crypto.decryptTemplate(response[i]);
                         if (template != null)
                             response[i] = template;
@@ -712,26 +711,26 @@ export default class Api {
 
                     resolve(response);
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static removeTemplate (id) {
+    static removeTemplate(id) {
         let constructed_url = Url.get('remove_template') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static fetchAutoReplies () {
+    static fetchAutoReplies() {
         let constructed_url = Url.get('auto_replies') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
+            Vue.http.get(constructed_url)
+                .then(response => {
                     response = response.data
 
                     // Decrypt reply items
-                    for(let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
                         const reply = Crypto.decryptAutoReply(response[i]);
                         if (reply != null)
                             response[i] = reply;
@@ -739,33 +738,33 @@ export default class Api {
 
                     resolve(response);
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static removeAutoReply (id) {
+    static removeAutoReply(id) {
         let constructed_url = Url.get('remove_auto_reply') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static fetchSettings () {
+    static fetchSettings() {
         let constructed_url = Url.get('settings') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get( constructed_url )
-                .then( response => {
+            Vue.http.get(constructed_url)
+                .then(response => {
                     Api.processSettings(response);
                     resolve(response);
 
                 })
-                .catch( response => Api.rejectHandler(response, reject) );
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static processSettings (response) {
+    static processSettings(response) {
         response = response.data
 
         const colors = {
@@ -787,21 +786,21 @@ export default class Api {
         store.commit('colors', colors);
     }
 
-    static updateSetting (setting, type, value) {
+    static updateSetting(setting, type, value) {
         let constructed_url = Url.get("update_setting") +
             "?pref=" + setting
             + "&type=" + type
             + "&value=" + value;
 
         const promise = new Promise((resolve, reject) => {
-            Vue.http.post( constructed_url, Url.getAccountPayload(),
-                {'Content-Type': 'application/json'})
-                .then( response => resolve(true) )
-                .catch( response => Api.rejectHandler(resposne, reject) );
+            Vue.http.post(constructed_url, Url.getAccountPayload(),
+                { 'Content-Type': 'application/json' })
+                .then(response => resolve(true))
+                .catch(response => Api.rejectHandler(resposne, reject));
         });
     }
 
-    static fetchContacts () {
+    static fetchContacts() {
         let constructed_url = Url.get("contacts") + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
             let contacts = [];
@@ -817,7 +816,7 @@ export default class Api {
                     response = response.data;
 
                     // Decrypt contact items
-                    for(let i = 0; i < response.length; i++) {
+                    for (let i = 0; i < response.length; i++) {
                         const contact = Crypto.decryptContact(response[i]);
                         if (contact != null)
                             contacts.push(contact);
@@ -832,7 +831,7 @@ export default class Api {
             }
 
             function finishQuery(contacts) {
-                contacts.sort(function(a, b) {
+                contacts.sort(function (a, b) {
                     let nameA = a.name.toUpperCase();
                     let nameB = b.name.toUpperCase();
 
@@ -853,30 +852,30 @@ export default class Api {
         return promise
     }
 
-    static removeContact (id) {
+    static removeContact(id) {
         let constructed_url = Url.get('remove_contact') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
 
-    static fetchImage (image_id) {
+    static fetchImage(image_id) {
         const constructed_url = Url.get('media') + image_id + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
             Vue.http.get(constructed_url)
-                .then( response => resolve(response) )
-                .catch( response => Api.rejectHandler(response, reject) );
+                .then(response => resolve(response))
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise
     }
 
-    static generateId () {
+    static generateId() {
         let min = 1;
         let max = 922337203685477;
 
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    static rejectHandler(e, callback=null) {
+    static rejectHandler(e, callback = null) {
         if (e.status == 401)
             return store.state.msgbus.$emit('logout-btn');
 
