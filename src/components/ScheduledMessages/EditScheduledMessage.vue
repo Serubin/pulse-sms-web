@@ -78,7 +78,7 @@ export default {
             this.loading = true;
 
             Api.scheduledMessages.delete(this.message_id)
-            Api.scheduledMesssages.create(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
+            Api.scheduledMessages.create(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
                 .then((data) => this.handleSave(data.data));
         },
 
