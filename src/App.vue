@@ -200,7 +200,7 @@ export default {
 
             setTimeout(() => {
                 // Fetch contacts for cache
-                Api.fetchContacts().then((resp) => this.processContacts(resp));
+                Api.contacts.get().then((resp) => this.processContacts(resp));
 
                 // Grab user settings from server and store in local storage
                 Api.account.settings.get();

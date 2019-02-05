@@ -1,6 +1,7 @@
 import Account from '@/utils/api/account.js';
 import AutoReply from '@/utils/api/auto_reply.js';
 import Blacklist from '@/utils/api/blacklist.js';
+import Contacts from '@/utils/api/contacts.js';
 import Conversations from '@/utils/api/conversations.js';
 import Devices from '@/utils/api/devices.js';
 import Drafts from '@/utils/api/drafts.js';
@@ -14,6 +15,7 @@ export {
     Account,
     AutoReply,
     Blacklist,
+    Contacts,
     Conversations,
     Devices,
     Drafts,

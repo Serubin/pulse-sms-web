@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Url } from '@/utils/'
+import { Api, Url } from '@/utils/'
 
 export default class Devices {
     static get() {

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Url, Crypto } from '@/utils/'
+import { Api, Url, Crypto } from '@/utils/'
 
 export default class AutoReply {
     static get() {

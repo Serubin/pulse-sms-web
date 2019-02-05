@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import store from '@/store/';
-import { Url, Crypto } from '@/utils/'
+import { Api, Url, Crypto } from '@/utils/'
 
 export default class Blacklist {
     static get() {

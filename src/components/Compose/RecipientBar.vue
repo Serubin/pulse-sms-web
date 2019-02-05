@@ -65,7 +65,7 @@ export default {
                 SessionCache.invalidateContacts();
             }
 
-            Api.fetchContacts().then((resp) => this.processContacts(resp));
+            Api.contacts.get().then((resp) => this.processContacts(resp));
         },
         /**
         * Process contacts received from server
@@ -106,7 +106,7 @@ export default {
                     }
                 }
 
-                Api.removeContact(idString);
+                Api.contacts.delete(idString);
             }
 
             let matcher = this.matchContact;

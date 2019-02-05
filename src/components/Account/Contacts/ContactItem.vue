@@ -39,7 +39,7 @@ export default {
     methods: {
         deleteContact () {
             Util.snackbar("Deleted contact: " + this.name);
-            Api.removeContact(this.id);
+            Api.contacts.delete(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },
