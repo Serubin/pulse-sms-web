@@ -96,7 +96,7 @@ export default {
 
             this.loading = true;
 
-            Api.createScheduledMessage(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
+            Api.scheduledMessages.create(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
                 .then((data) => this.handleCreated(data.data));
         },
 

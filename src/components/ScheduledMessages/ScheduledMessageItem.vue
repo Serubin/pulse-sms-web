@@ -48,7 +48,7 @@ export default {
     methods: {
         deleteMessage () {
             Util.snackbar("Deleted Message to " + this.title);
-            Api.removeScheduledMessage(this.id);
+            Api.scheduledMessages.delete(this.id);
             store.state.msgbus.$emit('refresh-btn');
         },
 

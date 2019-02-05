@@ -3,6 +3,7 @@ import Blacklist from '@/utils/api/blacklist.js';
 import Conversations from '@/utils/api/conversations.js';
 import Folders from '@/utils/api/folders.js';
 import Messages from '@/utils/api/messages.js';
+import ScheduledMessages from '@/utils/api/scheduled_messages.js';
 import Stream from '@/utils/api/stream.js';
 
 export {
@@ -11,5 +12,6 @@ export {
     Conversations,
     Folders,
     Messages,
+    ScheduledMessages,
     Stream
 }
