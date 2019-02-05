@@ -44,7 +44,7 @@ export default {
     methods: {
 
         fetchAutoReplies () {
-            Api.fetchAutoReplies()
+            Api.autoReplies.get()
                 .then(response => this.processAutoReplies(response));
         },
 

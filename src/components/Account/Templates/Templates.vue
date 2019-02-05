@@ -44,7 +44,7 @@ export default {
     methods: {
 
         fetchTemplates () {
-            Api.fetchTemplates()
+            Api.templates.get()
                 .then(response => this.processTemplates(response));
         },
 
