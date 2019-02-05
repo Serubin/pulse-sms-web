@@ -203,7 +203,7 @@ export default {
                 Api.fetchContacts().then((resp) => this.processContacts(resp));
 
                 // Grab user settings from server and store in local storage
-                Api.fetchSettings();
+                Api.account.settings.get();
             }, 1500);
 
             // Interval check to maintain socket
