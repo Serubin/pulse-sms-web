@@ -257,7 +257,7 @@ export default {
             this.content = ""; // Don't set content
 
             // Construct data url
-            const data_prefix = "data:" + "audio/mp4" + ";base64,";
+            const data_prefix = "data:" + this.mime + ";base64,";
 
             // Set data
             this.audio_src = data_prefix + blob;
