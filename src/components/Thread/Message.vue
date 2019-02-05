@@ -13,6 +13,10 @@
                     <div class="article-title" v-show="is_article"> {{ media_title }} </div>
                     <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
                 </a>
+
+                <!-- Video/Audio -->
+                <video controls v-show="video_src.length != 0 && !media_loading" :src="video_src" />
+                <audio controls v-show="audio_src.length != 0 && !media_loading" :src="audio_src" />
             </div>
         </transition>
 
@@ -61,9 +65,8 @@ export default {
 
             /* MMS Image Message */
             case "image": {
-                this.content = `
-                <div style="width:436px;text-align:center;">
-                    <i style="line-height:254px"> Loading MMS </i>
+                this.content = `<div style="width:436px;text-align:center;">
+                    <i style="line-height:254px">Loading image...</i>
                 </div>`;
                 this.is_media = true;
 
@@ -74,12 +77,26 @@ export default {
             }
 
             case "video": {
-                this.content = "<i>Video not yet supported.</i>";
+                this.content = `<div style="width:436px;text-align:center;">
+                    <i style="line-height:254px">Loading video...</i>
+                </div>`;
+                this.is_video = true;
+
+                // Fetch media
+                MediaLoader.getMedia(this.id, this.mime).then(blob => this.loadVideo(blob));
+
                 break;
             }
 
             case "audio": {
-                this.content = "<i>Audio not yet supported.</i>";
+                this.content = `<div style="width:436px;text-align:center;">
+                    <i style="line-height:254px">Loading audio...</i>
+                </div>`;
+                this.is_video = true;
+
+                // Fetch media
+                MediaLoader.getMedia(this.id, this.mime).then(blob => this.loadAudio(blob));
+
                 break;
             }
 
@@ -185,6 +202,8 @@ export default {
             media_thumb: "",
             media_title: "",
             media_content: "",
+            video_src: "",
+            audio_src: "",
 
             options_class: [ ],
             displayOptions: false
@@ -222,6 +241,26 @@ export default {
             // Set data
             this.media_thumb = data_prefix + blob;
             this.media_link = data_prefix + blob;
+            this.media_loading = false;
+        },
+        loadVideo (blob) {
+            this.content = ""; // Don't set content
+
+            // Construct data url
+            const data_prefix = "data:" + this.mime + ";base64,";
+
+            // Set data
+            this.video_src = data_prefix + blob;
+            this.media_loading = false;
+        },
+        loadAudio (blob) {
+            this.content = ""; // Don't set content
+
+            // Construct data url
+            const data_prefix = "data:" + "audio/mp4" + ";base64,";
+
+            // Set data
+            this.audio_src = data_prefix + blob;
             this.media_loading = false;
         },
         updateType (type) {
@@ -477,6 +516,12 @@ export default {
 
     img {
       padding-bottom: 4px;
+    }
+
+    video {
+        object-fit: cover;
+        background-repeat: no-repeat;
+        height: 400px;
     }
 
     .slide-out-enter-active, .slide-out-leave-active {
