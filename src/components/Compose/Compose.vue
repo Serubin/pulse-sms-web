@@ -53,12 +53,12 @@ export default {
             // send image, if one is attached
             if (this.$store.state.loaded_media) {
                 Api.messages.media.send(this.$store.state.loaded_media, (file, messageId) => {
-                    Api.createThreadWithImage(to, messageId, file.type);
+                    Api.conversations.createWithImage(to, messageId, file.type);
                 });
             }
 
             if (message.length > 0) {
-                Api.createThread(to, message);
+                Api.conversations.create(to, message);
             }
 
             setTimeout(() => {

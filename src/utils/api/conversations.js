@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { Api, Url, Crypto, SessionCache } from '@/utils/'
+import store from '@/store/';
+import { Api, Url, Crypto, SessionCache, Platform } from '@/utils/'
 
 export default class Conversations {
     static getList(index, folderId) {
@@ -92,5 +93,45 @@ export default class Conversations {
     static delete(conversation_id) {
         let constructed_url = Url.get('delete') + conversation_id + Url.getAccountParam();
         Vue.http.post(constructed_url);
+    }
+
+    static createWithImage(to, messageId, mimeType) {
+        const constructed_url = Url.get("new_thread");
+
+        const request = {
+            account_id: store.state.account_id,
+            to: to,
+            message: "firebase -1",
+            mime_type: mimeType,
+            message_id: messageId,
+            sent_device: Platform.getPlatformIdentifier()
+        }
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
+                .then(response => resolve(response))
+                .catch(response => Api.rejectHandler(response, reject))
+        });
+
+        return promise;
+    }
+
+    static create(to, message, messageId = null) {
+        const constructed_url = Url.get("new_thread");
+
+        const request = {
+            account_id: store.state.account_id,
+            to: to,
+            message: message,
+            sent_device: Platform.getPlatformIdentifier()
+        }
+
+        const promise = new Promise((resolve, reject) => {
+            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
+                .then(response => resolve(response))
+                .catch(response => Api.rejectHandler(response, reject))
+        });
+
+        return promise;
     }
 }

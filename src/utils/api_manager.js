@@ -1,10 +1,7 @@
 import Vue from 'vue';
 import store from '@/store/';
-import emojione from 'emojione';
-import * as firebase from 'firebase';
-import ImageCompressor from '@xkeshi/image-compressor';
 
-import { Util, Url, Crypto, SessionCache, Platform } from '@/utils/'
+import { Url, Crypto, SessionCache } from '@/utils/'
 import { Account, Conversations, Messages, Stream } from '@/utils/api/'
 
 export default class Api {
@@ -14,48 +11,6 @@ export default class Api {
     static account = Account
     static conversations = Conversations
     static messages = Messages
-
-
-
-    static createThreadWithImage(to, messageId, mimeType) {
-        const constructed_url = Url.get("new_thread");
-
-        const request = {
-            account_id: store.state.account_id,
-            to: to,
-            message: "firebase -1",
-            mime_type: mimeType,
-            message_id: messageId,
-            sent_device: Platform.getPlatformIdentifier()
-        }
-
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
-                .then(response => resolve(response))
-                .catch(response => Api.rejectHandler(response, reject))
-        });
-
-        return promise;
-    }
-
-    static createThread(to, message, messageId = null) {
-        const constructed_url = Url.get("new_thread");
-
-        const request = {
-            account_id: store.state.account_id,
-            to: to,
-            message: message,
-            sent_device: Platform.getPlatformIdentifier()
-        }
-
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
-                .then(response => resolve(response))
-                .catch(response => Api.rejectHandler(response, reject))
-        });
-
-        return promise;
-    }
 
     static fetchFolders() {
         let constructed_url = Url.get('folders') + Url.getAccountParam();
@@ -352,8 +307,6 @@ export default class Api {
         Vue.http.post(constructed_url)
             .catch(response => Api.rejectHandler(response));
     }
-
-
 
     static generateId() {
         let min = 1;
