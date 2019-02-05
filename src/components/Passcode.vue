@@ -30,7 +30,7 @@ export default {
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
 
-        Api.fetchSettings().then(response => {
+        Api.account.settings.get().then(response => {
             this.stored_passcode = Crypto.decrypt(response.data.passcode);
         })
     },

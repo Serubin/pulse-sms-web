@@ -35,7 +35,7 @@ export default {
     methods: {
         deleteFolder () {
             Util.snackbar("Deleted folder: " + this.name);
-            Api.removeFolder(this.id);
+            Api.folders.delete(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },

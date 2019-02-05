@@ -35,7 +35,7 @@ export default {
     methods: {
         deleteTemplate () {
             Util.snackbar("Deleted template: " + this.text);
-            Api.removeTemplate(this.id);
+            Api.templates.delete(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },

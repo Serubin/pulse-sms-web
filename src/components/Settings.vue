@@ -114,7 +114,7 @@ export default {
     name: 'settings',
 
     mounted () {
-        Api.fetchSettings()
+        Api.account.settings.get()
             .then( response => {
                 this.$store.commit("loading", false);
             })
@@ -194,7 +194,7 @@ export default {
 
     methods: {
         refreshSettings () {
-            Api.fetchSettings();
+            Api.account.settings.get();
             Util.snackbar("Settings Refreshed")
         },
 
@@ -250,9 +250,9 @@ export default {
             const theme_accent = this.hexToRgb(this.theme_accent)
 
             // Update value on remote server
-            Api.updateSetting("global_primary_color", "int", theme_default);
-            Api.updateSetting("global_primary_dark_color", "int", theme_dark);
-            Api.updateSetting("global_accent_color", "int", theme_accent);
+            Api.account.settings.update("global_primary_color", "int", theme_default);
+            Api.account.settings.update("global_primary_dark_color", "int", theme_dark);
+            Api.account.settings.update("global_accent_color", "int", theme_accent);
 
             // Store rgba value in store
             this.$store.commit('theme_global_default', Util.expandColor(theme_default))
@@ -276,15 +276,15 @@ export default {
         },
         'global_theme' () {
             this.$store.commit('theme_use_global', this.global_theme)
-            Api.updateSetting("apply_theme_globally", "boolean", this.global_theme)
+            Api.account.settings.update("apply_theme_globally", "boolean", this.global_theme)
         },
         'theme_appbar' () {
             this.$store.commit('theme_apply_appbar_color', this.theme_appbar)
-            Api.updateSetting("apply_primary_color_toolbar", "boolean", this.theme_appbar)
+            Api.account.settings.update("apply_primary_color_toolbar", "boolean", this.theme_appbar)
         },
         'theme' () {
             this.$store.commit('theme_base', this.theme),
-            Api.updateSetting("base_theme", "string", this.theme)
+            Api.account.settings.update("base_theme", "string", this.theme)
         },
         '$store.state.theme_global_default' () {
             const color = this.$store.state.theme_global_default;

@@ -44,7 +44,7 @@ export default {
     methods: {
 
         fetchDevices () {
-            Api.fetchDevices()
+            Api.devices.get()
                 .then(response => this.processDevices(response));
         },
 

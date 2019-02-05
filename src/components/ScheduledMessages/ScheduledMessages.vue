@@ -51,7 +51,7 @@ export default {
     methods: {
 
         fetchScheduledMessages () {
-            Api.fetchScheduledMessages()
+            Api.scheduledMessages.get()
                 .then(response => this.processScheduledMessages(response));
         },
 

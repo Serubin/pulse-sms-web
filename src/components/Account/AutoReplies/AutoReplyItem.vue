@@ -39,7 +39,7 @@ export default {
     methods: {
         deleteReply () {
             Util.snackbar("Deleted auto reply: " + this.response);
-            Api.removeAutoReply(this.id);
+            Api.autoReplies.delete(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },

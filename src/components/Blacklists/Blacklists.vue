@@ -51,7 +51,7 @@ export default {
     methods: {
 
         fetchBlacklists () {
-            Api.fetchBlacklists()
+            Api.blacklist.get()
                 .then(response => this.processBlacklists(response));
         },
 

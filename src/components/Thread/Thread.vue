@@ -129,7 +129,7 @@ export default {
                     file = e.target.files[0];
 
                 // Load file to local cache
-                Api.loadFile(file);
+                Api.messages.media.compress(file);
             }
         );
         this.listeners.extend(events);
@@ -227,8 +227,8 @@ export default {
         sendMessage (message) {
             // Send stored media if laoded
             if (this.$store.state.loaded_media) {
-                Api.sendFile(this.$store.state.loaded_media, (file, messageId) => {
-                    Api.sendMessage("firebase -1", file.type, this.conversation_id, messageId);
+                Api.messages.media.send(this.$store.state.loaded_media, (file, messageId) => {
+                    Api.messages.send("firebase -1", file.type, this.conversation_id, messageId);
                 });
             }
 
@@ -237,7 +237,7 @@ export default {
                 return false;
 
             // Otherwise send any corrisponding message
-            Api.sendMessage(message, "text/plain", this.conversation_id);
+            Api.messages.send(message, "text/plain", this.conversation_id);
         },
 
         /**
@@ -296,7 +296,7 @@ export default {
          * this.messages for rendering.
          */
         fetchMessages (offset=0) {
-            Api.fetchThread(this.conversation_id, offset)
+            Api.messages.get(this.conversation_id, offset)
                 .then(response => {
 
                     let new_messages = [];
@@ -467,7 +467,7 @@ export default {
             if(this.read) // if already read, stop
                 return;
 
-            Api.markAsRead(this.conversation_id);
+            Api.conversations.read(this.conversation_id);
             this.read = true; // Set thread to read
         },
 
@@ -490,7 +490,7 @@ export default {
          */
         archive () {
             // Archive conversation on the server
-            Api.archiver(!this.isArchived, this.conversation_id);
+            Api.conversations.archive(this.conversation_id, !this.isArchived);
 
             // Snackbar the user
             Util.snackbar({
@@ -499,7 +499,7 @@ export default {
                 actionText: "Undo",
                 actionHandler: (e) =>  {
                     // Construct push URL
-                    Api.archiver(!this.isArchived, this.conversation_id);
+                    Api.conversations.archive(this.conversation_id, !this.isArchived);
                     this.push_archive_url();
 
                     e.target.innerHTML = '<i class="material-icons">done</i>';
@@ -543,7 +543,7 @@ export default {
             this.$router.push('/');
             this.$dialog.confirm(this.$t('thread.delete.thread'), options)
                 .then(function(dialog) {
-                    apiUtils.deleter(id);
+                    apiUtils.conversations.delete(id);
                 }).catch(function() { });
         },
 
@@ -552,8 +552,8 @@ export default {
          */
         blacklist () {
             if (this.conversation_data.phone_number.indexOf(",") < 0) {
-                Api.createBlacklistPhone(this.conversation_data.phone_number);
-                Api.archiver(true, this.conversation_id);
+                Api.blacklist.create.phone(this.conversation_data.phone_number);
+                Api.conversations.archive(this.conversation_id, true);
 
                 // Snackbar the user
                 Util.snackbar({

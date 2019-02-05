@@ -44,7 +44,7 @@ export default {
     methods: {
 
         fetchContacts () {
-            Api.fetchContacts()
+            Api.contacts.get()
                 .then(response => this.processContacts(response));
         },
 

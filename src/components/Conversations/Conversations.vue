@@ -89,7 +89,7 @@ export default {
             }
 
             // Start query
-            Api.fetchConversations(this.index, this.folderId)
+            Api.conversations.getList(this.index, this.folderId)
                 .then(response => this.processConversations(response));
         },
 

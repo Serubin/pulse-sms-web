@@ -36,7 +36,7 @@ export default {
     methods: {
         deleteBlacklist () {
             Util.snackbar("Deleted blacklist: " + (this.phone_number || this.phrase));
-            Api.removeBlacklist(this.id);
+            Api.blacklist.delete(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },

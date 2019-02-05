@@ -58,7 +58,7 @@ export default {
 
     methods: {
         fetchAccount () {
-            Api.fetchAccount().then(response => this.processAccount(response));
+            Api.account.get().then(response => this.processAccount(response));
         },
 
         processAccount (response) {

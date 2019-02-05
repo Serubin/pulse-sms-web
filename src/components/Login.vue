@@ -73,7 +73,7 @@ export default {
             this.error = false;
             this.loading = true;
 
-            Api.login(this.username, this.password)
+            Api.account.login(this.username, this.password)
                 .then((data) => this.handleData(data.data))
                 .catch((data) => this.handleError(data));
         },

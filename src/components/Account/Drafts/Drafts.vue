@@ -44,7 +44,7 @@ export default {
     methods: {
 
         fetchDrafts () {
-            Api.fetchDrafts()
+            Api.drafts.get()
                 .then(response => this.processDrafts(response));
         },
 
