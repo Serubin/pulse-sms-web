@@ -82,7 +82,7 @@ export default {
 
             this.loading = true;
 
-            Api.createBlacklistPhone(this.phone)
+            Api.blacklist.create.phone(this.phone)
                 .then((data) => this.handleCreated(data.data));
         },
         
@@ -92,7 +92,7 @@ export default {
 
             this.loading = true;
 
-            Api.createBlacklistPhrase(this.phrase)
+            Api.blacklist.create.phrase(this.phrase)
                 .then((data) => this.handleCreated(data.data));
         },
 

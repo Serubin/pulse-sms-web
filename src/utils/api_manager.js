@@ -2,79 +2,17 @@ import Vue from 'vue';
 import store from '@/store/';
 
 import { Url, Crypto, SessionCache } from '@/utils/'
-import { Account, Conversations, Folders, Messages, Stream } from '@/utils/api/'
+import { Account, Blacklist, Conversations, Folders, Messages, Stream } from '@/utils/api/'
 
 export default class Api {
 
     static stream = Stream
 
     static account = Account
+    static blacklist = Blacklist
     static conversations = Conversations
     static folders = Folders
     static messages = Messages
-
-    
-
-    static fetchBlacklists() {
-        let constructed_url = Url.get('blacklists') + Url.getAccountParam();
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
-                .then(response => {
-                    response = response.data
-
-                    // Decrypt Blacklist items
-                    for (let i = 0; i < response.length; i++) {
-                        const blacklist = Crypto.decryptBlacklist(response[i]);
-                        if (blacklist != null)
-                            response[i] = blacklist;
-                    }
-
-                    resolve(response);
-                })
-                .catch(response => Api.rejectHandler(response, reject));
-        });
-
-        return promise
-    }
-
-    static removeBlacklist(id) {
-        let constructed_url = Url.get('remove_blacklist') + id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
-    }
-
-    static createBlacklistPhone(phone_number) {
-        let request = {
-            account_id: store.state.account_id,
-            device_id: Api.generateId(),
-            phone_number: Crypto.encrypt(phone_number)
-        };
-
-        let constructed_url = Url.get('create_blacklist');
-
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
-                .then(response => { resolve(response); });
-        });
-
-        return promise;
-    }
-
-    static createBlacklistPhrase(phrase) {
-        let request = {
-            account_id: store.state.account_id,
-            device_id: Api.generateId(),
-            phrase: Crypto.encrypt(phrase)
-        };
-
-        let constructed_url = Url.get('create_blacklist');
-
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
-                .then(response => { resolve(response); });
-        });
-
-        return promise;
-    }
 
     static fetchScheduledMessages() {
         let constructed_url = Url.get('scheduled') + Url.getAccountParam();
