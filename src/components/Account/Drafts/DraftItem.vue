@@ -40,7 +40,7 @@ export default {
     methods: {
         deleteDraft () {
             Util.snackbar("Deleted draft: " + this.data);
-            Api.removeDraftForConversation(this.conversation_id);
+            Api.drafts.delete(this.conversation_id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },

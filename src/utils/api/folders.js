@@ -1,5 +1,4 @@
 import Vue from 'vue';
-
 import { Url, Crypto } from '@/utils/'
 
 export default class Folders {

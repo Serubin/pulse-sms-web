@@ -1,10 +1,8 @@
-import { i18n } from '@/utils'
 import router from '@/router/';
 import ReconnectingWebsocket from 'reconnecting-websocket';
 import store from '@/store/';
 import emojione from 'emojione';
-
-import { Api, Util, Url, Crypto, SessionCache, Platform } from '@/utils/'
+import { Api, Util, Url, Crypto, SessionCache, Platform, i18n } from '@/utils/'
 
 export default class Stream {
     constructor() {

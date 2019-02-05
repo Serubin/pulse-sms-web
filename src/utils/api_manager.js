@@ -2,7 +2,16 @@ import Vue from 'vue';
 import store from '@/store/';
 
 import { Url, Crypto, SessionCache } from '@/utils/'
-import { Account, Blacklist, Conversations, Folders, Messages, ScheduledMessages, Stream } from '@/utils/api/'
+import { 
+    Account,
+    Blacklist,
+    Conversations,
+    Drafts,
+    Folders,
+    Messages,
+    ScheduledMessages,
+    Stream
+} from '@/utils/api/'
 
 export default class Api {
 
@@ -11,36 +20,12 @@ export default class Api {
     static account = Account
     static blacklist = Blacklist
     static conversations = Conversations
+    static drafts = Drafts
     static folders = Folders
     static messages = Messages
     static scheduledMessages = ScheduledMessages
     
-    static fetchDrafts() {
-        let constructed_url = Url.get('drafts') + Url.getAccountParam();
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
-                .then(response => {
-                    response = response.data
-
-                    // Decrypt draft items
-                    for (let i = 0; i < response.length; i++) {
-                        const draft = Crypto.decryptDraft(response[i]);
-                        if (draft != null)
-                            response[i] = draft;
-                    }
-
-                    resolve(response);
-                })
-                .catch(response => Api.rejectHandler(response, reject));
-        });
-
-        return promise
-    }
-
-    static removeDraftForConversation(conversation_id) {
-        let constructed_url = Url.get('remove_draft') + conversation_id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
-    }
+    
 
     static fetchDevices() {
         let constructed_url = Url.get('devices') + Url.getAccountParam();
