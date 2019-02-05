@@ -162,7 +162,7 @@ export default {
         this.$store.state.msgbus.$off('settings-btn');
         this.$store.state.msgbus.$off('logout-btn');
 
-        this.mm.close();
+        this.stream.close();
 
     },
 
@@ -187,7 +187,7 @@ export default {
          */
         applicationStart () {
             // Setup the API (Open websocket)
-            this.mm = new Api.stream();
+            this.stream = new Api.stream();
 
             // Start listening for shortcut keys
             this.shortcuts = new ShortcutKeys();
@@ -219,9 +219,9 @@ export default {
                     return;
 
                 // Else, open new API and force refresh
-                this.mm.close()
-                this.mm = new Api.stream();
-                this.mm.has_diconnected = true; // Initialize new api with has disconnected
+                this.stream.close()
+                this.stream = new Api.stream();
+                this.stream.has_diconnected = true; // Initialize new api with has disconnected
 
                 this.calculateHour();
 
@@ -355,7 +355,7 @@ export default {
             // Clear local storage (browser)
             window.localStorage.clear();
             // Close socket
-            this.mm.close();
+            this.stream.close();
 
             Util.snackbar("You've been logged out");
 
