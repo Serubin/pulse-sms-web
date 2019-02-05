@@ -129,7 +129,7 @@ export default {
                     file = e.target.files[0];
 
                 // Load file to local cache
-                Api.loadFile(file);
+                Api.messages.media.compress(file);
             }
         );
         this.listeners.extend(events);
@@ -227,8 +227,8 @@ export default {
         sendMessage (message) {
             // Send stored media if laoded
             if (this.$store.state.loaded_media) {
-                Api.sendFile(this.$store.state.loaded_media, (file, messageId) => {
-                    Api.sendMessage("firebase -1", file.type, this.conversation_id, messageId);
+                Api.messages.media.send(this.$store.state.loaded_media, (file, messageId) => {
+                    Api.messages.send("firebase -1", file.type, this.conversation_id, messageId);
                 });
             }
 
@@ -237,7 +237,7 @@ export default {
                 return false;
 
             // Otherwise send any corrisponding message
-            Api.sendMessage(message, "text/plain", this.conversation_id);
+            Api.messages.send(message, "text/plain", this.conversation_id);
         },
 
         /**
@@ -296,7 +296,7 @@ export default {
          * this.messages for rendering.
          */
         fetchMessages (offset=0) {
-            Api.fetchThread(this.conversation_id, offset)
+            Api.messages.get(this.conversation_id, offset)
                 .then(response => {
 
                     let new_messages = [];

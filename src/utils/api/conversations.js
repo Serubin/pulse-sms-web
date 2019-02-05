@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Url, Crypto, SessionCache } from '@/utils/'
+import { Api, Url, Crypto, SessionCache } from '@/utils/'
 
 export default class Conversations {
     static getList(index, folderId) {

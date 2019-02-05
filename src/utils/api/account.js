@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import store from '@/store/';
-import { Util, Url } from '@/utils/'
+import { Api, Util, Url } from '@/utils/'
 
 export default class Account {
 

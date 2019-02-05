@@ -168,7 +168,7 @@ export default class Stream {
 
         // fetch through the API instead of the session cache, since the session
         // cache doesn't know about the mute/private settings
-        Api.conversations.get(message.conversation_id).then(conversation => {
+        Api.conversations.getById(message.conversation_id).then(conversation => {
             if (conversation == null || conversation.mute) {
                 return;
             }

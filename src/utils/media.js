@@ -104,7 +104,7 @@ export default class MediaLoader {
      */
     getMediaFromServer (id) {
         return new Promise((resolve, reject) => {
-            Api.fetchImage(id)
+            Api.messages.media.get(id)
                 .then(data => {
 
                     console.log("fetching media from web");

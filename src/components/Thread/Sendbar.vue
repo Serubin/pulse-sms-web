@@ -64,7 +64,7 @@ export default {
                     reader = new FileReader();
 
                     reader.onload = function(evt) {
-                        return Api.loadFile(file);
+                        return Api.messages.media.compress(file);
                     };
 
                     reader.readAsDataURL(file);
@@ -175,7 +175,7 @@ export default {
                     file = e.target.files[0];
 
                 // Load file into cache
-                Api.loadFile(file);
+                Api.messages.media.compress(file);
             });
 
             // Simulate Click to open file input menu
