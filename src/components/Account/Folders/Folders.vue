@@ -44,7 +44,7 @@ export default {
     methods: {
 
         fetchFolders () {
-            Api.fetchFolders()
+            Api.folders.get()
                 .then(response => this.processFolders(response));
         },
 

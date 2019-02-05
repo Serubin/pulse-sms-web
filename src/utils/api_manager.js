@@ -2,7 +2,7 @@ import Vue from 'vue';
 import store from '@/store/';
 
 import { Url, Crypto, SessionCache } from '@/utils/'
-import { Account, Conversations, Messages, Stream } from '@/utils/api/'
+import { Account, Conversations, Folders, Messages, Stream } from '@/utils/api/'
 
 export default class Api {
 
@@ -10,34 +10,10 @@ export default class Api {
 
     static account = Account
     static conversations = Conversations
+    static folders = Folders
     static messages = Messages
 
-    static fetchFolders() {
-        let constructed_url = Url.get('folders') + Url.getAccountParam();
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
-                .then(response => {
-                    response = response.data
-
-                    // Decrypt Folder items
-                    for (let i = 0; i < response.length; i++) {
-                        const folder = Crypto.decryptFolder(response[i]);
-                        if (folder != null)
-                            response[i] = folder;
-                    }
-
-                    resolve(response);
-                })
-                .catch(response => Api.rejectHandler(response, reject));
-        });
-
-        return promise
-    }
-
-    static removeFolder(id) {
-        let constructed_url = Url.get('remove_folder') + id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
-    }
+    
 
     static fetchBlacklists() {
         let constructed_url = Url.get('blacklists') + Url.getAccountParam();

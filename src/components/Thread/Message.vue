@@ -210,7 +210,7 @@ export default {
             this.$dialog
                 .confirm(this.$t('thread.delete.message'), options)
                 .then(function(dialog) {
-                    apiUtils.messages.remove(id);
+                    apiUtils.messages.delete(id);
                 }).catch(function() { });
         },
         loadImage (blob) {

@@ -43,7 +43,7 @@ export default class Messages {
         return promise
     }
 
-    static remove(id) {
+    static delete(id) {
         let constructed_url = Url.get('remove_message') + id + Url.getAccountParam();
         Vue.http.post(constructed_url);
     }
