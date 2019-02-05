@@ -38,7 +38,7 @@ export default {
     methods: {
         deleteDevice () {
             Util.snackbar("Deleted device: " + this.name);
-            Api.removeDevice(this.id);
+            Api.devices.delete(this.id);
             store.state.msgbus.$emit('refresh-btn');
         }
     },

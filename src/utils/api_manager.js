@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import store from '@/store/';
-
 import { Url, Crypto, SessionCache } from '@/utils/'
+
 import { 
     Account,
     Blacklist,
     Conversations,
+    Devices,
     Drafts,
     Folders,
     Messages,
@@ -20,30 +21,11 @@ export default class Api {
     static account = Account
     static blacklist = Blacklist
     static conversations = Conversations
+    static devices = Devices
     static drafts = Drafts
     static folders = Folders
     static messages = Messages
     static scheduledMessages = ScheduledMessages
-    
-    
-
-    static fetchDevices() {
-        let constructed_url = Url.get('devices') + Url.getAccountParam();
-        const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
-                .then(response => {
-                    resolve(response.data);
-                })
-                .catch(response => Api.rejectHandler(response, reject));
-        });
-
-        return promise
-    }
-
-    static removeDevice(id) {
-        let constructed_url = Url.get('remove_device') + id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
-    }
 
     static fetchTemplates() {
         let constructed_url = Url.get('templates') + Url.getAccountParam();
