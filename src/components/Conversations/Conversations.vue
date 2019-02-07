@@ -339,7 +339,8 @@ export default {
                 }
 
                 if (conversation.title.toLowerCase().indexOf(to) > -1 ||
-                        conversation.snippet.toLowerCase().indexOf(to) > -1) {
+                        conversation.snippet.toLowerCase().indexOf(to) > -1 ||
+                        conversation.phone_numbers.indexOf(to) > -1) {
                     filteredConversations.push(conversation);
                 }
             }
