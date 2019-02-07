@@ -10,7 +10,7 @@
                 <span class="mdl-layout-title" id="toolbar-title">{{ $store.state.title }}</span>
                 <div id="toolbar_icons" >
                     <transition-group name="list">
-                    <button id="search-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="$route.name == 'conversations-list'" key="search" @click="dispatchMenuButton('search')">
+                    <button id="search-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="show_search" key="search" @click="dispatchMenuButton('search')">
                        <i class="material-icons">search</i>
                     </button>
                     <button id="add-button" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="$route.path.indexOf('thread') != -1" key="add" @click="$router.push('/compose');">
@@ -502,6 +502,10 @@ export default {
         text_color () { // Determines toolbar text color
             if (this.$store.state.theme_apply_appbar_color)
                 return "#fff";
+        }, 
+
+        show_search () {
+            return this.$route.name.indexOf('conversations-list') > -1;
         }
     },
     watch: {
