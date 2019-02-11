@@ -1,5 +1,5 @@
 <template>
-    <span class="mdl-chip mdl-chip--deletable contact-chip">
+    <span class="mdl-chip mdl-chip--deletable contact-chip" :title="contact.phone">
         <span class="mdl-chip__text">{{ contact.name }}</span>
         <button type="button" class="mdl-chip__action" @click="() => onDelete(contact)"><i class="material-icons">cancel</i></button>
     </span>
