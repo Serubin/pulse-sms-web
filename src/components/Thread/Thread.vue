@@ -168,6 +168,9 @@ export default {
         // Restore last title
         this.$store.commit('title', this.previous_title);
 
+        // Close media viewer if it is open
+        this.$store.state.msgbus.$emit('hideImage');
+
         // Remove event listeners
         Util.removeEventListeners(this.listeners);
 
