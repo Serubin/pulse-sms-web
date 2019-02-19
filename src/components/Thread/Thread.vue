@@ -498,7 +498,7 @@ export default {
             // Snackbar the user
             Util.snackbar({
                 message: "Conversation has been " +
-                    (!this.isArchived ? "archived" : "unarchived"),
+                    (!this.isArchived ? "archived" : "moved to inbox") + ".",
                 actionText: "Undo",
                 actionHandler: (e) =>  {
                     // Construct push URL
@@ -560,14 +560,14 @@ export default {
 
                 // Snackbar the user
                 Util.snackbar({
-                    message: "Contact has been blacklisted",
+                    message: this.$t('thread.blacklisted'),
                     timeout: 6 * 1000
                 })
 
                 this.$router.push('/');
             } else {
                 Util.snackbar({
-                    message: "Cannot blacklist group conversations",
+                    message: this.$t('thread.groupblacklisted'),
                     timeout: 6 * 1000
                 })
             }

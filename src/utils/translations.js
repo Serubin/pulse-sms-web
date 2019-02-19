@@ -66,6 +66,8 @@ export const i18n = new VueI18n({
                     thread: 'Are you sure that you want to delete this conversation?',
                     message: 'Are you sure that you want to delete this message?'
                 },
+                blacklisted: 'Contact blacklisted and moved to the archive.',
+                groupblacklisted: 'Cannot blacklist group conversations.',
                 newmessage: 'New Message',
                 show: 'Show'
             },
@@ -78,7 +80,7 @@ export const i18n = new VueI18n({
                 blacklist: 'Blacklist Contact',
                 delete: 'Delete Conversation',
                 archive: 'Archive Conversation',
-                unarchive: 'Unarchive Conversation',
+                unarchive: 'Move to Inbox',
                 convsettings: 'Conversation Settings'
             },
             compose: {
@@ -100,7 +102,8 @@ export const i18n = new VueI18n({
                 phone: 'Phone Number',
                 create_phone: 'Blacklist by Phone',
                 create_phrase: 'Blacklist by Phrase',
-                phrase: 'Phrase'
+                phrase: 'Phrase',
+                delete: 'Remove blacklist'
             },
             scheduled: {
                 repeat: {
