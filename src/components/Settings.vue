@@ -134,9 +134,9 @@ export default {
             show_notifications: this.$store.state.notifications,
             enter_to_send: this.$store.state.enter_to_send,
             theme: this.$store.state.theme_base,
-            theme_default: this.rgbaToHex(this.$store.state.theme_global_default).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_default) : "#009688",
-            theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : "#00695C",
-            theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : "#FFAB40",
+            theme_default: this.rgbaToHex(this.$store.state.theme_global_default).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_default) : "#428AFF",
+            theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : "#3778ED",
+            theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : "#FF6E40",
             theme_menu: null,
             showColorSettings: false
         }
@@ -159,15 +159,15 @@ export default {
             const accent = this.$store.state.theme_global_accent;
 
             if (!defaul && !dark && !accent) {
-                return "#009688, #00695C, #FFAB40"
+                return "#428AFF, #3778ED, #FF6E40"
             } else {
                 const defaultHex = this.rgbaToHex(defaul);
                 const darkHex = this.rgbaToHex(dark);
                 const accentHex = this.rgbaToHex(accent);
 
-                const defaultString = defaultHex.length > 1 ? defaultHex : "#009688";
-                const darkString = darkHex.length > 1 ? darkHex : "#00695C";
-                const accentString = accentHex.length > 1 ? accentHex : "#FFAB40";
+                const defaultString = defaultHex.length > 1 ? defaultHex : "#428AFF";
+                const darkString = darkHex.length > 1 ? darkHex : "#3778ED";
+                const accentString = accentHex.length > 1 ? accentHex : "#FF6E40";
 
                 return defaultString + ", " + darkString + ", " + accentString;
             }
@@ -289,7 +289,7 @@ export default {
         '$store.state.theme_global_default' () {
             const color = this.$store.state.theme_global_default;
             if (!color) {
-                this.theme_default = "#009688";
+                this.theme_default = "#428AFF";
             } else {
                 this.theme_default = this.rgbaToHex(color);
             }
@@ -297,7 +297,7 @@ export default {
         '$store.state.theme_global_dark' () {
             const color = this.$store.state.theme_global_dark;
             if (!color) {
-                this.theme_dark = "#00695C";
+                this.theme_dark = "#3778ED";
             } else {
                 this.theme_dark = this.rgbaToHex(color);
             }
@@ -305,7 +305,7 @@ export default {
         '$store.state.theme_global_accent' () {
             const color = this.$store.state.theme_global_accent;
             if (!color) {
-                this.theme_accent = "#FFAB40";
+                this.theme_accent = "#FF6E40";
             } else {
                 this.theme_accent = this.rgbaToHex(color);
             }

@@ -495,7 +495,7 @@ export default {
             } else if (this.$store.state.theme_global_default) {
                 return this.$store.state.theme_global_default;
             } else {
-                return "#009688";
+                return "#428AFF";
             }
         },
 
