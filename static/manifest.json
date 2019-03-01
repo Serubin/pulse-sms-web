@@ -5,7 +5,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f5f5f5",
-  "theme_color": "#428AFF",
+  "theme_color": "#1775D2",
   "prefer_related_applications": true,
   "related_applications": [{
     "platform": "play",

@@ -134,8 +134,8 @@ export default {
             show_notifications: this.$store.state.notifications,
             enter_to_send: this.$store.state.enter_to_send,
             theme: this.$store.state.theme_base,
-            theme_default: this.rgbaToHex(this.$store.state.theme_global_default).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_default) : "#428AFF",
-            theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : "#3778ED",
+            theme_default: this.rgbaToHex(this.$store.state.theme_global_default).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_default) : "#1775D2",
+            theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : "#1665C0",
             theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : "#FF6E40",
             theme_menu: null,
             showColorSettings: false
@@ -159,14 +159,14 @@ export default {
             const accent = this.$store.state.theme_global_accent;
 
             if (!defaul && !dark && !accent) {
-                return "#428AFF, #3778ED, #FF6E40"
+                return "#1775D2, #1665C0, #FF6E40"
             } else {
                 const defaultHex = this.rgbaToHex(defaul);
                 const darkHex = this.rgbaToHex(dark);
                 const accentHex = this.rgbaToHex(accent);
 
-                const defaultString = defaultHex.length > 1 ? defaultHex : "#428AFF";
-                const darkString = darkHex.length > 1 ? darkHex : "#3778ED";
+                const defaultString = defaultHex.length > 1 ? defaultHex : "#1775D2";
+                const darkString = darkHex.length > 1 ? darkHex : "#1665C0";
                 const accentString = accentHex.length > 1 ? accentHex : "#FF6E40";
 
                 return defaultString + ", " + darkString + ", " + accentString;
@@ -289,7 +289,7 @@ export default {
         '$store.state.theme_global_default' () {
             const color = this.$store.state.theme_global_default;
             if (!color) {
-                this.theme_default = "#428AFF";
+                this.theme_default = "#1775D2";
             } else {
                 this.theme_default = this.rgbaToHex(color);
             }
@@ -297,7 +297,7 @@ export default {
         '$store.state.theme_global_dark' () {
             const color = this.$store.state.theme_global_dark;
             if (!color) {
-                this.theme_dark = "#3778ED";
+                this.theme_dark = "#1665C0";
             } else {
                 this.theme_dark = this.rgbaToHex(color);
             }
