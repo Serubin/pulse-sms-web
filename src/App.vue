@@ -511,10 +511,10 @@ export default {
                     }
                 }
                 
-                if (this.toolbar_color == '#009688') {
-                    return "#FFF";
-                } else {
+                if (this.toolbar_color.indexOf("rgb(") > -1 || this.toolbar_color.indexOf("rgba(") > -1) {
                     return Util.getTextColorBasedOnBackground(this.toolbar_color);
+                } else {
+                    return "#FFF";
                 }
             } catch (err) {
                 return "#FFF";
