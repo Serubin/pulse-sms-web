@@ -647,16 +647,20 @@ export default {
          * @return text color
          */
         text_color (message) {
-            let colorString;
-            if (message.message_from)
-                colorString = this.getColor(message)
-            else // Otherwise default color
-                colorString = this.color;
+            try {
+                let colorString;
+                if (message.message_from)
+                    colorString = this.getColor(message)
+                else // Otherwise default color
+                    colorString = this.color;
 
-            if (!colorString)
-                colorString = this.color;
+                if (!colorString)
+                    colorString = this.color;
 
-            return Util.getTextColorBasedOnBackground(colorString);
+                return Util.getTextColorBasedOnBackground(colorString);
+            } catch (err) {
+                return "#FFF";
+            }
         },
 
         /**
