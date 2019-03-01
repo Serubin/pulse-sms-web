@@ -207,6 +207,23 @@ export default class Util {
 
         firebase.initializeApp(config);
     }
+
+    static getTextColorBasedOnBackground(color) {
+        let colorString = color.replace("rgba(", "").replace(")", "");
+        colorString = colorString.replace("rgb(", "").replace(")", "");
+
+        // Get actual colors
+        const  colorArray = colorString.split(",");
+        const  red = colorArray[0];
+        const  green = colorArray[1];
+        const  blue = colorArray[2];
+
+        // Some magic with implicit type conversion
+        const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+
+        // Determine color
+        return darkness >= 0.30 ? "#fff" : "#000";
+    }
 }
 
 Array.prototype.extend = function(array){
