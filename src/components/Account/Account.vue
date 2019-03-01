@@ -1,6 +1,9 @@
 <template>
      <div id="account" >
          <div class="page-content" id="account-list" v-mdl>
+            <div class="mdl-color-text--grey-600" v-if="showSubscriptionUpgrade">
+                {{ $t('account.upgrade_subscription') }}
+            </div>
             <h4>Account Statistics</h4>
             <div class="click-item" v-mdl @click="routeTo('statistics')">View Account Statistics</div>
             <div class="item" v-mdl>{{ account_counts.message_count }} Messages</div>
@@ -53,6 +56,13 @@ export default {
                 auto_reply_count: '',
                 folder_count: ''
             }
+        }
+    },
+
+    computed: {
+        showSubscriptionUpgrade () {
+            // If the user has the lifetime subscription, we shouldn't show this.
+            return this.$store.state.subscription_type != 3;
         }
     },
 

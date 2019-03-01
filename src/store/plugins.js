@@ -20,6 +20,7 @@ const localStoreSync = store => {
         'notifications': KEYS.NOTIFICATIONS,
         'enter_to_send': KEYS.ENTER_TO_SEND,
         'larger_app_bar': KEYS.LARGER_APP_BAR,
+        'subscription_type': KEYS.SUBSCRIPTION_TYPE,
     }
 
     // called after every mutation.

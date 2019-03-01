@@ -10,6 +10,7 @@ export const KEYS  = {
     NOTIFICATIONS: 'notifications',
     ENTER_TO_SEND: 'enter_to_send',
     LARGER_APP_BAR: 'larger_app_bar',
+    SUBSCRIPTION_TYPE: 'subscription_type',
     THEME: {
         BASE: 'theme_base',
         GLOBAL_DEFAULT: 'theme_global_default',
@@ -40,6 +41,7 @@ export const state = {
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
     enter_to_send: JSON.parse( window.localStorage.getItem(KEYS.ENTER_TO_SEND) || "true" ),
     larger_app_bar: JSON.parse( window.localStorage.getItem(KEYS.LARGER_APP_BAR) || "false" ),
+    subscription_type: window.localStorage.getItem(KEYS.SUBSCRIPTION_TYPE) || 1,
 
     /* Per session */
     aes: '',
@@ -98,6 +100,7 @@ export const mutations = {
     notifications: (state, notifications) => state.notifications = notifications,
     enter_to_send: (state, enter_to_send) => state.enter_to_send = enter_to_send,
     larger_app_bar: (state, larger_app_bar) => state.larger_app_bar = larger_app_bar,
+    subscription_type: (state, subscription_type) => state.subscription_type = subscription_type,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
     colors_default: (state, colors_default) => state.colors_default = colors_default,
     colors_dark: (state, colors_dark) => state.colors_dark = colors_dark,
