@@ -647,8 +647,6 @@ export default {
          * @return text color
          */
         text_color (message) {
-
-            // Get color string
             let colorString;
             if (message.message_from)
                 colorString = this.getColor(message)
@@ -658,21 +656,7 @@ export default {
             if (!colorString)
                 colorString = this.color;
 
-            // Split up color string
-            colorString = colorString.replace("rgba(", "").replace(")", "");
-            colorString = colorString.replace("rgb(", "").replace(")", "");
-
-            // Get actual colors
-            const  colorArray = colorString.split(",");
-            const  red = colorArray[0];
-            const  green = colorArray[1];
-            const  blue = colorArray[2];
-
-            // Some magic with implicit type conversion
-            const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-
-            // Determine color
-            return darkness >= 0.30 ? "#fff" : "#000";
+            return Util.getTextColorBasedOnBackground(colorString);
         },
 
         /**

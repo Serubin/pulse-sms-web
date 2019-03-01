@@ -499,9 +499,18 @@ export default {
             }
         },
 
-        text_color () { // Determines toolbar text color
-            if (this.apply_appbar_color)
-                return "#fff";
+        text_color () { // Determines toolbar text color (and menu icon color)
+            if (!this.apply_appbar_color) {
+                if (this.theme_str.indexOf('black') >= 0) {
+                    return "#FFF";
+                } else if (this.theme_str.indexOf('dark') >= 0) {
+                    return "#FFF";
+                } else {
+                    return "#000";
+                }
+            }
+
+            return Util.getTextColorBasedOnBackground(this.toolbar_color);
         }, 
 
         show_search () {
