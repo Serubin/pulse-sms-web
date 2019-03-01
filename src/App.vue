@@ -510,8 +510,12 @@ export default {
                         return "#000";
                     }
                 }
-
-                return Util.getTextColorBasedOnBackground(this.toolbar_color);
+                
+                if (this.toolbar_color == '#009688') {
+                    return "#FFF";
+                } else {
+                    return Util.getTextColorBasedOnBackground(this.toolbar_color);
+                }
             } catch (err) {
                 return "#FFF";
             }
