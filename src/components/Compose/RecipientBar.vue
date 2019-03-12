@@ -109,6 +109,34 @@ export default {
                 Api.contacts.delete(idString);
             }
 
+            // We also want to add any of the current conversations.
+            // Contacts are not refreshed automatically, so, if the user has a conversation active, but hasn't downloaded the 
+            // actual contact record, we still want to make it available for them on the compose screen. 
+            // This is jus for convienence. We will use the conversations in the cache.
+            const conversations = SessionCache.getConversations('index_public_unarchived');
+            if (conversations) {
+                // If the user goes directly to the compose page, the conversations would be undefined, since none are cached.
+                for (let conversation of conversations) {
+                    if (!conversation.phone_numbers || conversation.phone_numbers.indexOf(',') > -1) {
+                        // ignore group conversations, for now, since we can't create matchers for them.
+                        continue;
+                    }
+
+                    let matcher = Util.createIdMatcher(conversation.phone_numbers);
+                    if (matchers.indexOf(matcher) >= 0) {
+                        continue;
+                    }
+
+                    const id = Api.generateId();
+                    this.contacts[id] = {
+                        'id': id,
+                        'name': conversation.title,
+                        'phone': conversation.phone_numbers,
+                        'type': undefined
+                    };
+                }
+            }
+
             let matcher = this.matchContact;
             let addContact = this.addContact;
 
