@@ -239,17 +239,13 @@ export default {
             const end =  this.$sendbar.selectionEnd;
 
             // Overwrite selection with emoji
-            // this is a problem because emojis are often more than one character
-            // this.message = this.message.substr(0,start)
-            //     + e.native + this.message.substr(end, this.message.length)
-
-            // it is safer to just insert the emojis at the end...
-            this.message = this.message + e.native
+            this.message = this.message.substr(0,start)
+                + e.native + this.message.substr(end, this.message.length)
 
             // Set new location of selection to start of old selection
             // Wait until next tick to ensure the new message gets rendered
             Vue.nextTick(() =>
-                this.$sendbar.setSelectionRange(start + 1, start + 1)
+                this.$sendbar.setSelectionRange(start + e.native.length, start + e.native.length)
             );
         }
     },
