@@ -43,8 +43,8 @@ export default {
         this.$store.state.msgbus.$on('conversationRead', this.updateRead);
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
-        this.$store.state.msgbus.$on('newMargin', this.updateMargin);
         this.$store.state.msgbus.$on('search-btn', this.toggleSearch);
+        this.$store.state.msgbus.$on('newMargin', this.updateMargin);
 
         this.fetchConversations();
 
@@ -62,17 +62,12 @@ export default {
     },
 
     beforeDestroy () {
-        // when coming from a thread, back to the conversation list, this beforeDestory
-        // was getting called after the mounted callback, which erased the bus functionality.
-        // when it is mounted, it is overriding the old action, anyways.
-
-        if (!this.small) {
-            this.$store.state.msgbus.$off('newMessage')
-            this.$store.state.msgbus.$off('conversationRead')
-            this.$store.state.msgbus.$off('refresh-btn');
-            this.$store.state.msgbus.$off('search-btn');
-            this.$store.state.msgbus.$off('newMargin');
-        }
+        this.$store.state.msgbus.$off('newMessage', this.updateConversation);
+        this.$store.state.msgbus.$off('conversationRead', this.updateRead);
+        this.$store.state.msgbus.$off('removedConversation', this.fetchConversations);
+        this.$store.state.msgbus.$off('refresh-btn', this.refresh);
+        this.$store.state.msgbus.$off('search-btn', this.toggleSearch);
+        this.$store.state.msgbus.$off('newMargin', this.updateMargin);
     },
 
     methods: {

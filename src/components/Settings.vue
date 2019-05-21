@@ -126,6 +126,10 @@ export default {
         this.theme_menu = theme_menu_el.MaterialMenu;
     },
 
+    beforeDestroy () {
+        this.$store.state.msgbus.$off('refresh-btn', this.refreshSettings);
+    },
+
     data () {
         return {
             title: "Settings",

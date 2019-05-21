@@ -172,8 +172,7 @@ export default {
         }
 
         if (this.sending) {
-            this.$store.state.msgbus.$on('updateMessageType-' + this.id,
-                (payload) => this.updateType(payload.message_type));
+            this.$store.state.msgbus.$on('updateMessageType-' + this.id, this.updateType);
         }
 
         // Add links
@@ -181,7 +180,7 @@ export default {
     },
 
     beforeDestroy () {
-        this.$store.state.msgbus.$off('updateMessageType-' + this.id);
+        this.$store.state.msgbus.$off('updateMessageType-' + this.id, this.updateType);
     },
 
     data () {
@@ -210,6 +209,10 @@ export default {
         }
     },
     methods: {
+        refreshSettings () {
+            Api.account.settings.get();
+            Util.snackbar("Settings Refreshed")
+        },
         showOptions () {
             this.displayOptions = true;
         },
@@ -263,8 +266,8 @@ export default {
             this.audio_src = data_prefix + blob;
             this.media_loading = false;
         },
-        updateType (type) {
-            this.type = type;
+        updateType (payload) {
+            this.type = payload.message_type;
         },
         openImage (e) {
             if (this.mime.indexOf('image') > -1) {

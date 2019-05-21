@@ -144,9 +144,9 @@ export default {
         }
 
         // Setup global button listeners
-        this.$store.state.msgbus.$on('settings-btn', () => this.$router.push('/settings'));
-        this.$store.state.msgbus.$on('account-btn', () => this.$router.push('/account'));
-        this.$store.state.msgbus.$on('help-feedback-btn', () => this.$router.push('/help_feedback'));
+        this.$store.state.msgbus.$on('settings-btn', this.settings);
+        this.$store.state.msgbus.$on('account-btn', this.account);
+        this.$store.state.msgbus.$on('help-feedback-btn', this.helpAndFeedback);
         this.$store.state.msgbus.$on('logout-btn', this.logout);
 
         // Request notification permissions if setting is on.
@@ -161,12 +161,13 @@ export default {
     beforeDestroy () { // Remove event listeners
         window.removeEventListener('resize', this.handleResize)
 
-        this.$store.state.msgbus.$off('start-app');
-        this.$store.state.msgbus.$off('settings-btn');
-        this.$store.state.msgbus.$off('logout-btn');
+        this.$store.state.msgbus.$off('start-app', this.applicationStart);
+        this.$store.state.msgbus.$off('settings-btn', this.settings);
+        this.$store.state.msgbus.$off('account-btn', this.account);
+        this.$store.state.msgbus.$off('help-feedback-btn', this.helpAndFeedback);
+        this.$store.state.msgbus.$off('logout-btn', this.logout);
 
         this.stream.close();
-
     },
 
     data () {
@@ -336,6 +337,18 @@ export default {
                 return false;
 
             this.toolbar_color = color;
+        },
+
+        settings () {
+            this.$router.push('/settings');
+        },
+
+        account () {
+            this.$router.push('/account');
+        },
+
+        helpAndFeedback () {
+            this.$router.push('/help_feedback');
         },
 
         /**

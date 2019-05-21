@@ -153,8 +153,9 @@ export default {
 
     beforeDestroy () {
 
-        this.$store.state.msgbus.$off('newMessage');
-        this.$store.state.msgbus.$off('refresh-btn');
+        this.$store.state.msgbus.$off('newMessage', this.addNewMessage);
+        this.$store.state.msgbus.$off('deletedMessage', this.deletedMessage);
+        this.$store.state.msgbus.$off('refresh-btn', this.refresh);
 
         this.$store.state.msgbus.$off('archive-btn', this.archive);
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
@@ -164,6 +165,9 @@ export default {
 
         this.$store.state.msgbus.$off('conversation-information-btn', this.conversationInformation);
         this.$store.state.msgbus.$off('conversation-settings-btn', this.conversationSettings);
+
+        this.$store.state.msgbus.$off('hotkey-page-previous', this.pageToPrevious);
+        this.$store.state.msgbus.$off('hotkey-page-next', this.pageToNext);
 
         // Restore last title
         this.$store.commit('title', this.previous_title);

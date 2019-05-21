@@ -41,7 +41,7 @@ export default {
     },
 
     beforeDestroy () {
-        this.$store.state.msgbus.$off('refresh-btn');
+        this.$store.state.msgbus.$off('refresh-btn', this.refresh);
     },
 
     methods: {

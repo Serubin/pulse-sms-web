@@ -76,6 +76,7 @@ export default {
 
     destroy () {
         document.documentElement.removeEventListener('paste');
+        this.$store.state.msgbus.$off('hotkey-emoji', this.toggle);
     },
 
     data () {

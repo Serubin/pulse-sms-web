@@ -31,6 +31,12 @@ export default {
         store.state.msgbus.$on('hotkey-esc', this.close);
     },
 
+    beforeDestroy () {
+        this.$store.state.msgbus.$off('showImage', this.showImage);
+        this.$store.state.msgbus.$off('hideImage', this.close);
+        this.$store.state.msgbus.$off('hotkey-esc', this.close);
+    },
+
     data () {
         return {
             image_data: "",

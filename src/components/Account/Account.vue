@@ -38,6 +38,10 @@ export default {
         this.$store.state.msgbus.$on('refresh-btn', this.fetchAccounnt);
     },
 
+    beforeDestroy () {
+        this.$store.state.msgbus.$off('refresh-btn', this.fetchAccount);
+    },
+
     data () {
         return {
             title: "My Account",

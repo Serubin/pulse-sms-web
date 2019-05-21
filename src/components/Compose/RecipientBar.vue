@@ -39,7 +39,7 @@ export default {
             this.autocomplete.destroy();
         }
 
-        this.$store.state.msgbus.$off('refresh-btn');
+        this.$store.state.msgbus.$off('refresh-btn', this.refresh);
     },
 
     data () {
