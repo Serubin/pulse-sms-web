@@ -75,6 +75,9 @@ import Splash from '@/components/Splash.vue'
 import Snackbar from '@/components/Snackbar.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 
+// Vue.config.devtools = true;
+// Vue.config.performance = true;
+
 export default {
     name: 'app',
 

@@ -31,8 +31,8 @@
 import Vue from 'vue'
 import AutoGrow from '@/lib/textarea-autogrow.js'
 import emojione from 'emojione'
-import 'emoji-mart-vue/css/emoji-mart.css'
-import { Picker } from 'emoji-mart-vue'
+import 'emoji-mart-vue-fast/css/emoji-mart.css'
+import { Picker } from 'emoji-mart-vue-fast'
 import { Api } from '@/utils'
 
 export default {

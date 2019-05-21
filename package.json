@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@xkeshi/image-compressor": "^0.5.3",
-    "emoji-mart-vue": "2.5.3",
+    "emoji-mart-vue-fast": "^5.4.14",
     "emojione": "^3.1.7",
     "firebase": "^5.10.1",
     "hotkeys-js": "^3.6.3",
