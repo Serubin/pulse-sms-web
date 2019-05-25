@@ -13,7 +13,7 @@
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia"/>
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji"/>
             <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
-                    <Picker :style="emojiStyle" :set="set" :sheetSize="sheetSize" :per-line="perLine" :skins="skin" @select="insertEmoji" />
+                    <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheetSize="sheetSize" :per-line="perLine" :skins="skin" @select="insertEmoji" :data="emojiIndex" />
             </div>
             <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
                 <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
@@ -31,8 +31,9 @@
 import Vue from 'vue'
 import AutoGrow from '@/lib/textarea-autogrow.js'
 import emojione from 'emojione'
+import data from 'emoji-mart-vue-fast/data/all.json'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
-import { Picker } from 'emoji-mart-vue-fast'
+import { NimblePicker, EmojiIndex } from 'emoji-mart-vue-fast'
 import { Api } from '@/utils'
 
 export default {
@@ -90,6 +91,7 @@ export default {
             },
             perLine: 6,
             set: 'twitter',
+            emojiIndex: new EmojiIndex(data),
             sheetSize: 32,
             skin: 3,
             show_emoji: false,
@@ -276,7 +278,7 @@ export default {
         }
     },
     components: {
-        Picker,
+        NimblePicker,
     }
 }
 </script>
