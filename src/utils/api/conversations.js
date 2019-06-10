@@ -13,7 +13,7 @@ export default class Conversations {
         }
 
         let constructed_url = Url.get('conversations') + index + Url.getAccountParam()
-        if (index.indexOf("archive") != -1) {
+        if (index == "index_public_unarchived") {
             constructed_url += "&limit=75"
         }
 
