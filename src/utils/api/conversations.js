@@ -12,8 +12,10 @@ export default class Conversations {
             index = index + "/" + folderId;
         }
 
-        let constructed_url =
-            Url.get('conversations') + index + Url.getAccountParam() + "&limit=75"
+        let constructed_url = Url.get('conversations') + index + Url.getAccountParam()
+        if (index.indexOf("archive") != -1) {
+            constructed_url += "&limit=75"
+        }
 
         const promise = new Promise((resolve, reject) => {
             if (!SessionCache.hasConversations(index)) {
