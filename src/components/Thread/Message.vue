@@ -151,7 +151,11 @@ export default {
             switch (this.type) {
                 case 0:
                 case 6: {
-                    linkClass = 'link-received'
+                    if (this.textColor == "#000") {
+                        linkClass = 'link-received-dark';
+                    } else {
+                        linkClass = 'link-received';
+                    }
                     this.color = this.threadColor;
                     this.style_class.push('received');
                     break;

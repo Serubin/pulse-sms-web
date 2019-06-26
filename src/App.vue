@@ -828,6 +828,10 @@ export default {
         color: white;
     }
 
+    .link-received-dark {
+        color: black;
+    }
+
     .emojione {
         height: 16px;
         width: 16px;
