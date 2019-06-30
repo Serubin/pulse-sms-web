@@ -129,6 +129,8 @@ export const i18n = new VueI18n({
                 accent: 'Accent Color',
                 applyeverywhere: 'Apply Colors to all Conversations',
                 applyprimary: 'Apply Primary Color to App Bar',
+                messagetimstamp: 'Display Timestamp on Every Message',
+                conversationcategories: 'Display Conversations in Date Categories',
                 webspecific: 'Web Specific Settings',
                 shownotifs: 'Show Notifications',
                 entersend: 'Use Enter to Send Messages',

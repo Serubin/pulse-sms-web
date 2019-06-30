@@ -79,7 +79,34 @@
                         {{ $t('settings.applyprimary') }}
                     </span>
                 </label>
-            </div> <!-- End Apply Primary Color to App Bar -->
+            </div> 
+            <!-- End Apply Primary Color to App Bar -->
+
+            <br />
+
+            <!-- Display Timestamp on Every Message -->
+            <div class="label-item">
+                <label for="theme-message-timestamp" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
+                    <input id="theme-message-timestamp" class="mdl-switch__input" type="checkbox" v-model="theme_message_timestamp">
+                    <span class="mdl-switch__label mdl-color-text--grey-900">
+                        {{ $t('settings.messagetimestamp') }}
+                    </span>
+                </label>
+            </div> 
+            <!-- End Display Timestamp on Every Message -->
+
+            <br />
+
+            <!-- Display Conversations in Date Categories -->
+            <div class="label-item">
+                <label for="theme-conversation-categories" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
+                    <input id="theme-conversation-categories" class="mdl-switch__input" type="checkbox" v-model="theme_conversation_categories">
+                    <span class="mdl-switch__label mdl-color-text--grey-900">
+                        {{ $t('settings.conversationcategories') }}
+                    </span>
+                </label>
+            </div> 
+            <!-- End Display Conversations in Date Categories -->
 
             <br />
             <h4>{{ $t('settings.webspecific') }}</h4>
@@ -135,6 +162,8 @@ export default {
             title: "Settings",
             global_theme: this.$store.state.theme_use_global,
             theme_appbar: this.$store.state.theme_apply_appbar_color,
+            theme_message_timestamp: this.$store.state.theme_message_timestamp,
+            theme_conversation_categories: this.$store.state.theme_conversation_categories,
             show_notifications: this.$store.state.notifications,
             enter_to_send: this.$store.state.enter_to_send,
             theme: this.$store.state.theme_base,
@@ -285,6 +314,14 @@ export default {
         'theme_appbar' () {
             this.$store.commit('theme_apply_appbar_color', this.theme_appbar)
             Api.account.settings.update("apply_primary_color_toolbar", "boolean", this.theme_appbar)
+        },
+        'theme_conversation_categories' () {
+            this.$store.commit('theme_conversation_categories', this.theme_conversation_categories)
+            Api.account.settings.update("conversation_categories", "boolean", this.theme_conversation_categories)
+        },
+        'theme_message_timestamp' () {
+            this.$store.commit('theme_message_timestamp', this.theme_message_timestamp)
+            Api.account.settings.update("message_timestamp", "boolean", this.theme_message_timestamp)
         },
         'theme' () {
             this.$store.commit('theme_base', this.theme),

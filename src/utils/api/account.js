@@ -55,6 +55,8 @@ export default class Account {
                         store.commit('theme_base', response.base_theme);
                         store.commit('theme_use_global', response.use_global_theme);
                         store.commit('theme_apply_appbar_color', response.apply_primary_color_to_toolbar);
+                        store.commit('theme_conversation_categories', response.conversation_categories);
+                        store.commit('theme_message_timestamp', response.message_timestamp);
                         store.commit('subscription_type', response.subscription_type + '');
                         store.commit('theme_global', colors);
                         store.commit('colors', colors);

@@ -21,6 +21,8 @@ const localStoreSync = store => {
         'enter_to_send': KEYS.ENTER_TO_SEND,
         'larger_app_bar': KEYS.LARGER_APP_BAR,
         'subscription_type': KEYS.SUBSCRIPTION_TYPE,
+        'conversation_categories': KEYS.THEME.CONVERSATION_CATEGORIES,
+        'message_timestamp': KEYS.THEME.MESSAGE_TIMESTAMP,
     }
 
     // called after every mutation.

@@ -17,7 +17,9 @@ export const KEYS  = {
         GLOBAL_DARK: 'theme_global_dark',
         GLOBAL_ACCENT: 'theme_global_accent',
         USE_GLOBAL: 'theme_use_global',
-        APPLY_APPBAR_COLOR: 'theme_apply_appbar_color'
+        APPLY_APPBAR_COLOR: 'theme_apply_appbar_color',
+        CONVERSATION_CATEGORIES: 'conversation_categories',
+        MESSAGE_TIMESTAMP: 'message_timestamp'
     }
 }
 
@@ -38,6 +40,8 @@ export const state = {
     theme_global_accent: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_ACCENT) || "\"#FF6E40\"" ),
     theme_use_global: JSON.parse( window.localStorage.getItem(KEYS.THEME.USE_GLOBAL) || "false" ),
     theme_apply_appbar_color: JSON.parse( window.localStorage.getItem(KEYS.THEME.APPLY_APPBAR_COLOR) || "true" ),
+    theme_conversation_categories: JSON.parse( window.localStorage.getItem(KEYS.THEME.CONVERSATION_CATEGORIES) || "true" ),
+    theme_message_timestamp: JSON.parse( window.localStorage.getItem(KEYS.THEME.MESSAGE_TIMESTAMP) || "false" ),
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
     enter_to_send: JSON.parse( window.localStorage.getItem(KEYS.ENTER_TO_SEND) || "true" ),
     larger_app_bar: JSON.parse( window.localStorage.getItem(KEYS.LARGER_APP_BAR) || "false" ),
@@ -97,6 +101,8 @@ export const mutations = {
     theme_global_accent: (state, theme_global_accent) => state.theme_global_accent = theme_global_accent,
     theme_use_global: (state, theme_use_global) => state.theme_use_global = theme_use_global,
     theme_apply_appbar_color: (state, theme_apply_appbar_color) => state.theme_apply_appbar_color = theme_apply_appbar_color,
+    theme_conversation_categories: (state, theme_conversation_categories) => state.theme_conversation_categories = theme_conversation_categories,
+    theme_message_timestamp: (state, theme_message_timestamp) => state.theme_message_timestamp = theme_message_timestamp,
     notifications: (state, notifications) => state.notifications = notifications,
     enter_to_send: (state, enter_to_send) => state.enter_to_send = enter_to_send,
     larger_app_bar: (state, larger_app_bar) => state.larger_app_bar = larger_app_bar,

@@ -708,9 +708,10 @@ export default {
          */
         compareTimestamps(date, nextDate) {
             let length = 15; // minutes
-
+            
             // If the dates are "length" a part, return date string
-            if (nextDate.getTime() > date.getTime() + (1000 * 60 * length)) {
+            if (this.$store.state.theme_message_timestamp || 
+                    nextDate.getTime() > date.getTime() + (1000 * 60 * length)) {
                 return TimeUtils.formatTimestamp(date.getTime(), Date.now())
             } else {
                 return null;
