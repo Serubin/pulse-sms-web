@@ -19,7 +19,7 @@
 
 <script>
 
-import { Util } from '@/utils'
+import { Util, TimeUtils } from '@/utils'
 
 export default {
     name: 'conversation-item',
@@ -116,7 +116,11 @@ export default {
         },
 
         date () {
-            return "";
+            if (this.$store.state.theme_conversation_categories) {
+                return ""
+            } else {
+                return TimeUtils.formatConversationTimestamp(this.conversationData.timestamp, Date.now())
+            }
         }
     },
 }
@@ -249,6 +253,7 @@ export default {
                 font-size: 14px;
                 float: right;
                 color: rgba(0,0,0,.54);
+                margin-left: 8px;
             }
         }
 

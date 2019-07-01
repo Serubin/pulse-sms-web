@@ -25,7 +25,24 @@ export default class TimeUtils {
 
         if (timestamp > currentTime - 2 * TimeUtils.minute()) {
             return "Now";
-        } else if (timestamp > currentTime - 1 * TimeUtils.day()) {
+        } else if (timestamp > TimeUtils.isToday(currentTime)) {
+            let options = { second: undefined, hour: 'numeric', minute: 'numeric' };
+            return date.toLocaleTimeString(undefined, options);
+        } else if (timestamp > currentTime - 7 * TimeUtils.day()) {
+            let options = { second: undefined, hour: 'numeric', minute: 'numeric', weekday: 'short' };
+            return date.toLocaleTimeString(undefined, options);
+        } else if (timestamp > currentTime - 1 * TimeUtils.year()) {
+            let options = { month: 'short', day: 'numeric', second: undefined, hour: 'numeric', minute: 'numeric'};
+            return date.toLocaleDateString(undefined, options);
+        } else {
+            return TimeUtils.fullTimestamp(date);
+        }
+    }
+
+    static formatConversationTimestamp (timestamp, currentTime) {
+        let date = new Date(timestamp);
+
+        if (TimeUtils.isToday(timestamp)) {
             let options = { second: undefined, hour: 'numeric', minute: 'numeric' };
             return date.toLocaleTimeString(undefined, options);
         } else if (timestamp > currentTime - 7 * TimeUtils.day()) {
