@@ -25,7 +25,7 @@ export default class TimeUtils {
 
         if (timestamp > currentTime - 2 * TimeUtils.minute()) {
             return "Now";
-        } else if (timestamp > TimeUtils.isToday(currentTime)) {
+        } else if (TimeUtils.isToday(timestamp)) {
             let options = { second: undefined, hour: 'numeric', minute: 'numeric' };
             return date.toLocaleTimeString(undefined, options);
         } else if (timestamp > currentTime - 7 * TimeUtils.day()) {

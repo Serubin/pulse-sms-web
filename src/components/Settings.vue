@@ -98,7 +98,6 @@
             <br />
 
             <!-- Display Conversations in Date Categories -->
-            <!-- disabled, since this isn't implemented yet -->
             <div class="label-item">
                 <label for="theme-conversation-categories" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="theme-conversation-categories" class="mdl-switch__input" type="checkbox" v-model="theme_conversation_categories">
