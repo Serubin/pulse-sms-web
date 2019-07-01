@@ -18,7 +18,7 @@
             <component v-for="conversation in conversations" 
                 :is="conversation.title ? 'ConversationItem' : 'DayLabel'" 
                 :conversation-data="conversation" 
-                :showPinned="conversation.pinned && showPinned"
+                :showPinned="conversation.pinned && !showConversationCategories"
                 :archive="isArchive" 
                 :small="small" 
                 :key="conversation.hash ? conversation.hash : conversation.label
@@ -114,13 +114,15 @@ export default {
 
                 const title = this.calculateTitle(item);
 
-                if (this.$store.state.theme_conversation_categories && titles.indexOf(title) == -1) {
+                if (titles.indexOf(title) == -1) {
                     titles.push(title);
 
-                    updatedConversations.push({
-                        label: title,
-                        hash: Hash(title)
-                    });
+                    if (this.$store.state.theme_conversation_categories) {
+                        updatedConversations.push({
+                            label: title,
+                            hash: Hash(title)
+                        });
+                    }
                 }
 
                 updatedConversations.push(item)
@@ -183,25 +185,38 @@ export default {
 
             // Get start index (index after pinned items)
             let startIndex = 0;
-            if (this.conversations[0].label == "Pinned" && !conv.pinned) { // If there are any pinned items
-                this.conversations.some( (conv, i) => {
-                    if (typeof conv.label != "undefined" // Loop until we find a label
-                        && conv.label != "Pinned") { // That is not "pinned"
+            if (this.showConversationCategories) {
+                if (this.conversations[0].label == "Pinned" && !conv.pinned) { // If there are any pinned items
+                    this.conversations.some( (conv, i) => {
+                        if (typeof conv.label != "undefined" // Loop until we find a label
+                            && conv.label != "Pinned") { // That is not "pinned"
 
-                        startIndex = i; // Save index and return
-                        return true
-                    }
-                })
+                            startIndex = i; // Save index and return
+                            return true
+                        }
+                    })
+                }
+            } else {
+                if (this.conversations[0].pinned && !conv.pinned) { // If there are any pinned items
+                    this.conversations.some( (conv, i) => {
+                        if (!conv.pinned) { // That is not "pinned"
+                            startIndex = i; // Save index and return
+                            return true
+                        }
+                    })
+                }
             }
-
+            
             // Move conversation if required
-            if (conv_index != startIndex + 1) {
+            let showCategoryOffset = (this.showConversationCategories ? 1 : 0)
+            if (conv_index != startIndex + showCategoryOffset) {
                 conv = this.conversations.splice(conv_index, 1)[0]
 
                 // If top label is not "Today"
                 // This isn't elegant, but it works
                 if (this.conversations[startIndex].label != "Today"
-                    && this.conversations[startIndex].label != "Pinned") {
+                    && this.conversations[startIndex].label != "Pinned"
+                    && this.showConversationCategories) {
                     const title = "Today"; // Define title
                     const label = {        // And Define Label
                         label: title,
@@ -210,8 +225,9 @@ export default {
 
                     // Push label and conversation
                     this.conversations.splice(startIndex, 0, label, conv)
-                } else { // Else, just push the converstation to index 1 (below label)
-                    this.conversations.splice(startIndex + 1, 0, conv)
+                } else { 
+                    // Else, just push the converstation to index 1 (below label)
+                    this.conversations.splice(startIndex + showCategoryOffset, 0, conv)
                 }
             }
 
@@ -315,8 +331,8 @@ export default {
             return this.searchClicked && !this.small;
         },
 
-        showPinned () {
-            return !this.$store.state.theme_conversation_categories
+        showConversationCategories () {
+            return this.$store.state.theme_conversation_categories
         }
     },
 
