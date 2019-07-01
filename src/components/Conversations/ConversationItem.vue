@@ -8,7 +8,9 @@
 
         <!-- Conversation Item content -->
         <p class="conversation-text conversation-text-small" :class="{ unread: !read }">
+            <img class="conversation-pinned" src="./../../assets/images/holder.gif" width="18" height="18" v-if="showPinned" />
             <span class="conversation-title mdl-card__supporting-text conversation-title-small"><i v-if="!read"></i>{{ title }}</span>
+            <span class="conversation-date" v-if="!small">{{date}}</span>
             <br>
             <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small" v-html="snippet"><!-- Raw html insert --></span>
         </p>
@@ -21,7 +23,7 @@ import { Util } from '@/utils'
 
 export default {
     name: 'conversation-item',
-    props: [ 'conversationData', 'archive', 'small'],
+    props: [ 'conversationData', 'archive', 'small', 'showPinned' ],
 
     data () {
         return {
@@ -111,6 +113,10 @@ export default {
             } catch (e) { // Edge case for message with no title ??
                 return ""
             }
+        },
+
+        date () {
+            return "";
         }
     },
 }
@@ -140,6 +146,15 @@ export default {
             .conversation-snippet {
                 color: rgba(255,255,255,.77);
             }
+
+            .conversation-date {
+                color: rgba(255,255,255,.77);
+            }
+
+            .conversation-pinned {
+                background: url(../../assets/images/vector/pin-dark.svg) 0 0 no-repeat;
+                margin-right: 8px;
+            }
         }
     }
 
@@ -162,6 +177,15 @@ export default {
 
             .conversation-snippet {
                 color: rgba(255,255,255,.77);
+            }
+
+            .conversation-date {
+                color: rgba(255,255,255,.77);
+            }
+
+            .conversation-pinned {
+                background: url(../../assets/images/vector/pin-dark.svg) 0 0 no-repeat;
+                margin-right: 8px;
             }
         }
     }
@@ -214,6 +238,17 @@ export default {
             .conversation-snippet {
                 font-size: 14px;
                 padding: 0px 16px 24px 0px;
+            }
+
+            .conversation-pinned {
+                background: url(../../assets/images/vector/pin.svg) 0 0 no-repeat;
+                margin-right: 8px;
+            }
+
+            .conversation-date {
+                font-size: 14px;
+                float: right;
+                color: rgba(0,0,0,.54);
             }
         }
 

@@ -99,14 +99,14 @@
 
             <!-- Display Conversations in Date Categories -->
             <!-- disabled, since this isn't implemented yet -->
-            <!-- <div class="label-item">
+            <div class="label-item">
                 <label for="theme-conversation-categories" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
                     <input id="theme-conversation-categories" class="mdl-switch__input" type="checkbox" v-model="theme_conversation_categories">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
                         {{ $t('settings.conversationcategories') }}
                     </span>
                 </label>
-            </div>  -->
+            </div> 
             <!-- End Display Conversations in Date Categories -->
 
             <br />

@@ -15,7 +15,14 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="conversation in conversations" :is="conversation.title ? 'ConversationItem' : 'DayLabel'" :conversation-data="conversation" :archive="isArchive" :small="small" :key="conversation.hash ? conversation.hash : conversation.label"/>
+            <component v-for="conversation in conversations" 
+                :is="conversation.title ? 'ConversationItem' : 'DayLabel'" 
+                :conversation-data="conversation" 
+                :showPinned="conversation.pinned && showPinned"
+                :archive="isArchive" 
+                :small="small" 
+                :key="conversation.hash ? conversation.hash : conversation.label
+            "/>
         </transition-group>
 
         <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="composeStyle" v-if="!small" v-mdl>
@@ -107,7 +114,7 @@ export default {
 
                 const title = this.calculateTitle(item);
 
-                if (titles.indexOf(title) == -1) {
+                if (this.$store.state.theme_conversation_categories && titles.indexOf(title) == -1) {
                     titles.push(title);
 
                     updatedConversations.push({
@@ -304,8 +311,12 @@ export default {
                     "marginRight: " + (this.margin + 36) + "px;";
         },
 
-        showSearch() {
+        showSearch () {
             return this.searchClicked && !this.small;
+        },
+
+        showPinned () {
+            return !this.$store.state.theme_conversation_categories
         }
     },
 
@@ -320,6 +331,10 @@ export default {
                 this.fetchConversations();
             }
 
+        },
+
+        '$store.state.theme_conversation_categories' (to, from) {
+            this.processConversations(this.unFilteredAllConversations, true);
         },
 
         "searchQuery" (to, from) {
