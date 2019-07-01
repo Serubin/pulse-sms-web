@@ -117,7 +117,7 @@ export default {
                 if (titles.indexOf(title) == -1) {
                     titles.push(title);
 
-                    if (this.$store.state.theme_conversation_categories) {
+                    if (this.showConversationCategories) {
                         updatedConversations.push({
                             label: title,
                             hash: Hash(title)
