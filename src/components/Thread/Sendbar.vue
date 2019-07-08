@@ -493,15 +493,15 @@ export default {
 
     body.dark {
         .preview {
-            background: rgb(55,66,72);
+            background: rgb(32,32,36);
 
             .overlay {
-                background: linear-gradient(to bottom, rgba(55,66,72,0) 95%,rgba(55,66,72,1) 100%);
+                background: linear-gradient(to bottom, rgba(32,32,36,0) 95%,rgba(32,32,36,1) 100%);
             }
         }
 
         .send-bar-inner {
-            background: #374248;
+            background: #202024;
             color: #fff;
         }
 
