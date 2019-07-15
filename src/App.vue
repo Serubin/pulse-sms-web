@@ -504,7 +504,7 @@ export default {
                 if (this.theme_str.indexOf('black') >= 0) {
                     return "#000000";
                 } else if (this.theme_str.indexOf('dark') >= 0) {
-                    return "#2E3133";
+                    return "#202024";
                 } else {
                     return "#FFFFFF";
                 }
