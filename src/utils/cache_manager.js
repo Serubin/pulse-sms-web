@@ -54,6 +54,11 @@ export default class SessionCache {
     }
 
     static putConversations (conversations, index = 'index_public_unarchived') {
+        if (index == "index_public_unread") {
+            // We want to just always read these from the backend, when the user goes to this section of the app.
+            return
+        }
+
         let sessionConversations = SessionCache.getAllConversations();
         sessionConversations[index] = conversations;
 
