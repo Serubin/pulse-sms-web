@@ -19,6 +19,7 @@ export const i18n = new VueI18n({
             },
             sidebar: {
                 conversations: 'Conversations',
+                unreadconversations: 'Unread Conversations',
                 privateconversations: 'Private Conversations',
                 archive: 'Archive',
                 folders: 'Folders',

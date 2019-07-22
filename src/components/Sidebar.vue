@@ -9,6 +9,12 @@
                             {{ $t('sidebar.conversations') }}
                         </div>
                     </li>
+                    <li id="unread-link" @click="routeTo('unread')">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('unread') }">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon unread">
+                            {{ $t('sidebar.unreadconversations') }}
+                        </div>
+                    </li>
                     <li id="private-link" @click="routeTo('private')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('private') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon private">
@@ -105,6 +111,7 @@ export default {
         return {
             links: {
                 'conversations': { name: 'conversations-list'},
+                'unread': { name: 'conversations-list-unread'},
                 'archive': { name: 'conversations-list-archived'},
                 'blacklists': { name: 'blacklists'},
                 'private': { name: 'conversations-list-private' },
@@ -143,6 +150,10 @@ export default {
         is_active(route) {
             if (route == 'conversations' &&
                 (this.$route.name == 'conversations-list' || this.$route.name == 'thread'))
+                return true;
+
+            if (route == 'unread' &&
+                (this.$route.name == 'conversations-list-unread'))
                 return true;
 
             if (route == 'private' &&
@@ -224,6 +235,10 @@ export default {
 
             &.private {
                 background: url(../assets/images/vector/private-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.unread {
+                background: url(../assets/images/vector/unread-dark.svg) 0 0 no-repeat !important;
             }
 
             &.folders {
@@ -331,6 +346,10 @@ export default {
 
                     &.private {
                         background: url(../assets/images/vector/private.svg) 0 0 no-repeat;
+                    }
+
+                    &.unread {
+                        background: url(../assets/images/vector/unread.svg) 0 0 no-repeat;
                     }
 
                     &.folders {

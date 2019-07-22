@@ -35,6 +35,12 @@ let router = new VueRouter({
             props: { 'index': 'index_archived', 'small': false },
         },
         {
+            path: '/unread',
+            name: 'conversations-list-unread',
+            component: Conversations,
+            props: { 'index': 'index_public_unread', 'small': false },
+        },
+        {
             path: '/private',
             name: 'conversations-list-private',
             component: Conversations,
