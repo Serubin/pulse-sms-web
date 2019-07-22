@@ -45,6 +45,12 @@
                             {{ $t('sidebar.blacklist') }}
                         </div>
                     </li>
+                    <li v-if="showConversations">
+                        <div class="link-card mdl-card">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon search">
+                            <input v-model="searchQuery" id="search-bar" class="quick_find fixed_pos" type="text text_box" :placeholder="$t('sidebar.searchconversations')" autocomplete="off" autocorrect="off" spellcheck="false">
+                        </div>
+                    </li>
                 </ul>
                 <!-- If route is not conversation list -->
 
@@ -118,7 +124,8 @@ export default {
                 'folders': { name: 'folders' },
                 'scheduled': { name: 'scheduled-messages' }
             },
-            listeners: []
+            listeners: [],
+            searchQuery: "",
         }
     },
 
@@ -132,6 +139,7 @@ export default {
         routeTo (link) {
             this.close_drawer()
             this.$router.push(this.links[link])
+            this.searchQuery = "";
         },
 
         /**
@@ -199,6 +207,14 @@ export default {
         }
     },
 
+    watch: {
+        
+        "searchQuery" (to, from) {
+            this.$store.state.msgbus.$emit('searchUpdated', to);
+        }
+
+    },
+
     components: {
         Conversations
     }
@@ -210,6 +226,14 @@ export default {
 
     body.dark #sidebar {
         background-color: $bg-dark;
+
+        .quick_find {
+            color: white;
+        }
+
+        .quick_find::placeholder {
+            color: white;
+        }
 
         #drawer-links li .link-card {
             background-color: $bg-dark;
@@ -247,6 +271,10 @@ export default {
 
             &.blacklist {
                 background: url(../assets/images/vector/blacklist-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.search {
+                background: url(../assets/images/vector/search-dark.svg) 0 0 no-repeat !important;
             }
         }
     }
@@ -363,6 +391,10 @@ export default {
                     &.blacklist {
                         background: url(../assets/images/vector/blacklist.svg) 0 0 no-repeat;
                     }
+
+                    &.search {
+                        background: url(../assets/images/vector/search.svg) 0 0 no-repeat;
+                    }
                 }
             }
         }
@@ -395,5 +427,31 @@ export default {
     .slide-left-enter, .slide-left-leave-to {
         transform: translateX(-$sidebar_margin);
         opacity: 0;
+    }
+
+    #quick_find {
+      white-space: nowrap;
+      padding-top: 5px;
+      text-align: right;
+    }
+
+    .quick_find {
+      margin-top: 3px;
+      border: 0px solid white;
+      font-size: 16px;
+      background-color: transparent;
+      color: black;
+      background-position: 10px 10px;
+      background-repeat: no-repeat;
+      -webkit-transition: width 0.4s ease-in-out;
+      transition: width 0.4s ease-in-out;
+    }
+
+    .quick_find:focus {
+      outline: none !important;
+    }
+
+    .quick_find::placeholder {
+        color: black;
     }
 </style>

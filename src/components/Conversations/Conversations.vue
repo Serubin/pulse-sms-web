@@ -51,6 +51,7 @@ export default {
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
         this.$store.state.msgbus.$on('search-btn', this.toggleSearch);
+        this.$store.state.msgbus.$on('searchUpdated', this.searchUpdated);
         this.$store.state.msgbus.$on('newMargin', this.updateMargin);
 
         this.fetchConversations();
@@ -277,6 +278,10 @@ export default {
             this.margin = margin;
         },
 
+        searchUpdated (query) {
+            this.searchQuery = query;
+        },
+
         toggleSearch () {
             this.searchClicked = !this.searchClicked;
 
@@ -403,6 +408,7 @@ export default {
 
     #conversation-list {
         width: 100%;
+        margin-left: 6px;
         margin-top: 36px !important;
 
         .spinner {

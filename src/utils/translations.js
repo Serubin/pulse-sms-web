@@ -24,7 +24,8 @@ export const i18n = new VueI18n({
                 archive: 'Archive',
                 folders: 'Folders',
                 scheduled: 'Scheduled Messages',
-                blacklist: 'Blacklist'
+                blacklist: 'Blacklist',
+                searchconversations: 'Search Conversations'
             },
             api: {
                 disconnected: 'You\'ve been disconnected. We\'re trying to reconnect you...',
