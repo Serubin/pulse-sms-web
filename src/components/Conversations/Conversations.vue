@@ -328,8 +328,7 @@ export default {
         },
 
         composeStyle () {
-            return "background: " + this.$store.state.colors_accent + "; " +
-                    "marginRight: " + (this.margin + 36) + "px;";
+            return "background: " + this.$store.state.colors_accent + ";"
         },
 
         showSearch () {
