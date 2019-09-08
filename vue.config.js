@@ -1,6 +1,9 @@
 var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 
 module.exports = {
+    devServer: {
+        port: 8081
+    },
   runtimeCompiler: true,
     lintOnSave: false,
     configureWebpack: {
