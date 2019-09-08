@@ -106,7 +106,13 @@ export default {
 
                 this.style_class.push('media-preview');
 
-                const media = JSON.parse(this.content);
+                // Catch firebase errors
+                let media;
+                try {
+                    media = JSON.parse(this.content);
+                } catch (e) {
+                    this.mime = "media/error";
+                }
 
                 if (this.mime == "media/map") {
                     let map = "https://maps.googleapis.com/maps/api/staticmap" +
@@ -132,6 +138,13 @@ export default {
                     this.media_title =  media.title;
                     this.media_content = media.description;
                     this.media_loading = false;
+                } else if (this.mime = "media/error") {
+                    this.content = `<div style="width:436px;text-align:center;">
+                        <i style="line-height:254px">Media not avalible</i>
+                    </div>`;
+                    this.is_media = false;
+
+                    break;
                 }
 
                 this.content = "";
