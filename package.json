@@ -1,7 +1,14 @@
 {
-  "name": "pulse-new",
-  "version": "0.1.0",
-  "private": true,
+  "name": "pulse-sms-web",
+  "version": "v1.1.1",
+  "description": "Pulse SMS - text from your computer.",
+  "license": "Apache 2.0 & MIT",
+  "author": {
+    "name": "Luke Klinker",
+    "email": "luke@klinkerapps.com",
+    "url": "https://luke.klinker.xyz"
+  },
+  "repository": "https://github.com/klinker-apps/messenger-web",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
