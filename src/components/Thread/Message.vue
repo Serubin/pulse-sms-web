@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Util, Api, SessionCache, TimeUtils } from '@/utils';
+import { Api, Util, TimeUtils } from '@/utils';
 import linkify from 'linkifyjs/html';
 
 export default {
@@ -138,7 +138,7 @@ export default {
                     this.media_title =  media.title;
                     this.media_content = media.description;
                     this.media_loading = false;
-                } else if (this.mime = "media/error") {
+                } else if (this.mime == "media/error") {
                     this.content = `<div style="width:436px;text-align:center;">
                         <i style="line-height:254px">Media not avalible</i>
                     </div>`;
@@ -248,7 +248,7 @@ export default {
 
             this.$dialog
                 .confirm(this.$t('thread.delete.message'), options)
-                .then(function(dialog) {
+                .then(() => {
                     apiUtils.messages.delete(id);
                 }).catch(function() { });
         },
@@ -360,7 +360,7 @@ export default {
 
     .message-wrapper {
         user-select: text;
-        -moz-user-select: text; 
+        -moz-user-select: text;
         -ms-user-select: text;
         clear: both;
         display: block;

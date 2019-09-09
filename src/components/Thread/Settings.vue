@@ -54,7 +54,7 @@
 
             <div class="label-item">
                 <label for="private" :class="private_class" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
-                    <input id="private" class="mdl-switch__input" type="checkbox" v-model="private">
+                    <input id="private" class="mdl-switch__input" type="checkbox" v-model="private_notifications">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
                         {{ $t('thread.settings.private') }}
                     </span>
@@ -88,7 +88,7 @@ export default {
             phone_numbers: null,
             pin: false,
             mute: false,
-            private: false,
+            private_notifications: false,
             colors: { },
             hex: { },
             pin_class: "",
@@ -114,7 +114,7 @@ export default {
 
             this.pin = data.pinned;
             this.mute = data.mute;
-            this.private = data.private_notifications;
+            this.private_notifications = data.private_notifications;
 
             this.colors = {
                 default: data.color,
@@ -139,7 +139,7 @@ export default {
                 this.mute_class = "is-upgraded is-checked";
             }
 
-            if (this.private) {
+            if (this.private_notifications) {
                 this.private_class = "is-upgraded is-checked";
             }
         },
@@ -225,10 +225,10 @@ export default {
             };
             Api.conversations.update(this.conversation_id, request);
         },
-        'private' () {
+        'private_notifications' () {
             let request = {
                 account_id: this.$store.state.account_id,
-                private_notifications: this.private
+                private_notifications: this.private_notifications
             };
             Api.conversations.update(this.conversation_id, request);
         }
@@ -277,8 +277,8 @@ export default {
     }
 
     .mdl-dialog-button-bar {
-      	margin-left: auto;
-      	margin-right: 24px;
+          margin-left: auto;
+          margin-right: 24px;
     }
 
     body.dark {

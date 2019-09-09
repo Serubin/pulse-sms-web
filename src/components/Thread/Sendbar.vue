@@ -16,7 +16,7 @@
                     <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheetSize="sheetSize" :per-line="perLine" :skins="skin" @select="insertEmoji" :data="emojiIndex" />
             </div>
             <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
-                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
+                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.enter.prevent.stop.exact="dispatchSend" v-model="message"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
@@ -30,7 +30,6 @@
 <script>
 import Vue from 'vue'
 import AutoGrow from '@/lib/textarea-autogrow.js'
-import emojione from 'emojione'
 import data from 'emoji-mart-vue-fast/data/all.json'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { NimblePicker, EmojiIndex } from 'emoji-mart-vue-fast'
@@ -41,7 +40,8 @@ export default {
     props: ['threadId', 'onSend', 'loading'],
 
     mounted () {
-        let autogrow = new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
+        // No need for assignment - just build object
+        new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
 
         window.addEventListener('resize', this.updateEmojiMargin)
         this.$wrapper = document.querySelector("#wrapper");
@@ -64,7 +64,7 @@ export default {
                     file = clipboardData.items[i].getAsFile();
                     reader = new FileReader();
 
-                    reader.onload = function(evt) {
+                    reader.onload = function() {
                         return Api.messages.media.compress(file);
                     };
 
@@ -159,9 +159,9 @@ export default {
         /**
          * Attach media
          * Get media from event and puts it in the store
-         * @param e - event object
+         * @param e - event object (optional)
          */
-        attachMedia (e) {
+        attachMedia () {
 
             // Create input to attach file
             const input = document.createElement('input');
@@ -272,7 +272,7 @@ export default {
     },
 
     watch: {
-        '$route' (to) { // Update thread on route change
+        '$route' () { // Update thread on route change
             this.message = "";
             this.removeMedia();
         }

@@ -92,7 +92,7 @@ export default {
 
         // Drag over events
         events = Util.addEventListeners(['dragover', 'dragenter'],
-            (e) => {
+            () => {
                 // Get file drag dom
                 const file_drag = document.querySelector(".file-drag");
 
@@ -106,7 +106,7 @@ export default {
 
         // Drag leave events
         events = Util.addEventListeners(['dragleave', 'dragend', 'drop'],
-            (e) => {
+            () => {
                 // Get file drag dom
                 const file_drag = document.querySelector(".file-drag");
 
@@ -137,7 +137,7 @@ export default {
         // Watch sendbar's message content
         this.$watch(
             '$refs.sendbar.message',
-            (to) => setTimeout(() => { // Wait 500ms for text render and resize
+            () => setTimeout(() => { // Wait 500ms for text render and resize
 
                 // Set margin bottom
                 this.margin_bottom = this.$refs.sendbar.$el.clientHeight;
@@ -427,7 +427,7 @@ export default {
                     let timeoutId;
                     const data = {
                         message: this.$t('thread.newmessage'),
-                        actionHandler: (e) => {
+                        actionHandler: () => {
                             this.snackbar.MaterialSnackbar.cleanup_(); // Hide snackbar
 
                             clearTimeout(timeoutId); // Cancel timeout
@@ -549,7 +549,7 @@ export default {
 
             this.$router.push('/');
             this.$dialog.confirm(this.$t('thread.delete.thread'), options)
-                .then(function(dialog) {
+                .then(() => {
                     apiUtils.conversations.delete(id);
                 }).catch(function() { });
         },
@@ -708,9 +708,9 @@ export default {
          */
         compareTimestamps(date, nextDate) {
             let length = 15; // minutes
-            
+
             // If the dates are "length" a part, return date string
-            if (this.$store.state.theme_message_timestamp || 
+            if (this.$store.state.theme_message_timestamp ||
                     nextDate.getTime() > date.getTime() + (1000 * 60 * length)) {
                 return TimeUtils.formatTimestamp(date.getTime(), Date.now())
             } else {
@@ -724,7 +724,7 @@ export default {
     },
 
     watch: {
-        '$route' (to) { // Update thread on route change
+        '$route' () { // Update thread on route change
             this.conversation_id = this.threadId;
             this.read = this.isRead
 

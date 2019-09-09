@@ -1,7 +1,7 @@
 import { Util } from '@/utils'
 
 export default class AutoGrow {
-    
+
     constructor (options) {
 
         this.content     = null;
@@ -9,21 +9,21 @@ export default class AutoGrow {
         this.mirror      = null;
 
         this.row = 0;
-        
+
         this.settings = {
             extra_line: false,
             content_el: undefined
         }
 
         this.content = document.getElementsByClassName("page-content")[0];
-        
+
         if(typeof options.target == "undefined")
-           throw { 
-                name:        "TargetUndefined", 
-                level:       "Severe", 
-                message:     "Target textarea required.", 
-                toString:    function(){return this.name + ": " + this.message;} 
-            }; 
+           throw {
+                name:        "TargetUndefined",
+                level:       "Severe",
+                message:     "Target textarea required.",
+                toString:    function(){return this.name + ": " + this.message;}
+            };
 
         this.textarea = options.target
 
@@ -37,10 +37,10 @@ export default class AutoGrow {
 
         this.setSize();
 
-		this.textarea.onkeyup = this.updateMirrorContent;
-		this.textarea.onfocus = this.updateMirrorContent;
+        this.textarea.onkeyup = this.updateMirrorContent;
+        this.textarea.onfocus = this.updateMirrorContent;
         this.textarea.onchange = this.updateMirrorContent;
-        
+
         this.updateMirrorContent();
 
     }
@@ -75,15 +75,15 @@ export default class AutoGrow {
 
     setSize () {
         this.mirror.style.display = 'none';
-		this.mirror.style.wordWrap = 'break-word';
-		this.mirror.style.whiteSpace = 'pre-wrap';
+        this.mirror.style.wordWrap = 'break-word';
+        this.mirror.style.whiteSpace = 'pre-wrap';
 
-        this.mirror.style.padding = 
+        this.mirror.style.padding =
             this.textarea.style.paddingTop + ' ' +
-			this.textarea.style.paddingRight + ' ' +
-			this.textarea.style.paddingBottom + ' ' +
-			this.textarea.style.paddingLeft;
-            
+            this.textarea.style.paddingRight + ' ' +
+            this.textarea.style.paddingBottom + ' ' +
+            this.textarea.style.paddingLeft;
+
         this.mirror.style.borderStyle = this.textarea.style.borderTopStyle + ' ' +
                 this.textarea.style.borderRightStyle + ' ' +
                 this.textarea.style.borderBottomStyle + ' ' +
@@ -101,7 +101,7 @@ export default class AutoGrow {
         this.mirror.style.letterSpacing = this.textarea.style.letterSpacing;
 
         this.textarea.style.overflow = "hidden";
-		this.textarea.style.minHeight = this.rows + "em";
+        this.textarea.style.minHeight = this.rows + "em";
 
     }
 
@@ -115,7 +115,7 @@ export default class AutoGrow {
             wanted_height = 0;
 
         // if its not hidden we just return normal height
-        if(el_display !== 'none' && el_max_height !== '0') 
+        if(el_display !== 'none' && el_max_height !== '0')
             return el.clientHeight;
 
         // the element is hidden so:
