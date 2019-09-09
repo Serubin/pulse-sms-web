@@ -1,5 +1,5 @@
 
-import { KEYS, state } from '@/store/state.js'
+import { KEYS } from '@/store/state.js'
 
 // called when the store is initialize
 const localStoreSync = store => {
