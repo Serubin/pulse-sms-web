@@ -79,7 +79,7 @@
                         {{ $t('settings.applyprimary') }}
                     </span>
                 </label>
-            </div> 
+            </div>
             <!-- End Apply Primary Color to App Bar -->
 
             <br />
@@ -92,7 +92,7 @@
                         {{ $t('settings.messagetimestamp') }}
                     </span>
                 </label>
-            </div> 
+            </div>
             <!-- End Display Timestamp on Every Message -->
 
             <br />
@@ -105,7 +105,7 @@
                         {{ $t('settings.conversationcategories') }}
                     </span>
                 </label>
-            </div> 
+            </div>
             <!-- End Display Conversations in Date Categories -->
 
             <br />
@@ -142,7 +142,7 @@ export default {
 
     mounted () {
         Api.account.settings.get()
-            .then( response => {
+            .then( () => {
                 this.$store.commit("loading", false);
             })
 
@@ -371,7 +371,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+        background: #E0E0E0;
     }
 
     .click-item:hover {
@@ -380,7 +380,7 @@ export default {
 
     body.dark {
         .item:hover, .click-item:hover {
-        	  background: #202020;
+            background: #202020;
         }
     }
 
@@ -402,8 +402,8 @@ export default {
     }
 
     .mdl-dialog-button-bar {
-      	margin-left: auto;
-      	margin-right: 24px;
+          margin-left: auto;
+          margin-right: 24px;
     }
 
 </style>
