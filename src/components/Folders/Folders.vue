@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import Vue from 'vue';
+
 import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
+import { Api } from '@/utils'
 import FolderItem from './FolderItem.vue'
 import Spinner from '@/components/Spinner.vue'
 

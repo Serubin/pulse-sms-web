@@ -6,8 +6,6 @@
 
 <script>
 
-import store from '@/store/'
-
 export default {
     name: 'folder-item',
     props: [ 'folderData' ],
@@ -36,20 +34,20 @@ export default {
 
     body.dark {
         .item:hover {
-        	  background: #202020;
+            background: #202020;
         }
     }
 
     .item {
-    	height: 40px;
-    	line-height: 40px;
-    	width: 100%;
-    	padding-left: 16px;
+        height: 40px;
+        line-height: 40px;
+        width: 100%;
+        padding-left: 16px;
     }
 
     .item:hover {
-    	background: #E0E0E0;
-    	cursor: pointer;
+        background: #E0E0E0;
+        cursor: pointer;
     }
 
 
