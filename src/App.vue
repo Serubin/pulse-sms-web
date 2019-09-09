@@ -24,7 +24,7 @@
                     </button>
                     </transition-group>
                     <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button" >
-                        <li v-for="item in menu_items" class="mdl-menu__item" :id="item.name + '-btn'" @click.prevent="dispatchMenuButton(item.name)" v-mdl><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item.title }}</a></li>
+                        <li v-for="item in menu_items" class="mdl-menu__item" :key="item.name" :id="item.name + '-btn'" @click.prevent="dispatchMenuButton(item.name)" v-mdl><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item.title }}</a></li>
                     </ul>
                 </div>
             </div>  <!-- End Toolbar-Inner -->
@@ -67,11 +67,9 @@ import { i18n } from '@/utils'
 import '@/lib/sjcl.js'
 import '@/lib/hmacsha1.js'
 
-import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys, Platform } from '@/utils'
+import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys } from '@/utils'
 
 import Sidebar from '@/components/Sidebar.vue'
-import Conversations from '@/components/Conversations/'
-import Splash from '@/components/Splash.vue'
 import Snackbar from '@/components/Snackbar.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 
@@ -526,7 +524,7 @@ export default {
                         return "#000";
                     }
                 }
-                
+
                 if (this.toolbar_color.indexOf("rgb(") > -1 || this.toolbar_color.indexOf("rgba(") > -1) {
                     return Util.getTextColorBasedOnBackground(this.toolbar_color);
                 } else {
@@ -535,7 +533,7 @@ export default {
             } catch (err) {
                 return "#FFF";
             }
-        }, 
+        },
 
         show_search () {
             return this.$route.name.indexOf('conversations-list') > -1;
@@ -543,7 +541,7 @@ export default {
 
         apply_appbar_color () {
             if (this.toolbar_color == 'rgba(255,255,255,1)') {
-                // They have manually set the color to white, for the app bar. 
+                // They have manually set the color to white, for the app bar.
                 // If we didn't do this, then they wouldn't be able to see the settings, refresh, search, etc.
                 return false;
             }
@@ -551,7 +549,7 @@ export default {
         }
     },
     watch: {
-        '$route' (to, from) { // To update dropdown menu
+        '$route' () { // To update dropdown menu
             this.populateMenuItems();
         },
         '$store.state.colors_default' (to) { // Handle theme changes
@@ -560,7 +558,7 @@ export default {
         'theme_str' (to, from) { // Handles updating the body class
             this.updateBodyClass(to, from)
         },
-        'theme_toolbar' (to, from) { // Handle toolbar color change
+        'theme_toolbar' (to) { // Handle toolbar color change
             Vue.nextTick(() => {
                 const toolbar = this.$el.querySelector("#toolbar");
                 Util.materialColorChange(toolbar, to);
@@ -577,8 +575,6 @@ export default {
     },
     components: {
         Sidebar,
-        Conversations,
-        Splash,
         Snackbar,
         ImageViewer
     }
