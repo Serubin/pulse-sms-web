@@ -36,11 +36,10 @@
 
 <script>
 
-import '@/lib/sjcl.js'
-import '@/lib/hmacsha1.js'
-import Vue from 'vue'
-import { Crypto, Url, Api } from '@/utils/'
+import { Crypto, Api } from '@/utils/'
 import Spinner from '@/components/Spinner.vue'
+import { sjcl } from '@/lib/sjcl.js'
+import { hmacSHA1 } from '@/lib/hmacsha1.js'
 
 
 export default {
@@ -100,7 +99,7 @@ export default {
             this.$router.push({ name: 'conversations-list'});
         },
 
-        handleError(data) {
+        handleError() {
             this.password = "";
             this.error = true;
             this.loading = false;
