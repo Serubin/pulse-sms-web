@@ -15,12 +15,12 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="conversation in conversations" 
-                :is="conversation.title ? 'ConversationItem' : 'DayLabel'" 
-                :conversation-data="conversation" 
+            <component v-for="conversation in conversations"
+                :is="conversation.title ? 'ConversationItem' : 'DayLabel'"
+                :conversation-data="conversation"
                 :showPinned="conversation.pinned && !showConversationCategories"
-                :archive="isArchive" 
-                :small="small" 
+                :archive="isArchive"
+                :small="small"
                 :key="conversation.hash ? conversation.hash : conversation.label
             "/>
         </transition-group>
@@ -207,7 +207,7 @@ export default {
                     })
                 }
             }
-            
+
             // Move conversation if required
             let showCategoryOffset = (this.showConversationCategories ? 1 : 0)
             if (conv_index != startIndex + showCategoryOffset) {
@@ -226,7 +226,7 @@ export default {
 
                     // Push label and conversation
                     this.conversations.splice(startIndex, 0, label, conv)
-                } else { 
+                } else {
                     // Else, just push the converstation to index 1 (below label)
                     this.conversations.splice(startIndex + showCategoryOffset, 0, conv)
                 }
@@ -353,11 +353,11 @@ export default {
 
         },
 
-        '$store.state.theme_conversation_categories' (to, from) {
+        '$store.state.theme_conversation_categories' () {
             this.processConversations(this.unFilteredAllConversations, true);
         },
 
-        "searchQuery" (to, from) {
+        "searchQuery" (to) {
             to = to.toLowerCase();
             let filteredConversations = [];
 
