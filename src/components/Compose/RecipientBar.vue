@@ -17,7 +17,7 @@
 import Vue from 'vue'
 import { i18n } from '@/utils'
 
-import '@/lib/auto-complete.min.js'
+import { autoComplete } from '@/lib/auto-complete.js'
 import ContactChip from './ContactChip.vue'
 import { Api, Crypto, Util, SessionCache } from "@/utils/"
 
