@@ -12,6 +12,7 @@
 
 import store from '@/store/'
 import { Util, Api } from '@/utils'
+import { componentHandler } from '@/lib/material.js'
 
 export default {
     name: 'blacklist-item',
@@ -50,20 +51,20 @@ export default {
 
     body.dark {
         .item:hover {
-        	  background: #202020;
+            background: #202020;
         }
     }
 
     .item {
-    	height: 40px;
-    	line-height: 40px;
-    	width: 100%;
-    	padding-left: 16px;
+        height: 40px;
+        line-height: 40px;
+        width: 100%;
+        padding-left: 16px;
     }
 
     .item:hover {
-    	background: #E0E0E0;
-    	cursor: pointer;
+        background: #E0E0E0;
+        cursor: pointer;
     }
 
 </style>

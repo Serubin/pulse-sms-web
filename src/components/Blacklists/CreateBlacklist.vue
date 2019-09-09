@@ -54,8 +54,7 @@
 
 <script>
 
-import Vue from 'vue'
-import { Crypto, Url, Api } from '@/utils/'
+import { Api } from '@/utils/'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
@@ -85,7 +84,7 @@ export default {
             Api.blacklist.create.phone(this.phone)
                 .then((data) => this.handleCreated(data.data));
         },
-        
+
         createPhrase () {
             if (this.phrase == '')
                 return;
@@ -101,7 +100,7 @@ export default {
             this.$router.push({ name: 'blacklists'});
         },
 
-        cancel (data) {
+        cancel () {
             this.$router.push({ name: 'blacklists'});
         }
     },

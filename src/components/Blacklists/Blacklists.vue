@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import Vue from 'vue';
+
 import Hash from 'object-hash'
-import { Util, Api, SessionCache } from '@/utils'
+import { Api } from '@/utils'
 import BlacklistItem from './BlacklistItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
