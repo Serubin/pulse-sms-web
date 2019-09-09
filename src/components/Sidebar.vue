@@ -208,8 +208,8 @@ export default {
     },
 
     watch: {
-        
-        "searchQuery" (to, from) {
+
+        "searchQuery" (to) {
             this.$store.state.msgbus.$emit('searchUpdated', to);
         }
 
