@@ -19,7 +19,6 @@
 
 <script>
 
-import Vue from 'vue'
 import store from '@/store/'
 
 export default {
@@ -60,7 +59,7 @@ export default {
             document.body.removeChild(link);
         },
 
-        downloadUri (uri, name) {
+        downloadUri () {
 
         },
 
