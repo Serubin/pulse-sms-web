@@ -25,8 +25,7 @@
 </template>
 
 <script>
-import { Api, Util } from '@/utils/'
-import Spinner from '@/components/Spinner.vue'
+import { Api } from '@/utils/'
 
 export default {
     name: 'account',
@@ -92,7 +91,6 @@ export default {
     },
 
     components: {
-        Spinner
     }
 }
 </script>
@@ -109,7 +107,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+        background: #E0E0E0;
     }
 
     .click-item:hover {

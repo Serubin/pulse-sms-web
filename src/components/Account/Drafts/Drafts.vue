@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import Vue from 'vue';
+
 import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
+import { Api } from '@/utils'
 import DraftItem from './DraftItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
@@ -95,7 +95,7 @@ export default {
         }
     }
 
-    .flip-list-enter, .flip-list-leave-to	{
+    .flip-list-enter, .flip-list-leave-to  {
         opacity: 0;
     }
 

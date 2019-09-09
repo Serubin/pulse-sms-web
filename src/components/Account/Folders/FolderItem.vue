@@ -11,7 +11,8 @@
 <script>
 
 import store from '@/store/'
-import { Util, Api } from '@/utils'
+import { Api, Util } from '@/utils'
+import { componentHandler } from '@/lib/material.js'
 
 export default {
     name: 'folder-item',
@@ -60,7 +61,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+        background: #E0E0E0;
     }
 
     .click-item:hover {
