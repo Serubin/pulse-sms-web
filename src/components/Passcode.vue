@@ -6,7 +6,7 @@
         <div class="mdl-card__supporting-text">
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" type="password" id="passcode" v-model="passcode" autofocus @keydown.shift.enter.stop @keydown.enter.prevent.stop="continueClicked"/>
+                    <input class="mdl-textfield__input" type="password" id="passcode" v-model="passcode" autofocus @keydown.enter.prevent.stop.exact="continueClicked"/>
                     <label class="mdl-textfield__label" for="passcode">{{ $t('passcode.passcode') }}</label>
                 </div>
             </form>
@@ -20,7 +20,6 @@
 
 <script>
 
-import Vue from 'vue'
 import { Crypto, Util, Api } from '@/utils/'
 
 export default {
