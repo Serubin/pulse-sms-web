@@ -19,7 +19,7 @@ import { i18n } from '@/utils'
 
 import { autoComplete } from '@/lib/auto-complete.js'
 import ContactChip from './ContactChip.vue'
-import { Api, Crypto, Util, SessionCache } from "@/utils/"
+import { Api, Util, SessionCache } from "@/utils/"
 
 export default {
     name: 'RecipientBar',
@@ -110,8 +110,8 @@ export default {
             }
 
             // We also want to add any of the current conversations.
-            // Contacts are not refreshed automatically, so, if the user has a conversation active, but hasn't downloaded the 
-            // actual contact record, we still want to make it available for them on the compose screen. 
+            // Contacts are not refreshed automatically, so, if the user has a conversation active, but hasn't downloaded the
+            // actual contact record, we still want to make it available for them on the compose screen.
             // This is jus for convienence. We will use the conversations in the cache.
             const conversations = SessionCache.getConversations('index_public_unarchived');
             if (conversations) {
@@ -144,16 +144,16 @@ export default {
                 selector: this.$el.querySelector("#recipient"),
                 minChars: 2,
                 source: function(term, suggest) { suggest(matcher(term)); },
-                renderItem: function (contact, search) {
+                renderItem: function (contact) {
                     if (contact.id == null) {
                         return `<div class="autocomplete-suggestion">${i18n.t('compose.cantfind')}</div>`;
                     } else {
                         let display = contact.name + ' ' + contact.phone;
                         if (contact.type) {
                             switch (contact.type) {
-                                case -1: 
+                                case -1:
                                     break;
-                                case 0: 
+                                case 0:
                                     display = display + ' (' + i18n.t('contact.group') + ')';
                                     break;
                                 case 1:
@@ -162,7 +162,7 @@ export default {
                                 case 2:
                                     display = display + ' (' + i18n.t('contact.mobile') + ')';
                                     break;
-                                case 3: 
+                                case 3:
                                     display = display + ' (' + i18n.t('contact.work') + ')';
                                     break;
                                 default:
@@ -208,7 +208,7 @@ export default {
             let enteredText = this.$el.querySelector("#recipient").value;
             if (enteredText.length > 0) {
                 let split = enteredText.split(/;|,/g); // split using ";" or ","
-                split.forEach((contact, i) => {
+                split.forEach((contact) => {
                     if (contact.length > 0) {
                         contact = contact.replace(/ /g, "");
                         this.addContact({

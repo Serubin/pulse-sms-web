@@ -6,10 +6,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { i18n } from '@/utils'
 
-import { Api, Crypto, Util } from "@/utils/"
+import { Api, Util } from "@/utils/"
 import Sendbar from '../Thread/Sendbar.vue'
 import RecipientBar from './RecipientBar.vue'
 
