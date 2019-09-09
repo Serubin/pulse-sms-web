@@ -10,7 +10,7 @@ import { i18n } from '@/utils'
 
 import 'vuejs-dialog/dist/vuejs-dialog.min.css';
 import '@/lib/dialog.min.css';
-import '@/lib/material.min.js'
+import { componentHandler } from '@/lib/material.js';
 
 Vue.config.productionTip = false
 
