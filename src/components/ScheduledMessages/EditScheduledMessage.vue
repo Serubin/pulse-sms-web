@@ -11,7 +11,7 @@
             </div>
             Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
             <select class="repeat" v-model="repeat">
-                <option v-for="option in repeatOptions" v-bind:value="option.value">
+                <option v-for="option in repeatOptions" :value="option.value" :key="option.value">
                     {{ option.text }}
                 </option>
             </select>
@@ -33,9 +33,8 @@
 
 <script>
 
-import Vue from 'vue'
 import 'flatpickr/dist/flatpickr.css'
-import { Crypto, Url, Api } from '@/utils/'
+import { Api } from '@/utils/'
 import Spinner from '@/components/Spinner.vue'
 import FlatPickr from 'vue-flatpickr-component'
 

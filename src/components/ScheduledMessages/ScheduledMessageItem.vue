@@ -20,6 +20,7 @@
 
 import store from '@/store/'
 import { Util, Api } from '@/utils'
+import { componentHandler } from '@/lib/material.js'
 
 export default {
     name: 'scheduled-message-item',
@@ -54,12 +55,12 @@ export default {
 
         editMessage () {
             this.$router.push({
-                name: 'edit-scheduled-message', params: { 
-                    message_id: this.id, 
-                    original_to: this.to, 
-                    original_title: this.title, 
-                    original_data: this.data, 
-                    original_timestamp: this.timestamp, 
+                name: 'edit-scheduled-message', params: {
+                    message_id: this.id,
+                    original_to: this.to,
+                    original_title: this.title,
+                    original_data: this.data,
+                    original_timestamp: this.timestamp,
                     original_repeat: this.repeat
                 }
             });
