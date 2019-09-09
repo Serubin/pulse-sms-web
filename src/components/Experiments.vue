@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import { i18n } from '@/utils/'
 
 export default {
     name: 'experiments',
