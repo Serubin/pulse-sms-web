@@ -29,6 +29,19 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'ScheduledMessages',
 
+    components: {
+        ScheduledMessageItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "",
+            loading: true,
+            scheduled_messages: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -81,19 +94,6 @@ export default {
         createScheduledMessage () {
             this.$router.push({ name: 'create-scheduled-message'});
         }
-    },
-
-    data () {
-        return {
-            title: "",
-            loading: true,
-            scheduled_messages: [],
-        }
-    },
-
-    components: {
-        ScheduledMessageItem,
-        Spinner
     }
 }
 </script>

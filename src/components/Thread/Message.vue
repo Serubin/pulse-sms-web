@@ -50,6 +50,72 @@ export default {
     name: 'Message',
     props: [ 'messageData', 'threadColor', 'textColor' ],
 
+    data () {
+        return {
+            id: this.messageData.device_id,
+            mime: this.messageData.mime_type,
+            content: this.messageData.data,
+            type: this.messageData.message_type,
+            timestamp: this.messageData.timestamp,
+            message_from: this.messageData.message_from,
+
+            color: 'rgba(255,255,255,1)',
+            style_class: [ ],
+            is_media: false,
+            is_article: false,
+            media_loading: true,
+            media_link: "",
+            media_thumb: "",
+            media_title: "",
+            media_content: "",
+            video_src: "",
+            audio_src: "",
+
+            options_class: [ ],
+            displayOptions: false
+        }
+    },
+
+    computed: {
+        sending () {
+            return this.type == 2 && (new Date().getTime() - this.timestamp) < 1000 * 60 ? true : false;
+        },
+        stringTime () {
+            return TimeUtils.fullTimestamp(new Date(this.timestamp));
+        },
+        styleGenerator () {
+            // Only style recieved and media
+            if (this.type != 0 && this.type != 6)
+                return "";
+
+            let media = "";
+            if (this.is_article || this.is_media)
+                media = "padding-bottom:10px;"
+
+            return "background: " + this.color + ";"
+                  + "border-color: " + this.color
+                  + " transparent;" + media
+                  + "color:" + this.textColor + ";";
+        },
+        dateType () {
+            if (this.type == 0 || this.type == 6)
+                return "date-received"
+            return "date-sent"
+        },
+        dateLabel () {
+            let from = this.messageData.fromLabel;
+            let dateLabel = this.messageData.dateLabel;
+
+            if (from != null && from.length > 0 && dateLabel != null) {
+                return from + " - " + dateLabel;
+            } else if (from != null && from.length > 0) {
+                return from;
+            } else {
+                return dateLabel;
+            }
+        }
+    },
+
     mounted () {
         if (this.messageData.marker)
             return;
@@ -203,32 +269,6 @@ export default {
     beforeDestroy () {
         this.$store.state.msgbus.$off('updateMessageType-' + this.id, this.updateType);
     },
-
-    data () {
-        return {
-            id: this.messageData.device_id,
-            mime: this.messageData.mime_type,
-            content: this.messageData.data,
-            type: this.messageData.message_type,
-            timestamp: this.messageData.timestamp,
-            message_from: this.messageData.message_from,
-
-            color: 'rgba(255,255,255,1)',
-            style_class: [ ],
-            is_media: false,
-            is_article: false,
-            media_loading: true,
-            media_link: "",
-            media_thumb: "",
-            media_title: "",
-            media_content: "",
-            video_src: "",
-            audio_src: "",
-
-            options_class: [ ],
-            displayOptions: false
-        }
-    },
     methods: {
         refreshSettings () {
             Api.account.settings.get();
@@ -300,46 +340,6 @@ export default {
             }
         }
 
-    },
-
-    computed: {
-        sending () {
-            return this.type == 2 && (new Date().getTime() - this.timestamp) < 1000 * 60 ? true : false;
-        },
-        stringTime () {
-            return TimeUtils.fullTimestamp(new Date(this.timestamp));
-        },
-        styleGenerator () {
-            // Only style recieved and media
-            if (this.type != 0 && this.type != 6)
-                return "";
-
-            let media = "";
-            if (this.is_article || this.is_media)
-                media = "padding-bottom:10px;"
-
-            return "background: " + this.color + ";"
-                  + "border-color: " + this.color
-                  + " transparent;" + media
-                  + "color:" + this.textColor + ";";
-        },
-        dateType () {
-            if (this.type == 0 || this.type == 6)
-                return "date-received"
-            return "date-sent"
-        },
-        dateLabel () {
-            let from = this.messageData.fromLabel;
-            let dateLabel = this.messageData.dateLabel;
-
-            if (from != null && from.length > 0 && dateLabel != null) {
-                return from + " - " + dateLabel;
-            } else if (from != null && from.length > 0) {
-                return from;
-            } else {
-                return dateLabel;
-            }
-        }
     }
 }
 </script>

@@ -20,6 +20,18 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'Folders',
 
+    components: {
+        FolderItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Folders",
+            folders: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -66,18 +78,6 @@ export default {
         refresh () {
             this.fetchFolders();
         }
-    },
-
-    data () {
-        return {
-            title: "Folders",
-            folders: [],
-        }
-    },
-
-    components: {
-        FolderItem,
-        Spinner
     }
 }
 </script>

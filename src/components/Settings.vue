@@ -163,23 +163,6 @@ import { Api, Util, Platform, i18n } from '@/utils/'
 export default {
     name: 'Settings',
 
-    mounted () {
-        Api.account.settings.get()
-            .then( () => {
-                this.$store.commit("loading", false);
-            })
-
-        this.$store.commit('title', this.title);
-        this.$store.state.msgbus.$on('refresh-btn', this.refreshSettings);
-
-        let theme_menu_el = this.$el.querySelector("#base-theme-menu")
-        this.theme_menu = theme_menu_el.MaterialMenu;
-    },
-
-    beforeDestroy () {
-        this.$store.state.msgbus.$off('refresh-btn', this.refreshSettings);
-    },
-
     data () {
         return {
             title: "Settings",
@@ -246,6 +229,75 @@ export default {
         showNotification () {
             return Platform.isWebsite();
         }
+    },
+    watch: {
+        'show_notifications' () {
+            this.$store.commit('notifications', this.show_notifications);
+        },
+        'enter_to_send' () {
+            this.$store.commit('enter_to_send', this.enter_to_send);
+        },
+        'global_theme' () {
+            this.$store.commit('theme_use_global', this.global_theme)
+            Api.account.settings.update("apply_theme_globally", "boolean", this.global_theme)
+        },
+        'theme_appbar' () {
+            this.$store.commit('theme_apply_appbar_color', this.theme_appbar)
+            Api.account.settings.update("apply_primary_color_toolbar", "boolean", this.theme_appbar)
+        },
+        'theme_conversation_categories' () {
+            this.$store.commit('theme_conversation_categories', this.theme_conversation_categories)
+            Api.account.settings.update("conversation_categories", "boolean", this.theme_conversation_categories)
+        },
+        'theme_message_timestamp' () {
+            this.$store.commit('theme_message_timestamp', this.theme_message_timestamp)
+            Api.account.settings.update("message_timestamp", "boolean", this.theme_message_timestamp)
+        },
+        'theme' () {
+            this.$store.commit('theme_base', this.theme),
+            Api.account.settings.update("base_theme", "string", this.theme)
+        },
+        '$store.state.theme_global_default' () {
+            const color = this.$store.state.theme_global_default;
+            if (!color) {
+                this.theme_default = "#1775D2";
+            } else {
+                this.theme_default = this.rgbaToHex(color);
+            }
+        },
+        '$store.state.theme_global_dark' () {
+            const color = this.$store.state.theme_global_dark;
+            if (!color) {
+                this.theme_dark = "#1665C0";
+            } else {
+                this.theme_dark = this.rgbaToHex(color);
+            }
+        },
+        '$store.state.theme_global_accent' () {
+            const color = this.$store.state.theme_global_accent;
+            if (!color) {
+                this.theme_accent = "#FF6E40";
+            } else {
+                this.theme_accent = this.rgbaToHex(color);
+            }
+        }
+    },
+
+    mounted () {
+        Api.account.settings.get()
+            .then( () => {
+                this.$store.commit("loading", false);
+            })
+
+        this.$store.commit('title', this.title);
+        this.$store.state.msgbus.$on('refresh-btn', this.refreshSettings);
+
+        let theme_menu_el = this.$el.querySelector("#base-theme-menu")
+        this.theme_menu = theme_menu_el.MaterialMenu;
+    },
+
+    beforeDestroy () {
+        this.$store.state.msgbus.$off('refresh-btn', this.refreshSettings);
     },
 
     methods: {
@@ -322,58 +374,6 @@ export default {
             this.closeColorDialog();
         }
 
-    },
-    watch: {
-        'show_notifications' () {
-            this.$store.commit('notifications', this.show_notifications);
-        },
-        'enter_to_send' () {
-            this.$store.commit('enter_to_send', this.enter_to_send);
-        },
-        'global_theme' () {
-            this.$store.commit('theme_use_global', this.global_theme)
-            Api.account.settings.update("apply_theme_globally", "boolean", this.global_theme)
-        },
-        'theme_appbar' () {
-            this.$store.commit('theme_apply_appbar_color', this.theme_appbar)
-            Api.account.settings.update("apply_primary_color_toolbar", "boolean", this.theme_appbar)
-        },
-        'theme_conversation_categories' () {
-            this.$store.commit('theme_conversation_categories', this.theme_conversation_categories)
-            Api.account.settings.update("conversation_categories", "boolean", this.theme_conversation_categories)
-        },
-        'theme_message_timestamp' () {
-            this.$store.commit('theme_message_timestamp', this.theme_message_timestamp)
-            Api.account.settings.update("message_timestamp", "boolean", this.theme_message_timestamp)
-        },
-        'theme' () {
-            this.$store.commit('theme_base', this.theme),
-            Api.account.settings.update("base_theme", "string", this.theme)
-        },
-        '$store.state.theme_global_default' () {
-            const color = this.$store.state.theme_global_default;
-            if (!color) {
-                this.theme_default = "#1775D2";
-            } else {
-                this.theme_default = this.rgbaToHex(color);
-            }
-        },
-        '$store.state.theme_global_dark' () {
-            const color = this.$store.state.theme_global_dark;
-            if (!color) {
-                this.theme_dark = "#1665C0";
-            } else {
-                this.theme_dark = this.rgbaToHex(color);
-            }
-        },
-        '$store.state.theme_global_accent' () {
-            const color = this.$store.state.theme_global_accent;
-            if (!color) {
-                this.theme_accent = "#FF6E40";
-            } else {
-                this.theme_accent = this.rgbaToHex(color);
-            }
-        }
     }
 }
 </script>

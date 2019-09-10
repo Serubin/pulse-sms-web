@@ -28,13 +28,6 @@ export default {
     name: 'DraftItem',
     props: [ 'draftData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#draft-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.draftData.device_id,
@@ -43,6 +36,13 @@ export default {
             mime_type: this.draftData.mime_type,
             menu: null,
         }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#draft-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {

@@ -19,6 +19,18 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'AutoReplies',
 
+    components: {
+        AutoReplyItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Auto Replies",
+            replies: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -65,18 +77,6 @@ export default {
         refresh () {
             this.fetchAutoReplies();
         }
-    },
-
-    data () {
-        return {
-            title: "Auto Replies",
-            replies: [],
-        }
-    },
-
-    components: {
-        AutoReplyItem,
-        Spinner
     }
 }
 </script>

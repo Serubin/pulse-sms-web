@@ -24,26 +24,11 @@
 export default {
     name: 'Experiments',
 
-    mounted () {
-        this.$store.commit('title', this.title);
-        this.$store.state.msgbus.$on('refresh-btn', this.refreshExperiments);
-    },
-
-    beforeDestroy () {
-        this.$store.state.msgbus.$off('refresh-btn', this.refreshExperiments);
-    },
-
     data () {
         return {
             title: "Experiments",
             larger_app_bar: this.$store.state.larger_app_bar,
         }
-    },
-
-    methods: {
-        refreshExperiments () {
-
-        },
     },
     watch: {
         'larger_app_bar' () {
@@ -60,6 +45,21 @@ export default {
                 body.className = body.className.replace(` ${LARGER_APP_BAR} `, "");
 
         }
+    },
+
+    mounted () {
+        this.$store.commit('title', this.title);
+        this.$store.state.msgbus.$on('refresh-btn', this.refreshExperiments);
+    },
+
+    beforeDestroy () {
+        this.$store.state.msgbus.$off('refresh-btn', this.refreshExperiments);
+    },
+
+    methods: {
+        refreshExperiments () {
+
+        },
     }
 }
 </script>

@@ -81,15 +81,15 @@
 export default {
     name: 'HelpFeedback',
 
-    mounted () {
-        this.$store.commit('title', this.title);
-    },
-
     data () {
         return {
             title: "Help and Feedback",
             loading: false,
         }
+    },
+
+    mounted () {
+        this.$store.commit('title', this.title);
     },
 
     methods: {

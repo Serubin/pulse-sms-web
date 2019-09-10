@@ -29,6 +29,19 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'Blacklists',
 
+    components: {
+        BlacklistItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "",
+            loading: true,
+            blacklists: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -81,19 +94,6 @@ export default {
         createBlacklist () {
             this.$router.push({ name: 'create-blacklist'});
         }
-    },
-
-    data () {
-        return {
-            title: "",
-            loading: true,
-            blacklists: [],
-        }
-    },
-
-    components: {
-        BlacklistItem,
-        Spinner
     }
 }
 </script>

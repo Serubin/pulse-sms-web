@@ -23,19 +23,19 @@ export default {
     name: 'TemplateItem',
     props: [ 'templateData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#template-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.templateData.device_id,
             text: this.templateData.text,
             menu: null,
         }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#template-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {

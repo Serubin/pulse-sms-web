@@ -20,6 +20,18 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'Drafts',
 
+    components: {
+        DraftItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Drafts",
+            drafts: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -66,18 +78,6 @@ export default {
         refresh () {
             this.fetchDrafts();
         }
-    },
-
-    data () {
-        return {
-            title: "Drafts",
-            drafts: [],
-        }
-    },
-
-    components: {
-        DraftItem,
-        Spinner
     }
 }
 </script>

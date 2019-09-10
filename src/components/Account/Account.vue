@@ -53,15 +53,7 @@ import { Api } from '@/utils/'
 export default {
     name: 'Account',
 
-    mounted () {
-        this.fetchAccount()
-
-        this.$store.commit('title', this.title);
-        this.$store.state.msgbus.$on('refresh-btn', this.fetchAccounnt);
-    },
-
-    beforeDestroy () {
-        this.$store.state.msgbus.$off('refresh-btn', this.fetchAccount);
+    components: {
     },
 
     data () {
@@ -92,6 +84,17 @@ export default {
         }
     },
 
+    mounted () {
+        this.fetchAccount()
+
+        this.$store.commit('title', this.title);
+        this.$store.state.msgbus.$on('refresh-btn', this.fetchAccounnt);
+    },
+
+    beforeDestroy () {
+        this.$store.state.msgbus.$off('refresh-btn', this.fetchAccount);
+    },
+
     methods: {
         fetchAccount () {
             Api.account.get().then(response => this.processAccount(response));
@@ -111,9 +114,6 @@ export default {
                 this.$router.push({ name: route });
             }
         }
-    },
-
-    components: {
     }
 }
 </script>

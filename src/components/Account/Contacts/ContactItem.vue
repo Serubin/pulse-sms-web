@@ -28,13 +28,6 @@ export default {
     name: 'ContactItem',
     props: [ 'contactData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#contact-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.contactData.id,
@@ -42,6 +35,13 @@ export default {
             phone_number: this.contactData.phone_number,
             menu: null,
         }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#contact-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {

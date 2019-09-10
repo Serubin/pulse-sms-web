@@ -25,6 +25,19 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'Folders',
 
+    components: {
+        FolderItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "",
+            loading: true,
+            folders: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -73,19 +86,6 @@ export default {
             this.loading = true;
             this.fetchFolders();
         }
-    },
-
-    data () {
-        return {
-            title: "",
-            loading: true,
-            folders: [],
-        }
-    },
-
-    components: {
-        FolderItem,
-        Spinner
     }
 }
 </script>

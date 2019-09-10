@@ -23,19 +23,19 @@ export default {
     name: 'FolderItem',
     props: [ 'folderData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#folder-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.folderData.device_id,
             name: this.folderData.name,
             menu: null,
         }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#folder-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {

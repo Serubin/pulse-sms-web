@@ -20,6 +20,18 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'Contacts',
 
+    components: {
+        ContactItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Contacts",
+            contacts: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -66,18 +78,6 @@ export default {
         refresh () {
             this.fetchContacts();
         }
-    },
-
-    data () {
-        return {
-            title: "Contacts",
-            contacts: [],
-        }
-    },
-
-    components: {
-        ContactItem,
-        Spinner
     }
 }
 </script>

@@ -23,13 +23,6 @@ export default {
     name: 'BlacklistItem',
     props: [ 'blacklistData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#blacklist-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.blacklistData.device_id,
@@ -37,6 +30,13 @@ export default {
             phrase: this.blacklistData.phrase,
             menu: null,
         }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#blacklist-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {

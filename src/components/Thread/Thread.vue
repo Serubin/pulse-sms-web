@@ -31,7 +31,64 @@ import Sendbar from './Sendbar.vue'
 
 export default {
     name: 'Thread',
+
+    components: {
+        Spinner,
+        Message,
+        Sendbar,
+    },
     props: ['threadId', 'isRead'],
+
+    data () {
+        return {
+            conversation_id: this.threadId,
+            read: this.isRead,
+            messages: [],
+
+            previous_title: "",
+            listeners: [],
+
+            colors_from: {},
+            margin_bottom: "63",
+
+            html: null,
+            body: null,
+            list: null,
+            snackbar: null,
+            sendbar: null,
+
+            offset: 0,
+        }
+    },
+
+    computed: {
+
+        conversation_data () {
+            return this.$store.getters.getConversationData(this.conversation_id);
+        },
+
+        color () {
+            if (this.$store.state.theme_use_global) {
+                return this.$store.state.theme_global_default;
+            } else {
+                return this.conversation_data.colors.default;
+            }
+        },
+
+        isArchived () {
+            return this.$route.path.indexOf("archived") > -1;
+        },
+    },
+
+    watch: {
+        '$route' () { // Update thread on route change
+            this.conversation_id = this.threadId;
+            this.read = this.isRead
+
+            this.loadThread();
+
+        },
+    },
 
 
     mounted () {
@@ -182,47 +239,6 @@ export default {
         // Remove any loaded media
         if (this.$store.state.loaded_media)
             this.$store.commit('loaded_media', null);
-    },
-
-    data () {
-        return {
-            conversation_id: this.threadId,
-            read: this.isRead,
-            messages: [],
-
-            previous_title: "",
-            listeners: [],
-
-            colors_from: {},
-            margin_bottom: "63",
-
-            html: null,
-            body: null,
-            list: null,
-            snackbar: null,
-            sendbar: null,
-
-            offset: 0,
-        }
-    },
-
-    computed: {
-
-        conversation_data () {
-            return this.$store.getters.getConversationData(this.conversation_id);
-        },
-
-        color () {
-            if (this.$store.state.theme_use_global) {
-                return this.$store.state.theme_global_default;
-            } else {
-                return this.conversation_data.colors.default;
-            }
-        },
-
-        isArchived () {
-            return this.$route.path.indexOf("archived") > -1;
-        },
     },
 
     methods: {
@@ -722,22 +738,6 @@ export default {
         handleShowMore() {
             this.fetchMessages(this.offset);
         }
-    },
-
-    watch: {
-        '$route' () { // Update thread on route change
-            this.conversation_id = this.threadId;
-            this.read = this.isRead
-
-            this.loadThread();
-
-        },
-    },
-
-    components: {
-        Spinner,
-        Message,
-        Sendbar,
     }
 }
 </script>

@@ -24,6 +24,13 @@ import store from '@/store/'
 export default {
     name: 'Imageviewer',
 
+    data () {
+        return {
+            image_data: "",
+            display: false,
+        }
+    },
+
     mounted () {
         store.state.msgbus.$on('showImage', this.showImage);
         store.state.msgbus.$on('hideImage', this.close);
@@ -34,13 +41,6 @@ export default {
         this.$store.state.msgbus.$off('showImage', this.showImage);
         this.$store.state.msgbus.$off('hideImage', this.close);
         this.$store.state.msgbus.$off('hotkey-esc', this.close);
-    },
-
-    data () {
-        return {
-            image_data: "",
-            display: false,
-        }
     },
 
     methods: {

@@ -31,6 +31,14 @@ import { Crypto, Util, Api } from '@/utils/'
 export default {
     name: 'Passcode',
 
+    data () {
+        return {
+            title: "",
+            passcode: "",
+            stored_passcode: null
+        }
+    },
+
     mounted () {
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
@@ -38,14 +46,6 @@ export default {
         Api.account.settings.get().then(response => {
             this.stored_passcode = Crypto.decrypt(response.passcode);
         })
-    },
-
-    data () {
-        return {
-            title: "",
-            passcode: "",
-            stored_passcode: null
-        }
     },
 
     methods: {

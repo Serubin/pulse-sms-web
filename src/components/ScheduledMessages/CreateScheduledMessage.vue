@@ -48,9 +48,10 @@ import RecipientBar from '../Compose/RecipientBar.vue'
 export default {
     name: 'CreateScheduledMessage',
 
-    mounted () {
-        this.$store.commit("loading", false);
-        this.$store.commit('title', "");
+    components: {
+        Spinner,
+        FlatPickr,
+        RecipientBar
     },
 
     data () {
@@ -73,6 +74,11 @@ export default {
                 { text: this.$t('scheduled.repeat.yearly'), value: '4' }
             ]
         }
+    },
+
+    mounted () {
+        this.$store.commit("loading", false);
+        this.$store.commit('title', "");
     },
 
     methods: {
@@ -113,12 +119,6 @@ export default {
         cancel () {
             this.$router.push({ name: 'scheduled-messages'});
         }
-    },
-
-    components: {
-        Spinner,
-        FlatPickr,
-        RecipientBar
     }
 }
 </script>

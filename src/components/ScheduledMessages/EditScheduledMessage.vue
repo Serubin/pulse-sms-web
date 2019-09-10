@@ -46,12 +46,12 @@ import FlatPickr from 'vue-flatpickr-component'
 
 export default {
     name: 'CreateScheduledMessage',
-    props: [ 'message_id', 'original_data', 'original_timestamp', 'original_to', 'original_title', 'original_repeat' ],
 
-    mounted () {
-        this.$store.commit("loading", false);
-        this.$store.commit('title', "");
+    components: {
+        Spinner,
+        FlatPickr
     },
+    props: [ 'messageId', 'originalData', 'originalTimestamp', 'originalTo', 'originalTitle', 'originalRepeat' ],
 
     data () {
         return {
@@ -75,6 +75,11 @@ export default {
         }
     },
 
+    mounted () {
+        this.$store.commit("loading", false);
+        this.$store.commit('title', "");
+    },
+
     methods: {
         save () {
             if (this.to == '' || this.message == '')
@@ -95,11 +100,6 @@ export default {
         cancel () {
             this.$router.push({ name: 'scheduled-messages'});
         }
-    },
-
-    components: {
-        Spinner,
-        FlatPickr
     }
 }
 </script>

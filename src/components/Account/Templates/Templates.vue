@@ -19,6 +19,18 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'Templates',
 
+    components: {
+        TemplateItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Templates",
+            templates: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -65,18 +77,6 @@ export default {
         refresh () {
             this.fetchTemplates();
         }
-    },
-
-    data () {
-        return {
-            title: "Templates",
-            templates: [],
-        }
-    },
-
-    components: {
-        TemplateItem,
-        Spinner
     }
 }
 </script>

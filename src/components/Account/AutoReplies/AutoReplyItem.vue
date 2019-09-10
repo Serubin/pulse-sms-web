@@ -28,13 +28,6 @@ export default {
     name: 'AutoReplyItem',
     props: [ 'replyData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#reply-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.replyData.device_id,
@@ -42,6 +35,13 @@ export default {
             reply_type: this.replyData.reply_type,
             menu: null,
         }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#reply-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {

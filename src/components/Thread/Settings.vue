@@ -77,17 +77,7 @@ import { Api, Util, SessionCache } from '@/utils/'
 
 export default {
     name: 'ConversationSettings',
-    props: [ 'conversation_title', 'conversation_id' ],
-
-    mounted () {
-        SessionCache.invalidateAllConversations();
-
-        Api.conversations.getById(this.conversation_id)
-            .then(response => this.processConversation(response))
-
-        this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
-    },
+    props: [ 'conversationTitle', 'conversationId' ],
 
     data () {
         return {
@@ -103,6 +93,56 @@ export default {
             private_class: "",
             showColorSettings: false
         }
+    },
+
+    computed: {
+
+        colors_string () {
+            if (this.colors.default == null) {
+                return "Loading...";
+            } else {
+                const defaultHex = this.rgbaToHex(this.colors.default);
+                const darkHex = this.rgbaToHex(this.colors.dark);
+                const accentHex = this.rgbaToHex(this.colors.accent);
+
+                return defaultHex + ", " + darkHex + ", " + accentHex;
+            }
+        },
+
+    },
+
+    watch: {
+        'pin' () {
+            let request = {
+                account_id: this.$store.state.account_id,
+                pinned: this.pin,
+            };
+            Api.conversations.update(this.conversation_id, request);
+        },
+        'mute' () {
+            let request = {
+                account_id: this.$store.state.account_id,
+                mute: this.mute
+            };
+            Api.conversations.update(this.conversation_id, request);
+        },
+        'private_notifications' () {
+            let request = {
+                account_id: this.$store.state.account_id,
+                private_notifications: this.private_notifications
+            };
+            Api.conversations.update(this.conversation_id, request);
+        }
+    },
+
+    mounted () {
+        SessionCache.invalidateAllConversations();
+
+        Api.conversations.getById(this.conversation_id)
+            .then(response => this.processConversation(response))
+
+        this.$store.commit("loading", false);
+        this.$store.commit('title', this.title);
     },
 
     methods: {
@@ -199,46 +239,6 @@ export default {
             this.closeColorDialog();
         }
 
-    },
-
-    computed: {
-
-        colors_string () {
-            if (this.colors.default == null) {
-                return "Loading...";
-            } else {
-                const defaultHex = this.rgbaToHex(this.colors.default);
-                const darkHex = this.rgbaToHex(this.colors.dark);
-                const accentHex = this.rgbaToHex(this.colors.accent);
-
-                return defaultHex + ", " + darkHex + ", " + accentHex;
-            }
-        },
-
-    },
-
-    watch: {
-        'pin' () {
-            let request = {
-                account_id: this.$store.state.account_id,
-                pinned: this.pin,
-            };
-            Api.conversations.update(this.conversation_id, request);
-        },
-        'mute' () {
-            let request = {
-                account_id: this.$store.state.account_id,
-                mute: this.mute
-            };
-            Api.conversations.update(this.conversation_id, request);
-        },
-        'private_notifications' () {
-            let request = {
-                account_id: this.$store.state.account_id,
-                private_notifications: this.private_notifications
-            };
-            Api.conversations.update(this.conversation_id, request);
-        }
     }
 }
 </script>

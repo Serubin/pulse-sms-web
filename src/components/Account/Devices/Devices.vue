@@ -20,6 +20,18 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'Devices',
 
+    components: {
+        DeviceItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Devices",
+            devices: [],
+        }
+    },
+
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
 
@@ -66,18 +78,6 @@ export default {
         refresh () {
             this.fetchDevices();
         }
-    },
-
-    data () {
-        return {
-            title: "Devices",
-            devices: [],
-        }
-    },
-
-    components: {
-        DeviceItem,
-        Spinner
     }
 }
 </script>

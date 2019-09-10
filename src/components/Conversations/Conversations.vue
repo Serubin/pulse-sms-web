@@ -45,7 +45,82 @@ import emojione from 'emojione'
 
 export default {
     name: 'Conversations',
+
+    components: {
+        ConversationItem,
+        DayLabel,
+        Spinner
+    },
     props: ['small', 'index', 'folderId', 'folderName'],
+
+    data () {
+        return {
+            title: "",
+            loading: true,
+            conversations: [],
+            unFilteredAllConversations: [],
+            margin: 0,
+            searchClicked: false,
+            searchQuery: ""
+        }
+    },
+
+    computed: {
+        isArchive () {
+            return this.index == "index_archived";
+        },
+
+        composeStyle () {
+            return "background: " + this.$store.state.colors_accent + ";"
+        },
+
+        showSearch () {
+            return this.searchClicked && !this.small;
+        },
+
+        showConversationCategories () {
+            return this.$store.state.theme_conversation_categories
+        }
+    },
+
+    watch: {
+        '$route' (to, from) { // Update index on route change
+
+            // Only update if list page
+            if (to.name != from.name && to.name.indexOf('conversations-list') >= 0) {
+                this.conversations = [];
+                this.unFilteredAllConversations = [];
+
+                this.fetchConversations();
+            }
+
+        },
+
+        '$store.state.theme_conversation_categories' () {
+            this.processConversations(this.unFilteredAllConversations, true);
+        },
+
+        "searchQuery" (to) {
+            to = to.toLowerCase();
+            let filteredConversations = [];
+
+            for (let i in this.unFilteredAllConversations) {
+                let conversation = this.unFilteredAllConversations[i];
+
+                if (typeof conversation == "function") {
+                    continue;
+                }
+
+                if (conversation.title.toLowerCase().indexOf(to) > -1 ||
+                        conversation.snippet.toLowerCase().indexOf(to) > -1 ||
+                        conversation.phone_numbers.indexOf(to) > -1) {
+                    filteredConversations.push(conversation);
+                }
+            }
+
+            this.processConversations(filteredConversations, false);
+        }
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('newMessage', this.updateConversation);
@@ -310,81 +385,6 @@ export default {
             else
                 return i18n.t('conversations.older');
         }
-    },
-
-    data () {
-        return {
-            title: "",
-            loading: true,
-            conversations: [],
-            unFilteredAllConversations: [],
-            margin: 0,
-            searchClicked: false,
-            searchQuery: ""
-        }
-    },
-
-    computed: {
-        isArchive () {
-            return this.index == "index_archived";
-        },
-
-        composeStyle () {
-            return "background: " + this.$store.state.colors_accent + ";"
-        },
-
-        showSearch () {
-            return this.searchClicked && !this.small;
-        },
-
-        showConversationCategories () {
-            return this.$store.state.theme_conversation_categories
-        }
-    },
-
-    watch: {
-        '$route' (to, from) { // Update index on route change
-
-            // Only update if list page
-            if (to.name != from.name && to.name.indexOf('conversations-list') >= 0) {
-                this.conversations = [];
-                this.unFilteredAllConversations = [];
-
-                this.fetchConversations();
-            }
-
-        },
-
-        '$store.state.theme_conversation_categories' () {
-            this.processConversations(this.unFilteredAllConversations, true);
-        },
-
-        "searchQuery" (to) {
-            to = to.toLowerCase();
-            let filteredConversations = [];
-
-            for (let i in this.unFilteredAllConversations) {
-                let conversation = this.unFilteredAllConversations[i];
-
-                if (typeof conversation == "function") {
-                    continue;
-                }
-
-                if (conversation.title.toLowerCase().indexOf(to) > -1 ||
-                        conversation.snippet.toLowerCase().indexOf(to) > -1 ||
-                        conversation.phone_numbers.indexOf(to) > -1) {
-                    filteredConversations.push(conversation);
-                }
-            }
-
-            this.processConversations(filteredConversations, false);
-        }
-    },
-
-    components: {
-        ConversationItem,
-        DayLabel,
-        Spinner
     }
 }
 </script>

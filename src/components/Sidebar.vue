@@ -79,6 +79,53 @@ import { Util } from '@/utils'
 export default {
     name: 'Sidebar',
 
+    components: {
+        Conversations
+    },
+
+    data () {
+        return {
+            links: {
+                'conversations': { name: 'conversations-list'},
+                'unread': { name: 'conversations-list-unread'},
+                'archive': { name: 'conversations-list-archived'},
+                'blacklists': { name: 'blacklists'},
+                'private': { name: 'conversations-list-private' },
+                'folders': { name: 'folders' },
+                'scheduled': { name: 'scheduled-messages' }
+            },
+            listeners: [],
+            searchQuery: "",
+        }
+    },
+
+    computed: {
+        marginLeft () { // Handles margins
+            if(this.open)
+                return "margin-left: 0px;";
+            else
+                return "margin-left: -269px;";
+        },
+        open () { // Sidebar_open state
+            return this.$store.state.sidebar_open;
+        },
+        full_theme () { // Full_theme state
+            return this.$store.state.full_theme;
+        },
+        showConversations () {
+            return this.$route.name != 'conversations-list'
+                && this.$store.state.account_id != '';
+        }
+    },
+
+    watch: {
+
+        "searchQuery" (to) {
+            this.$store.state.msgbus.$emit('searchUpdated', to);
+        }
+
+    },
+
     mounted () {
         let sidebar = this.$el.querySelector("#sidebar");
         let events = Util.addEventListeners(['mousewheel', 'DOMMouseScroll'], (e) => {
@@ -111,22 +158,6 @@ export default {
 
     beforeDestroy () {
         Util.removeEventListeners(this.listeners);
-    },
-
-    data () {
-        return {
-            links: {
-                'conversations': { name: 'conversations-list'},
-                'unread': { name: 'conversations-list-unread'},
-                'archive': { name: 'conversations-list-archived'},
-                'blacklists': { name: 'blacklists'},
-                'private': { name: 'conversations-list-private' },
-                'folders': { name: 'folders' },
-                'scheduled': { name: 'scheduled-messages' }
-            },
-            listeners: [],
-            searchQuery: "",
-        }
     },
 
     methods: {
@@ -186,37 +217,6 @@ export default {
 
             return false;
         }
-    },
-
-    computed: {
-        marginLeft () { // Handles margins
-            if(this.open)
-                return "margin-left: 0px;";
-            else
-                return "margin-left: -269px;";
-        },
-        open () { // Sidebar_open state
-            return this.$store.state.sidebar_open;
-        },
-        full_theme () { // Full_theme state
-            return this.$store.state.full_theme;
-        },
-        showConversations () {
-            return this.$route.name != 'conversations-list'
-                && this.$store.state.account_id != '';
-        }
-    },
-
-    watch: {
-
-        "searchQuery" (to) {
-            this.$store.state.msgbus.$emit('searchUpdated', to);
-        }
-
-    },
-
-    components: {
-        Conversations
     }
 }
 </script>

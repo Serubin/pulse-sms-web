@@ -28,19 +28,19 @@ export default {
     name: 'DeviceItem',
     props: [ 'deviceData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#device-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.deviceData.id,
             name: this.deviceData.name,
             menu: null,
         }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#device-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {

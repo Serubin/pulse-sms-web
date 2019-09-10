@@ -37,7 +37,55 @@ import { Api } from '@/utils'
 
 export default {
     name: 'Sendbar',
+    components: {
+        NimblePicker,
+    },
     props: ['threadId', 'onSend', 'loading'],
+
+    data () {
+        return {
+            message: "",
+            emojiStyle: {
+                position: "absolute",
+                left: 0,
+                bottom: "70px",
+                width: "18em",
+            },
+            perLine: 6,
+            set: 'twitter',
+            emojiIndex: new EmojiIndex(data),
+            sheetSize: 32,
+            skin: 3,
+            show_emoji: false,
+            $wrapper: null,
+            $sendbar: null,
+        }
+    },
+
+    computed: {
+        send_color () {
+            if (this.$store.state.theme_use_global) {
+                return this.$store.state.theme_global_accent;
+            } else {
+                return this.$store.state.colors_accent;
+            }
+        },
+        is_dirty () { // Is dirty fix for mdl
+            if (this.message.length > 0)
+                return "is-dirty";
+            return "";
+        },
+        media_blob () { // creates url object from media blob
+            return window.URL.createObjectURL(this.$store.state.loaded_media)
+        }
+    },
+
+    watch: {
+        '$route' () { // Update thread on route change
+            this.message = "";
+            this.removeMedia();
+        }
+    },
 
     mounted () {
         // No need for assignment - just build object
@@ -78,26 +126,6 @@ export default {
     destroy () {
         document.documentElement.removeEventListener('paste');
         this.$store.state.msgbus.$off('hotkey-emoji', this.toggle);
-    },
-
-    data () {
-        return {
-            message: "",
-            emojiStyle: {
-                position: "absolute",
-                left: 0,
-                bottom: "70px",
-                width: "18em",
-            },
-            perLine: 6,
-            set: 'twitter',
-            emojiIndex: new EmojiIndex(data),
-            sheetSize: 32,
-            skin: 3,
-            show_emoji: false,
-            $wrapper: null,
-            $sendbar: null,
-        }
     },
 
     methods: {
@@ -251,34 +279,6 @@ export default {
                 this.$sendbar.setSelectionRange(start + e.native.length, start + e.native.length)
             );
         }
-    },
-
-    computed: {
-        send_color () {
-            if (this.$store.state.theme_use_global) {
-                return this.$store.state.theme_global_accent;
-            } else {
-                return this.$store.state.colors_accent;
-            }
-        },
-        is_dirty () { // Is dirty fix for mdl
-            if (this.message.length > 0)
-                return "is-dirty";
-            return "";
-        },
-        media_blob () { // creates url object from media blob
-            return window.URL.createObjectURL(this.$store.state.loaded_media)
-        }
-    },
-
-    watch: {
-        '$route' () { // Update thread on route change
-            this.message = "";
-            this.removeMedia();
-        }
-    },
-    components: {
-        NimblePicker,
     }
 }
 </script>

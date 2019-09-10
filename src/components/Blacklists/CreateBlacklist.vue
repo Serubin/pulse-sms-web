@@ -72,9 +72,8 @@ import Spinner from '@/components/Spinner.vue'
 export default {
     name: 'CreateBlacklist',
 
-    mounted () {
-        this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
+    components: {
+        Spinner
     },
 
     data () {
@@ -84,6 +83,11 @@ export default {
             phrase: "",
             loading: false,
         }
+    },
+
+    mounted () {
+        this.$store.commit("loading", false);
+        this.$store.commit('title', this.title);
     },
 
     methods: {
@@ -115,10 +119,6 @@ export default {
         cancel () {
             this.$router.push({ name: 'blacklists'});
         }
-    },
-
-    components: {
-        Spinner
     }
 }
 </script>

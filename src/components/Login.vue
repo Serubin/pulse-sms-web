@@ -51,12 +51,8 @@ import { hmacSHA1 } from '@/lib/hmacsha1.js'
 export default {
     name: 'Login',
 
-    mounted () {
-        if (this.$store.state.account_id != '')
-            return this.$router.push({ name: 'conversations-list'});
-
-        this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
+    components: {
+        Spinner
     },
 
     data () {
@@ -67,6 +63,14 @@ export default {
             loading: false,
             error: false,
         }
+    },
+
+    mounted () {
+        if (this.$store.state.account_id != '')
+            return this.$router.push({ name: 'conversations-list'});
+
+        this.$store.commit("loading", false);
+        this.$store.commit('title', this.title);
     },
 
     methods: {
@@ -110,10 +114,6 @@ export default {
             this.error = true;
             this.loading = false;
         }
-    },
-
-    components: {
-        Spinner
     }
 }
 </script>

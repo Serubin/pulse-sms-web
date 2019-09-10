@@ -78,6 +78,144 @@ import ImageViewer from '@/components/ImageViewer.vue'
 
 export default {
     name: 'App',
+    components: {
+        Sidebar,
+        Snackbar,
+        ImageViewer
+    },
+
+    data () {
+        return {
+            margin: 0,
+            loading: this.$store.state.loading,
+            mm: null,
+            toolbar_color: this.$store.state.theme_global_default,
+            menu_items: [],
+            hour: null,
+        }
+    },
+
+    computed: {
+        icon_class () {
+            return {
+                'logo': this.full_theme && !this.apply_appbar_color,
+                'logo_dark': this.full_theme && this.apply_appbar_color,
+                'menu_toggle': !this.full_theme && !this.apply_appbar_color,
+                'menu_toggle_dark': !this.full_theme && this.apply_appbar_color,
+            }
+        },
+
+        sidebar_open () { // Sidebar_open state
+            return this.$store.state.sidebar_open;
+        },
+
+        full_theme () { // Full_theme state
+            return this.$store.state.full_theme;
+        },
+
+        theme_str () {
+            const theme = this.$store.state.theme_base;
+
+            // If day/night, return dark/light
+            if (theme == "day_night")
+                return this.is_night ? "dark" : "";
+
+            if (theme == "black")
+                return 'dark black';
+
+            return theme; // Otherwise return stored theme
+        },
+
+        is_night () { // If "night" (between 20 and 7)
+            return this.hour < 7 || this.hour >= 20 ? true : false;
+        },
+
+        theme_toolbar () { // Determine toolbar color
+            if (!this.apply_appbar_color)  // If not color toolbar
+                return this.default_toolbar_color;
+
+            if (this.$store.state.theme_use_global) // If use global
+                return this.$store.state.theme_global_default;
+
+            return this.toolbar_color;
+        },
+
+        default_toolbar_color () { // Determine default colors
+            if (!this.apply_appbar_color) {
+                if (this.theme_str.indexOf('black') >= 0) {
+                    return "#000000";
+                } else if (this.theme_str.indexOf('dark') >= 0) {
+                    return "#202024";
+                } else {
+                    return "#FFFFFF";
+                }
+            } else if (this.$store.state.theme_global_default) {
+                return this.$store.state.theme_global_default;
+            } else {
+                return "#1775D2";
+            }
+        },
+
+        text_color () { // Determines toolbar text color (and menu icon color)
+            try {
+                if (!this.apply_appbar_color) {
+                    if (this.theme_str.indexOf('black') >= 0) {
+                        return "#FFF";
+                    } else if (this.theme_str.indexOf('dark') >= 0) {
+                        return "#FFF";
+                    } else {
+                        return "#000";
+                    }
+                }
+
+                if (this.toolbar_color.indexOf("rgb(") > -1 || this.toolbar_color.indexOf("rgba(") > -1) {
+                    return Util.getTextColorBasedOnBackground(this.toolbar_color);
+                } else {
+                    return "#FFF";
+                }
+            } catch (err) {
+                return "#FFF";
+            }
+        },
+
+        show_search () {
+            return this.$route.name.indexOf('conversations-list') > -1;
+        },
+
+        apply_appbar_color () {
+            if (this.toolbar_color == 'rgba(255,255,255,1)') {
+                // They have manually set the color to white, for the app bar.
+                // If we didn't do this, then they wouldn't be able to see the settings, refresh, search, etc.
+                return false;
+            }
+            return this.$store.state.theme_apply_appbar_color;
+        }
+    },
+    watch: {
+        '$route' () { // To update dropdown menu
+            this.populateMenuItems();
+        },
+        '$store.state.colors_default' (to) { // Handle theme changes
+            this.updateTheme(to);
+        },
+        'theme_str' (to, from) { // Handles updating the body class
+            this.updateBodyClass(to, from)
+        },
+        'theme_toolbar' (to) { // Handle toolbar color change
+            Vue.nextTick(() => {
+                const toolbar = this.$el.querySelector("#toolbar");
+                Util.materialColorChange(toolbar, to);
+            })
+        },
+        '$store.state.title' (to) {
+            if (to.length > 0) {
+                document.title = to;
+            } else {
+                document.title = "Pulse SMS";
+            }
+        }
+
+    },
 
     beforeCreate () {
         this.$store.commit('title', "Pulse SMS");
@@ -166,17 +304,6 @@ export default {
         this.$store.state.msgbus.$off('logout-btn', this.logout);
 
         this.stream.close();
-    },
-
-    data () {
-        return {
-            margin: 0,
-            loading: this.$store.state.loading,
-            mm: null,
-            toolbar_color: this.$store.state.theme_global_default,
-            menu_items: [],
-            hour: null,
-        }
     },
 
     methods: {
@@ -450,133 +577,6 @@ export default {
                 body.className += ` ${LARGER_APP_BAR} `;
 
         }
-    },
-
-    computed: {
-        icon_class () {
-            return {
-                'logo': this.full_theme && !this.apply_appbar_color,
-                'logo_dark': this.full_theme && this.apply_appbar_color,
-                'menu_toggle': !this.full_theme && !this.apply_appbar_color,
-                'menu_toggle_dark': !this.full_theme && this.apply_appbar_color,
-            }
-        },
-
-        sidebar_open () { // Sidebar_open state
-            return this.$store.state.sidebar_open;
-        },
-
-        full_theme () { // Full_theme state
-            return this.$store.state.full_theme;
-        },
-
-        theme_str () {
-            const theme = this.$store.state.theme_base;
-
-            // If day/night, return dark/light
-            if (theme == "day_night")
-                return this.is_night ? "dark" : "";
-
-            if (theme == "black")
-                return 'dark black';
-
-            return theme; // Otherwise return stored theme
-        },
-
-        is_night () { // If "night" (between 20 and 7)
-            return this.hour < 7 || this.hour >= 20 ? true : false;
-        },
-
-        theme_toolbar () { // Determine toolbar color
-            if (!this.apply_appbar_color)  // If not color toolbar
-                return this.default_toolbar_color;
-
-            if (this.$store.state.theme_use_global) // If use global
-                return this.$store.state.theme_global_default;
-
-            return this.toolbar_color;
-        },
-
-        default_toolbar_color () { // Determine default colors
-            if (!this.apply_appbar_color) {
-                if (this.theme_str.indexOf('black') >= 0) {
-                    return "#000000";
-                } else if (this.theme_str.indexOf('dark') >= 0) {
-                    return "#202024";
-                } else {
-                    return "#FFFFFF";
-                }
-            } else if (this.$store.state.theme_global_default) {
-                return this.$store.state.theme_global_default;
-            } else {
-                return "#1775D2";
-            }
-        },
-
-        text_color () { // Determines toolbar text color (and menu icon color)
-            try {
-                if (!this.apply_appbar_color) {
-                    if (this.theme_str.indexOf('black') >= 0) {
-                        return "#FFF";
-                    } else if (this.theme_str.indexOf('dark') >= 0) {
-                        return "#FFF";
-                    } else {
-                        return "#000";
-                    }
-                }
-
-                if (this.toolbar_color.indexOf("rgb(") > -1 || this.toolbar_color.indexOf("rgba(") > -1) {
-                    return Util.getTextColorBasedOnBackground(this.toolbar_color);
-                } else {
-                    return "#FFF";
-                }
-            } catch (err) {
-                return "#FFF";
-            }
-        },
-
-        show_search () {
-            return this.$route.name.indexOf('conversations-list') > -1;
-        },
-
-        apply_appbar_color () {
-            if (this.toolbar_color == 'rgba(255,255,255,1)') {
-                // They have manually set the color to white, for the app bar.
-                // If we didn't do this, then they wouldn't be able to see the settings, refresh, search, etc.
-                return false;
-            }
-            return this.$store.state.theme_apply_appbar_color;
-        }
-    },
-    watch: {
-        '$route' () { // To update dropdown menu
-            this.populateMenuItems();
-        },
-        '$store.state.colors_default' (to) { // Handle theme changes
-            this.updateTheme(to);
-        },
-        'theme_str' (to, from) { // Handles updating the body class
-            this.updateBodyClass(to, from)
-        },
-        'theme_toolbar' (to) { // Handle toolbar color change
-            Vue.nextTick(() => {
-                const toolbar = this.$el.querySelector("#toolbar");
-                Util.materialColorChange(toolbar, to);
-            })
-        },
-        '$store.state.title' (to) {
-            if (to.length > 0) {
-                document.title = to;
-            } else {
-                document.title = "Pulse SMS";
-            }
-        }
-
-    },
-    components: {
-        Sidebar,
-        Snackbar,
-        ImageViewer
     }
 }
 </script>

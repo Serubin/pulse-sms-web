@@ -33,13 +33,6 @@ export default {
     name: 'ScheduledMessageItem',
     props: [ 'messageData' ],
 
-    mounted () {
-        let menu_el = this.$el.querySelector("#message-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
-
     data () {
         return {
             id: this.messageData.device_id,
@@ -50,27 +43,6 @@ export default {
             mime_type: this.messageData.mime_type,
             repeat: this.messageData.repeat || 0,
             menu: null,
-        }
-    },
-
-    methods: {
-        deleteMessage () {
-            Util.snackbar("Deleted Message to " + this.title);
-            Api.scheduledMessages.delete(this.id);
-            store.state.msgbus.$emit('refresh-btn');
-        },
-
-        editMessage () {
-            this.$router.push({
-                name: 'edit-scheduled-message', params: {
-                    message_id: this.id,
-                    original_to: this.to,
-                    original_title: this.title,
-                    original_data: this.data,
-                    original_timestamp: this.timestamp,
-                    original_repeat: this.repeat
-                }
-            });
         }
     },
 
@@ -107,6 +79,34 @@ export default {
 
                 return `${name} - ${time} (${repeatText})`
             }
+        }
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#message-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
+    },
+
+    methods: {
+        deleteMessage () {
+            Util.snackbar("Deleted Message to " + this.title);
+            Api.scheduledMessages.delete(this.id);
+            store.state.msgbus.$emit('refresh-btn');
+        },
+
+        editMessage () {
+            this.$router.push({
+                name: 'edit-scheduled-message', params: {
+                    message_id: this.id,
+                    original_to: this.to,
+                    original_title: this.title,
+                    original_data: this.data,
+                    original_timestamp: this.timestamp,
+                    original_repeat: this.repeat
+                }
+            });
         }
     }
 
