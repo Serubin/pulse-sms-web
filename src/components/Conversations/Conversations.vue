@@ -18,8 +18,7 @@
         <transition-group name="flip-list" tag="div">
             <component :is="conversation.title ? 'ConversationItem' : 'DayLabel'"
                        v-for="conversation in conversations"
-                       :key="conversation.hash ? conversation.hash : conversation.label
-                       "
+                       :key="conversation.hash ? conversation.hash : conversation.label"
                        :conversation-data="conversation"
                        :show-pinned="conversation.pinned && !showConversationCategories"
                        :archive="isArchive"
