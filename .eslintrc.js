@@ -12,7 +12,16 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
       'indent': ["error", 4, { "SwitchCase": 1 }],
       'vue/max-attributes-per-line': 0,
-      "vue/html-indent":  ["error", 4, {}]
+      "vue/html-indent":  ["error", 4, {}],
+      "vue/html-self-closing": ["error", {
+        "html": {
+        "void": "never",
+        "normal": "never",
+        "component": "always"
+      },
+      "svg": "never",
+      "math": "never"
+    }]
   },
   parserOptions: {
     parser: 'babel-eslint'
