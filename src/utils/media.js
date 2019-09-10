@@ -145,6 +145,7 @@ export default class MediaLoader {
 
                             // unregister listener
                             worker.removeEventListener("message", handleWorkerCompletion);
+                            worker.terminate();
                         }
                     }
 
