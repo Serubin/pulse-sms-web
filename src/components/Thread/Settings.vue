@@ -1,42 +1,50 @@
 <template>
-     <div id="settings" >
-         <div class="page-content" id="account-list" v-mdl>
-
-            <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showColorDialog"> <!-- Global Colors -->
-         <div class="mdl-color-text--grey-900">{{ $t('settings.primary')}}, {{ $t('settings.darkprimary')}}, {{ $t('settings.accent') }}</div>
-                <div class="mdl-color-text--grey-600">{{ hex.default }}, {{ hex.dark }}, {{ hex.accent }}</div>
+    <div id="settings">
+        <div id="account-list" v-mdl class="page-content">
+            <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showColorDialog">
+                <!-- Global Colors -->
+                <div class="mdl-color-text--grey-900">
+                    {{ $t('settings.primary') }}, {{ $t('settings.darkprimary') }}, {{ $t('settings.accent') }}
+                </div>
+                <div class="mdl-color-text--grey-600">
+                    {{ hex.default }}, {{ hex.dark }}, {{ hex.accent }}
+                </div>
             </div>
 
-            <div class="mdl-dialog" v-if="showColorSettings">
+            <div v-if="showColorSettings" class="mdl-dialog">
                 <div class="mdl-dialog__content mdl-dialog-card mdl-card">
                     <h4>{{ $t('thread.settings.updatecolors') }}</h4>
                     <div class="mdl-textfield mdl-js-textfield">
                         {{ $t('settings.primary') }}
-                        <input class="mdl-textfield__input" type="text" id="theme-default" v-model="hex.default"/>
+                        <input id="theme-default" v-model="hex.default" class="mdl-textfield__input" type="text">
                         <label class="mdl-textfield__label" for="theme-default"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
                         {{ $t('settings.darkprimary') }}
-                        <input class="mdl-textfield__input" type="text" id="theme-dark" v-model="hex.dark"/>
+                        <input id="theme-dark" v-model="hex.dark" class="mdl-textfield__input" type="text">
                         <label class="mdl-textfield__label" for="theme-dark"></label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
                         {{ $t('settings.accent') }}
-                        <input class="mdl-textfield__input" type="text" id="theme-accent" v-model="hex.accent"/>
+                        <input id="theme-accent" v-model="hex.accent" class="mdl-textfield__input" type="text">
                         <label class="mdl-textfield__label" for="theme-accent"></label>
                     </div>
                     <div class="mdl-dialog__actions">
-                        <button type="button" class="mdl-button close" @click="saveColors">{{ $t('dialog.save') }}</button>
-                        <button type="button" class="mdl-button close" @click="closeColorDialog">{{ $t('dialog.close') }}</button>
+                        <button type="button" class="mdl-button close" @click="saveColors">
+                            {{ $t('dialog.save') }}
+                        </button>
+                        <button type="button" class="mdl-button close" @click="closeColorDialog">
+                            {{ $t('dialog.close') }}
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <br />
+            <br>
 
             <div class="label-item">
                 <label for="pin" :class="pin_class" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
-                    <input id="pin" class="mdl-switch__input" type="checkbox" v-model.lazy="pin">
+                    <input id="pin" v-model.lazy="pin" class="mdl-switch__input" type="checkbox">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
                         {{ $t('thread.settings.pin') }}
                     </span>
@@ -45,7 +53,7 @@
 
             <div class="label-item">
                 <label for="mute" :class="mute_class" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
-                    <input id="mute" class="mdl-switch__input" type="checkbox" v-model="mute">
+                    <input id="mute" v-model="mute" class="mdl-switch__input" type="checkbox">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
                         {{ $t('thread.settings.mute') }}
                     </span>
@@ -54,13 +62,12 @@
 
             <div class="label-item">
                 <label for="private" :class="private_class" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
-                    <input id="private" class="mdl-switch__input" type="checkbox" v-model="private_notifications">
+                    <input id="private" v-model="private_notifications" class="mdl-switch__input" type="checkbox">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
                         {{ $t('thread.settings.private') }}
                     </span>
                 </label>
             </div>
-
         </div>
     </div>
 </template>

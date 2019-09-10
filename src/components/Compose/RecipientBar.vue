@@ -1,11 +1,11 @@
 <template>
     <div id="compose-head">
-        <div class="mdl-card__title" >
+        <div class="mdl-card__title">
             <div id="chip-insert">
-                <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
+                <ContactChip v-for="selected in Object.values(selectedContacts)" :key="selected.id" :contact="selected" :on-delete="removeContact" />
             </div>
-            <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" @keydown.delete="deleteKey">
+            <div id="recipient-wrap" v-mdl class="mdl-textfield mdl-js-textfield" :class="is_dirty">
+                <input id="recipient" v-model="recipient" class="mdl-textfield__input" type="text" @blur="inputToChips" @keydown.delete="deleteKey">
                 <label class="mdl-textfield__label" for="recipient">{{ $t('compose.type') }}</label>
             </div>
             <div id="border"></div>

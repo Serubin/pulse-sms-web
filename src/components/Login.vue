@@ -1,18 +1,22 @@
 <template>
-    <div class="mdl-card mdl-shadow--6dp" id="login-pane" v-mdl>
+    <div id="login-pane" v-mdl class="mdl-card mdl-shadow--6dp">
         <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-            <h2 class="mdl-card__title-text">Pulse SMS</h2>
+            <h2 class="mdl-card__title-text">
+                Pulse SMS
+            </h2>
         </div>
         <div class="mdl-card__supporting-text">
             <p v-html="$t('login.first')"></p>
-            <p v-if="error" class="error">{{ $t('login.error') }}</p>
+            <p v-if="error" class="error">
+                {{ $t('login.error') }}
+            </p>
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" type="email" id="username" v-model="username" autofocus/>
+                    <input id="username" v-model="username" class="mdl-textfield__input" type="email" autofocus>
                     <label class="mdl-textfield__label" for="username">{{ $t('login.email') }}</label>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" type="password" id="password" v-model="password" @keyup.enter="doLogin"/>
+                    <input id="password" v-model="password" class="mdl-textfield__input" type="password" @keyup.enter="doLogin">
                     <label class="mdl-textfield__label" for="password">{{ $t('login.password') }}</label>
                 </div>
             </form>
@@ -22,13 +26,15 @@
             <a href="https://messenger.klinkerapps.com/overview/platform-ios.html" target="_blank" v-html="$t('login.iphone')"></a>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="login" @click="doLogin">{{ $t('login.login') }}</button>
+            <button id="login" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="doLogin">
+                {{ $t('login.login') }}
+            </button>
         </div>
 
 
         <transition name="loading-fade">
-            <div class="loading-center" v-if="loading">
-                <spinner></spinner>
+            <div v-if="loading" class="loading-center">
+                <spinner />
             </div>
         </transition>
     </div>

@@ -1,12 +1,11 @@
 <template>
     <div id="draft-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="drafts.length == 0"></spinner>
+        <spinner v-if="drafts.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="draft in drafts" :is="'DraftItem'" :draft-data="draft" :key="draft.hash"/>
+            <component :is="'DraftItem'" v-for="draft in drafts" :key="draft.hash" :draft-data="draft" />
         </transition-group>
     </div>
 </template>

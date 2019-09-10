@@ -1,18 +1,19 @@
 <template>
     <div id="scheduled-message-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="scheduled_messages.length == 0 && loading"></spinner>
+        <spinner v-if="scheduled_messages.length == 0 && loading" class="spinner" />
 
         <!-- If no Messages -->
-        <p class="empty-message" v-if="scheduled_messages.length == 0 && !loading">No Scheduled Messages</p>
+        <p v-if="scheduled_messages.length == 0 && !loading" class="empty-message">
+            No Scheduled Messages
+        </p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="message in scheduled_messages" :is="'ScheduledMessageItem'" :message-data="message" :key="message.hash"/>
+            <component :is="'ScheduledMessageItem'" v-for="message in scheduled_messages" :key="message.hash" :message-data="message" />
         </transition-group>
 
-        <button tag="button" class="create-scheduled-message mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="createScheduledMessage" :style="{ background: $store.state.colors_accent }" v-mdl>
+        <button v-mdl tag="button" class="create-scheduled-message mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="{ background: $store.state.colors_accent }" @click="createScheduledMessage">
             <i class="material-icons md-light">add</i>
         </button>
     </div>

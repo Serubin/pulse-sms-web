@@ -1,31 +1,33 @@
 <template>
     <div id="conversation-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="conversations.length == 0 && loading"></spinner>
+        <spinner v-if="conversations.length == 0 && loading" class="spinner" />
 
-        <div id="quick_find" v-if="showSearch">
-           <div>
-             <input v-model="searchQuery" id="search-bar" class="quick_find fixed_pos" type="text text_box" placeholder="Search conversations..." autocomplete="off" autocorrect="off" spellcheck="false">
-           </div>
-         </div>
+        <div v-if="showSearch" id="quick_find">
+            <div>
+                <input id="search-bar" v-model="searchQuery" class="quick_find fixed_pos" type="text text_box" placeholder="Search conversations..." autocomplete="off" autocorrect="off" spellcheck="false">
+            </div>
+        </div>
 
         <!-- If no Messages -->
-        <p class="empty-message" v-if="conversations.length == 0 && !loading">{{ $t('conversations.noconv') }}</p>
+        <p v-if="conversations.length == 0 && !loading" class="empty-message">
+            {{ $t('conversations.noconv') }}
+        </p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="conversation in conversations"
-                :is="conversation.title ? 'ConversationItem' : 'DayLabel'"
-                :conversation-data="conversation"
-                :showPinned="conversation.pinned && !showConversationCategories"
-                :archive="isArchive"
-                :small="small"
-                :key="conversation.hash ? conversation.hash : conversation.label
-            "/>
+            <component :is="conversation.title ? 'ConversationItem' : 'DayLabel'"
+                       v-for="conversation in conversations"
+                       :key="conversation.hash ? conversation.hash : conversation.label
+                       "
+                       :conversation-data="conversation"
+                       :show-pinned="conversation.pinned && !showConversationCategories"
+                       :archive="isArchive"
+                       :small="small"
+            />
         </transition-group>
 
-        <button tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="$router.push('/compose');" :style="composeStyle" v-if="!small" v-mdl>
+        <button v-if="!small" v-mdl tag="button" class="compose mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="composeStyle" @click="$router.push('/compose');">
             <i class="material-icons md-light">add</i>
         </button>
     </div>

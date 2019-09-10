@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div class="lightbox-wrapper" v-if="display">
+        <div v-if="display" class="lightbox-wrapper">
             <div class="lightbox-toolbar">
                 <button id="close-button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="close">
                     <i class="material-icons material-icons-white">cancel</i>
@@ -14,7 +14,7 @@
                 <img class="full-image" :src="image_data" alt="Image">
             </div>
         </div>
-  </transition>
+    </transition>
 </template>
 
 <script>

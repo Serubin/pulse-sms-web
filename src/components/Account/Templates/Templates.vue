@@ -1,12 +1,11 @@
 <template>
     <div id="template-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="templates.length == 0"></spinner>
+        <spinner v-if="templates.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="template in templates" :is="'TemplateItem'" :template-data="template" :key="template.hash"/>
+            <component :is="'TemplateItem'" v-for="template in templates" :key="template.hash" :template-data="template" />
         </transition-group>
     </div>
 </template>

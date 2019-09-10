@@ -1,26 +1,49 @@
 <template>
-     <div id="account" >
-         <div class="page-content" id="account-list" v-mdl>
-            <div class="mdl-color-text--grey-600" v-if="showSubscriptionUpgrade">
+    <div id="account">
+        <div id="account-list" v-mdl class="page-content">
+            <div v-if="showSubscriptionUpgrade" class="mdl-color-text--grey-600">
                 {{ $t('account.upgrade_subscription') }}
             </div>
             <h4>Account Statistics</h4>
-            <div class="click-item" v-mdl @click="routeTo('statistics')">View Account Statistics</div>
-            <div class="item" v-mdl>{{ account_counts.message_count }} Messages</div>
-            <div class="item" v-mdl>{{ account_counts.conversation_count }} Conversations</div>
-            <div class="item" v-mdl>{{ account_counts.scheduled_count }} Scheduled Messages</div>
-            <div class="item" v-mdl>{{ account_counts.blacklist_count }} Blacklisted Numbers</div>
+            <div v-mdl class="click-item" @click="routeTo('statistics')">
+                View Account Statistics
+            </div>
+            <div v-mdl class="item">
+                {{ account_counts.message_count }} Messages
+            </div>
+            <div v-mdl class="item">
+                {{ account_counts.conversation_count }} Conversations
+            </div>
+            <div v-mdl class="item">
+                {{ account_counts.scheduled_count }} Scheduled Messages
+            </div>
+            <div v-mdl class="item">
+                {{ account_counts.blacklist_count }} Blacklisted Numbers
+            </div>
 
             <h4>Account Managment</h4>
-            <div class="click-item" v-mdl @click="routeTo('password')">Update Email or Password</div>
-            <div class="click-item" v-mdl @click="routeTo('devices')">{{ account_counts.device_count }} Devices</div>
-            <div class="click-item" v-mdl @click="routeTo('drafts')">{{ account_counts.draft_count }} Drafts</div>
-            <div class="click-item" v-mdl @click="routeTo('contacts')">{{ account_counts.contact_count }} Contacts</div>
-            <div class="click-item" v-mdl @click="routeTo('templates')">{{ account_counts.template_count }} Templates</div>
-            <div class="click-item" v-mdl @click="routeTo('auto-replies')">{{ account_counts.auto_reply_count }} Auto Replies</div>
-            <div class="click-item" v-mdl @click="routeTo('account-folders')">{{ account_counts.folder_count }} Folders</div>
+            <div v-mdl class="click-item" @click="routeTo('password')">
+                Update Email or Password
+            </div>
+            <div v-mdl class="click-item" @click="routeTo('devices')">
+                {{ account_counts.device_count }} Devices
+            </div>
+            <div v-mdl class="click-item" @click="routeTo('drafts')">
+                {{ account_counts.draft_count }} Drafts
+            </div>
+            <div v-mdl class="click-item" @click="routeTo('contacts')">
+                {{ account_counts.contact_count }} Contacts
+            </div>
+            <div v-mdl class="click-item" @click="routeTo('templates')">
+                {{ account_counts.template_count }} Templates
+            </div>
+            <div v-mdl class="click-item" @click="routeTo('auto-replies')">
+                {{ account_counts.auto_reply_count }} Auto Replies
+            </div>
+            <div v-mdl class="click-item" @click="routeTo('account-folders')">
+                {{ account_counts.folder_count }} Folders
+            </div>
         </div>
-
     </div>
 </template>
 

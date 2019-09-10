@@ -1,5 +1,5 @@
 <template>
-    <div v-mdl class="spinner" id="loading">
+    <div id="loading" v-mdl class="spinner">
         <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
     </div>
 </template>

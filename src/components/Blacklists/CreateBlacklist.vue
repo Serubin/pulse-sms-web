@@ -1,51 +1,63 @@
 <template>
     <div>
-        <div class="mdl-card mdl-shadow--6dp" id="create-blacklist-phone-pane" v-mdl>
+        <div id="create-blacklist-phone-pane" v-mdl class="mdl-card mdl-shadow--6dp">
             <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">{{ $t('blacklist.create_phone') }}</h2>
+                <h2 class="mdl-card__title-text">
+                    {{ $t('blacklist.create_phone') }}
+                </h2>
             </div>
             <div class="mdl-card__supporting-text">
                 <form>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" id="phone" v-model="phone" autofocus/>
+                        <input id="phone" v-model="phone" class="mdl-textfield__input" autofocus>
                         <label class="mdl-textfield__label" for="phone">{{ $t('blacklist.phone') }}</label>
                     </div>
                 </form>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="create-phone" @click="createPhone"> {{ $t('dialog.create') }}</button>
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancel">{{ $t('dialog.cancel') }}</button>
+                <button id="create-phone" class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="createPhone">
+                    {{ $t('dialog.create') }}
+                </button>
+                <button id="cancel" class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="cancel">
+                    {{ $t('dialog.cancel') }}
+                </button>
             </div>
 
 
             <transition name="loading-fade">
-                <div class="loading-center" v-if="loading">
-                    <spinner></spinner>
+                <div v-if="loading" class="loading-center">
+                    <spinner />
                 </div>
             </transition>
         </div>
 
-        <div class="mdl-card mdl-shadow--6dp" id="create-blacklist-phrase-pane" v-mdl>
+        <div id="create-blacklist-phrase-pane" v-mdl class="mdl-card mdl-shadow--6dp">
             <div class="mdl-card__title">
-                <h2 class="mdl-card__title-text">{{ $t('blacklist.create_phrase') }}</h2>
+                <h2 class="mdl-card__title-text">
+                    {{ $t('blacklist.create_phrase') }}
+                </h2>
             </div>
             <div class="mdl-card__supporting-text">
                 <form>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" id="phrase" v-model="phrase" autofocus/>
+                        <input id="phrase" v-model="phrase" class="mdl-textfield__input" autofocus>
                         <label class="mdl-textfield__label" for="phrase">{{ $t('blacklist.phrase') }}</label>
                     </div>
                 </form>
             </div>
             <div class="mdl-card__actions mdl-card--border">
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="create-phrase" @click="createPhrase"> {{ $t('dialog.create') }}</button>
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancel">{{ $t('dialog.cancel') }}</button>
+                <button id="create-phrase" class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="createPhrase">
+                    {{ $t('dialog.create') }}
+                </button>
+                <button id="cancel" class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="cancel">
+                    {{ $t('dialog.cancel') }}
+                </button>
             </div>
 
 
             <transition name="loading-fade">
-                <div class="loading-center" v-if="loading">
-                    <spinner></spinner>
+                <div v-if="loading" class="loading-center">
+                    <spinner />
                 </div>
             </transition>
         </div>

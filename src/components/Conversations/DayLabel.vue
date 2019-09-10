@@ -1,5 +1,7 @@
 <template>
-    <div class="label mdl-color-text--grey-600"> {{conversationData.label}} </div>
+    <div class="label mdl-color-text--grey-600">
+        {{ conversationData.label }}
+    </div>
 </template>
 
 <script>

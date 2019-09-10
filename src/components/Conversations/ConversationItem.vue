@@ -1,5 +1,5 @@
 <template>
-    <div class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small }" :id="conversation_id" :data-timestamp="timestamp" v-mdl @click="routeToThread">
+    <div :id="conversation_id" v-mdl class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small }" :data-timestamp="timestamp" @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
@@ -8,9 +8,9 @@
 
         <!-- Conversation Item content -->
         <p class="conversation-text conversation-text-small" :class="{ unread: !read }">
-            <img class="conversation-pinned" src="./../../assets/images/holder.gif" width="18" height="18" v-if="showPinned" />
+            <img v-if="showPinned" class="conversation-pinned" src="./../../assets/images/holder.gif" width="18" height="18">
             <span class="conversation-title mdl-card__supporting-text conversation-title-small"><i v-if="!read"></i>{{ title }}</span>
-            <span class="conversation-date" v-if="!small">{{date}}</span>
+            <span v-if="!small" class="conversation-date">{{ date }}</span>
             <br>
             <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small" v-html="snippet"><!-- Raw html insert --></span>
         </p>

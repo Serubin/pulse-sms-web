@@ -1,15 +1,16 @@
 <template>
     <div id="folders-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="folders.length == 0 && loading"></spinner>
+        <spinner v-if="folders.length == 0 && loading" class="spinner" />
 
         <!-- If no Folders -->
-        <p class="empty-message" v-if="folders.length == 0 && !loading">No Folders</p>
+        <p v-if="folders.length == 0 && !loading" class="empty-message">
+            No Folders
+        </p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="folder in folders" :is="'FolderItem'" :folder-data="folder" :key="folder.hash"/>
+            <component :is="'FolderItem'" v-for="folder in folders" :key="folder.hash" :folder-data="folder" />
         </transition-group>
     </div>
 </template>

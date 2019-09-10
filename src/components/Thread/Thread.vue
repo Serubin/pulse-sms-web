@@ -1,19 +1,20 @@
 <template>
     <div id="thread-wrap" @click="markAsRead">
-        <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom + 'px'}">
+        <div id="message-list" class="page-content" :style="{marginBottom: margin_bottom + 'px'}">
             <!-- Load More Button -->
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore" v-if="messages.length > 69">Load Previous</button>
+            <button v-if="messages.length > 69" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore">
+                Load Previous
+            </button>
             <!-- Spinner On load -->
-            <spinner class="spinner" v-if="messages.length == 0"></spinner>
+            <spinner v-if="messages.length == 0" class="spinner" />
             <!-- messages will be inserted here -->
 
             <transition-group name="fade" tag="div">
-                    <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
+                <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)" />
             </transition-group>
-
         </div>
 
-        <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage" :loading="$store.state.media_sending" ></sendbar>
+        <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage" :loading="$store.state.media_sending" />
     </div>
 </template>
 

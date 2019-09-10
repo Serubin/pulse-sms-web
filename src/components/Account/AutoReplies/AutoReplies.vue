@@ -1,12 +1,11 @@
 <template>
     <div id="auto-reply-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="replies.length == 0"></spinner>
+        <spinner v-if="replies.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="reply in replies" :is="'AutoReplyItem'" :reply-data="reply" :key="reply.hash"/>
+            <component :is="'AutoReplyItem'" v-for="reply in replies" :key="reply.hash" :reply-data="reply" />
         </transition-group>
     </div>
 </template>

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div class="item" :id="id" v-mdl @click="routeToList">{{ name }}</div>
+        <div :id="id" v-mdl class="item" @click="routeToList">
+            {{ name }}
+        </div>
     </div>
 </template>
 

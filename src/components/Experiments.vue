@@ -1,15 +1,15 @@
 <template>
-     <div id="settings" >
-         <div class="page-content" id="experiments-list" v-mdl>
+    <div id="settings">
+        <div id="experiments-list" v-mdl class="page-content">
             <h4>{{ $t('experiments.disclaimer') }}</h4>
             <div class="mdl-color-text--grey-600">
-               {{ $t('experiments.explanatory_intro') }}
+                {{ $t('experiments.explanatory_intro') }}
             </div>
             <br>
             <h4>{{ $t('settings.theme') }}</h4>
             <div class="label-item">
                 <label for="larger_app_bar" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
-                    <input id="larger_app_bar" class="mdl-switch__input" type="checkbox" v-model="larger_app_bar">
+                    <input id="larger_app_bar" v-model="larger_app_bar" class="mdl-switch__input" type="checkbox">
                     <span class="mdl-switch__label mdl-color-text--grey-900">
                         {{ $t('experiments.larger_app_bar') }}
                     </span>

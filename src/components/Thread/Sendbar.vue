@@ -1,26 +1,26 @@
 <template>
-    <div class="send-bar" v-mdl>
-        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: loading ? '' : 'none' }" v-mdl></div>
-        <div v-if="$store.state.loaded_media" class="preview" v-mdl>
+    <div v-mdl class="send-bar">
+        <div v-mdl class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: loading ? '' : 'none' }"></div>
+        <div v-if="$store.state.loaded_media" v-mdl class="preview">
             <div class="overlay">
                 <button class="media-clear mdl-button mdl-js-button mdl-button--colored mdl-button--fab mdl-js-ripple-effect" :style="{ background: send_color }" @click="removeMedia">
                     <i class="material-icons">clear</i>
                 </button>
             </div>
-            <img :src="media_blob" />
+            <img :src="media_blob">
         </div>
-        <div class="send-bar-inner" id="sendbar">
-            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia"/>
-            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji"/>
-            <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
-                    <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheetSize="sheetSize" :per-line="perLine" :skins="skin" @select="insertEmoji" :data="emojiIndex" />
+        <div id="sendbar" class="send-bar-inner">
+            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia">
+            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji">
+            <div v-show="show_emoji" id="emoji-wrapper" @click.self="toggleEmoji">
+                <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheet-size="sheetSize" :per-line="perLine" :skins="skin" :data="emojiIndex" @select="insertEmoji" />
             </div>
-            <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
-                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.enter.prevent.stop.exact="dispatchSend" v-model="message"></textarea>
+            <div v-mdl class="entry mdl-textfield mdl-js-textfield" :class="is_dirty">
+                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.enter.prevent.stop.exact="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
-            <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" id="send-button" @click="dispatchSend">
+            <button id="send-button" class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" @click="dispatchSend">
                 <i class="material-icons md-18 material-icons-white">send</i>
             </button>
         </div>

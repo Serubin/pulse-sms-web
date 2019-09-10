@@ -1,9 +1,14 @@
 <template>
     <div>
-        <div class="item" :id="id" v-mdl @click="menu.toggle()">{{ phone_number || phrase }}</div>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="blacklist-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteBlacklist">{{ $t('blacklist.delete') }}</li>
+        <div :id="id" v-mdl class="item" @click="menu.toggle()">
+            {{ phone_number || phrase }}
+        </div>
+        <ul id="blacklist-menu"
+            class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
+        >
+            <li class="mdl-menu__item" @click="deleteBlacklist">
+                {{ $t('blacklist.delete') }}
+            </li>
         </ul>
     </div>
 </template>

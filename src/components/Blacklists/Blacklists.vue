@@ -1,18 +1,19 @@
 <template>
     <div id="blacklists-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="blacklists.length == 0 && loading"></spinner>
+        <spinner v-if="blacklists.length == 0 && loading" class="spinner" />
 
         <!-- If no Folders -->
-        <p class="empty-message" v-if="blacklists.length == 0 && !loading">{{ $t('blacklist.none') }}</p>
+        <p v-if="blacklists.length == 0 && !loading" class="empty-message">
+            {{ $t('blacklist.none') }}
+        </p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="blacklist in blacklists" :is="'BlacklistItem'" :blacklist-data="blacklist" :key="blacklist.hash"/>
+            <component :is="'BlacklistItem'" v-for="blacklist in blacklists" :key="blacklist.hash" :blacklist-data="blacklist" />
         </transition-group>
 
-        <button tag="button" class="create-blacklist mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="createBlacklist" :style="{ background: $store.state.colors_accent }" v-mdl>
+        <button v-mdl tag="button" class="create-blacklist mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="{ background: $store.state.colors_accent }" @click="createBlacklist">
             <i class="material-icons md-light">add</i>
         </button>
     </div>

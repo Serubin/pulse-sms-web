@@ -1,38 +1,42 @@
 <template>
     <div class="message-wrapper" :title="stringTime" @mouseover="showOptions" @mouseleave="hideOptions">
-        <div id="offset-marker" v-if="this.messageData.marker"></div>
+        <div v-if="this.messageData.marker" id="offset-marker"></div>
 
         <transition name="fade">
-            <div :class="style_class" :style="styleGenerator" :id="id" v-if="!this.messageData.marker">
+            <div v-if="!this.messageData.marker" :id="id" :class="style_class" :style="styleGenerator">
                 <div v-html="content"></div>
                 <!-- Content is inserted via v-html -->
 
                 <!-- Media -->
-                <a :href="media_link" target="_blank" v-show="is_media && !media_loading">
+                <a v-show="is_media && !media_loading" :href="media_link" target="_blank">
                     <img class="media" :src="media_thumb" alt="Thumbnail" @click="openImage">
-                    <div class="article-title" v-show="is_article"> {{ media_title }} </div>
-                    <div class="article-snippet" v-show="is_article"> {{ media_content }} </div>
+                    <div v-show="is_article" class="article-title"> {{ media_title }} </div>
+                    <div v-show="is_article" class="article-snippet"> {{ media_content }} </div>
                 </a>
 
                 <!-- Video/Audio -->
-                <video controls v-show="video_src.length != 0 && !media_loading" :src="video_src" />
-                <audio controls v-show="audio_src.length != 0 && !media_loading" :src="audio_src" />
+                <video v-show="video_src.length != 0 && !media_loading" controls :src="video_src"></video>
+                <audio v-show="audio_src.length != 0 && !media_loading" controls :src="audio_src"></audio>
             </div>
         </transition>
 
         <transition name="fade">
-            <button id="delete-button" :class="options_class" class="message_options menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="displayOptions && !is_article" @click="deleteMessage">
-               <i class="material-icons">delete</i>
+            <button v-if="displayOptions && !is_article" id="delete-button" :class="options_class" class="message_options menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="deleteMessage">
+                <i class="material-icons">delete</i>
             </button>
         </transition>
 
-        <div class="date-wrapper" v-if="dateLabel">
-            <div :class="dateType" class="mdl-color-text--grey-500"> {{ dateLabel }}</div>
+        <div v-if="dateLabel" class="date-wrapper">
+            <div :class="dateType" class="mdl-color-text--grey-500">
+                {{ dateLabel }}
+            </div>
         </div>
 
         <transition name="slide-out">
-            <div class="sent-wrapper" v-if="sending">
-                <div class="sending mdl-color-text--grey-500">Sending...</div>
+            <div v-if="sending" class="sent-wrapper">
+                <div class="sending mdl-color-text--grey-500">
+                    Sending...
+                </div>
             </div>
         </transition>
     </div>

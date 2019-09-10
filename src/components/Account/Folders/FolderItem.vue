@@ -1,9 +1,14 @@
 <template>
     <div>
-        <div class="click-item" :id="id" v-mdl @click="menu.toggle()">{{ name }}</div>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="folder-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteFolder">Delete</li>
+        <div :id="id" v-mdl class="click-item" @click="menu.toggle()">
+            {{ name }}
+        </div>
+        <ul id="folder-menu"
+            class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
+        >
+            <li class="mdl-menu__item" @click="deleteFolder">
+                Delete
+            </li>
         </ul>
     </div>
 </template>

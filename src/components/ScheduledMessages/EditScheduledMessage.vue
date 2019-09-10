@@ -1,31 +1,37 @@
 <template>
-    <div class="mdl-card mdl-shadow--6dp" id="edit-scheduled-pane" v-mdl>
+    <div id="edit-scheduled-pane" v-mdl class="mdl-card mdl-shadow--6dp">
         <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Edit Scheduled Message</h2>
+            <h2 class="mdl-card__title-text">
+                Edit Scheduled Message
+            </h2>
         </div>
 
         <div class="mdl-card__supporting-text">
             <div class="mdl-textfield mdl-js-textfield">
-                <textarea class="mdl-textfield__input" id="message" v-model="message" autofocus/>
+                <textarea id="message" v-model="message" class="mdl-textfield__input" autofocus></textarea>
                 <label class="mdl-textfield__label" for="message">Message text...</label>
             </div>
-            Time: <flat-pickr class="time-picker" v-model="timestamp" :config="config" placeholder="Select a date"></flat-pickr>
-            <select class="repeat" v-model="repeat">
-                <option v-for="option in repeatOptions" :value="option.value" :key="option.value">
+            Time: <flat-pickr v-model="timestamp" class="time-picker" :config="config" placeholder="Select a date" />
+            <select v-model="repeat" class="repeat">
+                <option v-for="option in repeatOptions" :key="option.value" :value="option.value">
                     {{ option.text }}
                 </option>
             </select>
         </div>
 
         <div class="mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="create" @click="save">Save</button>
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="cancel" @click="cancel">Cancel</button>
+            <button id="create" class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="save">
+                Save
+            </button>
+            <button id="cancel" class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="cancel">
+                Cancel
+            </button>
         </div>
 
 
         <transition name="loading-fade">
-            <div class="loading-center" v-if="loading">
-                <spinner></spinner>
+            <div v-if="loading" class="loading-center">
+                <spinner />
             </div>
         </transition>
     </div>

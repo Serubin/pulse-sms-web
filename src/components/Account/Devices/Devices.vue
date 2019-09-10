@@ -1,12 +1,11 @@
 <template>
     <div id="device-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="devices.length == 0"></spinner>
+        <spinner v-if="devices.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="device in devices" :is="'DeviceItem'" :device-data="device" :key="device.hash"/>
+            <component :is="'DeviceItem'" v-for="device in devices" :key="device.hash" :device-data="device" />
         </transition-group>
     </div>
 </template>

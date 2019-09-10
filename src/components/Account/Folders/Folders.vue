@@ -1,12 +1,11 @@
 <template>
     <div id="folder-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="folders.length == 0"></spinner>
+        <spinner v-if="folders.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="folder in folders" :is="'FolderItem'" :folder-data="folder" :key="folder.hash"/>
+            <component :is="'FolderItem'" v-for="folder in folders" :key="folder.hash" :folder-data="folder" />
         </transition-group>
     </div>
 </template>

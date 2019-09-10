@@ -1,7 +1,7 @@
 <template>
     <div class="page-content">
-        <RecipientBar :onContactListChanged="onContactListChanged"/>
-        <Sendbar :onSend="sendMessage" :loading="sending" />
+        <RecipientBar :on-contact-list-changed="onContactListChanged" />
+        <Sendbar :on-send="sendMessage" :loading="sending" />
     </div>
 </template>
 

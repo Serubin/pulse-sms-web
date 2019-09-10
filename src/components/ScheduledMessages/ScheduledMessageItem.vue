@@ -1,19 +1,26 @@
 <template>
-  <div class="message-wrapper" :title="stringTime">
-      <!-- <transition name="fade"> -->
-          <div class="message scheduled shadow" :id="id">
-              <div>{{ displayText }}</div>
-          </div>
-          <div class="date-wrapper">
-              <div class="date mdl-color-text--grey-500">{{ timestampText }}</div>
-          </div>
-          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--right"
-              id="message-menu" :data-mdl-for="id">
-              <li class="mdl-menu__item" @click="editMessage">Edit Message</li>
-              <li class="mdl-menu__item" @click="deleteMessage">Delete Message</li>
-          </ul>
-      <!-- </transition> -->
-  </div>
+    <div class="message-wrapper" :title="stringTime">
+        <!-- <transition name="fade"> -->
+        <div :id="id" class="message scheduled shadow">
+            <div>{{ displayText }}</div>
+        </div>
+        <div class="date-wrapper">
+            <div class="date mdl-color-text--grey-500">
+                {{ timestampText }}
+            </div>
+        </div>
+        <ul id="message-menu"
+            class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--right" :data-mdl-for="id"
+        >
+            <li class="mdl-menu__item" @click="editMessage">
+                Edit Message
+            </li>
+            <li class="mdl-menu__item" @click="deleteMessage">
+                Delete Message
+            </li>
+        </ul>
+        <!-- </transition> -->
+    </div>
 </template>
 
 <script>

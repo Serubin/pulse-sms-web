@@ -1,12 +1,19 @@
 <template>
     <div>
         <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="menu.toggle()">
-            <div class="mdl-color-text--grey-900">{{ name }}</div>
-            <div class="mdl-color-text--grey-600">Phone Number: {{ phone_number }}</div>
+            <div class="mdl-color-text--grey-900">
+                {{ name }}
+            </div>
+            <div class="mdl-color-text--grey-600">
+                Phone Number: {{ phone_number }}
+            </div>
         </div>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="contact-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteContact">Delete</li>
+        <ul id="contact-menu"
+            class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
+        >
+            <li class="mdl-menu__item" @click="deleteContact">
+                Delete
+            </li>
         </ul>
     </div>
 </template>

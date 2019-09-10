@@ -1,6 +1,8 @@
 <template>
-    <div> <!-- sidebar-outer-holder -->
-        <div id="sidebar" v-bind:style="marginLeft"> <!-- Sidebar-internal -->
+    <div>
+        <!-- sidebar-outer-holder -->
+        <div id="sidebar" :style="marginLeft">
+            <!-- Sidebar-internal -->
             <div id="drawer-holder">
                 <ul id="drawer-links">
                     <li id="conversations-link" @click="routeTo('conversations')">
@@ -48,17 +50,16 @@
                     <li v-if="showConversations">
                         <div class="link-card mdl-card">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon search">
-                            <input v-model="searchQuery" id="search-bar" class="quick_find fixed_pos" type="text text_box" :placeholder="$t('sidebar.searchconversations')" autocomplete="off" autocorrect="off" spellcheck="false">
+                            <input id="search-bar" v-model="searchQuery" class="quick_find fixed_pos" type="text text_box" :placeholder="$t('sidebar.searchconversations')" autocomplete="off" autocorrect="off" spellcheck="false">
                         </div>
                     </li>
                 </ul>
                 <!-- If route is not conversation list -->
 
                 <transition name="slide-left">
-                    <conversations v-if="showConversations" small="true"></conversations>
+                    <conversations v-if="showConversations" small="true" />
                 </transition>
                 <!-- End if -->
-
             </div>
         </div> <!-- End sidebar-internal -->
 
@@ -67,7 +68,6 @@
             <div v-if="!full_theme && open" id="sidebar-overlay" @click="close_drawer"></div>
         </transition>
         <!-- End if -->
-
     </div>
 </template>
 

@@ -1,30 +1,33 @@
 <template>
     <div id="app">
-
         <!-- Toolbar -->
         <div id="toolbar" :style="{ color: text_color }">
-            <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}"> <!-- Toolbar-Inner -->
-                <div id="logo" @click="toggleSidebar"> <!-- Logo/Drawer link -->
-                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class" />
+            <div id="toolbar_inner" :style="{ marginLeft: margin + 'px'}">
+                <!-- Toolbar-Inner -->
+                <div id="logo" @click="toggleSidebar">
+                    <!-- Logo/Drawer link -->
+                    <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class">
                 </div>
-                <span class="mdl-layout-title" id="toolbar-title">{{ $store.state.title }}</span>
-                <div id="toolbar_icons" >
+                <span id="toolbar-title" class="mdl-layout-title">{{ $store.state.title }}</span>
+                <div id="toolbar_icons">
                     <transition-group name="list">
-                    <button id="search-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="show_search" key="search" @click="dispatchMenuButton('search')">
-                       <i class="material-icons">search</i>
-                    </button>
-                    <button id="add-button" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" v-if="$route.path.indexOf('thread') != -1" key="add" @click="$router.push('/compose');">
-                        <i class="material-icons material-icons-white">add</i>
-                    </button>
-                    <button id="refresh-button" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')" key="refresh">
-                        <i class="material-icons">refresh</i>
-                    </button>
-                    <button class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect" id="more-button" key="more">
-                        <i class="material-icons">more_vert</i>
-                    </button>
+                        <button v-if="show_search" id="search-button" key="search" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
+                            <i class="material-icons">search</i>
+                        </button>
+                        <button v-if="$route.path.indexOf('thread') != -1" id="add-button" key="add" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="$router.push('/compose');">
+                            <i class="material-icons material-icons-white">add</i>
+                        </button>
+                        <button id="refresh-button" key="refresh" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
+                            <i class="material-icons">refresh</i>
+                        </button>
+                        <button id="more-button" key="more" class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
+                            <i class="material-icons">more_vert</i>
+                        </button>
                     </transition-group>
-                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button" >
-                        <li v-for="item in menu_items" class="mdl-menu__item" :key="item.name" :id="item.name + '-btn'" @click.prevent="dispatchMenuButton(item.name)" v-mdl><a class="mdl-menu__item" :id="item.name + '-conversation'" href="#">{{ item.title }}</a></li>
+                    <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="more-button">
+                        <li v-for="item in menu_items" :id="item.name + '-btn'" :key="item.name" v-mdl class="mdl-menu__item" @click.prevent="dispatchMenuButton(item.name)">
+                            <a :id="item.name + '-conversation'" class="mdl-menu__item" href="#">{{ item.title }}</a>
+                        </li>
                     </ul>
                 </div>
             </div>  <!-- End Toolbar-Inner -->
@@ -32,20 +35,17 @@
 
         <!-- Content Wrapper -->
         <div id="wrapper" :style="{ marginLeft: margin + 'px'}">
-
             <!-- Side Menu -->
             <div id="side-menu">
-                <sidebar v-mdl>
-                </sidebar>
+                <sidebar v-mdl />
             </div> <!-- End Side Menu -->
 
             <!-- Content Area -->
             <div id="content">
                 <main class="mdl-layout__content">
-                    <router-view></router-view>
+                    <router-view />
                 </main>
             </div> <!-- End Content Area -->
-
         </div> <!-- End Content Wrapper -->
 
         <!-- Loading splash page -->

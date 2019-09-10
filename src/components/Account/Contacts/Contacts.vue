@@ -1,12 +1,11 @@
 <template>
     <div id="contact-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="contacts.length == 0"></spinner>
+        <spinner v-if="contacts.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="contact in contacts" :is="'ContactItem'" :contact-data="contact" :key="contact.hash"/>
+            <component :is="'ContactItem'" v-for="contact in contacts" :key="contact.hash" :contact-data="contact" />
         </transition-group>
     </div>
 </template>
