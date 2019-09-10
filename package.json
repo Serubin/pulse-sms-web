@@ -13,7 +13,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "deploy": "npm run build; touch dist/CNAME; echo \"pulsesms.app\" > dist/CNAME; push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
     "@xkeshi/image-compressor": "^0.5.3",
@@ -48,6 +49,7 @@
     "grpc": "^1.23.3",
     "lint-staged": "^8.1.5",
     "node-sass": "^4.9.0",
+    "push-dir": "^0.4.1",
     "sass-loader": "^7.1.0",
     "sw-precache-webpack-plugin": "^0.11.5",
     "vue-template-compiler": "^2.6.10",
