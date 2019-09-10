@@ -1,5 +1,5 @@
 <template>
-    <div aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar" v-mdl>
+    <div v-mdl aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
         <div class="mdl-snackbar__text"></div>
         <button type="button" class="mdl-snackbar__action"></button>
     </div>
@@ -7,9 +7,9 @@
 
 <script>
 export default {
-    name: 'snackbar',
+    name: 'Snackbar',
     // JS for this is found in utils/Util
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

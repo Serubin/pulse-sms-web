@@ -6,7 +6,7 @@ export default class Platform {
     }
 
     static isChromeExtension() {
-        return window.chrome && chrome.runtime && chrome.runtime.id !== undefined;
+        return window.chrome && window.chrome.runtime && window.chrome.runtime.id !== undefined;
     }
 
     static isChromeApp() {

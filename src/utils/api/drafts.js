@@ -7,7 +7,7 @@ export default class Drafts {
         const promise = new Promise((resolve, reject) => {
             Vue.http.get(constructed_url)
                 .then(response => {
-                    response = response.data
+                    response = response.data;
 
                     // Decrypt draft items
                     for (let i = 0; i < response.length; i++) {
@@ -21,7 +21,7 @@ export default class Drafts {
                 .catch(response => Api.rejectHandler(response, reject));
         });
 
-        return promise
+        return promise;
     }
 
     static delete(conversation_id) {

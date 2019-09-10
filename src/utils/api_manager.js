@@ -13,7 +13,7 @@ import {
     ScheduledMessages,
     Stream,
     Templates
-} from '@/utils/api/'
+} from '@/utils/api/';
 
 export default class Api {
 

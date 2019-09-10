@@ -1,31 +1,32 @@
 <template>
     <div>
         <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="menu.toggle()">
-            <div class="mdl-color-text--grey-900">{{ data }}</div>
-            <div class="mdl-color-text--grey-600">Type: {{ mime_type }}</div>
+            <div class="mdl-color-text--grey-900">
+                {{ data }}
+            </div>
+            <div class="mdl-color-text--grey-600">
+                Type: {{ mime_type }}
+            </div>
         </div>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="draft-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteDraft">Delete</li>
+        <ul id="draft-menu"
+            class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
+        >
+            <li class="mdl-menu__item" @click="deleteDraft">
+                Delete
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
 
-import store from '@/store/'
-import { Util, Api } from '@/utils'
+import store from '@/store/';
+import { Api, Util } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
-    name: 'draft-item',
+    name: 'DraftItem',
     props: [ 'draftData' ],
-
-    mounted () {
-        let menu_el = this.$el.querySelector("#draft-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
 
     data () {
         return {
@@ -34,7 +35,14 @@ export default {
             data: this.draftData.data,
             mime_type: this.draftData.mime_type,
             menu: null,
-        }
+        };
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#draft-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {
@@ -45,7 +53,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -60,7 +68,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+        background: #E0E0E0;
     }
 
     .click-item:hover {

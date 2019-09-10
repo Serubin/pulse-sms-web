@@ -1,11 +1,13 @@
 <template>
     <div v-mdl class="splash">
         <div class="splash-center">
-            <img src="../assets/images/android-desktop.png" />
+            <img src="../assets/images/android-desktop.png">
             <h3> {{ $store.state.title }} </h3>
 
             <div id="offline">
-                <h4 v-if="$store.state.offline">Offline</h4>
+                <h4 v-if="$store.state.offline">
+                    Offline
+                </h4>
             </div>
         </div>
     </div>
@@ -13,8 +15,8 @@
 
 <script>
 export default {
-    name: 'splash'
-}
+    name: 'Splash'
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

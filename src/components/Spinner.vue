@@ -1,13 +1,13 @@
 <template>
-    <div v-mdl class="spinner" id="loading">
+    <div id="loading" v-mdl class="spinner">
         <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'spinner'
-}
+    name: 'Spinner'
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

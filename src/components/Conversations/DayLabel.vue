@@ -1,12 +1,14 @@
 <template>
-    <div class="label mdl-color-text--grey-600"> {{conversationData.label}} </div>
+    <div class="label mdl-color-text--grey-600">
+        {{ conversationData.label }}
+    </div>
 </template>
 
 <script>
 export default {
-    name: 'day-label',
+    name: 'DayLabel',
     props: ['conversationData']
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

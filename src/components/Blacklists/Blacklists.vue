@@ -1,32 +1,46 @@
 <template>
     <div id="blacklists-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="blacklists.length == 0 && loading"></spinner>
+        <spinner v-if="blacklists.length == 0 && loading" class="spinner" />
 
         <!-- If no Folders -->
-        <p class="empty-message" v-if="blacklists.length == 0 && !loading">{{ $t('blacklist.none') }}</p>
+        <p v-if="blacklists.length == 0 && !loading" class="empty-message">
+            {{ $t('blacklist.none') }}
+        </p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="blacklist in blacklists" :is="'BlacklistItem'" :blacklist-data="blacklist" :key="blacklist.hash"/>
+            <component :is="'BlacklistItem'" v-for="blacklist in blacklists" :key="blacklist.hash" :blacklist-data="blacklist" />
         </transition-group>
 
-        <button tag="button" class="create-blacklist mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" @click="createBlacklist" :style="{ background: $store.state.colors_accent }" v-mdl>
+        <button v-mdl tag="button" class="create-blacklist mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="{ background: $store.state.colors_accent }" @click="createBlacklist">
             <i class="material-icons md-light">add</i>
         </button>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import Hash from 'object-hash'
-import { Util, Api, SessionCache } from '@/utils'
-import BlacklistItem from './BlacklistItem.vue'
-import Spinner from '@/components/Spinner.vue'
+
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import BlacklistItem from './BlacklistItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
-    name: 'blacklists',
+    name: 'Blacklists',
+
+    components: {
+        BlacklistItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "",
+            loading: true,
+            blacklists: [],
+        };
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -80,21 +94,8 @@ export default {
         createBlacklist () {
             this.$router.push({ name: 'create-blacklist'});
         }
-    },
-
-    data () {
-        return {
-            title: "",
-            loading: true,
-            blacklists: [],
-        }
-    },
-
-    components: {
-        BlacklistItem,
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

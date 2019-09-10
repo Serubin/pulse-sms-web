@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Api, Url } from '@/utils/'
+import { Api, Url } from '@/utils/';
 
 export default class Devices {
     static get() {
@@ -12,7 +12,7 @@ export default class Devices {
                 .catch(response => Api.rejectHandler(response, reject));
         });
 
-        return promise
+        return promise;
     }
 
     static delete(id) {

@@ -1,5 +1,5 @@
 
-import { KEYS, state } from '@/store/state.js'
+import { KEYS } from '@/store/state.js';
 
 // called when the store is initialize
 const localStoreSync = store => {
@@ -23,7 +23,7 @@ const localStoreSync = store => {
         'enter_to_send': KEYS.ENTER_TO_SEND,
         'larger_app_bar': KEYS.LARGER_APP_BAR,
         'subscription_type': KEYS.SUBSCRIPTION_TYPE,
-    }
+    };
 
     // called after every mutation.
     store.subscribe((mutation, state) => {
@@ -31,12 +31,12 @@ const localStoreSync = store => {
         if (!Object.keys(local_items).contains(mutation.type))
             return;
 
-        let key = local_items[mutation.type]
-        let value = JSON.stringify(state[mutation.type])
+        let key = local_items[mutation.type];
+        let value = JSON.stringify(state[mutation.type]);
 
-        window.localStorage.setItem(key, value)
-    })
-}
+        window.localStorage.setItem(key, value);
+    });
+};
 
 
 export default [ localStoreSync ];

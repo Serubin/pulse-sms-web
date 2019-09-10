@@ -1,25 +1,36 @@
 <template>
     <div id="contact-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="contacts.length == 0"></spinner>
+        <spinner v-if="contacts.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="contact in contacts" :is="'ContactItem'" :contact-data="contact" :key="contact.hash"/>
+            <component :is="'ContactItem'" v-for="contact in contacts" :key="contact.hash" :contact-data="contact" />
         </transition-group>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
-import ContactItem from './ContactItem.vue'
-import Spinner from '@/components/Spinner.vue'
+
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import ContactItem from './ContactItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
-    name: 'contacts',
+    name: 'Contacts',
+
+    components: {
+        ContactItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Contacts",
+            contacts: [],
+        };
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -67,20 +78,8 @@ export default {
         refresh () {
             this.fetchContacts();
         }
-    },
-
-    data () {
-        return {
-            title: "Contacts",
-            contacts: [],
-        }
-    },
-
-    components: {
-        ContactItem,
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

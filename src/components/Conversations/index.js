@@ -1,3 +1,3 @@
-import Conversations from './Conversations.vue'
+import Conversations from './Conversations.vue';
 
 export default Conversations;

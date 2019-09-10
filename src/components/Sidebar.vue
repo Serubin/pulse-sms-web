@@ -1,6 +1,8 @@
 <template>
-    <div> <!-- sidebar-outer-holder -->
-        <div id="sidebar" v-bind:style="marginLeft"> <!-- Sidebar-internal -->
+    <div>
+        <!-- sidebar-outer-holder -->
+        <div id="sidebar" :style="marginLeft">
+            <!-- Sidebar-internal -->
             <div id="drawer-holder">
                 <ul id="drawer-links">
                     <li id="conversations-link" @click="routeTo('conversations')">
@@ -48,17 +50,16 @@
                     <li v-if="showConversations">
                         <div class="link-card mdl-card">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon search">
-                            <input v-model="searchQuery" id="search-bar" class="quick_find fixed_pos" type="text text_box" :placeholder="$t('sidebar.searchconversations')" autocomplete="off" autocorrect="off" spellcheck="false">
+                            <input id="search-bar" v-model="searchQuery" class="quick_find fixed_pos" type="text text_box" :placeholder="$t('sidebar.searchconversations')" autocomplete="off" autocorrect="off" spellcheck="false">
                         </div>
                     </li>
                 </ul>
                 <!-- If route is not conversation list -->
 
                 <transition name="slide-left">
-                    <conversations v-if="showConversations" small="true"></conversations>
+                    <conversations v-if="showConversations" small="true" />
                 </transition>
                 <!-- End if -->
-
             </div>
         </div> <!-- End sidebar-internal -->
 
@@ -67,17 +68,63 @@
             <div v-if="!full_theme && open" id="sidebar-overlay" @click="close_drawer"></div>
         </transition>
         <!-- End if -->
-
     </div>
 </template>
 
 <script>
 
-import Conversations from '@/components/Conversations/'
-import { Util } from '@/utils'
+import Conversations from '@/components/Conversations/';
+import { Util } from '@/utils';
 
 export default {
-    name: 'sidebar',
+    name: 'Sidebar',
+
+    components: {
+        Conversations
+    },
+
+    data () {
+        return {
+            links: {
+                'conversations': { name: 'conversations-list'},
+                'unread': { name: 'conversations-list-unread'},
+                'archive': { name: 'conversations-list-archived'},
+                'blacklists': { name: 'blacklists'},
+                'private': { name: 'conversations-list-private' },
+                'folders': { name: 'folders' },
+                'scheduled': { name: 'scheduled-messages' }
+            },
+            listeners: [],
+            searchQuery: "",
+        };
+    },
+
+    computed: {
+        marginLeft () { // Handles margins
+            if(this.open)
+                return "margin-left: 0px;";
+            else
+                return "margin-left: -269px;";
+        },
+        open () { // Sidebar_open state
+            return this.$store.state.sidebar_open;
+        },
+        full_theme () { // Full_theme state
+            return this.$store.state.full_theme;
+        },
+        showConversations () {
+            return this.$route.name != 'conversations-list'
+                && this.$store.state.account_id != '';
+        }
+    },
+
+    watch: {
+
+        "searchQuery" (to) {
+            this.$store.state.msgbus.$emit('searchUpdated', to);
+        }
+
+    },
 
     mounted () {
         let sidebar = this.$el.querySelector("#sidebar");
@@ -93,7 +140,7 @@ export default {
                 e.preventDefault();
                 e.returnValue = false;
                 return false;
-            }
+            };
 
             if (!up && -delta > scrollHeight - height - scrollTop) {
                 // Scrolling down, but this will take us past the bottom.
@@ -113,22 +160,6 @@ export default {
         Util.removeEventListeners(this.listeners);
     },
 
-    data () {
-        return {
-            links: {
-                'conversations': { name: 'conversations-list'},
-                'unread': { name: 'conversations-list-unread'},
-                'archive': { name: 'conversations-list-archived'},
-                'blacklists': { name: 'blacklists'},
-                'private': { name: 'conversations-list-private' },
-                'folders': { name: 'folders' },
-                'scheduled': { name: 'scheduled-messages' }
-            },
-            listeners: [],
-            searchQuery: "",
-        }
-    },
-
     methods: {
         /**
          * route to
@@ -137,8 +168,8 @@ export default {
          * @param link - link to route too
          */
         routeTo (link) {
-            this.close_drawer()
-            this.$router.push(this.links[link])
+            this.close_drawer();
+            this.$router.push(this.links[link]);
             this.searchQuery = "";
         },
 
@@ -186,39 +217,8 @@ export default {
 
             return false;
         }
-    },
-
-    computed: {
-        marginLeft () { // Handles margins
-            if(this.open)
-                return "margin-left: 0px;";
-            else
-                return "margin-left: -269px;";
-        },
-        open () { // Sidebar_open state
-            return this.$store.state.sidebar_open;
-        },
-        full_theme () { // Full_theme state
-            return this.$store.state.full_theme;
-        },
-        showConversations () {
-            return this.$route.name != 'conversations-list'
-                && this.$store.state.account_id != '';
-        }
-    },
-
-    watch: {
-        
-        "searchQuery" (to, from) {
-            this.$store.state.msgbus.$emit('searchUpdated', to);
-        }
-
-    },
-
-    components: {
-        Conversations
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

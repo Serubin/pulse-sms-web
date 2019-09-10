@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Api, Url, Crypto, SessionCache } from '@/utils/'
+import { Api, Url, Crypto, SessionCache } from '@/utils/';
 
 export default class Contacts {
     static get() {
@@ -51,7 +51,7 @@ export default class Contacts {
             }
         });
 
-        return promise
+        return promise;
     }
 
     static delete(id) {

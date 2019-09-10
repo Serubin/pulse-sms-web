@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/store';
 
 export default class SessionCache {
 
@@ -11,7 +11,7 @@ export default class SessionCache {
     }
 
     static getConversation (conversation_id) {
-        let conversations = SessionCache.getConversations('index_public_unarchived')
+        let conversations = SessionCache.getConversations('index_public_unarchived');
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == conversation_id) {
@@ -20,7 +20,7 @@ export default class SessionCache {
             }
         }
 
-        conversations = SessionCache.getConversations('index_archived')
+        conversations = SessionCache.getConversations('index_archived');
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == conversation_id) {
@@ -29,7 +29,7 @@ export default class SessionCache {
             }
         }
 
-        conversations = SessionCache.getConversations('index_private')
+        conversations = SessionCache.getConversations('index_private');
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == conversation_id) {
@@ -56,7 +56,7 @@ export default class SessionCache {
     static putConversations (conversations, index = 'index_public_unarchived') {
         if (index == "index_public_unread") {
             // We want to just always read these from the backend, when the user goes to this section of the app.
-            return
+            return;
         }
 
         let sessionConversations = SessionCache.getAllConversations();
@@ -81,18 +81,18 @@ export default class SessionCache {
     }
 
     static hasMessages (conversation_id) {
-        let conversation = SessionCache.getConversation(conversation_id)
+        let conversation = SessionCache.getConversation(conversation_id);
         let messages = SessionCache.getMessages(conversation_id);
 
         if (conversation == null || messages == null || messages.length == 0) {
             return false;
         }
 
-        return messages[0].timestamp >= conversation.timestamp - 2000
+        return messages[0].timestamp >= conversation.timestamp - 2000;
     }
 
     static hasContacts () {
-        return SessionCache.getContacts().length > 0
+        return SessionCache.getContacts().length > 0;
     }
 
     static invalidateConversations (index = 'index_public_unarchived') {
@@ -179,7 +179,7 @@ export default class SessionCache {
     }
 
     static updateConversation (message) {
-        let conversations = SessionCache.getConversations('index_public_unarchived')
+        let conversations = SessionCache.getConversations('index_public_unarchived');
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
@@ -191,7 +191,7 @@ export default class SessionCache {
             }
         }
 
-        conversations = SessionCache.getConversations('index_archived')
+        conversations = SessionCache.getConversations('index_archived');
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
@@ -203,7 +203,7 @@ export default class SessionCache {
             }
         }
 
-        conversations = SessionCache.getConversations('index_private')
+        conversations = SessionCache.getConversations('index_private');
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {

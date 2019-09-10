@@ -1,25 +1,36 @@
 <template>
     <div id="device-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="devices.length == 0"></spinner>
+        <spinner v-if="devices.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="device in devices" :is="'DeviceItem'" :device-data="device" :key="device.hash"/>
+            <component :is="'DeviceItem'" v-for="device in devices" :key="device.hash" :device-data="device" />
         </transition-group>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
-import DeviceItem from './DeviceItem.vue'
-import Spinner from '@/components/Spinner.vue'
+
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import DeviceItem from './DeviceItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
-    name: 'devices',
+    name: 'Devices',
+
+    components: {
+        DeviceItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Devices",
+            devices: [],
+        };
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -67,20 +78,8 @@ export default {
         refresh () {
             this.fetchDevices();
         }
-    },
-
-    data () {
-        return {
-            title: "Devices",
-            devices: [],
-        }
-    },
-
-    components: {
-        DeviceItem,
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -95,7 +94,7 @@ export default {
         }
     }
 
-    .flip-list-enter, .flip-list-leave-to	{
+    .flip-list-enter, .flip-list-leave-to  {
         opacity: 0;
     }
 

@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/store';
 
 export default class Url {
     static urls = {
@@ -55,7 +55,7 @@ export default class Url {
     static getAccountPayload () {
         return {
             account_id: store.state.account_id
-        }
+        };
     }
 
     static get (name) {

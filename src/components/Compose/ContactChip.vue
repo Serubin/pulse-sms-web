@@ -9,11 +9,11 @@
 
 export default {
     name: 'ContactChip',
-    props: [ 'contact', 'onDelete'],
     components: {
 
-    }
-}
+    },
+    props: [ 'contact', 'onDelete']
+};
 </script>
 
 <style lang="scss" scoped>

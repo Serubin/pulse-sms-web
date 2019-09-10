@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Api, Url, Crypto } from '@/utils/'
+import { Api, Url, Crypto } from '@/utils/';
 
 export default class Templates {
     static get() {
@@ -7,7 +7,7 @@ export default class Templates {
         const promise = new Promise((resolve, reject) => {
             Vue.http.get(constructed_url)
                 .then(response => {
-                    response = response.data
+                    response = response.data;
 
                     // Decrypt template items
                     for (let i = 0; i < response.length; i++) {
@@ -21,7 +21,7 @@ export default class Templates {
                 .catch(response => Api.rejectHandler(response, reject));
         });
 
-        return promise
+        return promise;
     }
 
     static delete(id) {

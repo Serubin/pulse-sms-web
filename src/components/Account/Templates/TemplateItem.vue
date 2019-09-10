@@ -1,35 +1,41 @@
 <template>
     <div>
-        <div class="click-item" :id="id" v-mdl @click="menu.toggle()">{{ text }}</div>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="template-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteTemplate">Delete</li>
+        <div :id="id" v-mdl class="click-item" @click="menu.toggle()">
+            {{ text }}
+        </div>
+        <ul id="template-menu"
+            class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
+        >
+            <li class="mdl-menu__item" @click="deleteTemplate">
+                Delete
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
 
-import store from '@/store/'
-import { Util, Api } from '@/utils'
+import store from '@/store/';
+import { Api, Util } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
-    name: 'template-item',
+    name: 'TemplateItem',
     props: [ 'templateData' ],
-
-    mounted () {
-        let menu_el = this.$el.querySelector("#template-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
 
     data () {
         return {
             id: this.templateData.device_id,
             text: this.templateData.text,
             menu: null,
-        }
+        };
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#template-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {
@@ -40,7 +46,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -60,7 +66,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+        background: #E0E0E0;
     }
 
     .click-item:hover {

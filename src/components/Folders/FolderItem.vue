@@ -1,22 +1,22 @@
 <template>
     <div>
-        <div class="item" :id="id" v-mdl @click="routeToList">{{ name }}</div>
+        <div :id="id" v-mdl class="item" @click="routeToList">
+            {{ name }}
+        </div>
     </div>
 </template>
 
 <script>
 
-import store from '@/store/'
-
 export default {
-    name: 'folder-item',
+    name: 'FolderItem',
     props: [ 'folderData' ],
 
     data () {
         return {
             id: this.folderData.device_id,
             name: this.folderData.name
-        }
+        };
     },
 
     methods: {
@@ -27,7 +27,7 @@ export default {
         }
     }
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -36,20 +36,20 @@ export default {
 
     body.dark {
         .item:hover {
-        	  background: #202020;
+            background: #202020;
         }
     }
 
     .item {
-    	height: 40px;
-    	line-height: 40px;
-    	width: 100%;
-    	padding-left: 16px;
+        height: 40px;
+        line-height: 40px;
+        width: 100%;
+        padding-left: 16px;
     }
 
     .item:hover {
-    	background: #E0E0E0;
-    	cursor: pointer;
+        background: #E0E0E0;
+        cursor: pointer;
     }
 
 

@@ -21,7 +21,7 @@ export const KEYS  = {
         CONVERSATION_CATEGORIES: 'conversation_categories',
         MESSAGE_TIMESTAMP: 'message_timestamp'
     }
-}
+};
 
 const empty_str = "\"\"";
 
@@ -73,7 +73,7 @@ export const state = {
 
     session_conversations: { },
     session_messages: { }
-}
+};
 
 export const getters = {
     getConversationData: (state) => (id) => {
@@ -82,7 +82,7 @@ export const getters = {
     getContact: (state) => (id) => {
         return state.contacts[id];
     }
-}
+};
 
 export const mutations = {
     title: (state, title) => state.title = title,
@@ -138,23 +138,23 @@ export const mutations = {
     },
     conversations: (state, payload) => {
         if(!Array.isArray(payload))
-            payload = [ payload ]
+            payload = [ payload ];
 
         for(let i = 0; i < payload.length; i++)
-            state.conversations[payload[i].id] = payload[i]
+            state.conversations[payload[i].id] = payload[i];
     },
     contacts: (state, payload) => {
         if(!Array.isArray(payload))
-            payload = [ payload ]
+            payload = [ payload ];
 
         for(let i = 0; i < payload.length; i++)
-            state.contacts[payload[i].id] = payload[i]
+            state.contacts[payload[i].id] = payload[i];
     },
-    clearContacts: (state, payload) => {
+    clearContacts: (state) => {
         state.contacts = {};
     }
-}
+};
 
 export const actions = {
 
-}
+};

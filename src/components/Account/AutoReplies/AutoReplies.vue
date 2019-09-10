@@ -1,25 +1,35 @@
 <template>
     <div id="auto-reply-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="replies.length == 0"></spinner>
+        <spinner v-if="replies.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="reply in replies" :is="'AutoReplyItem'" :reply-data="reply" :key="reply.hash"/>
+            <component :is="'AutoReplyItem'" v-for="reply in replies" :key="reply.hash" :reply-data="reply" />
         </transition-group>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
-import AutoReplyItem from './AutoReplyItem.vue'
-import Spinner from '@/components/Spinner.vue'
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import AutoReplyItem from './AutoReplyItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
-    name: 'auto-replies',
+    name: 'AutoReplies',
+
+    components: {
+        AutoReplyItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Auto Replies",
+            replies: [],
+        };
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -67,20 +77,8 @@ export default {
         refresh () {
             this.fetchAutoReplies();
         }
-    },
-
-    data () {
-        return {
-            title: "Auto Replies",
-            replies: [],
-        }
-    },
-
-    components: {
-        AutoReplyItem,
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

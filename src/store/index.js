@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { state, getters, mutations, actions } from '@/store/state.js'
-import plugins from '@/store/plugins.js'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { state, getters, mutations, actions } from '@/store/state.js';
+import plugins from '@/store/plugins.js';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
     state,
@@ -11,4 +11,4 @@ export default new Vuex.Store({
     mutations,
     actions,
     plugins,
-})
+});

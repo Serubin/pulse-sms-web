@@ -1,34 +1,42 @@
 <template>
-    <div class="mdl-card mdl-shadow--6dp" id="login-pane" v-mdl>
+    <div id="login-pane" v-mdl class="mdl-card mdl-shadow--6dp">
         <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
-            <h2 class="mdl-card__title-text">Pulse SMS</h2>
+            <h2 class="mdl-card__title-text">
+                Pulse SMS
+            </h2>
         </div>
         <div class="mdl-card__supporting-text">
+            <!-- eslint-disable vue/no-v-html -->
             <p v-html="$t('login.first')"></p>
-            <p v-if="error" class="error">{{ $t('login.error') }}</p>
+            <p v-if="error" class="error">
+                {{ $t('login.error') }}
+            </p>
             <form>
                 <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" type="email" id="username" v-model="username" autofocus/>
+                    <input id="username" v-model="username" class="mdl-textfield__input" type="email" autofocus>
                     <label class="mdl-textfield__label" for="username">{{ $t('login.email') }}</label>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input" type="password" id="password" v-model="password" @keyup.enter="doLogin"/>
+                    <input id="password" v-model="password" class="mdl-textfield__input" type="password" @keyup.enter="doLogin">
                     <label class="mdl-textfield__label" for="password">{{ $t('login.password') }}</label>
                 </div>
             </form>
 
             <a href="https://messenger.klinkerapps.com/forgot_password.html" target="_blank">{{ $t('login.forgotpassword') }}</a>
             <br>
+            <!-- eslint-disable vue/no-v-html -->
             <a href="https://messenger.klinkerapps.com/overview/platform-ios.html" target="_blank" v-html="$t('login.iphone')"></a>
         </div>
         <div class="mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="login" @click="doLogin">{{ $t('login.login') }}</button>
+            <button id="login" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="doLogin">
+                {{ $t('login.login') }}
+            </button>
         </div>
 
 
         <transition name="loading-fade">
-            <div class="loading-center" v-if="loading">
-                <spinner></spinner>
+            <div v-if="loading" class="loading-center">
+                <spinner />
             </div>
         </transition>
     </div>
@@ -36,22 +44,17 @@
 
 <script>
 
-import '@/lib/sjcl.js'
-import '@/lib/hmacsha1.js'
-import Vue from 'vue'
-import { Crypto, Url, Api } from '@/utils/'
-import Spinner from '@/components/Spinner.vue'
+import { Crypto, Api } from '@/utils/';
+import Spinner from '@/components/Spinner.vue';
+import { sjcl } from '@/lib/sjcl.js';
+import { hmacSHA1 } from '@/lib/hmacsha1.js';
 
 
 export default {
-    name: 'login',
+    name: 'Login',
 
-    mounted () {
-        if (this.$store.state.account_id != '')
-            return this.$router.push({ name: 'conversations-list'});
-
-        this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
+    components: {
+        Spinner
     },
 
     data () {
@@ -61,7 +64,15 @@ export default {
             password: '',
             loading: false,
             error: false,
-        }
+        };
+    },
+
+    mounted () {
+        if (this.$store.state.account_id != '')
+            return this.$router.push({ name: 'conversations-list'});
+
+        this.$store.commit("loading", false);
+        this.$store.commit('title', this.title);
     },
 
     methods: {
@@ -100,17 +111,13 @@ export default {
             this.$router.push({ name: 'conversations-list'});
         },
 
-        handleError(data) {
+        handleError() {
             this.password = "";
             this.error = true;
             this.loading = false;
         }
-    },
-
-    components: {
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

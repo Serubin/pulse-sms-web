@@ -1,26 +1,26 @@
 <template>
-    <div class="send-bar" v-mdl>
-        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: loading ? '' : 'none' }" v-mdl></div>
-        <div v-if="$store.state.loaded_media" class="preview" v-mdl>
+    <div v-mdl class="send-bar">
+        <div v-mdl class="mdl-progress mdl-js-progress mdl-progress__indeterminate" :style="{ display: loading ? '' : 'none' }"></div>
+        <div v-if="$store.state.loaded_media" v-mdl class="preview">
             <div class="overlay">
                 <button class="media-clear mdl-button mdl-js-button mdl-button--colored mdl-button--fab mdl-js-ripple-effect" :style="{ background: send_color }" @click="removeMedia">
                     <i class="material-icons">clear</i>
                 </button>
             </div>
-            <img :src="media_blob" />
+            <img :src="media_blob">
         </div>
-        <div class="send-bar-inner" id="sendbar">
-            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia"/>
-            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji"/>
-            <div id="emoji-wrapper" v-show="show_emoji" @click.self="toggleEmoji">
-                    <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheetSize="sheetSize" :per-line="perLine" :skins="skin" @select="insertEmoji" :data="emojiIndex" />
+        <div id="sendbar" class="send-bar-inner">
+            <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia">
+            <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji">
+            <div v-show="show_emoji" id="emoji-wrapper" @click.self="toggleEmoji">
+                <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheet-size="sheetSize" :per-line="perLine" :skins="skin" :data="emojiIndex" @select="insertEmoji" />
             </div>
-            <div class="entry mdl-textfield mdl-js-textfield" :class="is_dirty" v-mdl>
-                <textarea class="mdl-textfield__input disabled" type="text" id="message-entry" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend" v-model="message"></textarea>
+            <div v-mdl class="entry mdl-textfield mdl-js-textfield" :class="is_dirty">
+                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.enter.prevent.stop.exact="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
-            <button class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" id="send-button" @click="dispatchSend">
+            <button id="send-button" class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" @click="dispatchSend">
                 <i class="material-icons md-18 material-icons-white">send</i>
             </button>
         </div>
@@ -28,22 +28,70 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import AutoGrow from '@/lib/textarea-autogrow.js'
-import emojione from 'emojione'
-import data from 'emoji-mart-vue-fast/data/all.json'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
-import { NimblePicker, EmojiIndex } from 'emoji-mart-vue-fast'
-import { Api } from '@/utils'
+import Vue from 'vue';
+import AutoGrow from '@/lib/textarea-autogrow.js';
+import data from 'emoji-mart-vue-fast/data/all.json';
+import 'emoji-mart-vue-fast/css/emoji-mart.css';
+import { NimblePicker, EmojiIndex } from 'emoji-mart-vue-fast';
+import { Api } from '@/utils';
 
 export default {
     name: 'Sendbar',
+    components: {
+        NimblePicker,
+    },
     props: ['threadId', 'onSend', 'loading'],
 
-    mounted () {
-        let autogrow = new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
+    data () {
+        return {
+            message: "",
+            emojiStyle: {
+                position: "absolute",
+                left: 0,
+                bottom: "70px",
+                width: "18em",
+            },
+            perLine: 6,
+            set: 'twitter',
+            emojiIndex: new EmojiIndex(data),
+            sheetSize: 32,
+            skin: 3,
+            show_emoji: false,
+            $wrapper: null,
+            $sendbar: null,
+        };
+    },
 
-        window.addEventListener('resize', this.updateEmojiMargin)
+    computed: {
+        send_color () {
+            if (this.$store.state.theme_use_global) {
+                return this.$store.state.theme_global_accent;
+            } else {
+                return this.$store.state.colors_accent;
+            }
+        },
+        is_dirty () { // Is dirty fix for mdl
+            if (this.message.length > 0)
+                return "is-dirty";
+            return "";
+        },
+        media_blob () { // creates url object from media blob
+            return window.URL.createObjectURL(this.$store.state.loaded_media);
+        }
+    },
+
+    watch: {
+        '$route' () { // Update thread on route change
+            this.message = "";
+            this.removeMedia();
+        }
+    },
+
+    mounted () {
+        // No need for assignment - just build object
+        new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
+
+        window.addEventListener('resize', this.updateEmojiMargin);
         this.$wrapper = document.querySelector("#wrapper");
         this.$sendbar = document.querySelector("#message-entry");
 
@@ -64,7 +112,7 @@ export default {
                     file = clipboardData.items[i].getAsFile();
                     reader = new FileReader();
 
-                    reader.onload = function(evt) {
+                    reader.onload = function() {
                         return Api.messages.media.compress(file);
                     };
 
@@ -78,26 +126,6 @@ export default {
     destroy () {
         document.documentElement.removeEventListener('paste');
         this.$store.state.msgbus.$off('hotkey-emoji', this.toggle);
-    },
-
-    data () {
-        return {
-            message: "",
-            emojiStyle: {
-                position: "absolute",
-                left: 0,
-                bottom: "70px",
-                width: "18em",
-            },
-            perLine: 6,
-            set: 'twitter',
-            emojiIndex: new EmojiIndex(data),
-            sheetSize: 32,
-            skin: 3,
-            show_emoji: false,
-            $wrapper: null,
-            $sendbar: null,
-        }
     },
 
     methods: {
@@ -118,7 +146,7 @@ export default {
             // case four: enter to send=on, shift key -> return line
 
             if (e instanceof KeyboardEvent && (
-                  (e.shiftKey && this.$store.state.enter_to_send) ||
+                (e.shiftKey && this.$store.state.enter_to_send) ||
                   (!e.shiftKey && !this.$store.state.enter_to_send))) { // return line
 
                 // Get start/end of selection for insert location
@@ -127,7 +155,7 @@ export default {
 
                 // Overwrite selection with newline
                 this.message = this.message.substr(0,start)
-                    + "\n" + this.message.substr(end, this.message.length)
+                    + "\n" + this.message.substr(end, this.message.length);
 
                 // Set new location of selection to start of old selection
                 // Wait until next tick to ensure the new message gets rendered
@@ -159,9 +187,9 @@ export default {
         /**
          * Attach media
          * Get media from event and puts it in the store
-         * @param e - event object
+         * @param e - event object (optional)
          */
-        attachMedia (e) {
+        attachMedia () {
 
             // Create input to attach file
             const input = document.createElement('input');
@@ -173,7 +201,7 @@ export default {
 
                 // Get file from event
                 if (e.dataTransfer)
-                    file = e.dataTransfer.files[0]
+                    file = e.dataTransfer.files[0];
                 else
                     file = e.target.files[0];
 
@@ -187,7 +215,7 @@ export default {
                 false, false, false, false, 0, null);
 
             // Dispatch click event
-            input.dispatchEvent(event)
+            input.dispatchEvent(event);
         },
 
         /**
@@ -201,10 +229,10 @@ export default {
 
             // If no toggle given, toggle the show_emoji value
             if(typeof toggle != "boolean")
-                return this.show_emoji = !this.show_emoji
+                return this.show_emoji = !this.show_emoji;
 
             // Otherwise set to provided toggle
-            return this.show_emoji = toggle
+            return this.show_emoji = toggle;
 
         },
 
@@ -243,7 +271,7 @@ export default {
 
             // Overwrite selection with emoji
             this.message = this.message.substr(0,start)
-                + e.native + this.message.substr(end, this.message.length)
+                + e.native + this.message.substr(end, this.message.length);
 
             // Set new location of selection to start of old selection
             // Wait until next tick to ensure the new message gets rendered
@@ -251,36 +279,8 @@ export default {
                 this.$sendbar.setSelectionRange(start + e.native.length, start + e.native.length)
             );
         }
-    },
-
-    computed: {
-        send_color () {
-            if (this.$store.state.theme_use_global) {
-                return this.$store.state.theme_global_accent;
-            } else {
-                return this.$store.state.colors_accent;
-            }
-        },
-        is_dirty () { // Is dirty fix for mdl
-            if (this.message.length > 0)
-                return "is-dirty";
-            return "";
-        },
-        media_blob () { // creates url object from media blob
-            return window.URL.createObjectURL(this.$store.state.loaded_media)
-        }
-    },
-
-    watch: {
-        '$route' (to) { // Update thread on route change
-            this.message = "";
-            this.removeMedia();
-        }
-    },
-    components: {
-        NimblePicker,
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

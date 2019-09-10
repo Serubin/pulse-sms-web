@@ -1,25 +1,35 @@
 <template>
     <div id="template-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="templates.length == 0"></spinner>
+        <spinner v-if="templates.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="template in templates" :is="'TemplateItem'" :template-data="template" :key="template.hash"/>
+            <component :is="'TemplateItem'" v-for="template in templates" :key="template.hash" :template-data="template" />
         </transition-group>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
-import TemplateItem from './TemplateItem.vue'
-import Spinner from '@/components/Spinner.vue'
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import TemplateItem from './TemplateItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
-    name: 'templates',
+    name: 'Templates',
+
+    components: {
+        TemplateItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Templates",
+            templates: [],
+        };
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -67,20 +77,8 @@ export default {
         refresh () {
             this.fetchTemplates();
         }
-    },
-
-    data () {
-        return {
-            title: "Templates",
-            templates: [],
-        }
-    },
-
-    components: {
-        TemplateItem,
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

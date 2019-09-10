@@ -1,11 +1,11 @@
 <template>
     <div id="compose-head">
-        <div class="mdl-card__title" >
+        <div class="mdl-card__title">
             <div id="chip-insert">
-                <ContactChip v-for="selected in Object.values(selectedContacts)" :contact="selected" :key="selected.id" :onDelete="removeContact" />
+                <ContactChip v-for="selected in Object.values(selectedContacts)" :key="selected.id" :contact="selected" :on-delete="removeContact" />
             </div>
-            <div class="mdl-textfield mdl-js-textfield" id="recipient-wrap" :class="is_dirty" v-mdl>
-                <input class="mdl-textfield__input" type="text" id="recipient" v-model="recipient" @blur="inputToChips" @keydown.delete="deleteKey">
+            <div id="recipient-wrap" v-mdl class="mdl-textfield mdl-js-textfield" :class="is_dirty">
+                <input id="recipient" v-model="recipient" class="mdl-textfield__input" type="text" @blur="inputToChips" @keydown.delete="deleteKey">
                 <label class="mdl-textfield__label" for="recipient">{{ $t('compose.type') }}</label>
             </div>
             <div id="border"></div>
@@ -14,16 +14,56 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { i18n } from '@/utils'
+import Vue from 'vue';
+import { i18n } from '@/utils';
 
-import '@/lib/auto-complete.min.js'
-import ContactChip from './ContactChip.vue'
-import { Api, Crypto, Util, SessionCache } from "@/utils/"
+import { autoComplete } from '@/lib/auto-complete.js';
+import ContactChip from './ContactChip.vue';
+import { Api, Util, SessionCache } from "@/utils/";
 
 export default {
     name: 'RecipientBar',
+    components: {
+        ContactChip,
+    },
     props: ['onContactListChanged'],
+
+    data () {
+        return {
+            contacts: {},
+            recipient: "",
+            selectedContacts: [],
+            autocomplete: null,
+        };
+    },
+    computed: {
+        is_dirty () { // Is dirty fix for mdl
+            if (this.recipient.length > 0)
+                return "is-dirty";
+            return "";
+        },
+    },
+    watch: {
+        'recipient' (string) {
+            const lastchar = string.substr(string.length - 1, string.length);
+
+            if (lastchar != ',')
+                return;
+
+
+            string = string.substr(0, string.length - 1); // Remove comma
+
+            if (!/(\d{10}|\d{3}-\d{3}-\d{4})|\d{5}/.test(string))
+                return;
+
+            this.addContact({
+                'id': string,
+                'name': string,
+                'phone': string
+            });
+
+        }
+    },
 
     mounted () {
         this.queryContacts();
@@ -40,15 +80,6 @@ export default {
         }
 
         this.$store.state.msgbus.$off('refresh-btn', this.refresh);
-    },
-
-    data () {
-        return {
-            contacts: {},
-            recipient: "",
-            selectedContacts: [],
-            autocomplete: null,
-        }
     },
 
     methods: {
@@ -110,8 +141,8 @@ export default {
             }
 
             // We also want to add any of the current conversations.
-            // Contacts are not refreshed automatically, so, if the user has a conversation active, but hasn't downloaded the 
-            // actual contact record, we still want to make it available for them on the compose screen. 
+            // Contacts are not refreshed automatically, so, if the user has a conversation active, but hasn't downloaded the
+            // actual contact record, we still want to make it available for them on the compose screen.
             // This is jus for convienence. We will use the conversations in the cache.
             const conversations = SessionCache.getConversations('index_public_unarchived');
             if (conversations) {
@@ -143,17 +174,17 @@ export default {
             this.autocomplete = new autoComplete({
                 selector: this.$el.querySelector("#recipient"),
                 minChars: 2,
-                source: function(term, suggest) { suggest(matcher(term)); },
-                renderItem: function (contact, search) {
+                source: function(term, suggest) { suggest(matcher(term)) },
+                renderItem: function (contact) {
                     if (contact.id == null) {
                         return `<div class="autocomplete-suggestion">${i18n.t('compose.cantfind')}</div>`;
                     } else {
                         let display = contact.name + ' ' + contact.phone;
                         if (contact.type) {
                             switch (contact.type) {
-                                case -1: 
+                                case -1:
                                     break;
-                                case 0: 
+                                case 0:
                                     display = display + ' (' + i18n.t('contact.group') + ')';
                                     break;
                                 case 1:
@@ -162,7 +193,7 @@ export default {
                                 case 2:
                                     display = display + ' (' + i18n.t('contact.mobile') + ')';
                                     break;
-                                case 3: 
+                                case 3:
                                     display = display + ' (' + i18n.t('contact.work') + ')';
                                     break;
                                 default:
@@ -189,14 +220,14 @@ export default {
             });
         },
         matchContact (input) {
-            input = input.toLowerCase()
+            input = input.toLowerCase();
             let list = Object.values(this.contacts).filter((data) => {
                 if (data.name.toLowerCase().indexOf(input) > -1 || data.phone.indexOf(input) > -1)
                     return data;
             });
 
             // the blank object will be used to tell the search to add the "Can't find your contact?" text
-            list[list.length] = { }
+            list[list.length] = { };
             return list;
         },
         /**
@@ -208,7 +239,7 @@ export default {
             let enteredText = this.$el.querySelector("#recipient").value;
             if (enteredText.length > 0) {
                 let split = enteredText.split(/;|,/g); // split using ";" or ","
-                split.forEach((contact, i) => {
+                split.forEach((contact) => {
                     if (contact.length > 0) {
                         contact = contact.replace(/ /g, "");
                         this.addContact({
@@ -228,7 +259,7 @@ export default {
             let contactsLength = this.selectedContacts.length;
 
             if (textLength == 0 && contactsLength > 0) {
-                this.removeContact(this.selectedContacts[contactsLength - 1])
+                this.removeContact(this.selectedContacts[contactsLength - 1]);
             }
         },
         addContact (contact) {
@@ -251,39 +282,8 @@ export default {
         notifyContactListUpdated () {
             this.onContactListChanged(this.selectedContacts);
         }
-    },
-    computed: {
-        is_dirty () { // Is dirty fix for mdl
-            if (this.recipient.length > 0)
-                return "is-dirty";
-            return "";
-        },
-    },
-    watch: {
-        'recipient' (string) {
-            const lastchar = string.substr(string.length - 1, string.length);
-
-            if (lastchar != ',')
-                return;
-
-
-            string = string.substr(0, string.length - 1); // Remove comma
-
-            if (!/(\d{10}|\d{3}-\d{3}-\d{4})|\d{5}/.test(string))
-                return;
-
-            this.addContact({
-                'id': string,
-                'name': string,
-                'phone': string
-            });
-
-        }
-    },
-    components: {
-        ContactChip,
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

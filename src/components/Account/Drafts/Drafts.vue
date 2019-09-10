@@ -1,25 +1,36 @@
 <template>
     <div id="draft-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="drafts.length == 0"></spinner>
+        <spinner v-if="drafts.length == 0" class="spinner" />
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="draft in drafts" :is="'DraftItem'" :draft-data="draft" :key="draft.hash"/>
+            <component :is="'DraftItem'" v-for="draft in drafts" :key="draft.hash" :draft-data="draft" />
         </transition-group>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
-import DraftItem from './DraftItem.vue'
-import Spinner from '@/components/Spinner.vue'
+
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import DraftItem from './DraftItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
-    name: 'drafts',
+    name: 'Drafts',
+
+    components: {
+        DraftItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "Drafts",
+            drafts: [],
+        };
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -67,20 +78,8 @@ export default {
         refresh () {
             this.fetchDrafts();
         }
-    },
-
-    data () {
-        return {
-            title: "Drafts",
-            drafts: [],
-        }
-    },
-
-    components: {
-        DraftItem,
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -95,7 +94,7 @@ export default {
         }
     }
 
-    .flip-list-enter, .flip-list-leave-to	{
+    .flip-list-enter, .flip-list-leave-to  {
         opacity: 0;
     }
 

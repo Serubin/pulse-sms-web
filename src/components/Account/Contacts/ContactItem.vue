@@ -1,31 +1,32 @@
 <template>
     <div>
         <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="menu.toggle()">
-            <div class="mdl-color-text--grey-900">{{ name }}</div>
-            <div class="mdl-color-text--grey-600">Phone Number: {{ phone_number }}</div>
+            <div class="mdl-color-text--grey-900">
+                {{ name }}
+            </div>
+            <div class="mdl-color-text--grey-600">
+                Phone Number: {{ phone_number }}
+            </div>
         </div>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned"
-            id="contact-menu" :data-mdl-for="id">
-            <li class="mdl-menu__item" @click="deleteContact">Delete</li>
+        <ul id="contact-menu"
+            class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
+        >
+            <li class="mdl-menu__item" @click="deleteContact">
+                Delete
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
 
-import store from '@/store/'
-import { Util, Api } from '@/utils'
+import store from '@/store/';
+import { Api, Util } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
-    name: 'contact-item',
+    name: 'ContactItem',
     props: [ 'contactData' ],
-
-    mounted () {
-        let menu_el = this.$el.querySelector("#contact-menu");
-        componentHandler.upgradeElement(menu_el);
-
-        this.menu = menu_el.MaterialMenu;
-    },
 
     data () {
         return {
@@ -33,7 +34,14 @@ export default {
             name: this.contactData.name,
             phone_number: this.contactData.phone_number,
             menu: null,
-        }
+        };
+    },
+
+    mounted () {
+        let menu_el = this.$el.querySelector("#contact-menu");
+        componentHandler.upgradeElement(menu_el);
+
+        this.menu = menu_el.MaterialMenu;
     },
 
     methods: {
@@ -44,7 +52,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -59,7 +67,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
-    	  background: #E0E0E0;
+        background: #E0E0E0;
     }
 
     .click-item:hover {

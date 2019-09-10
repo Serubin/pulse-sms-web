@@ -1,36 +1,94 @@
 <template>
     <div id="thread-wrap" @click="markAsRead">
-        <div class="page-content" id="message-list" :style="{marginBottom: margin_bottom + 'px'}">
+        <div id="message-list" class="page-content" :style="{marginBottom: margin_bottom + 'px'}">
             <!-- Load More Button -->
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore" v-if="messages.length > 69">Load Previous</button>
+            <button v-if="messages.length > 69" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore">
+                Load Previous
+            </button>
             <!-- Spinner On load -->
-            <spinner class="spinner" v-if="messages.length == 0"></spinner>
+            <spinner v-if="messages.length == 0" class="spinner" />
             <!-- messages will be inserted here -->
 
             <transition-group name="fade" tag="div">
-                    <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)"></message>
+                <message v-for="message in messages" :key="message.device_id" :message-data="message" :thread-color="getColor(message)" :text-color="text_color(message)" />
             </transition-group>
-
         </div>
 
-        <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage" :loading="$store.state.media_sending" ></sendbar>
+        <sendbar ref="sendbar" :thread-id="threadId" :on-send="sendMessage" :loading="$store.state.media_sending" />
     </div>
 </template>
 
 
 <script>
-import Vue from 'vue'
-import jump from 'jump.js'
+import Vue from 'vue';
+import jump from 'jump.js';
 
-import { Util, Api, SessionCache, TimeUtils } from '@/utils'
+import { Util, Api, SessionCache, TimeUtils } from '@/utils';
 
-import Spinner from '@/components/Spinner.vue'
-import Message from './Message.vue'
-import Sendbar from './Sendbar.vue'
+import Spinner from '@/components/Spinner.vue';
+import Message from './Message.vue';
+import Sendbar from './Sendbar.vue';
 
 export default {
-    name: 'thread',
+    name: 'Thread',
+
+    components: {
+        Spinner,
+        Message,
+        Sendbar,
+    },
     props: ['threadId', 'isRead'],
+
+    data () {
+        return {
+            conversation_id: this.threadId,
+            read: this.isRead,
+            messages: [],
+
+            previous_title: "",
+            listeners: [],
+
+            colors_from: {},
+            margin_bottom: "63",
+
+            html: null,
+            body: null,
+            list: null,
+            snackbar: null,
+            sendbar: null,
+
+            offset: 0,
+        };
+    },
+
+    computed: {
+
+        conversation_data () {
+            return this.$store.getters.getConversationData(this.conversation_id);
+        },
+
+        color () {
+            if (this.$store.state.theme_use_global) {
+                return this.$store.state.theme_global_default;
+            } else {
+                return this.conversation_data.colors.default;
+            }
+        },
+
+        isArchived () {
+            return this.$route.path.indexOf("archived") > -1;
+        },
+    },
+
+    watch: {
+        '$route' () { // Update thread on route change
+            this.conversation_id = this.threadId;
+            this.read = this.isRead;
+
+            this.loadThread();
+
+        },
+    },
 
 
     mounted () {
@@ -84,20 +142,20 @@ export default {
         events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
             (e) => {
                 // Stop normal events
-                e.preventDefault()
-                e.stopPropagation()
+                e.preventDefault();
+                e.stopPropagation();
             }
         );
         this.listeners.extend(events);
 
         // Drag over events
         events = Util.addEventListeners(['dragover', 'dragenter'],
-            (e) => {
+            () => {
                 // Get file drag dom
                 const file_drag = document.querySelector(".file-drag");
 
                 // Add dragging class if not already added
-                const classes = file_drag.className
+                const classes = file_drag.className;
                 if (classes.indexOf("dragging") < 0)
                     file_drag.className = classes + " dragging";
             }
@@ -106,7 +164,7 @@ export default {
 
         // Drag leave events
         events = Util.addEventListeners(['dragleave', 'dragend', 'drop'],
-            (e) => {
+            () => {
                 // Get file drag dom
                 const file_drag = document.querySelector(".file-drag");
 
@@ -124,7 +182,7 @@ export default {
 
                 // Get actual file
                 if (e.dataTransfer)
-                    file = e.dataTransfer.files[0]
+                    file = e.dataTransfer.files[0];
                 else
                     file = e.target.files[0];
 
@@ -137,14 +195,14 @@ export default {
         // Watch sendbar's message content
         this.$watch(
             '$refs.sendbar.message',
-            (to) => setTimeout(() => { // Wait 500ms for text render and resize
+            () => setTimeout(() => { // Wait 500ms for text render and resize
 
                 // Set margin bottom
                 this.margin_bottom = this.$refs.sendbar.$el.clientHeight;
 
             }, 500),
             { deep: true, immediate: true }
-        )
+        );
 
         // Load thread
         this.loadThread();
@@ -181,47 +239,6 @@ export default {
         // Remove any loaded media
         if (this.$store.state.loaded_media)
             this.$store.commit('loaded_media', null);
-    },
-
-    data () {
-        return {
-            conversation_id: this.threadId,
-            read: this.isRead,
-            messages: [],
-
-            previous_title: "",
-            listeners: [],
-
-            colors_from: {},
-            margin_bottom: "63",
-
-            html: null,
-            body: null,
-            list: null,
-            snackbar: null,
-            sendbar: null,
-
-            offset: 0,
-        }
-    },
-
-    computed: {
-
-        conversation_data () {
-            return this.$store.getters.getConversationData(this.conversation_id);
-        },
-
-        color () {
-            if (this.$store.state.theme_use_global) {
-                return this.$store.state.theme_global_default;
-            } else {
-                return this.conversation_data.colors.default;
-            }
-        },
-
-        isArchived () {
-            return this.$route.path.indexOf("archived") > -1;
-        },
     },
 
     methods: {
@@ -285,7 +302,7 @@ export default {
             else // Otherwise, get from cache
                 from.map(
                     (i) => { // For each name
-                        const id = Util.createIdMatcher(i)
+                        const id = Util.createIdMatcher(i);
                         const contact = this.$store.getters.getContact(id); // Get contact
 
                         if (!contact || !contact.colors.default)
@@ -427,7 +444,7 @@ export default {
                     let timeoutId;
                     const data = {
                         message: this.$t('thread.newmessage'),
-                        actionHandler: (e) => {
+                        actionHandler: () => {
                             this.snackbar.MaterialSnackbar.cleanup_(); // Hide snackbar
 
                             clearTimeout(timeoutId); // Cancel timeout
@@ -517,7 +534,7 @@ export default {
 
                 },
                 timeout: 6 * 1000
-            })
+            });
 
             // Awful terrible fix for thread snackbar clean up events
             this.snackbar.MaterialSnackbar.active = false;
@@ -542,14 +559,14 @@ export default {
                 okText: this.$t('thread.delete.delete'),
                 cancelText: this.$t('thread.delete.cancel'),
                 animation: 'fade'
-            }
+            };
 
             const id = this.conversation_id;
             const apiUtils = Api;
 
             this.$router.push('/');
             this.$dialog.confirm(this.$t('thread.delete.thread'), options)
-                .then(function(dialog) {
+                .then(() => {
                     apiUtils.conversations.delete(id);
                 }).catch(function() { });
         },
@@ -566,14 +583,14 @@ export default {
                 Util.snackbar({
                     message: this.$t('thread.blacklisted'),
                     timeout: 6 * 1000
-                })
+                });
 
                 this.$router.push('/');
             } else {
                 Util.snackbar({
                     message: this.$t('thread.groupblacklisted'),
                     timeout: 6 * 1000
-                })
+                });
             }
 
             // Awful terrible fix for thread snackbar clean up events
@@ -585,7 +602,7 @@ export default {
          */
         conversationInformation () {
             // Just a way to give the user the phone number for the conversation
-            const baseText = this.conversation_data.phone_number.indexOf(",") < 0 ? "Phone number: " : "Phone numbers: "
+            const baseText = this.conversation_data.phone_number.indexOf(",") < 0 ? "Phone number: " : "Phone numbers: ";
             Util.snackbar({
                 message: baseText + this.conversation_data.phone_number,
                 actionText: "Copy",
@@ -600,7 +617,7 @@ export default {
                     e.target.parentElement.MaterialSnackbar.cleanup_();
                 },
                 timeout: 10 * 1000
-            })
+            });
         },
 
         /**
@@ -613,7 +630,7 @@ export default {
         },
 
         pageToNext () {
-            let conversations = SessionCache.getConversations()
+            let conversations = SessionCache.getConversations();
             let index = -1;
 
             for (let i = 0; i < conversations.length; i++) {
@@ -629,7 +646,7 @@ export default {
         },
 
         pageToPrevious () {
-            let conversations = SessionCache.getConversations()
+            let conversations = SessionCache.getConversations();
             let index = -1;
 
             for (let i = 0; i < conversations.length; i++) {
@@ -654,7 +671,7 @@ export default {
             try {
                 let colorString;
                 if (message.message_from)
-                    colorString = this.getColor(message)
+                    colorString = this.getColor(message);
                 else // Otherwise default color
                     colorString = this.color;
 
@@ -681,7 +698,7 @@ export default {
                     return this.color;
                 }
             } else {
-                return this.color // Otherwise return conversation default
+                return this.color; // Otherwise return conversation default
             }
         },
 
@@ -708,11 +725,11 @@ export default {
          */
         compareTimestamps(date, nextDate) {
             let length = 15; // minutes
-            
+
             // If the dates are "length" a part, return date string
-            if (this.$store.state.theme_message_timestamp || 
+            if (this.$store.state.theme_message_timestamp ||
                     nextDate.getTime() > date.getTime() + (1000 * 60 * length)) {
-                return TimeUtils.formatTimestamp(date.getTime(), Date.now())
+                return TimeUtils.formatTimestamp(date.getTime(), Date.now());
             } else {
                 return null;
             }
@@ -721,24 +738,8 @@ export default {
         handleShowMore() {
             this.fetchMessages(this.offset);
         }
-    },
-
-    watch: {
-        '$route' (to) { // Update thread on route change
-            this.conversation_id = this.threadId;
-            this.read = this.isRead
-
-            this.loadThread();
-
-        },
-    },
-
-    components: {
-        Spinner,
-        Message,
-        Sendbar,
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

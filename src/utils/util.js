@@ -1,4 +1,4 @@
-import jump from 'jump.js'
+import jump from 'jump.js';
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import store from '@/store/';
@@ -66,14 +66,14 @@ export default class Util {
                 ligher: ligher,
                 darker: darker
             }
-        }
+        };
     }
 
     static createIdMatcher(phone) {
         let stripped = phone.replace(/\+/g, "").replace(/ /g, "")
-                .replace(/\-/g, "").replace(/\./g, "")
-                .replace(/\(/g, "").replace(/\)/g, "")
-                .replace(/\,/g, "");
+            .replace(/-/g, "").replace(/\./g, "")
+            .replace(/\(/g, "").replace(/\)/g, "")
+            .replace(/,/g, "");
 
         if (stripped.length > 8)
             return stripped.substring(stripped.length - 8, stripped.length);
@@ -92,8 +92,8 @@ export default class Util {
         if (Util.isScrolledToBottom()) // Ignore if at bottom
             return false;
 
-        const docu = document.getElementsByTagName("html")[0].clientHeight
-        const body = document.getElementsByTagName("body")[0].clientHeight
+        const docu = document.getElementsByTagName("html")[0].clientHeight;
+        const body = document.getElementsByTagName("body")[0].clientHeight;
 
         const bottom = Math.max(docu, body); // Calculate bottom
 
@@ -119,7 +119,7 @@ export default class Util {
             el = document.querySelector("html");
 
         return el.scrollTop ===
-            (el.scrollHeight - el.offsetHeight)
+            (el.scrollHeight - el.offsetHeight);
     }
 
     /**
@@ -128,12 +128,12 @@ export default class Util {
      * @param message - either a string, or data object
      */
     static snackbar(message) {
-        let data = {}
+        let data = {};
 
         if(typeof message == "string")
             data = { message: message };
         else
-            data = message
+            data = message;
 
         const snackbar = document.querySelector('.mdl-js-snackbar');
 
@@ -183,9 +183,9 @@ export default class Util {
     static addEventListeners(events, listener, object=window) {
         return events.map(
             (i) => {
-                object.addEventListener(i, listener)
+                object.addEventListener(i, listener);
 
-                return { event: i, listener, object }
+                return { event: i, listener, object };
             }
         );
     }
@@ -204,7 +204,7 @@ export default class Util {
             authDomain: "messenger-42616.firebaseapp.com",
             databaseURL: "https://messenger-42616.firebaseio.com",
             storageBucket: "messenger-42616.appspot.com",
-        }
+        };
 
         firebase.initializeApp(config);
     }
@@ -228,16 +228,16 @@ export default class Util {
 }
 
 Array.prototype.extend = function(array){
-    this.push.apply(this, array)
-}
+    this.push.apply(this, array);
+};
 
 /**
 * Contains element
 * @param element value
 */
 Array.prototype.contains = function(element) {
-    return this.indexOf(element) > -1 ? true : false
-}
+    return this.indexOf(element) > -1 ? true : false;
+};
 
 /**
 * Contains element, by key
@@ -248,7 +248,7 @@ Array.prototype.containsObjKey = function(key, element) {
 
     for (let i = 0; i < this.length; i++)
         if (this[i][key] === element)
-            return this[i]
+            return this[i];
 
-    return false
-}
+    return false;
+};

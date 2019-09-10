@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import store from '@/store/';
-import { Api, Url, Crypto } from '@/utils/'
+import { Api, Url, Crypto } from '@/utils/';
 
 export default class ScheduledMessages {
     static get() {
@@ -8,7 +8,7 @@ export default class ScheduledMessages {
         const promise = new Promise((resolve, reject) => {
             Vue.http.get(constructed_url)
                 .then(response => {
-                    response = response.data
+                    response = response.data;
 
                     // Decrypt Scheduled Message items
                     for (let i = 0; i < response.length; i++) {
@@ -22,7 +22,7 @@ export default class ScheduledMessages {
                 .catch(response => Api.rejectHandler(response, reject));
         });
 
-        return promise
+        return promise;
     }
 
     static delete(id) {
@@ -44,9 +44,9 @@ export default class ScheduledMessages {
 
         let constructed_url = Url.get('create_scheduled');
 
-        const promise = new Promise((resolve, reject) => {
+        const promise = new Promise((resolve) => {
             Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
-                .then(response => { resolve(response); });
+                .then(response => { resolve(response) });
         });
 
         return promise;

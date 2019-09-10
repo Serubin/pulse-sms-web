@@ -1,3 +1,3 @@
-import Folders from './Folders.vue'
+import Folders from './Folders.vue';
 
 export default Folders;

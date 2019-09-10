@@ -1,28 +1,42 @@
 <template>
     <div id="folders-list" class="page-content">
-
         <!-- Spinner On load -->
-        <spinner class="spinner" v-if="folders.length == 0 && loading"></spinner>
+        <spinner v-if="folders.length == 0 && loading" class="spinner" />
 
         <!-- If no Folders -->
-        <p class="empty-message" v-if="folders.length == 0 && !loading">No Folders</p>
+        <p v-if="folders.length == 0 && !loading" class="empty-message">
+            No Folders
+        </p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component v-for="folder in folders" :is="'FolderItem'" :folder-data="folder" :key="folder.hash"/>
+            <component :is="'FolderItem'" v-for="folder in folders" :key="folder.hash" :folder-data="folder" />
         </transition-group>
     </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import Hash from 'object-hash'
-import { Util, Api } from '@/utils'
-import FolderItem from './FolderItem.vue'
-import Spinner from '@/components/Spinner.vue'
+
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import FolderItem from './FolderItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
-    name: 'folders',
+    name: 'Folders',
+
+    components: {
+        FolderItem,
+        Spinner
+    },
+
+    data () {
+        return {
+            title: "",
+            loading: true,
+            folders: [],
+        };
+    },
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
@@ -72,21 +86,8 @@ export default {
             this.loading = true;
             this.fetchFolders();
         }
-    },
-
-    data () {
-        return {
-            title: "",
-            loading: true,
-            folders: [],
-        }
-    },
-
-    components: {
-        FolderItem,
-        Spinner
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

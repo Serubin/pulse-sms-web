@@ -1,28 +1,23 @@
 <template>
     <div class="page-content">
-        <RecipientBar :onContactListChanged="onContactListChanged"/>
-        <Sendbar :onSend="sendMessage" :loading="sending" />
+        <RecipientBar :on-contact-list-changed="onContactListChanged" />
+        <Sendbar :on-send="sendMessage" :loading="sending" />
     </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import { i18n } from '@/utils'
+import { i18n } from '@/utils';
 
-import { Api, Crypto, Util } from "@/utils/"
-import Sendbar from '../Thread/Sendbar.vue'
-import RecipientBar from './RecipientBar.vue'
+import { Api, Util } from "@/utils/";
+import Sendbar from '../Thread/Sendbar.vue';
+import RecipientBar from './RecipientBar.vue';
 
 export default {
-    name: 'compose',
+    name: 'Compose',
 
-    mounted () {
-        this.$store.commit('colors_default', this.$store.state.theme_global_default)
-        this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
-        this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
-
-        this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
+    components: {
+        RecipientBar,
+        Sendbar,
     },
 
     data () {
@@ -30,7 +25,16 @@ export default {
             title: 'Compose',
             sending: false,
             selectedContacts: [],
-        }
+        };
+    },
+
+    mounted () {
+        this.$store.commit('colors_default', this.$store.state.theme_global_default);
+        this.$store.commit('colors_dark', this.$store.state.theme_global_dark);
+        this.$store.commit('colors_accent', this.$store.state.theme_global_accent);
+
+        this.$store.commit("loading", false);
+        this.$store.commit('title', this.title);
     },
 
     methods: {
@@ -65,14 +69,9 @@ export default {
                 this.$router.push('/');
             }, 1500);
         },
-    },
-
-    components: {
-        RecipientBar,
-        Sendbar,
     }
 
-}
+};
 </script>
 
 <style lang="scss" scoped>
