@@ -118,7 +118,7 @@ export default class Conversations {
         return promise;
     }
 
-    static create(to, message, messageId = null) {
+    static create(to, message) {
         const constructed_url = Url.get("new_thread");
 
         const request = {

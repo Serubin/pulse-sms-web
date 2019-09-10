@@ -44,7 +44,7 @@ export default class ScheduledMessages {
 
         let constructed_url = Url.get('create_scheduled');
 
-        const promise = new Promise((resolve, reject) => {
+        const promise = new Promise((resolve) => {
             Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then(response => { resolve(response); });
         });

@@ -134,7 +134,7 @@ export default class Messages {
                     maxWidth: 1500,
                     maxHeight: 1500,
                     success: (result) => Api.messages.media.compress(result, compress * 0.7),
-                    error: (e) => null
+                    error: () => null
                 });
             }
 
@@ -157,7 +157,7 @@ export default class Messages {
                 const messageRef = accountRef.child(id + "");
 
                 // Add to firebase
-                messageRef.put(encryptedFile).then((snapshot) => {
+                messageRef.put(encryptedFile).then(() => {
                     // Send message
                     send(file, id);
 

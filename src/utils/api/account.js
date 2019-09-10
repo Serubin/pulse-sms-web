@@ -73,11 +73,11 @@ export default class Account {
                 + "&type=" + type
                 + "&value=" + value;
 
-            const promise = new Promise((resolve, reject) => {
+            new Promise((resolve, reject) => {
                 Vue.http.post(constructed_url, Url.getAccountPayload(),
                     { 'Content-Type': 'application/json' })
-                    .then(response => resolve(true))
-                    .catch(response => Api.rejectHandler(resposne, reject));
+                    .then(() => resolve(true))
+                    .catch(response => Api.rejectHandler(response, reject));
             });
         }
     }
