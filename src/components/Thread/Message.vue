@@ -1,9 +1,10 @@
 <template>
     <div class="message-wrapper" :title="stringTime" @mouseover="showOptions" @mouseleave="hideOptions">
-        <div v-if="this.messageData.marker" id="offset-marker"></div>
+        <div v-if="messageData.marker" id="offset-marker"></div>
 
         <transition name="fade">
-            <div v-if="!this.messageData.marker" :id="id" :class="style_class" :style="styleGenerator">
+            <div v-if="!messageData.marker" :id="id" :class="style_class" :style="styleGenerator">
+                <!-- eslint-disable vue/no-v-html -->
                 <div v-html="content"></div>
                 <!-- Content is inserted via v-html -->
 

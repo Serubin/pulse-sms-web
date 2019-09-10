@@ -6,6 +6,7 @@
             </h2>
         </div>
         <div class="mdl-card__supporting-text">
+            <!-- eslint-disable vue/no-v-html -->
             <p v-html="$t('login.first')"></p>
             <p v-if="error" class="error">
                 {{ $t('login.error') }}
@@ -23,6 +24,7 @@
 
             <a href="https://messenger.klinkerapps.com/forgot_password.html" target="_blank">{{ $t('login.forgotpassword') }}</a>
             <br>
+            <!-- eslint-disable vue/no-v-html -->
             <a href="https://messenger.klinkerapps.com/overview/platform-ios.html" target="_blank" v-html="$t('login.iphone')"></a>
         </div>
         <div class="mdl-card__actions mdl-card--border">

@@ -12,6 +12,7 @@
             <span class="conversation-title mdl-card__supporting-text conversation-title-small"><i v-if="!read"></i>{{ title }}</span>
             <span v-if="!small" class="conversation-date">{{ date }}</span>
             <br>
+            <!-- eslint-disable vue/no-v-html -->
             <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small" v-html="snippet"><!-- Raw html insert --></span>
         </p>
     </div>
