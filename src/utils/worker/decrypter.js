@@ -1,5 +1,5 @@
-import '@/lib/sjcl-worker.js'
-import '@/lib/hmacsha1-worker.js'
+import { sjcl } from '@/lib/sjcl-worker.js'
+import { hmacSHA1 } from '@/lib/hmacsha1-worker.js'
 
 onmessage = function(message) {
 

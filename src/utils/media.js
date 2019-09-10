@@ -5,8 +5,6 @@ import Worker from "worker-loader?name=decrypt.worker.js!./worker/decrypter";
 // IndexedDB
 const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
         || window.OIndexedDB || window.msIndexedDB
-const DBTransaction = window.IDBTransaction || window.webkitIDBTransaction
-    || window.OIDBTransaction || window.msIDBTransaction
 const dbVersion = 1.0;
 
 // DB name consts
@@ -26,22 +24,22 @@ export default class MediaLoader {
 
         this.db_req = indexedDB.open(dbName, dbVersion);
 
-        this.db_req.onerror = (event) => {
+        this.db_req.onerror = () => {
             console.log("Error creating/accessing IndexedDB database");
         }
 
-        this.db_req.onsuccess = (event) => {
+        this.db_req.onsuccess = () => {
             this.db = this.db_req.result;
 
-            this.db.onerror = (event) => {
+            this.db.onerror = () => {
                 console.log("Error creating/accessing IndexedDB database");
             };
 
             if (this.db.setVersion) {
                 if (this.db.version != dbVersion) {
                     const setVersion = this.db.setVersion(dbVersion);
-                    setVersion.onsuccess = (event) => {
-                        this.createObjectStore(db);
+                    setVersion.onsuccess = () => {
+                        this.createObjectStore(this.db);
                     };
                 }
             }
@@ -56,14 +54,13 @@ export default class MediaLoader {
      * getMedia - get's media from server or local store
      *
      * @param id - device id (media id)
-     * @param mime - mime type
      * @return Promise
      */
-    getMedia(id, mime) {
-        return new Promise((resolve, reject) => {
+    getMedia(id) {
+        return new Promise((resolve) => {
             this.getMediaFromStore(id) // Atempt to get media from local store
                 .then(response => resolve(response))
-                .catch(response => {
+                .catch(() => {
                     this.getMediaFromServer(id) // If fail, get from server
                         .then(response => resolve(response))
                         .catch(response => console.log(response))

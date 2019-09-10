@@ -1,5 +1,5 @@
-import '@/lib/sjcl.js'
-import '@/lib/hmacsha1.js'
+import { sjcl } from '@/lib/sjcl.js'
+import { hmacSHA1 } from '@/lib/hmacsha1.js'
 
 import Hash from 'object-hash'
 import store from '@/store'
