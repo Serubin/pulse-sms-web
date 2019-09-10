@@ -267,7 +267,7 @@ export default {
          */
         refresh () {
             //if (!this.small) // Don't clear list if using sidebar list
-                //this.conversations = [];
+            //this.conversations = [];
 
             this.loading = true;
             SessionCache.invalidateAllConversations();

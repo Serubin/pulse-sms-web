@@ -118,7 +118,7 @@ export default {
             // case four: enter to send=on, shift key -> return line
 
             if (e instanceof KeyboardEvent && (
-                  (e.shiftKey && this.$store.state.enter_to_send) ||
+                (e.shiftKey && this.$store.state.enter_to_send) ||
                   (!e.shiftKey && !this.$store.state.enter_to_send))) { // return line
 
                 // Get start/end of selection for insert location

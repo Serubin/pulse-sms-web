@@ -71,9 +71,9 @@ export default class Util {
 
     static createIdMatcher(phone) {
         let stripped = phone.replace(/\+/g, "").replace(/ /g, "")
-                .replace(/-/g, "").replace(/\./g, "")
-                .replace(/\(/g, "").replace(/\)/g, "")
-                .replace(/,/g, "");
+            .replace(/-/g, "").replace(/\./g, "")
+            .replace(/\(/g, "").replace(/\)/g, "")
+            .replace(/,/g, "");
 
         if (stripped.length > 8)
             return stripped.substring(stripped.length - 8, stripped.length);

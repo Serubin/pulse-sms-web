@@ -247,7 +247,7 @@ export default class Crypto {
         const parts = data.split("-:-");
         return sjcl.codec.utf8String.fromBits(
             sjcl.mode.cbc.decrypt(store.state.aes, sjcl.codec.base64.toBits(parts[1]),
-            sjcl.codec.base64.toBits(parts[0]), null)
+                sjcl.codec.base64.toBits(parts[0]), null)
         );
     }
 
@@ -259,7 +259,7 @@ export default class Crypto {
         const parts = data.split("-:-");
         return sjcl.codec.base64.fromBits(
             sjcl.mode.cbc.decrypt(store.state.aes, sjcl.codec.base64.toBits(parts[1]),
-            sjcl.codec.base64.toBits(parts[0]), null));
+                sjcl.codec.base64.toBits(parts[0]), null));
     }
     /**
      * encrypt

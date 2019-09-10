@@ -18,7 +18,7 @@ onmessage = function(message) {
 
     const parts = imageData.split("-:-");
     const decryptedData = sjcl.codec.base64.fromBits(
-            sjcl.mode.cbc.decrypt(aes, sjcl.codec.base64.toBits(parts[1]),
+        sjcl.mode.cbc.decrypt(aes, sjcl.codec.base64.toBits(parts[1]),
             sjcl.codec.base64.toBits(parts[0]), null));
 
     self.postMessage({

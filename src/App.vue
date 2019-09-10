@@ -135,8 +135,8 @@ export default {
         if (this.$store.state.account_id != '') {
             this.applicationStart();
         } else { // Otherwise, add listener for start-app event
-                 // This allows for another part of the app to setup parts of the app
-                 // Which may have unmet requirements (such as login)
+            // This allows for another part of the app to setup parts of the app
+            // Which may have unmet requirements (such as login)
             this.$store.state.msgbus.$on('start-app', this.applicationStart);
             this.mount_view = true;
         }
