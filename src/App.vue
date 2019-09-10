@@ -85,10 +85,11 @@ export default {
         this.$store.commit('title', "Pulse SMS");
 
         // If logged in (account_id) then setup crypto
-        if(this.$store.state.account_id != '')
+        if(this.$store.state.account_id != '') {
             Crypto.setupAes();
-        else
+        } else if (this.$route.name != 'login') {
             this.$router.push('login');
+        }
 
         navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js').then((registration) => {
             console.log('Registered SW with scope: ', registration.scope);
