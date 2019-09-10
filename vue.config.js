@@ -16,7 +16,13 @@ module.exports = {
                 stripPrefix: 'dist/',
                 dontCacheBustUrlsMatching: /\.\w{6}\./
             })
-        ]
+        ],
+        optimization: {
+            splitChunks: {
+                minSize: 10000,
+                maxSize: 250000
+            }
+        }
     },
     chainWebpack: config => {
         // Worker Loader
