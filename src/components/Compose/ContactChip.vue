@@ -13,7 +13,7 @@ export default {
 
     },
     props: [ 'contact', 'onDelete']
-}
+};
 </script>
 
 <style lang="scss" scoped>

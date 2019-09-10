@@ -20,14 +20,14 @@
 
 
 <script>
-import Vue from 'vue'
-import jump from 'jump.js'
+import Vue from 'vue';
+import jump from 'jump.js';
 
-import { Util, Api, SessionCache, TimeUtils } from '@/utils'
+import { Util, Api, SessionCache, TimeUtils } from '@/utils';
 
-import Spinner from '@/components/Spinner.vue'
-import Message from './Message.vue'
-import Sendbar from './Sendbar.vue'
+import Spinner from '@/components/Spinner.vue';
+import Message from './Message.vue';
+import Sendbar from './Sendbar.vue';
 
 export default {
     name: 'Thread',
@@ -58,7 +58,7 @@ export default {
             sendbar: null,
 
             offset: 0,
-        }
+        };
     },
 
     computed: {
@@ -83,7 +83,7 @@ export default {
     watch: {
         '$route' () { // Update thread on route change
             this.conversation_id = this.threadId;
-            this.read = this.isRead
+            this.read = this.isRead;
 
             this.loadThread();
 
@@ -142,8 +142,8 @@ export default {
         events = Util.addEventListeners(['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop'],
             (e) => {
                 // Stop normal events
-                e.preventDefault()
-                e.stopPropagation()
+                e.preventDefault();
+                e.stopPropagation();
             }
         );
         this.listeners.extend(events);
@@ -155,7 +155,7 @@ export default {
                 const file_drag = document.querySelector(".file-drag");
 
                 // Add dragging class if not already added
-                const classes = file_drag.className
+                const classes = file_drag.className;
                 if (classes.indexOf("dragging") < 0)
                     file_drag.className = classes + " dragging";
             }
@@ -182,7 +182,7 @@ export default {
 
                 // Get actual file
                 if (e.dataTransfer)
-                    file = e.dataTransfer.files[0]
+                    file = e.dataTransfer.files[0];
                 else
                     file = e.target.files[0];
 
@@ -202,7 +202,7 @@ export default {
 
             }, 500),
             { deep: true, immediate: true }
-        )
+        );
 
         // Load thread
         this.loadThread();
@@ -302,7 +302,7 @@ export default {
             else // Otherwise, get from cache
                 from.map(
                     (i) => { // For each name
-                        const id = Util.createIdMatcher(i)
+                        const id = Util.createIdMatcher(i);
                         const contact = this.$store.getters.getContact(id); // Get contact
 
                         if (!contact || !contact.colors.default)
@@ -534,7 +534,7 @@ export default {
 
                 },
                 timeout: 6 * 1000
-            })
+            });
 
             // Awful terrible fix for thread snackbar clean up events
             this.snackbar.MaterialSnackbar.active = false;
@@ -559,7 +559,7 @@ export default {
                 okText: this.$t('thread.delete.delete'),
                 cancelText: this.$t('thread.delete.cancel'),
                 animation: 'fade'
-            }
+            };
 
             const id = this.conversation_id;
             const apiUtils = Api;
@@ -583,14 +583,14 @@ export default {
                 Util.snackbar({
                     message: this.$t('thread.blacklisted'),
                     timeout: 6 * 1000
-                })
+                });
 
                 this.$router.push('/');
             } else {
                 Util.snackbar({
                     message: this.$t('thread.groupblacklisted'),
                     timeout: 6 * 1000
-                })
+                });
             }
 
             // Awful terrible fix for thread snackbar clean up events
@@ -602,7 +602,7 @@ export default {
          */
         conversationInformation () {
             // Just a way to give the user the phone number for the conversation
-            const baseText = this.conversation_data.phone_number.indexOf(",") < 0 ? "Phone number: " : "Phone numbers: "
+            const baseText = this.conversation_data.phone_number.indexOf(",") < 0 ? "Phone number: " : "Phone numbers: ";
             Util.snackbar({
                 message: baseText + this.conversation_data.phone_number,
                 actionText: "Copy",
@@ -617,7 +617,7 @@ export default {
                     e.target.parentElement.MaterialSnackbar.cleanup_();
                 },
                 timeout: 10 * 1000
-            })
+            });
         },
 
         /**
@@ -630,7 +630,7 @@ export default {
         },
 
         pageToNext () {
-            let conversations = SessionCache.getConversations()
+            let conversations = SessionCache.getConversations();
             let index = -1;
 
             for (let i = 0; i < conversations.length; i++) {
@@ -646,7 +646,7 @@ export default {
         },
 
         pageToPrevious () {
-            let conversations = SessionCache.getConversations()
+            let conversations = SessionCache.getConversations();
             let index = -1;
 
             for (let i = 0; i < conversations.length; i++) {
@@ -671,7 +671,7 @@ export default {
             try {
                 let colorString;
                 if (message.message_from)
-                    colorString = this.getColor(message)
+                    colorString = this.getColor(message);
                 else // Otherwise default color
                     colorString = this.color;
 
@@ -698,7 +698,7 @@ export default {
                     return this.color;
                 }
             } else {
-                return this.color // Otherwise return conversation default
+                return this.color; // Otherwise return conversation default
             }
         },
 
@@ -729,7 +729,7 @@ export default {
             // If the dates are "length" a part, return date string
             if (this.$store.state.theme_message_timestamp ||
                     nextDate.getTime() > date.getTime() + (1000 * 60 * length)) {
-                return TimeUtils.formatTimestamp(date.getTime(), Date.now())
+                return TimeUtils.formatTimestamp(date.getTime(), Date.now());
             } else {
                 return null;
             }
@@ -739,7 +739,7 @@ export default {
             this.fetchMessages(this.offset);
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

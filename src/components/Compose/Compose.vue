@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import { i18n } from '@/utils'
+import { i18n } from '@/utils';
 
-import { Api, Util } from "@/utils/"
-import Sendbar from '../Thread/Sendbar.vue'
-import RecipientBar from './RecipientBar.vue'
+import { Api, Util } from "@/utils/";
+import Sendbar from '../Thread/Sendbar.vue';
+import RecipientBar from './RecipientBar.vue';
 
 export default {
     name: 'Compose',
@@ -25,13 +25,13 @@ export default {
             title: 'Compose',
             sending: false,
             selectedContacts: [],
-        }
+        };
     },
 
     mounted () {
-        this.$store.commit('colors_default', this.$store.state.theme_global_default)
-        this.$store.commit('colors_dark', this.$store.state.theme_global_dark)
-        this.$store.commit('colors_accent', this.$store.state.theme_global_accent)
+        this.$store.commit('colors_default', this.$store.state.theme_global_default);
+        this.$store.commit('colors_dark', this.$store.state.theme_global_dark);
+        this.$store.commit('colors_accent', this.$store.state.theme_global_accent);
 
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
@@ -71,7 +71,7 @@ export default {
         },
     }
 
-}
+};
 </script>
 
 <style lang="scss" scoped>

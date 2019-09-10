@@ -12,10 +12,10 @@
 
 <script>
 
-import Hash from 'object-hash'
-import { Api } from '@/utils'
-import ContactItem from './ContactItem.vue'
-import Spinner from '@/components/Spinner.vue'
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import ContactItem from './ContactItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
     name: 'Contacts',
@@ -29,7 +29,7 @@ export default {
         return {
             title: "Contacts",
             contacts: [],
-        }
+        };
     },
 
     mounted () {
@@ -79,7 +79,7 @@ export default {
             this.fetchContacts();
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

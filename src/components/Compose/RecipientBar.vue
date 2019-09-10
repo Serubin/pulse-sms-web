@@ -14,12 +14,12 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import { i18n } from '@/utils'
+import Vue from 'vue';
+import { i18n } from '@/utils';
 
-import { autoComplete } from '@/lib/auto-complete.js'
-import ContactChip from './ContactChip.vue'
-import { Api, Util, SessionCache } from "@/utils/"
+import { autoComplete } from '@/lib/auto-complete.js';
+import ContactChip from './ContactChip.vue';
+import { Api, Util, SessionCache } from "@/utils/";
 
 export default {
     name: 'RecipientBar',
@@ -34,7 +34,7 @@ export default {
             recipient: "",
             selectedContacts: [],
             autocomplete: null,
-        }
+        };
     },
     computed: {
         is_dirty () { // Is dirty fix for mdl
@@ -174,7 +174,7 @@ export default {
             this.autocomplete = new autoComplete({
                 selector: this.$el.querySelector("#recipient"),
                 minChars: 2,
-                source: function(term, suggest) { suggest(matcher(term)); },
+                source: function(term, suggest) { suggest(matcher(term)) },
                 renderItem: function (contact) {
                     if (contact.id == null) {
                         return `<div class="autocomplete-suggestion">${i18n.t('compose.cantfind')}</div>`;
@@ -220,14 +220,14 @@ export default {
             });
         },
         matchContact (input) {
-            input = input.toLowerCase()
+            input = input.toLowerCase();
             let list = Object.values(this.contacts).filter((data) => {
                 if (data.name.toLowerCase().indexOf(input) > -1 || data.phone.indexOf(input) > -1)
                     return data;
             });
 
             // the blank object will be used to tell the search to add the "Can't find your contact?" text
-            list[list.length] = { }
+            list[list.length] = { };
             return list;
         },
         /**
@@ -259,7 +259,7 @@ export default {
             let contactsLength = this.selectedContacts.length;
 
             if (textLength == 0 && contactsLength > 0) {
-                this.removeContact(this.selectedContacts[contactsLength - 1])
+                this.removeContact(this.selectedContacts[contactsLength - 1]);
             }
         },
         addContact (contact) {
@@ -283,7 +283,7 @@ export default {
             this.onContactListChanged(this.selectedContacts);
         }
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

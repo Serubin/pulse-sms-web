@@ -20,9 +20,9 @@
 
 <script>
 
-import store from '@/store/'
-import { Util, Api } from '@/utils'
-import { componentHandler } from '@/lib/material.js'
+import store from '@/store/';
+import { Util, Api } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'AutoReplyItem',
@@ -34,7 +34,7 @@ export default {
             response: this.replyData.response,
             reply_type: this.replyData.reply_type,
             menu: null,
-        }
+        };
     },
 
     mounted () {
@@ -52,7 +52,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

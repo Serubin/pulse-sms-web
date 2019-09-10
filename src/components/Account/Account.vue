@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { Api } from '@/utils/'
+import { Api } from '@/utils/';
 
 export default {
     name: 'Account',
@@ -74,7 +74,7 @@ export default {
                 auto_reply_count: '',
                 folder_count: ''
             }
-        }
+        };
     },
 
     computed: {
@@ -85,7 +85,7 @@ export default {
     },
 
     mounted () {
-        this.fetchAccount()
+        this.fetchAccount();
 
         this.$store.commit('title', this.title);
         this.$store.state.msgbus.$on('refresh-btn', this.fetchAccounnt);
@@ -115,7 +115,7 @@ export default {
             }
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

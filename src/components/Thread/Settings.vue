@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { Api, Util, SessionCache } from '@/utils/'
+import { Api, Util, SessionCache } from '@/utils/';
 
 export default {
     name: 'ConversationSettings',
@@ -92,7 +92,7 @@ export default {
             mute_class: "",
             private_class: "",
             showColorSettings: false
-        }
+        };
     },
 
     computed: {
@@ -139,7 +139,7 @@ export default {
         SessionCache.invalidateAllConversations();
 
         Api.conversations.getById(this.conversation_id)
-            .then(response => this.processConversation(response))
+            .then(response => this.processConversation(response));
 
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
@@ -167,13 +167,13 @@ export default {
                 default: data.color,
                 dark: Util.expandColor(data.color_dark),
                 accent: Util.expandColor(data.color_accent)
-            }
+            };
 
             this.hex = {
                 default: this.rgbaToHex(this.colors.default),
                 dark: this.rgbaToHex(this.colors.dark),
                 accent: this.rgbaToHex(this.colors.accent)
-            }
+            };
 
             // This is a bit of a hack. I couldn't get the checkboxes to be checked, without
             // manually changing their class.
@@ -211,7 +211,7 @@ export default {
                 hex.push(str_16);
             }
 
-            return "#" + hex.slice(0, (hex.length - 1)).join("")
+            return "#" + hex.slice(0, (hex.length - 1)).join("");
         },
         hexToRgb(hex) {
             let r = parseInt(hex.slice(1, 3), 16),
@@ -240,7 +240,7 @@ export default {
         }
 
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -2,7 +2,7 @@ import router from '@/router/';
 import ReconnectingWebsocket from 'reconnecting-websocket';
 import store from '@/store/';
 import emojione from 'emojione';
-import { Api, Util, Url, Crypto, SessionCache, Platform, i18n } from '@/utils/'
+import { Api, Util, Url, Crypto, SessionCache, Platform, i18n } from '@/utils/';
 
 export default class Stream {
     constructor() {
@@ -46,7 +46,7 @@ export default class Stream {
 
         this.socket.addEventListener('close', (e) => {
             if (e.wasClean || e.code == 1001) // If not an error, ignore
-                return
+                return;
 
             // if the websocket reconnects within 5 seconds, we won't show anything to the user
             // if it takes longer than that, then we will notify the user that we are
@@ -155,7 +155,7 @@ export default class Stream {
      */
     notify(message) {
         if (Notification.permission != "granted" && !store.state.notifications)
-            return
+            return;
 
         if (message.type != 0)
             return;
@@ -182,9 +182,9 @@ export default class Stream {
             });
 
             notification.onclick = () => {
-                window.focus()
+                window.focus();
                 router.push(link);
-            }
-        })
+            };
+        });
     }
 }

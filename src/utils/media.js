@@ -1,10 +1,10 @@
-import { Api } from '@/utils'
-import store from '@/store'
+import { Api } from '@/utils';
+import store from '@/store';
 import Worker from "worker-loader?name=decrypt.worker.js!./worker/decrypter";
 
 // IndexedDB
 const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
-        || window.OIndexedDB || window.msIndexedDB
+        || window.OIndexedDB || window.msIndexedDB;
 const dbVersion = 1.0;
 
 // DB name consts
@@ -26,7 +26,7 @@ export default class MediaLoader {
 
         this.db_req.onerror = () => {
             console.log("Error creating/accessing IndexedDB database");
-        }
+        };
 
         this.db_req.onsuccess = () => {
             this.db = this.db_req.result;
@@ -63,7 +63,7 @@ export default class MediaLoader {
                 .catch(() => {
                     this.getMediaFromServer(id) // If fail, get from server
                         .then(response => resolve(response))
-                        .catch(response => console.log(response))
+                        .catch(response => console.log(response));
                 });
         });
     }
@@ -89,7 +89,7 @@ export default class MediaLoader {
                     resolve(media_blob); // Return media
                 else
                     reject(null); // Return media
-            }
+            };
         });
     }
 
@@ -115,8 +115,8 @@ export default class MediaLoader {
 
                     // TODO: Now that we are loading things off on the worker thread, can this restriction be removed?
                     if (data.data.length > 10000000) {
-                        reject(null)
-                        return
+                        reject(null);
+                        return;
                     }
 
                     // get data out of json response

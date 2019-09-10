@@ -4,7 +4,7 @@ import emojione from 'emojione';
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import ImageCompressor from '@xkeshi/image-compressor';
-import { Api, Util, Url, Crypto, SessionCache, Platform } from '@/utils/'
+import { Api, Util, Url, Crypto, SessionCache, Platform } from '@/utils/';
 
 export default class Messages {
 
@@ -19,7 +19,7 @@ export default class Messages {
             if (!SessionCache.hasMessages(conversation_id) || offset > 0) {
                 Vue.http.get(constructed_url)
                     .then(response => {
-                        response = response.data
+                        response = response.data;
 
                         // Decrypt Conversations items
                         for (let i = 0; i < response.length; i++) {
@@ -40,7 +40,7 @@ export default class Messages {
             }
         });
 
-        return promise
+        return promise;
     }
 
     static delete(id) {
@@ -100,7 +100,7 @@ export default class Messages {
             data: emojione.unicodeToImage(Util.entityEncode(data)),
             read: true,
             snippet: snippet
-        }
+        };
 
         store.state.msgbus.$emit('newMessage', event_object);
     }
@@ -114,17 +114,17 @@ export default class Messages {
                     .catch(response => Api.rejectHandler(response, reject));
             });
 
-            return promise
+            return promise;
         },
         compress: (file, compress = null) => {
             if (!file.type.startsWith("image/"))
-                return Util.snackbar("File type not supported")
+                return Util.snackbar("File type not supported");
 
             if (compress < 0.05 && compress != null)
-                return Util.snackbar("Image too large")
+                return Util.snackbar("Image too large");
 
             if (compress == null)
-                compress = 0.6
+                compress = 0.6;
 
             // Disallow large non-image files
             if ((file.type.startsWith("image/") || !file.type === "image/gif")
@@ -139,12 +139,12 @@ export default class Messages {
             }
 
             store.commit('loaded_media', file);
-            Vue.nextTick(() => Util.scrollToBottom(250))
+            Vue.nextTick(() => Util.scrollToBottom(250));
         },
         send: (file, send) => {
             store.commit('media_sending', true);
 
-            const reader = new FileReader()
+            const reader = new FileReader();
             reader.onload = (e) => {
                 let encryptedFile = Crypto.encryptData(new Uint8Array(e.target.result));
                 encryptedFile = new TextEncoder('utf-8').encode(encryptedFile);
@@ -166,10 +166,10 @@ export default class Messages {
                     Vue.http.get(constructed_url);
 
                     // Empty loaded media
-                    store.commit('loaded_media', null)
+                    store.commit('loaded_media', null);
                     store.commit('media_sending', false);
                 });
-            }
+            };
 
             reader.readAsArrayBuffer(file);
         }

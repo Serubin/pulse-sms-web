@@ -19,7 +19,7 @@
 
 <script>
 
-import store from '@/store/'
+import store from '@/store/';
 
 export default {
     name: 'Imageviewer',
@@ -28,7 +28,7 @@ export default {
         return {
             image_data: "",
             display: false,
-        }
+        };
     },
 
     mounted () {
@@ -74,7 +74,7 @@ export default {
                 });
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

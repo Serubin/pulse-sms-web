@@ -26,7 +26,7 @@
 
 <script>
 
-import { Crypto, Util, Api } from '@/utils/'
+import { Crypto, Util, Api } from '@/utils/';
 
 export default {
     name: 'Passcode',
@@ -36,7 +36,7 @@ export default {
             title: "",
             passcode: "",
             stored_passcode: null
-        }
+        };
     },
 
     mounted () {
@@ -45,7 +45,7 @@ export default {
 
         Api.account.settings.get().then(response => {
             this.stored_passcode = Crypto.decrypt(response.passcode);
-        })
+        });
     },
 
     methods: {
@@ -63,7 +63,7 @@ export default {
             this.$router.push({ name: 'conversations-list'});
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -16,7 +16,7 @@ export default {
         return {
             id: this.folderData.device_id,
             name: this.folderData.name
-        }
+        };
     },
 
     methods: {
@@ -27,7 +27,7 @@ export default {
         }
     }
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

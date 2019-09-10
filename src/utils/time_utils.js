@@ -74,7 +74,7 @@ export default class TimeUtils {
     static isYesterday (timestamp) {
         let yesterday = new Date();
         TimeUtils.zeroDate(yesterday);
-        yesterday = new Date(yesterday.getTime() - 1000 * 60 * 60 * 24)
+        yesterday = new Date(yesterday.getTime() - 1000 * 60 * 60 * 24);
 
         let time = new Date(timestamp);
         TimeUtils.zeroDate(time);
@@ -85,7 +85,7 @@ export default class TimeUtils {
     static isLastWeek (timestamp) {
         let lastWeek = new Date();
         TimeUtils.zeroDate(lastWeek);
-        lastWeek = new Date(lastWeek.getTime() - 1000 * 60 * 60 * 24 * 7)
+        lastWeek = new Date(lastWeek.getTime() - 1000 * 60 * 60 * 24 * 7);
 
         return timestamp > lastWeek.getTime() && timestamp < (new Date().getTime());
     }

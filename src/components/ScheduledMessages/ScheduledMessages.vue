@@ -21,10 +21,10 @@
 
 <script>
 
-import Hash from 'object-hash'
-import { Api } from '@/utils'
-import ScheduledMessageItem from './ScheduledMessageItem.vue'
-import Spinner from '@/components/Spinner.vue'
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import ScheduledMessageItem from './ScheduledMessageItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
     name: 'ScheduledMessages',
@@ -39,7 +39,7 @@ export default {
             title: "",
             loading: true,
             scheduled_messages: [],
-        }
+        };
     },
 
     mounted () {
@@ -95,7 +95,7 @@ export default {
             this.$router.push({ name: 'create-scheduled-message'});
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

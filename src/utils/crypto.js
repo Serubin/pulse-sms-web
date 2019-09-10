@@ -1,10 +1,10 @@
-import { sjcl } from '@/lib/sjcl.js'
-import { hmacSHA1 } from '@/lib/hmacsha1.js'
+import { sjcl } from '@/lib/sjcl.js';
+import { hmacSHA1 } from '@/lib/hmacsha1.js';
 
-import Hash from 'object-hash'
-import store from '@/store'
-import emojione from 'emojione'
-import { Util } from '@/utils'
+import Hash from 'object-hash';
+import store from '@/store';
+import emojione from 'emojione';
+import { Util } from '@/utils';
 
 export default class Crypto {
     /**
@@ -14,8 +14,8 @@ export default class Crypto {
      */
     static setupAes() {
         // Setup key
-        const combinedKey = store.state.account_id + ":" + store.state.hash + "\n"
-        const key = sjcl.misc.pbkdf2(combinedKey, store.state.salt, 10000, 256, hmacSHA1)
+        const combinedKey = store.state.account_id + ":" + store.state.hash + "\n";
+        const key = sjcl.misc.pbkdf2(combinedKey, store.state.salt, 10000, 256, hmacSHA1);
 
         store.commit('aes', new sjcl.cipher.aes(key)); // Store aes
         sjcl.beware["CBC mode is dangerous because it doesn't protect message integrity."]();
@@ -43,7 +43,7 @@ export default class Crypto {
             convo.snippetNoEmoji = convo.snippetNoEmoji.replace("<i>", "").replace("</i>", "");
             convo.snippet = emojione.unicodeToImage(Util.entityEncode(convo.snippetNoEmoji));
         } catch (err) {
-            return null
+            return null;
         }
 
         // Handle phone number(s) if applicable
@@ -85,7 +85,7 @@ export default class Crypto {
 
             message.message_from = Crypto.decrypt(message.message_from);
         } catch (err) {
-            return null
+            return null;
         }
 
         if (typeof message.device_id == "undefined") // Correct for "id"
@@ -133,7 +133,7 @@ export default class Crypto {
             }
 
             if (blacklist.phrase) {
-                blacklist.phrase = Crypto.decrypt(blacklist.phrase)
+                blacklist.phrase = Crypto.decrypt(blacklist.phrase);
             }
         } catch (err) {
             return null;

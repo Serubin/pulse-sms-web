@@ -20,9 +20,9 @@
 
 <script>
 
-import store from '@/store/'
-import { Api, Util } from '@/utils'
-import { componentHandler } from '@/lib/material.js'
+import store from '@/store/';
+import { Api, Util } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'DeviceItem',
@@ -33,7 +33,7 @@ export default {
             id: this.deviceData.id,
             name: this.deviceData.name,
             menu: null,
-        }
+        };
     },
 
     mounted () {
@@ -51,7 +51,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

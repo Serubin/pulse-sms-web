@@ -85,7 +85,7 @@ export default {
         return {
             title: "Help and Feedback",
             loading: false,
-        }
+        };
     },
 
     mounted () {
@@ -97,7 +97,7 @@ export default {
             window.open(route,'_blank');
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

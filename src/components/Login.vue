@@ -44,10 +44,10 @@
 
 <script>
 
-import { Crypto, Api } from '@/utils/'
-import Spinner from '@/components/Spinner.vue'
-import { sjcl } from '@/lib/sjcl.js'
-import { hmacSHA1 } from '@/lib/hmacsha1.js'
+import { Crypto, Api } from '@/utils/';
+import Spinner from '@/components/Spinner.vue';
+import { sjcl } from '@/lib/sjcl.js';
+import { hmacSHA1 } from '@/lib/hmacsha1.js';
 
 
 export default {
@@ -64,7 +64,7 @@ export default {
             password: '',
             loading: false,
             error: false,
-        }
+        };
     },
 
     mounted () {
@@ -117,7 +117,7 @@ export default {
             this.loading = false;
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

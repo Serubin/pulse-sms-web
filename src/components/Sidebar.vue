@@ -73,8 +73,8 @@
 
 <script>
 
-import Conversations from '@/components/Conversations/'
-import { Util } from '@/utils'
+import Conversations from '@/components/Conversations/';
+import { Util } from '@/utils';
 
 export default {
     name: 'Sidebar',
@@ -96,7 +96,7 @@ export default {
             },
             listeners: [],
             searchQuery: "",
-        }
+        };
     },
 
     computed: {
@@ -140,7 +140,7 @@ export default {
                 e.preventDefault();
                 e.returnValue = false;
                 return false;
-            }
+            };
 
             if (!up && -delta > scrollHeight - height - scrollTop) {
                 // Scrolling down, but this will take us past the bottom.
@@ -168,8 +168,8 @@ export default {
          * @param link - link to route too
          */
         routeTo (link) {
-            this.close_drawer()
-            this.$router.push(this.links[link])
+            this.close_drawer();
+            this.$router.push(this.links[link]);
             this.searchQuery = "";
         },
 
@@ -218,7 +218,7 @@ export default {
             return false;
         }
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

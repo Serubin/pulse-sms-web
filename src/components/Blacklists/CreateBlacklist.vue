@@ -66,8 +66,8 @@
 
 <script>
 
-import { Api } from '@/utils/'
-import Spinner from '@/components/Spinner.vue'
+import { Api } from '@/utils/';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
     name: 'CreateBlacklist',
@@ -82,7 +82,7 @@ export default {
             phone: "",
             phrase: "",
             loading: false,
-        }
+        };
     },
 
     mounted () {
@@ -120,7 +120,7 @@ export default {
             this.$router.push({ name: 'blacklists'});
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -28,11 +28,11 @@ export default {
         return {
             title: "Experiments",
             larger_app_bar: this.$store.state.larger_app_bar,
-        }
+        };
     },
     watch: {
         'larger_app_bar' () {
-            const body = document.querySelector('body') // Select body
+            const body = document.querySelector('body'); // Select body
             const LARGER_APP_BAR = "larger_app_bar";
 
             this.$store.commit('larger_app_bar', this.larger_app_bar);
@@ -61,7 +61,7 @@ export default {
 
         },
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

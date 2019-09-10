@@ -20,9 +20,9 @@
 
 <script>
 
-import store from '@/store/'
-import { Api, Util } from '@/utils'
-import { componentHandler } from '@/lib/material.js'
+import store from '@/store/';
+import { Api, Util } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'DraftItem',
@@ -35,7 +35,7 @@ export default {
             data: this.draftData.data,
             mime_type: this.draftData.mime_type,
             menu: null,
-        }
+        };
     },
 
     mounted () {
@@ -53,7 +53,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

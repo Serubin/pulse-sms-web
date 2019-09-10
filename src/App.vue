@@ -61,17 +61,17 @@
 
 <script>
 
-import Vue from 'vue'
-import { i18n } from '@/utils'
+import Vue from 'vue';
+import { i18n } from '@/utils';
 
-import '@/lib/sjcl.js'
-import '@/lib/hmacsha1.js'
+import '@/lib/sjcl.js';
+import '@/lib/hmacsha1.js';
 
-import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys } from '@/utils'
+import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys } from '@/utils';
 
-import Sidebar from '@/components/Sidebar.vue'
-import Snackbar from '@/components/Snackbar.vue'
-import ImageViewer from '@/components/ImageViewer.vue'
+import Sidebar from '@/components/Sidebar.vue';
+import Snackbar from '@/components/Snackbar.vue';
+import ImageViewer from '@/components/ImageViewer.vue';
 
 // Vue.config.devtools = true;
 // Vue.config.performance = true;
@@ -92,7 +92,7 @@ export default {
             toolbar_color: this.$store.state.theme_global_default,
             menu_items: [],
             hour: null,
-        }
+        };
     },
 
     computed: {
@@ -102,7 +102,7 @@ export default {
                 'logo_dark': this.full_theme && this.apply_appbar_color,
                 'menu_toggle': !this.full_theme && !this.apply_appbar_color,
                 'menu_toggle_dark': !this.full_theme && this.apply_appbar_color,
-            }
+            };
         },
 
         sidebar_open () { // Sidebar_open state
@@ -199,13 +199,13 @@ export default {
             this.updateTheme(to);
         },
         'theme_str' (to, from) { // Handles updating the body class
-            this.updateBodyClass(to, from)
+            this.updateBodyClass(to, from);
         },
         'theme_toolbar' (to) { // Handle toolbar color change
             Vue.nextTick(() => {
                 const toolbar = this.$el.querySelector("#toolbar");
                 Util.materialColorChange(toolbar, to);
-            })
+            });
         },
         '$store.state.title' (to) {
             if (to.length > 0) {
@@ -253,7 +253,7 @@ export default {
         this.updateBodyClass(this.theme_str, ""); // Enables global theme
 
         // Handle resizing for left margin size
-        window.addEventListener('resize', this.handleResize)
+        window.addEventListener('resize', this.handleResize);
         this.handleResize(); // Get initial margin size
 
         // Setup firebase
@@ -295,7 +295,7 @@ export default {
     },
 
     beforeDestroy () { // Remove event listeners
-        window.removeEventListener('resize', this.handleResize)
+        window.removeEventListener('resize', this.handleResize);
 
         this.$store.state.msgbus.$off('start-app', this.applicationStart);
         this.$store.state.msgbus.$off('settings-btn', this.settings);
@@ -348,7 +348,7 @@ export default {
                     return;
 
                 // Else, open new API and force refresh
-                this.stream.close()
+                this.stream.close();
                 this.stream = new Api.stream();
                 this.stream.has_diconnected = true; // Initialize new api with has disconnected
 
@@ -394,7 +394,7 @@ export default {
             }
 
             // Set margin
-            this.margin = margin
+            this.margin = margin;
             this.$store.state.msgbus.$emit('newMargin', margin);
         },
 
@@ -407,7 +407,7 @@ export default {
         populateMenuItems () {
 
             // Static items!
-            const items = [ ]
+            const items = [ ];
 
             // On thread add Delete, Blacklist, & Archive/unarchive
             if (this.$route.name.indexOf('thread') > -1) {
@@ -426,7 +426,7 @@ export default {
                     { 'name': "help-feedback", 'title': i18n.t('menus.help') },
                     { 'name': "settings", 'title': i18n.t('menus.settings')},
                     { 'name': "logout", 'title': i18n.t('menus.logout')}
-                )
+                );
             }
 
             return this.menu_items = items;
@@ -512,7 +512,7 @@ export default {
         updateBodyClass (to, from) {
             const body = this.$el.parentElement; // select body
             // Add and remove classes
-            const classes = body.className.replace(from, "")
+            const classes = body.className.replace(from, "");
             body.className = classes + " " + to;
         },
 
@@ -522,11 +522,11 @@ export default {
         calculateHour () {
 
             // Determines ms to the next hour
-            const nextHour = (60 - new Date().getMinutes()) * 60 * 1000
+            const nextHour = (60 - new Date().getMinutes()) * 60 * 1000;
             this.hour = new Date().getHours(); // Get current hour
 
             setTimeout(() => { // Rerun function at the next hour
-                this.calculateHour()
+                this.calculateHour();
             }, nextHour + 2000);
         },
 
@@ -578,7 +578,7 @@ export default {
 
         }
     }
-}
+};
 </script>
 
 <style lang="scss">

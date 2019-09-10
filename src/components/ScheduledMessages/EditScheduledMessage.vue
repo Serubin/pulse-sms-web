@@ -39,10 +39,10 @@
 
 <script>
 
-import 'flatpickr/dist/flatpickr.css'
-import { Api } from '@/utils/'
-import Spinner from '@/components/Spinner.vue'
-import FlatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css';
+import { Api } from '@/utils/';
+import Spinner from '@/components/Spinner.vue';
+import FlatPickr from 'vue-flatpickr-component';
 
 export default {
     name: 'CreateScheduledMessage',
@@ -72,7 +72,7 @@ export default {
                 { text: this.$t('scheduled.repeat.monthly'), value: '3' },
                 { text: this.$t('scheduled.repeat.yearly'), value: '4' }
             ]
-        }
+        };
     },
 
     mounted () {
@@ -87,7 +87,7 @@ export default {
 
             this.loading = true;
 
-            Api.scheduledMessages.delete(this.message_id)
+            Api.scheduledMessages.delete(this.message_id);
             Api.scheduledMessages.create(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
                 .then((data) => this.handleSave(data.data));
         },
@@ -101,7 +101,7 @@ export default {
             this.$router.push({ name: 'scheduled-messages'});
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

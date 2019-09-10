@@ -9,7 +9,7 @@
 export default {
     name: 'Snackbar',
     // JS for this is found in utils/Util
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

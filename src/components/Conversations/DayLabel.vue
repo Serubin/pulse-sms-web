@@ -8,7 +8,7 @@
 export default {
     name: 'DayLabel',
     props: ['conversationData']
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { Api, Util, Platform, i18n } from '@/utils/'
+import { Api, Util, Platform, i18n } from '@/utils/';
 
 export default {
     name: 'Settings',
@@ -178,16 +178,16 @@ export default {
             theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : "#FF6E40",
             theme_menu: null,
             showColorSettings: false
-        }
+        };
     },
 
     computed: {
         base_theme () {
             let base = this.$store.state.theme_base;
-            base = base.split("_")
+            base = base.split("_");
             base.forEach( (b, i) => {
                 base[i] = b.charAt(0).toUpperCase() + b.slice(1);
-            })
+            });
 
             return base.join(" / ");
         },
@@ -198,7 +198,7 @@ export default {
             const accent = this.$store.state.theme_global_accent;
 
             if (!defaul && !dark && !accent) {
-                return "#1775D2, #1665C0, #FF6E40"
+                return "#1775D2, #1665C0, #FF6E40";
             } else {
                 const defaultHex = this.rgbaToHex(defaul);
                 const darkHex = this.rgbaToHex(dark);
@@ -238,24 +238,24 @@ export default {
             this.$store.commit('enter_to_send', this.enter_to_send);
         },
         'global_theme' () {
-            this.$store.commit('theme_use_global', this.global_theme)
-            Api.account.settings.update("apply_theme_globally", "boolean", this.global_theme)
+            this.$store.commit('theme_use_global', this.global_theme);
+            Api.account.settings.update("apply_theme_globally", "boolean", this.global_theme);
         },
         'theme_appbar' () {
-            this.$store.commit('theme_apply_appbar_color', this.theme_appbar)
-            Api.account.settings.update("apply_primary_color_toolbar", "boolean", this.theme_appbar)
+            this.$store.commit('theme_apply_appbar_color', this.theme_appbar);
+            Api.account.settings.update("apply_primary_color_toolbar", "boolean", this.theme_appbar);
         },
         'theme_conversation_categories' () {
-            this.$store.commit('theme_conversation_categories', this.theme_conversation_categories)
-            Api.account.settings.update("conversation_categories", "boolean", this.theme_conversation_categories)
+            this.$store.commit('theme_conversation_categories', this.theme_conversation_categories);
+            Api.account.settings.update("conversation_categories", "boolean", this.theme_conversation_categories);
         },
         'theme_message_timestamp' () {
-            this.$store.commit('theme_message_timestamp', this.theme_message_timestamp)
-            Api.account.settings.update("message_timestamp", "boolean", this.theme_message_timestamp)
+            this.$store.commit('theme_message_timestamp', this.theme_message_timestamp);
+            Api.account.settings.update("message_timestamp", "boolean", this.theme_message_timestamp);
         },
         'theme' () {
             this.$store.commit('theme_base', this.theme),
-            Api.account.settings.update("base_theme", "string", this.theme)
+            Api.account.settings.update("base_theme", "string", this.theme);
         },
         '$store.state.theme_global_default' () {
             const color = this.$store.state.theme_global_default;
@@ -287,12 +287,12 @@ export default {
         Api.account.settings.get()
             .then( () => {
                 this.$store.commit("loading", false);
-            })
+            });
 
         this.$store.commit('title', this.title);
         this.$store.state.msgbus.$on('refresh-btn', this.refreshSettings);
 
-        let theme_menu_el = this.$el.querySelector("#base-theme-menu")
+        let theme_menu_el = this.$el.querySelector("#base-theme-menu");
         this.theme_menu = theme_menu_el.MaterialMenu;
     },
 
@@ -303,7 +303,7 @@ export default {
     methods: {
         refreshSettings () {
             Api.account.settings.get();
-            Util.snackbar("Settings Refreshed")
+            Util.snackbar("Settings Refreshed");
         },
 
         showColorDialog () {
@@ -334,7 +334,7 @@ export default {
                 hex.push(str_16);
             }
 
-            return "#" + hex.slice(0, (hex.length - 1)).join("")
+            return "#" + hex.slice(0, (hex.length - 1)).join("");
         },
         hexToRgb(hex) {
             let r = parseInt(hex.slice(1, 3), 16),
@@ -348,14 +348,14 @@ export default {
          * Bool to Yes/No
          */
         boolToStr (bool) {
-            return bool ? i18n.t('settings.yes') : i18n.t('settings.no')
+            return bool ? i18n.t('settings.yes') : i18n.t('settings.no');
         },
         saveColors () {
 
             // Convert hex to RGB Int
-            const theme_default = this.hexToRgb(this.theme_default)
-            const theme_dark = this.hexToRgb(this.theme_dark)
-            const theme_accent = this.hexToRgb(this.theme_accent)
+            const theme_default = this.hexToRgb(this.theme_default);
+            const theme_dark = this.hexToRgb(this.theme_dark);
+            const theme_accent = this.hexToRgb(this.theme_accent);
 
             // Update value on remote server
             Api.account.settings.update("global_primary_color", "int", theme_default);
@@ -363,19 +363,19 @@ export default {
             Api.account.settings.update("global_accent_color", "int", theme_accent);
 
             // Store rgba value in store
-            this.$store.commit('theme_global_default', Util.expandColor(theme_default))
-            this.$store.commit('theme_global_dark', Util.expandColor(theme_dark))
-            this.$store.commit('theme_global_accent', Util.expandColor(theme_accent))
+            this.$store.commit('theme_global_default', Util.expandColor(theme_default));
+            this.$store.commit('theme_global_dark', Util.expandColor(theme_dark));
+            this.$store.commit('theme_global_accent', Util.expandColor(theme_accent));
 
-            this.$store.commit('colors_default', Util.expandColor(theme_default))
-            this.$store.commit('colors_dark', Util.expandColor(theme_dark))
-            this.$store.commit('colors_accent', Util.expandColor(theme_accent))
+            this.$store.commit('colors_default', Util.expandColor(theme_default));
+            this.$store.commit('colors_dark', Util.expandColor(theme_dark));
+            this.$store.commit('colors_accent', Util.expandColor(theme_accent));
 
             this.closeColorDialog();
         }
 
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

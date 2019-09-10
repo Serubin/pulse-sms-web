@@ -20,7 +20,7 @@
 
 <script>
 
-import { Util, TimeUtils } from '@/utils'
+import { Util, TimeUtils } from '@/utils';
 
 export default {
     name: 'ConversationItem',
@@ -35,7 +35,7 @@ export default {
             timestamp: this.conversationData.timestamp,
             mute: this.conversationData.mute,
             private_notifications: this.conversationData.private_notifications
-        }
+        };
     },
 
     computed: {
@@ -48,28 +48,28 @@ export default {
 
         iconSize () {
             if (this.small)
-                return 24
+                return 24;
             else
-                return 48
+                return 48;
         },
 
         circleSize () {
             if (this.small)
-                return 12
+                return 12;
             else
-                return 24
+                return 24;
         },
 
         textLocation () {
             if (this.small)
-                return { x: 12, y: 17.5, size: 16}
+                return { x: 12, y: 17.5, size: 16};
             else
-                return { x: 25, y: 35, size: 30}
+                return { x: 25, y: 35, size: 30};
         },
 
         titleFirstLetter () {
             if (this.small) {
-                return ""
+                return "";
             }
 
             try {
@@ -80,15 +80,15 @@ export default {
                     return letter;
                 }
             } catch (e) { // Edge case for message with no title ??
-                return ""
+                return "";
             }
         },
 
         date () {
             if (this.$store.state.theme_conversation_categories) {
-                return ""
+                return "";
             } else {
-                return TimeUtils.formatConversationTimestamp(this.conversationData.timestamp, Date.now())
+                return TimeUtils.formatConversationTimestamp(this.conversationData.timestamp, Date.now());
             }
         }
     },
@@ -107,7 +107,7 @@ export default {
                 Util.expandColor(this.conversationData.color_accent),
                 Util.expandColor(this.conversationData.color_light),
                 Util.expandColor(this.conversationData.color_dark)
-            )
+            );
             this.$store.commit('contacts', contact_data);
 
             this.$router.push({
@@ -124,7 +124,7 @@ export default {
         }
 
     },
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

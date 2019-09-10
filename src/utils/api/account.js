@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import store from '@/store/';
-import { Api, Util, Url } from '@/utils/'
+import { Api, Util, Url } from '@/utils/';
 
 export default class Account {
 
     static login(username, password) {
         const promise = new Promise((resolve, reject) => {
-            const constructed_url = Url.get('login')
+            const constructed_url = Url.get('login');
             const request = {
                 username,
                 password
@@ -18,7 +18,7 @@ export default class Account {
 
         });
 
-        return promise
+        return promise;
     }
 
     static get() {
@@ -29,7 +29,7 @@ export default class Account {
                 .catch((error) => reject(error));
         });
 
-        return promise
+        return promise;
     }
 
     static settings = {
@@ -38,7 +38,7 @@ export default class Account {
             const promise = new Promise((resolve, reject) => {
                 Vue.http.get(constructed_url)
                     .then(response => {
-                        response = response.data
+                        response = response.data;
 
                         const colors = {
                             'default': Util.expandColor(response.color),
@@ -65,7 +65,7 @@ export default class Account {
                     }).catch(response => Api.rejectHandler(response, reject));
             });
 
-            return promise
+            return promise;
         },
         update: (setting, type, value) => {
             let constructed_url = Url.get("update_setting") +

@@ -15,9 +15,9 @@
 
 <script>
 
-import store from '@/store/'
-import { Util, Api } from '@/utils'
-import { componentHandler } from '@/lib/material.js'
+import store from '@/store/';
+import { Util, Api } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'BlacklistItem',
@@ -29,7 +29,7 @@ export default {
             phone_number: this.blacklistData.phone_number,
             phrase: this.blacklistData.phrase,
             menu: null,
-        }
+        };
     },
 
     mounted () {
@@ -47,7 +47,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

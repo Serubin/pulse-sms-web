@@ -16,7 +16,7 @@
 <script>
 export default {
     name: 'Splash'
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

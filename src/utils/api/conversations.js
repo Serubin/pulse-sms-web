@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import store from '@/store/';
-import { Api, Url, Crypto, SessionCache, Platform } from '@/utils/'
+import { Api, Url, Crypto, SessionCache, Platform } from '@/utils/';
 
 export default class Conversations {
     static getList(index, folderId) {
@@ -12,16 +12,16 @@ export default class Conversations {
             index = index + "/" + folderId;
         }
 
-        let constructed_url = Url.get('conversations') + index + Url.getAccountParam()
+        let constructed_url = Url.get('conversations') + index + Url.getAccountParam();
         if (index == "index_public_unarchived") {
-            constructed_url += "&limit=75"
+            constructed_url += "&limit=75";
         }
 
         const promise = new Promise((resolve, reject) => {
             if (!SessionCache.hasConversations(index)) {
                 Vue.http.get(constructed_url)
                     .then(response => {
-                        response = response.data
+                        response = response.data;
 
                         if (response != null) {
                             // Decrypt Conversations items
@@ -42,11 +42,11 @@ export default class Conversations {
             }
         });
 
-        return promise
+        return promise;
     }
 
     static getById(id) {
-        let constructed_url = Url.get('conversation') + id + Url.getAccountParam()
+        let constructed_url = Url.get('conversation') + id + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
             Vue.http.get(constructed_url)
                 .then(response => {
@@ -58,7 +58,7 @@ export default class Conversations {
                 .catch(response => Api.rejectHandler(response, reject));
         });
 
-        return promise
+        return promise;
     }
 
     static update(conversation_id, params) {
@@ -83,9 +83,9 @@ export default class Conversations {
         let constructed_url;
 
         if (archive) {
-            constructed_url = Url.get('archive')
+            constructed_url = Url.get('archive');
         } else {
-            constructed_url = Url.get('unarchive')
+            constructed_url = Url.get('unarchive');
         }
 
         constructed_url += conversation_id + Url.getAccountParam();
@@ -107,12 +107,12 @@ export default class Conversations {
             mime_type: mimeType,
             message_id: messageId,
             sent_device: Platform.getPlatformIdentifier()
-        }
+        };
 
         const promise = new Promise((resolve, reject) => {
             Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then(response => resolve(response))
-                .catch(response => Api.rejectHandler(response, reject))
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise;
@@ -126,12 +126,12 @@ export default class Conversations {
             to: to,
             message: message,
             sent_device: Platform.getPlatformIdentifier()
-        }
+        };
 
         const promise = new Promise((resolve, reject) => {
             Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then(response => resolve(response))
-                .catch(response => Api.rejectHandler(response, reject))
+                .catch(response => Api.rejectHandler(response, reject));
         });
 
         return promise;

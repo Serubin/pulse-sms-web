@@ -28,12 +28,12 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import AutoGrow from '@/lib/textarea-autogrow.js'
-import data from 'emoji-mart-vue-fast/data/all.json'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
-import { NimblePicker, EmojiIndex } from 'emoji-mart-vue-fast'
-import { Api } from '@/utils'
+import Vue from 'vue';
+import AutoGrow from '@/lib/textarea-autogrow.js';
+import data from 'emoji-mart-vue-fast/data/all.json';
+import 'emoji-mart-vue-fast/css/emoji-mart.css';
+import { NimblePicker, EmojiIndex } from 'emoji-mart-vue-fast';
+import { Api } from '@/utils';
 
 export default {
     name: 'Sendbar',
@@ -59,7 +59,7 @@ export default {
             show_emoji: false,
             $wrapper: null,
             $sendbar: null,
-        }
+        };
     },
 
     computed: {
@@ -76,7 +76,7 @@ export default {
             return "";
         },
         media_blob () { // creates url object from media blob
-            return window.URL.createObjectURL(this.$store.state.loaded_media)
+            return window.URL.createObjectURL(this.$store.state.loaded_media);
         }
     },
 
@@ -91,7 +91,7 @@ export default {
         // No need for assignment - just build object
         new AutoGrow({target: document.getElementById("message-entry"), extra_line: true, content_el: document.getElementById("message-list")});
 
-        window.addEventListener('resize', this.updateEmojiMargin)
+        window.addEventListener('resize', this.updateEmojiMargin);
         this.$wrapper = document.querySelector("#wrapper");
         this.$sendbar = document.querySelector("#message-entry");
 
@@ -155,7 +155,7 @@ export default {
 
                 // Overwrite selection with newline
                 this.message = this.message.substr(0,start)
-                    + "\n" + this.message.substr(end, this.message.length)
+                    + "\n" + this.message.substr(end, this.message.length);
 
                 // Set new location of selection to start of old selection
                 // Wait until next tick to ensure the new message gets rendered
@@ -201,7 +201,7 @@ export default {
 
                 // Get file from event
                 if (e.dataTransfer)
-                    file = e.dataTransfer.files[0]
+                    file = e.dataTransfer.files[0];
                 else
                     file = e.target.files[0];
 
@@ -215,7 +215,7 @@ export default {
                 false, false, false, false, 0, null);
 
             // Dispatch click event
-            input.dispatchEvent(event)
+            input.dispatchEvent(event);
         },
 
         /**
@@ -229,10 +229,10 @@ export default {
 
             // If no toggle given, toggle the show_emoji value
             if(typeof toggle != "boolean")
-                return this.show_emoji = !this.show_emoji
+                return this.show_emoji = !this.show_emoji;
 
             // Otherwise set to provided toggle
-            return this.show_emoji = toggle
+            return this.show_emoji = toggle;
 
         },
 
@@ -271,7 +271,7 @@ export default {
 
             // Overwrite selection with emoji
             this.message = this.message.substr(0,start)
-                + e.native + this.message.substr(end, this.message.length)
+                + e.native + this.message.substr(end, this.message.length);
 
             // Set new location of selection to start of old selection
             // Wait until next tick to ensure the new message gets rendered
@@ -280,7 +280,7 @@ export default {
             );
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

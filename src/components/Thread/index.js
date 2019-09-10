@@ -1,3 +1,3 @@
-import Thread from './Thread.vue'
+import Thread from './Thread.vue';
 
 export default Thread;

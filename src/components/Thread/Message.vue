@@ -74,7 +74,7 @@ export default {
 
             options_class: [ ],
             displayOptions: false
-        }
+        };
     },
 
     computed: {
@@ -91,7 +91,7 @@ export default {
 
             let media = "";
             if (this.is_article || this.is_media)
-                media = "padding-bottom:10px;"
+                media = "padding-bottom:10px;";
 
             return "background: " + this.color + ";"
                   + "border-color: " + this.color
@@ -100,8 +100,8 @@ export default {
         },
         dateType () {
             if (this.type == 0 || this.type == 6)
-                return "date-received"
-            return "date-sent"
+                return "date-received";
+            return "date-sent";
         },
         dateLabel () {
             let from = this.messageData.fromLabel;
@@ -189,7 +189,7 @@ export default {
                     let map = "https://maps.googleapis.com/maps/api/staticmap" +
                           "?size=600x400" +
                           "&markers=color:red%7C" + media.latitude + "," + media.longitude +
-                          "&key=AIzaSyAHq1IIIdGz01rEbEtUtDwEFJWwvAI_lww"
+                          "&key=AIzaSyAHq1IIIdGz01rEbEtUtDwEFJWwvAI_lww";
                     let googleMaps = "https://maps.google.com/maps/@" + media.latitude + "," + media.longitude + ",16z";
 
                     this.media_thumb = map;
@@ -230,7 +230,7 @@ export default {
             }
         }
 
-        let linkClass = 'link-sent'
+        let linkClass = 'link-sent';
         if (!this.is_article) {
             switch (this.type) {
                 case 0:
@@ -253,7 +253,7 @@ export default {
                     break;
                 }
                 default: {
-                    this.style_class.push('sent') //TODO add text color from global theme
+                    this.style_class.push('sent'); //TODO add text color from global theme
                     this.options_class.push('sent_options');
                 }
             }
@@ -264,7 +264,7 @@ export default {
         }
 
         // Add links
-        this.content = linkify(this.content, { className: linkClass })
+        this.content = linkify(this.content, { className: linkClass });
     },
 
     beforeDestroy () {
@@ -273,7 +273,7 @@ export default {
     methods: {
         refreshSettings () {
             Api.account.settings.get();
-            Util.snackbar("Settings Refreshed")
+            Util.snackbar("Settings Refreshed");
         },
         showOptions () {
             this.displayOptions = true;
@@ -286,7 +286,7 @@ export default {
                 okText: this.$t('thread.delete.delete'),
                 cancelText: this.$t('thread.delete.cancel'),
                 animation: 'fade'
-            }
+            };
 
             const id = this.id;
             const apiUtils = Api;
@@ -342,7 +342,7 @@ export default {
         }
 
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

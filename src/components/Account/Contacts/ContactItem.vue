@@ -20,9 +20,9 @@
 
 <script>
 
-import store from '@/store/'
-import { Api, Util } from '@/utils'
-import { componentHandler } from '@/lib/material.js'
+import store from '@/store/';
+import { Api, Util } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'ContactItem',
@@ -34,7 +34,7 @@ export default {
             name: this.contactData.name,
             phone_number: this.contactData.phone_number,
             menu: null,
-        }
+        };
     },
 
     mounted () {
@@ -52,7 +52,7 @@ export default {
         }
     },
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import Hash from 'object-hash'
-import { Api } from '@/utils'
-import AutoReplyItem from './AutoReplyItem.vue'
-import Spinner from '@/components/Spinner.vue'
+import Hash from 'object-hash';
+import { Api } from '@/utils';
+import AutoReplyItem from './AutoReplyItem.vue';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
     name: 'AutoReplies',
@@ -28,7 +28,7 @@ export default {
         return {
             title: "Auto Replies",
             replies: [],
-        }
+        };
     },
 
     mounted () {
@@ -78,7 +78,7 @@ export default {
             this.fetchAutoReplies();
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

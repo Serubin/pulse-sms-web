@@ -35,13 +35,13 @@
 
 <script>
 import Vue from 'vue';
-import { i18n } from '@/utils'
-import Hash from 'object-hash'
-import { Util, Api, SessionCache, TimeUtils } from '@/utils'
-import ConversationItem from './ConversationItem.vue'
-import DayLabel from './DayLabel.vue'
-import Spinner from '@/components/Spinner.vue'
-import emojione from 'emojione'
+import { i18n } from '@/utils';
+import Hash from 'object-hash';
+import { Util, Api, SessionCache, TimeUtils } from '@/utils';
+import ConversationItem from './ConversationItem.vue';
+import DayLabel from './DayLabel.vue';
+import Spinner from '@/components/Spinner.vue';
+import emojione from 'emojione';
 
 export default {
     name: 'Conversations',
@@ -62,7 +62,7 @@ export default {
             margin: 0,
             searchClicked: false,
             searchQuery: ""
-        }
+        };
     },
 
     computed: {
@@ -71,7 +71,7 @@ export default {
         },
 
         composeStyle () {
-            return "background: " + this.$store.state.colors_accent + ";"
+            return "background: " + this.$store.state.colors_accent + ";";
         },
 
         showSearch () {
@@ -79,7 +79,7 @@ export default {
         },
 
         showConversationCategories () {
-            return this.$store.state.theme_conversation_categories
+            return this.$store.state.theme_conversation_categories;
         }
     },
 
@@ -185,7 +185,7 @@ export default {
             const titles = [];
 
             for(let i in response) {
-                const item = response[i]
+                const item = response[i];
                 if (typeof item == "function") {
                     continue;
                 }
@@ -203,7 +203,7 @@ export default {
                     }
                 }
 
-                updatedConversations.push(item)
+                updatedConversations.push(item);
 
                 // Save to contact cache
                 cache.push(
@@ -270,25 +270,25 @@ export default {
                             && conv.label != "Pinned") { // That is not "pinned"
 
                             startIndex = i; // Save index and return
-                            return true
+                            return true;
                         }
-                    })
+                    });
                 }
             } else {
                 if (this.conversations[0].pinned && !conv.pinned) { // If there are any pinned items
                     this.conversations.some( (conv, i) => {
                         if (!conv.pinned) { // That is not "pinned"
                             startIndex = i; // Save index and return
-                            return true
+                            return true;
                         }
-                    })
+                    });
                 }
             }
 
             // Move conversation if required
-            let showCategoryOffset = (this.showConversationCategories ? 1 : 0)
+            let showCategoryOffset = (this.showConversationCategories ? 1 : 0);
             if (conv_index != startIndex + showCategoryOffset) {
-                conv = this.conversations.splice(conv_index, 1)[0]
+                conv = this.conversations.splice(conv_index, 1)[0];
 
                 // If top label is not "Today"
                 // This isn't elegant, but it works
@@ -299,13 +299,13 @@ export default {
                     const label = {        // And Define Label
                         label: title,
                         hash: Hash(title)
-                    }
+                    };
 
                     // Push label and conversation
-                    this.conversations.splice(startIndex, 0, label, conv)
+                    this.conversations.splice(startIndex, 0, label, conv);
                 } else {
                     // Else, just push the converstation to index 1 (below label)
-                    this.conversations.splice(startIndex + showCategoryOffset, 0, conv)
+                    this.conversations.splice(startIndex + showCategoryOffset, 0, conv);
                 }
             }
 
@@ -320,7 +320,7 @@ export default {
                 return false;
 
             conv.read = true;
-            conv.hash = Hash(conv)
+            conv.hash = Hash(conv);
         },
 
         getConversation(id) {
@@ -386,7 +386,7 @@ export default {
                 return i18n.t('conversations.older');
         }
     }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

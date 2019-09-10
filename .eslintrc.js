@@ -23,6 +23,7 @@ module.exports = {
       "svg": "never",
       "math": "never"
     }],
+    semi: ["error", "always", { "omitLastInOneLineBlock": true }]
   },
   parserOptions: {
     parser: 'babel-eslint'

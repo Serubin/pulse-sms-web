@@ -1,4 +1,4 @@
-var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = {
     devServer: {
@@ -25,6 +25,6 @@ module.exports = {
             .test(/\.worker\.js$/)
             .use('worker-loader')
             .loader('worker-loader')
-            .end()
+            .end();
     }
-}
+};

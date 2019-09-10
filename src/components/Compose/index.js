@@ -1,3 +1,3 @@
-import Compose from './Compose.vue'
+import Compose from './Compose.vue';
 
 export default Compose;

@@ -25,9 +25,9 @@
 
 <script>
 
-import store from '@/store/'
-import { Util, Api } from '@/utils'
-import { componentHandler } from '@/lib/material.js'
+import store from '@/store/';
+import { Util, Api } from '@/utils';
+import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'ScheduledMessageItem',
@@ -43,7 +43,7 @@ export default {
             mime_type: this.messageData.mime_type,
             repeat: this.messageData.repeat || 0,
             menu: null,
-        }
+        };
     },
 
     computed: {
@@ -51,7 +51,7 @@ export default {
             if (this.mime_type != 'text/plain') {
                 return this.$t('scheduled.media');
             } else {
-                return this.data
+                return this.data;
             }
         },
         timestampText () {
@@ -59,9 +59,9 @@ export default {
             const name = this.title;
 
             if (this.repeat == 0) {
-                return `${name} - ${time}`
+                return `${name} - ${time}`;
             } else {
-                let repeatText = ""
+                let repeatText = "";
                 switch (this.repeat) {
                     case 1:
                         repeatText = this.$t('scheduled.repeat.daily');
@@ -77,7 +77,7 @@ export default {
                         break;
                 }
 
-                return `${name} - ${time} (${repeatText})`
+                return `${name} - ${time} (${repeatText})`;
             }
         }
     },
@@ -110,7 +110,7 @@ export default {
         }
     }
 
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
