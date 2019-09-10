@@ -26,7 +26,7 @@ import ScheduledMessageItem from './ScheduledMessageItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'scheduled-messages',
+    name: 'ScheduledMessages',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);

@@ -138,7 +138,7 @@
 import { Api, Util, Platform, i18n } from '@/utils/'
 
 export default {
-    name: 'settings',
+    name: 'Settings',
 
     mounted () {
         Api.account.settings.get()

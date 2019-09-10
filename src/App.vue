@@ -77,7 +77,7 @@ import ImageViewer from '@/components/ImageViewer.vue'
 // Vue.config.performance = true;
 
 export default {
-    name: 'app',
+    name: 'App',
 
     beforeCreate () {
         this.$store.commit('title', "Pulse SMS");

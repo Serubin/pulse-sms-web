@@ -13,7 +13,7 @@ import Sendbar from '../Thread/Sendbar.vue'
 import RecipientBar from './RecipientBar.vue'
 
 export default {
-    name: 'compose',
+    name: 'Compose',
 
     mounted () {
         this.$store.commit('colors_default', this.$store.state.theme_global_default)

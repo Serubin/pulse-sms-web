@@ -28,7 +28,7 @@
 import { Api } from '@/utils/'
 
 export default {
-    name: 'account',
+    name: 'Account',
 
     mounted () {
         this.fetchAccount()

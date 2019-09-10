@@ -19,7 +19,7 @@ import DraftItem from './DraftItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'drafts',
+    name: 'Drafts',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);

@@ -22,7 +22,7 @@
 import { Util, TimeUtils } from '@/utils'
 
 export default {
-    name: 'conversation-item',
+    name: 'ConversationItem',
     props: [ 'conversationData', 'archive', 'small', 'showPinned' ],
 
     data () {

@@ -15,7 +15,7 @@ import { Api, Util } from '@/utils'
 import { componentHandler } from '@/lib/material.js'
 
 export default {
-    name: 'folder-item',
+    name: 'FolderItem',
     props: [ 'folderData' ],
 
     mounted () {

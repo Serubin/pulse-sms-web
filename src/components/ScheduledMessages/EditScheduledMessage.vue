@@ -39,7 +39,7 @@ import Spinner from '@/components/Spinner.vue'
 import FlatPickr from 'vue-flatpickr-component'
 
 export default {
-    name: 'create-scheduled-message',
+    name: 'CreateScheduledMessage',
     props: [ 'message_id', 'original_data', 'original_timestamp', 'original_to', 'original_title', 'original_repeat' ],
 
     mounted () {

@@ -43,7 +43,7 @@ import { hmacSHA1 } from '@/lib/hmacsha1.js'
 
 
 export default {
-    name: 'login',
+    name: 'Login',
 
     mounted () {
         if (this.$store.state.account_id != '')

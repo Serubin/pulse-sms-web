@@ -42,7 +42,7 @@ import Spinner from '@/components/Spinner.vue'
 import emojione from 'emojione'
 
 export default {
-    name: 'conversations',
+    name: 'Conversations',
     props: ['small', 'index', 'folderId', 'folderName'],
 
     mounted () {

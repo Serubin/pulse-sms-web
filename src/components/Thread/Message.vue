@@ -43,7 +43,7 @@ import { Api, Util, TimeUtils } from '@/utils';
 import linkify from 'linkifyjs/html';
 
 export default {
-    name: 'message',
+    name: 'Message',
     props: [ 'messageData', 'threadColor', 'textColor' ],
 
     mounted () {

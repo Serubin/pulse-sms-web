@@ -29,7 +29,7 @@ import Message from './Message.vue'
 import Sendbar from './Sendbar.vue'
 
 export default {
-    name: 'thread',
+    name: 'Thread',
     props: ['threadId', 'isRead'],
 
 

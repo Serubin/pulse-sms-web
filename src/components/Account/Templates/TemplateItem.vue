@@ -15,7 +15,7 @@ import { Api, Util } from '@/utils'
 import { componentHandler } from '@/lib/material.js'
 
 export default {
-    name: 'template-item',
+    name: 'TemplateItem',
     props: [ 'templateData' ],
 
     mounted () {

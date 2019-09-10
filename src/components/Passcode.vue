@@ -23,7 +23,7 @@
 import { Crypto, Util, Api } from '@/utils/'
 
 export default {
-    name: 'passcode',
+    name: 'Passcode',
 
     mounted () {
         this.$store.commit("loading", false);

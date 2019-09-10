@@ -18,7 +18,7 @@ import { Util, Api } from '@/utils'
 import { componentHandler } from '@/lib/material.js'
 
 export default {
-    name: 'auto-reply-item',
+    name: 'AutoReplyItem',
     props: [ 'replyData' ],
 
     mounted () {

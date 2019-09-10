@@ -69,7 +69,7 @@
 import { Api, Util, SessionCache } from '@/utils/'
 
 export default {
-    name: 'conversation-settings',
+    name: 'ConversationSettings',
     props: [ 'conversation_title', 'conversation_id' ],
 
     mounted () {

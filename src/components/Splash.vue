@@ -13,7 +13,7 @@
 
 <script>
 export default {
-    name: 'splash'
+    name: 'Splash'
 }
 </script>
 

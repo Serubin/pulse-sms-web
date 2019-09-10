@@ -22,7 +22,7 @@
 import store from '@/store/'
 
 export default {
-    name: 'imageviewer',
+    name: 'Imageviewer',
 
     mounted () {
         store.state.msgbus.$on('showImage', this.showImage);

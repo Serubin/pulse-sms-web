@@ -77,7 +77,7 @@ import Conversations from '@/components/Conversations/'
 import { Util } from '@/utils'
 
 export default {
-    name: 'sidebar',
+    name: 'Sidebar',
 
     mounted () {
         let sidebar = this.$el.querySelector("#sidebar");

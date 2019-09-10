@@ -19,7 +19,7 @@ import DeviceItem from './DeviceItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'devices',
+    name: 'Devices',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);

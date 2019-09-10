@@ -22,7 +22,7 @@
 <script>
 
 export default {
-    name: 'experiments',
+    name: 'Experiments',
 
     mounted () {
         this.$store.commit('title', this.title);

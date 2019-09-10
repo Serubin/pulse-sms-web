@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: 'snackbar',
+    name: 'Snackbar',
     // JS for this is found in utils/Util
 }
 </script>

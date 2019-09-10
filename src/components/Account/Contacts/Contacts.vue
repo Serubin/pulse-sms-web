@@ -19,7 +19,7 @@ import ContactItem from './ContactItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'contacts',
+    name: 'Contacts',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);

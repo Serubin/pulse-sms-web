@@ -15,7 +15,7 @@ import { Util, Api } from '@/utils'
 import { componentHandler } from '@/lib/material.js'
 
 export default {
-    name: 'blacklist-item',
+    name: 'BlacklistItem',
     props: [ 'blacklistData' ],
 
     mounted () {

@@ -43,7 +43,7 @@
 <script>
 
 export default {
-    name: 'help-feedback',
+    name: 'HelpFeedback',
 
     mounted () {
         this.$store.commit('title', this.title);

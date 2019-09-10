@@ -18,7 +18,7 @@ import { Api, Util } from '@/utils'
 import { componentHandler } from '@/lib/material.js'
 
 export default {
-    name: 'draft-item',
+    name: 'DraftItem',
     props: [ 'draftData' ],
 
     mounted () {

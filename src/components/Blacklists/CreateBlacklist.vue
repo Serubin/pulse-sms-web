@@ -58,7 +58,7 @@ import { Api } from '@/utils/'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'create-blacklist',
+    name: 'CreateBlacklist',
 
     mounted () {
         this.$store.commit("loading", false);

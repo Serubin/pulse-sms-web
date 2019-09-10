@@ -26,7 +26,7 @@ import BlacklistItem from './BlacklistItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'blacklists',
+    name: 'Blacklists',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);

@@ -23,7 +23,7 @@ import { Util, Api } from '@/utils'
 import { componentHandler } from '@/lib/material.js'
 
 export default {
-    name: 'scheduled-message-item',
+    name: 'ScheduledMessageItem',
     props: [ 'messageData' ],
 
     mounted () {

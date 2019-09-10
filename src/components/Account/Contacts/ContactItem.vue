@@ -18,7 +18,7 @@ import { Api, Util } from '@/utils'
 import { componentHandler } from '@/lib/material.js'
 
 export default {
-    name: 'contact-item',
+    name: 'ContactItem',
     props: [ 'contactData' ],
 
     mounted () {

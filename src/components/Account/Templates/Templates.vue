@@ -18,7 +18,7 @@ import TemplateItem from './TemplateItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'templates',
+    name: 'Templates',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);

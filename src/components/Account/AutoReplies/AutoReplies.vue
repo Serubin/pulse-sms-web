@@ -18,7 +18,7 @@ import AutoReplyItem from './AutoReplyItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'auto-replies',
+    name: 'AutoReplies',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);

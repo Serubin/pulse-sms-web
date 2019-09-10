@@ -40,7 +40,7 @@ import Spinner from '@/components/Spinner.vue'
 import RecipientBar from '../Compose/RecipientBar.vue'
 
 export default {
-    name: 'create-scheduled-message',
+    name: 'CreateScheduledMessage',
 
     mounted () {
         this.$store.commit("loading", false);

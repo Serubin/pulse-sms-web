@@ -19,7 +19,7 @@ import FolderItem from './FolderItem.vue'
 import Spinner from '@/components/Spinner.vue'
 
 export default {
-    name: 'folders',
+    name: 'Folders',
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
