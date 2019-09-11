@@ -51,7 +51,7 @@ export default {
 
         download () {
             var link = document.createElement("a");
-            link.download = "pulse-image.jpg";
+            link.download = `pulse-image-${new Date().getTime()}.jpg`;
             link.href = document.querySelector('.full-image').src;
             document.body.appendChild(link);
 
