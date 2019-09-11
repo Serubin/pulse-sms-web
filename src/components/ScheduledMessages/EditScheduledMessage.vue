@@ -45,7 +45,7 @@ import Spinner from '@/components/Spinner.vue';
 import FlatPickr from 'vue-flatpickr-component';
 
 export default {
-    name: 'CreateScheduledMessage',
+    name: 'EditScheduledMessage',
 
     components: {
         Spinner,
@@ -56,15 +56,15 @@ export default {
     data () {
         return {
             loading: false,
-            timestamp: this.original_timestamp,
-            message: this.original_data,
-            to: this.original_to,
-            title: this.original_title,
+            timestamp: this.originalTimestamp,
+            message: this.originalData,
+            to: this.originalTo,
+            title: this.originalTitle,
             config: {
                 enableTime: true,
                 defaultDate: Math.floor(Date.now())
             },
-            repeat: this.original_repeat,
+            repeat: this.originalRepeat,
             repeatOptions: [
                 { text: this.$t('scheduled.repeat.never'), value: '0' },
                 { text: this.$t('scheduled.repeat.daily'), value: '1' },
@@ -87,7 +87,7 @@ export default {
 
             this.loading = true;
 
-            Api.scheduledMessages.delete(this.message_id);
+            Api.scheduledMessages.delete(this.messageId);
             Api.scheduledMessages.create(this.to, this.message, Math.floor(new Date(this.timestamp)), this.title, this.repeat)
                 .then((data) => this.handleSave(data.data));
         },

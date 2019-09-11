@@ -625,7 +625,7 @@ export default {
          */
         conversationSettings () {
             this.$router.push({
-                name: 'conversation-settings', params: { conversation_title: this.conversation_data.name, conversation_id: this.conversation_id }
+                name: 'conversation-settings', params: { conversationTitle: this.conversation_data.name, conversationId: this.conversation_id }
             });
         },
 

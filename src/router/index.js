@@ -85,7 +85,7 @@ let router = new VueRouter({
             component: Experiments,
         },
         {
-            path: '/thread/:conversation_id/settings',
+            path: '/thread/:conversationId/settings',
             name: 'conversation-settings',
             component: ConversationSettings,
             props: true
@@ -121,7 +121,7 @@ let router = new VueRouter({
             component: CreateScheduledMessage
         },
         {
-            path: '/scheduled/edit/:message_id',
+            path: '/scheduled/edit/:messageId',
             name: 'edit-scheduled-message',
             component: EditScheduledMessage,
             props: true

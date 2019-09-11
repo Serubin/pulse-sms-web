@@ -81,7 +81,7 @@ export default {
 
     data () {
         return {
-            title: "Settings - " + this.conversation_title,
+            title: "Settings - " + this.conversationTitle,
             phone_numbers: null,
             pin: false,
             mute: false,
@@ -117,28 +117,28 @@ export default {
                 account_id: this.$store.state.account_id,
                 pinned: this.pin,
             };
-            Api.conversations.update(this.conversation_id, request);
+            Api.conversations.update(this.conversationId, request);
         },
         'mute' () {
             let request = {
                 account_id: this.$store.state.account_id,
                 mute: this.mute
             };
-            Api.conversations.update(this.conversation_id, request);
+            Api.conversations.update(this.conversationId, request);
         },
         'private_notifications' () {
             let request = {
                 account_id: this.$store.state.account_id,
                 private_notifications: this.private_notifications
             };
-            Api.conversations.update(this.conversation_id, request);
+            Api.conversations.update(this.conversationId, request);
         }
     },
 
     mounted () {
         SessionCache.invalidateAllConversations();
 
-        Api.conversations.getById(this.conversation_id)
+        Api.conversations.getById(this.conversationId)
             .then(response => this.processConversation(response));
 
         this.$store.commit("loading", false);
@@ -235,7 +235,7 @@ export default {
                 color_accent: theme_accent
             };
 
-            Api.conversations.update(this.conversation_id, request);
+            Api.conversations.update(this.conversationId, request);
             this.closeColorDialog();
         }
 
