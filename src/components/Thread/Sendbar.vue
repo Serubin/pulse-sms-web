@@ -16,7 +16,8 @@
                 <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheet-size="sheetSize" :per-line="perLine" :skins="skin" :data="emojiIndex" @select="insertEmoji" />
             </div>
             <div v-mdl class="entry mdl-textfield mdl-js-textfield" :class="is_dirty">
-                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.enter.prevent.stop.exact="dispatchSend"></textarea>
+                <!-- eslint-disable-next-line vue/use-v-on-exact -->
+                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
