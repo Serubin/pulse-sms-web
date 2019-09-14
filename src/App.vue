@@ -56,6 +56,11 @@
         <ImageViewer />
 
         <div class="file-drag"></div>
+
+        <!-- For external app access - like Franz, Rambox, or Station -->
+        <div id="unread_count">
+            {{ unread_count }}
+        </div>
     </div>
 </template>
 
@@ -189,6 +194,9 @@ export default {
                 return false;
             }
             return this.$store.state.theme_apply_appbar_color;
+        },
+        unread_count () { // For external app access - like Franz, Rambox, or Station
+            return this.$store.state.unread_count;
         }
     },
     watch: {
@@ -747,6 +755,11 @@ export default {
                 margin-left: 0px;
             }
         }
+    }
+
+    /* For external app access - like Franz, Rambox, or Station */
+    #unread_count {
+        display: none;
     }
 
     .mdl-layout__content {
