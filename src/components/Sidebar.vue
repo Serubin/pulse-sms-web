@@ -9,6 +9,9 @@
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('conversations') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon conversations">
                             {{ $t('sidebar.conversations') }}
+                            <span v-if="display_unread">
+                                ({{ unread_count }})
+                            </span>
                         </div>
                     </li>
                     <li id="unread-link" @click="routeTo('unread')">
@@ -95,7 +98,7 @@ export default {
                 'scheduled': { name: 'scheduled-messages' }
             },
             listeners: [],
-            searchQuery: "",
+            searchQuery: ""
         };
     },
 
@@ -115,6 +118,12 @@ export default {
         showConversations () {
             return this.$route.name != 'conversations-list'
                 && this.$store.state.account_id != '';
+        },
+        display_unread () {
+            return this.$store.state.unread_count_in_sidebar;
+        },
+        unread_count () {
+            return this.$store.state.unread_count;
         }
     },
 

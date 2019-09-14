@@ -15,6 +15,14 @@
                     </span>
                 </label>
             </div>
+            <div class="label-item">
+                <label for="unread_count_in_sidebar" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
+                    <input id="unread_count_in_sidebar" v-model="unread_count_in_sidebar" class="mdl-switch__input" type="checkbox">
+                    <span class="mdl-switch__label mdl-color-text--grey-900">
+                        {{ $t('experiments.unread_count_in_sidebar') }}
+                    </span>
+                </label>
+            </div>
         </div>
     </div>
 </template>
@@ -28,6 +36,7 @@ export default {
         return {
             title: "Experiments",
             larger_app_bar: this.$store.state.larger_app_bar,
+            unread_count_in_sidebar: this.$store.state.unread_count_in_sidebar,
         };
     },
     watch: {
@@ -44,6 +53,10 @@ export default {
             else if (!this.larger_app_bar && body.className.includes(LARGER_APP_BAR))
                 body.className = body.className.replace(` ${LARGER_APP_BAR} `, "");
 
+        },
+
+        'unread_count_in_sidebar' () {
+            this.$store.commit('unread_count_in_sidebar', this.unread_count_in_sidebar);
         }
     },
 
