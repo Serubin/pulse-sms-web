@@ -22,6 +22,7 @@ const localStoreSync = store => {
         'notifications': KEYS.NOTIFICATIONS,
         'enter_to_send': KEYS.ENTER_TO_SEND,
         'larger_app_bar': KEYS.LARGER_APP_BAR,
+        'unread_count_in_sidebar': KEYS.UNREAD_COUNT_IN_SIDEBAR,
         'subscription_type': KEYS.SUBSCRIPTION_TYPE,
     };
 

@@ -10,6 +10,7 @@ export const KEYS  = {
     NOTIFICATIONS: 'notifications',
     ENTER_TO_SEND: 'enter_to_send',
     LARGER_APP_BAR: 'larger_app_bar',
+    UNREAD_COUNT_IN_SIDEBAR: 'unread_count_in_sidebar',
     SUBSCRIPTION_TYPE: 'subscription_type',
     THEME: {
         BASE: 'theme_base',
@@ -45,6 +46,7 @@ export const state = {
     notifications: JSON.parse( window.localStorage.getItem(KEYS.NOTIFICATIONS) || "true" ),
     enter_to_send: JSON.parse( window.localStorage.getItem(KEYS.ENTER_TO_SEND) || "true" ),
     larger_app_bar: JSON.parse( window.localStorage.getItem(KEYS.LARGER_APP_BAR) || "false" ),
+    unread_count_in_sidebar: JSON.parse( window.localStorage.getItem(KEYS.UNREAD_COUNT_IN_SIDEBAR) || "false" ),
     subscription_type: window.localStorage.getItem(KEYS.SUBSCRIPTION_TYPE) || 1,
 
     /* Per session */
@@ -54,6 +56,7 @@ export const state = {
     title: "Pulse SMS",
     loading: true,
     hotkey_navigation: false,
+    unread_count: 0,
 
     colors_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#1775D2\"" ),
     colors_dark: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DARK) || "\"#1665C0\"" ),
@@ -88,6 +91,9 @@ export const mutations = {
     title: (state, title) => state.title = title,
     loading: (state, loading) => state.loading = loading,
     hotkey_navigation: (state, hotkey_navigation) => state.hotkey_navigation = hotkey_navigation,
+    unread_count: (state, unread_count) => state.unread_count = unread_count,
+    increment_unread_count: (state) => state.unread_count++,
+    decrement_unread_count: (state) => state.unread_count--,
     full_theme: (state, full_theme) => state.full_theme = full_theme,
     sidebar_open: (state, sidebar_open) => state.sidebar_open = sidebar_open,
     account_id: (state, account_id) => state.account_id = account_id,
@@ -106,6 +112,7 @@ export const mutations = {
     notifications: (state, notifications) => state.notifications = notifications,
     enter_to_send: (state, enter_to_send) => state.enter_to_send = enter_to_send,
     larger_app_bar: (state, larger_app_bar) => state.larger_app_bar = larger_app_bar,
+    unread_count_in_sidebar: (state, unread_count_in_sidebar) => state.unread_count_in_sidebar = unread_count_in_sidebar,
     subscription_type: (state, subscription_type) => state.subscription_type = subscription_type,
     media_loader: (state, media_loader) => state.media_loader = media_loader,
     colors_default: (state, colors_default) => state.colors_default = colors_default,

@@ -178,6 +178,8 @@ export default {
                 this.unFilteredAllConversations = response;
             }
 
+            let unreadCount = 0;
+
             const updatedConversations = [];
 
             const cache = [];
@@ -202,6 +204,10 @@ export default {
                     }
                 }
 
+                // Update unread count
+                if (!item.read && (!this.index || this.index == "index_public_unarchived"))
+                    unreadCount++;
+
                 updatedConversations.push(item);
 
                 // Save to contact cache
@@ -224,6 +230,10 @@ export default {
             this.loading = false;
             this.$store.commit('conversations', cache);
             this.conversations = updatedConversations;
+
+            // Set unread, only on unarchived public index
+            if (!this.index || this.index == "index_public_unarchived")
+                this.$store.commit('unread_count', unreadCount);
 
             if (!this.small) {
                 this.$store.commit("loading", false);
@@ -251,6 +261,12 @@ export default {
 
                 return false;
             }
+
+            // Increment unread, only on unarchived public index
+            if (conv.read != event_obj.read && !event_obj.read
+                && (!this.index || this.index == "index_public_unarchived"))
+                this.$store.commit('increment_unread_count'); // Increment unread
+
 
             // Generate new snippet
             let new_snippet = emojione.unicodeToImage(Util.generateSnippet(event_obj));
@@ -312,11 +328,13 @@ export default {
         },
 
         updateRead (id) {
-
             let { conv, conv_index } = this.getConversation(id);
-
             if(!conv || !conv_index)
                 return false;
+
+            // Decrement unread, only on unarchived public index
+            if (!conv.read)
+                this.$store.commit('decrement_unread_count');
 
             conv.read = true;
             conv.hash = Hash(conv);
