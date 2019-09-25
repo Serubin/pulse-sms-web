@@ -121,6 +121,7 @@ export default {
                 this.contacts[contact.id] = {
                     'id': contact.id,
                     'name': contact.name,
+                    'nameNormalized': this.stripUnicode(contact.name),
                     'phone': contact.phone_number,
                     'type': contact.contact_type
                 };
@@ -162,6 +163,7 @@ export default {
                     this.contacts[id] = {
                         'id': id,
                         'name': conversation.title,
+                        'nameNormalized': this.stripUnicode(conversation.title),
                         'phone': conversation.phone_numbers,
                         'type': undefined
                     };
@@ -220,15 +222,18 @@ export default {
             });
         },
         matchContact (input) {
-            input = input.toLowerCase();
+            input = this.stripUnicode(input);
             let list = Object.values(this.contacts).filter((data) => {
-                if (data.name.toLowerCase().indexOf(input) > -1 || data.phone.indexOf(input) > -1)
+                if (data.nameNormalized.indexOf(input) > -1 || data.phone.indexOf(input) > -1)
                     return data;
             });
 
             // the blank object will be used to tell the search to add the "Can't find your contact?" text
             list[list.length] = { };
             return list;
+        },
+        stripUnicode (input) {
+            return input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         },
         /**
          * This takes in the input that is currently in the input box, and converts it to chips.
