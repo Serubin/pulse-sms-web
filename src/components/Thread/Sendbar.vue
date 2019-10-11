@@ -85,6 +85,16 @@ export default {
         '$route' () { // Update thread on route change
             this.message = "";
             this.removeMedia();
+        },
+
+        'message' () {
+            const lastIndexSemicolon = this.message.lastIndexOf(":");
+            const lastIndex = this.message.length - 1;
+            if (lastIndexSemicolon > this.message.lastIndexOf(" ") && lastIndexSemicolon != lastIndex) {
+                const emojiSearch = this.message.substring(lastIndexSemicolon + 1, lastIndex + 1);
+                const emojiOptions = this.emojiIndex.search(emojiSearch).map((o) => ({ emoji: o.native, title: o.name }));
+                console.log(emojiOptions);
+            }
         }
     },
 
@@ -177,6 +187,7 @@ export default {
             // Clear message
             this.message = "";
         },
+
         /**
          * Removes media from store
          */
