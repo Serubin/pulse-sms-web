@@ -47,10 +47,11 @@
             <div v-show="autocomplete_emoji" id="emoji-autocomplete" :style="emojiAutocompleteStyle">
                 <transition-group name="flip-list" tag="div">
                     <emoji-autocomplete-suggestion
-                        v-for="suggestion in emojiAutocompleteSuggestions"
+                        v-for="(suggestion, i) in emojiAutocompleteSuggestions"
                         :key="suggestion.code"
                         :emoji="suggestion"
                         :on-selected="selectAutocompleteEmoji"
+                        :is-active="i === emojiSelectedIndex"
                     />
                 </transition-group>
             </div>
@@ -61,6 +62,8 @@
                     v-model="message"
                     class="mdl-textfield__input disabled"
                     type="text"
+                    @keydown.down.exact.prevent.stop="onArrowUp"
+                    @keydown.up.exact.prevent.stop="onArrowDown"
                     @keydown.shift.enter.stop
                     @keydown.enter.prevent.stop="dispatchSend"
                 ></textarea>
@@ -120,6 +123,7 @@ export default {
             $wrapper: null,
             $sendbar: null,
             emojiAutocompleteSuggestions: [],
+            emojiSelectedIndex: 0,
         };
     },
 
@@ -156,7 +160,7 @@ export default {
             const lastIndex = cursorContextMessage.length - 1;
             if (lastIndexSemicolon != -1 && lastIndexSemicolon > cursorContextMessage.lastIndexOf(" ") && lastIndexSemicolon != lastIndex) {
                 const emojiSearch = cursorContextMessage.substring(lastIndexSemicolon + 1, lastIndex + 1);
-                this.emojiAutocompleteSuggestions = this.emojiIndex.search(emojiSearch).map((o) => ({ emoji: o.native, code: o.short_name }));
+                this.emojiAutocompleteSuggestions = this.emojiIndex.search(emojiSearch).map((o) => ({ emoji: o.native, code: o.short_name })).slice(0, 10);
             } else {
                 this.emojiAutocompleteSuggestions = [];
             }
@@ -214,7 +218,7 @@ export default {
         dispatchSend(e) { // Dispatch send message when clicked
 
             if (e instanceof KeyboardEvent && this.autocomplete_emoji) {
-                const emoji = this.emojiAutocompleteSuggestions[0].emoji;
+                const emoji = this.emojiAutocompleteSuggestions[this.emojiSelectedIndex].emoji;
                 this.selectAutocompleteEmoji(emoji);
 
                 return;
@@ -387,8 +391,21 @@ export default {
             );
         },
 
+        onArrowDown() {
+            if (this.autocomplete_emoji && this.emojiSelectedIndex > 0) {
+                this.emojiSelectedIndex = this.emojiSelectedIndex - 1;
+            }
+        },
+
+        onArrowUp() {
+            if (this.autocomplete_emoji && this.emojiSelectedIndex < this.emojiAutocompleteSuggestions.length) {
+                this.emojiSelectedIndex = this.emojiSelectedIndex + 1;
+            }
+        },
+
         destroyAutoComplete () {
             this.emojiAutocompleteSuggestions = [];
+            this.emojiSelectedIndex = 0;
         }
     }
 };

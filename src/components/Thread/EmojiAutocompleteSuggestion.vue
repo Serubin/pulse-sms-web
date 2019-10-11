@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="onClick">
+        <div :class="classes" @click="onClick">
             <div class="mdl-color-text--grey-900">
                 {{ emojiImage }} {{ emojiCode }}
             </div>
@@ -11,13 +11,24 @@
 <script>
 export default {
     name: "EmojiAutocompleteSuggestion",
-    props: ["emoji", "onSelected"],
+    props: ["emoji", "onSelected", "isActive"],
 
     data() {
         return {
             emojiImage: this.emoji.emoji,
             emojiCode: `:${this.emoji.code}`
         };
+    },
+
+    computed: {
+        classes () {
+            let base = "click-item mdl-js-button mdl-js-ripple-effect";
+            if (this.isActive) {
+                base = base + " is-active";
+            }
+
+            return base;
+        }
     },
 
     methods: {
@@ -32,7 +43,6 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/_vars.scss";
 
-.item,
 .click-item {
   background: #fafafa;
   position: relative;
@@ -48,23 +58,17 @@ export default {
   user-select: text;
 }
 
-.item:hover,
-.click-item:hover {
+.click-item:hover, .is-active {
   background: #e0e0e0;
-}
-
-.click-item:hover {
   cursor: pointer;
 }
 
 body.dark {
-  .item,
   .click-item {
     background: #202024;
   }
 
-  .item:hover,
-  .click-item:hover {
+  .click-item:hover, .is-active {
     background: #282828;
   }
 }
