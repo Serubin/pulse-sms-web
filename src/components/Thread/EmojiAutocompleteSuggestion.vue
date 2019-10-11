@@ -2,7 +2,7 @@
     <div>
         <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="onClick">
             <div class="mdl-color-text--grey-900">
-                {{ emojiImage }} {{ emojiName }}
+                {{ emojiImage }} {{ emojiCode }}
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@ export default {
     data() {
         return {
             emojiImage: this.emoji.emoji,
-            emojiName: this.emoji.title
+            emojiCode: `:${this.emoji.code}`
         };
     },
 

@@ -48,7 +48,7 @@
                 <transition-group name="flip-list" tag="div">
                     <emoji-autocomplete-suggestion
                         v-for="suggestion in emojiAutocompleteSuggestions"
-                        :key="suggestion.title"
+                        :key="suggestion.code"
                         :emoji="suggestion"
                         :on-selected="selectAutocompleteEmoji"
                     />
@@ -156,7 +156,7 @@ export default {
             const lastIndex = cursorContextMessage.length - 1;
             if (lastIndexSemicolon != -1 && lastIndexSemicolon > cursorContextMessage.lastIndexOf(" ") && lastIndexSemicolon != lastIndex) {
                 const emojiSearch = cursorContextMessage.substring(lastIndexSemicolon + 1, lastIndex + 1);
-                this.emojiAutocompleteSuggestions = this.emojiIndex.search(emojiSearch).map((o) => ({ emoji: o.native, title: o.name }));
+                this.emojiAutocompleteSuggestions = this.emojiIndex.search(emojiSearch).map((o) => ({ emoji: o.native, code: o.short_name }));
             } else {
                 this.emojiAutocompleteSuggestions = [];
             }
@@ -202,10 +202,6 @@ export default {
     destroy () {
         document.documentElement.removeEventListener('paste');
         this.$store.state.msgbus.$off('hotkey-emoji', this.toggle);
-
-        if (this.autocomplete != null) {
-            this.autocomplete.destroy();
-        }
     },
 
     methods: {
@@ -217,23 +213,9 @@ export default {
          */
         dispatchSend(e) { // Dispatch send message when clicked
 
-            if (e instanceof KeyboardEvent && this.autocomplete != null) {
-                // todo select first option?
-                this.destroyAutoComplete();
-
-                // Get start/end of selection for insert location
-                const start = e.target.selectionStart;
-                const end =  e.target.selectionEnd;
-
-                // Overwrite selection with newline
-                this.message = this.message.substr(0,start)
-                    + " " + this.message.substr(end, this.message.length);
-
-                // Set new location of selection to start of old selection
-                // Wait until next tick to ensure the new message gets rendered
-                Vue.nextTick(() =>
-                    e.target.setSelectionRange(start + 1, start + 1)
-                );
+            if (e instanceof KeyboardEvent && this.autocomplete_emoji) {
+                const emoji = this.emojiAutocompleteSuggestions[0].emoji;
+                this.selectAutocompleteEmoji(emoji);
 
                 return;
             }
