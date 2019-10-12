@@ -1,6 +1,6 @@
 <template>
     <div class="page-content">
-        <RecipientBar :on-contact-list-changed="onContactListChanged" />
+        <ContactEntryBar :on-contact-list-changed="onContactListChanged" />
         <Sendbar :on-send="sendMessage" :loading="sending" />
     </div>
 </template>
@@ -10,13 +10,13 @@ import { i18n } from '@/utils';
 
 import { Api, Util } from "@/utils/";
 import Sendbar from '../Thread/Sendbar.vue';
-import RecipientBar from './RecipientBar.vue';
+import ContactEntryBar from './ContactEntryBar.vue';
 
 export default {
     name: 'Compose',
 
     components: {
-        RecipientBar,
+        ContactEntryBar,
         Sendbar,
     },
 

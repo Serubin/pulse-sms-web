@@ -7,7 +7,7 @@
         </div>
 
         <div class="mdl-card__supporting-text">
-            <RecipientBar :on-contact-list-changed="onContactListChanged" />
+            <ContactEntryBar :on-contact-list-changed="onContactListChanged" />
             <div class="mdl-textfield mdl-js-textfield">
                 <textarea id="message" v-model="message" class="mdl-textfield__input"></textarea>
                 <label class="mdl-textfield__label" for="message">Message text...</label>
@@ -43,7 +43,7 @@ import 'flatpickr/dist/flatpickr.css';
 import { Api, Util } from '@/utils/';
 import FlatPickr from 'vue-flatpickr-component';
 import Spinner from '@/components/Spinner.vue';
-import RecipientBar from '../Compose/RecipientBar.vue';
+import ContactEntryBar from '../Compose/ContactEntryBar.vue';
 
 export default {
     name: 'CreateScheduledMessage',
@@ -51,7 +51,7 @@ export default {
     components: {
         Spinner,
         FlatPickr,
-        RecipientBar
+        ContactEntryBar
     },
 
     data () {
