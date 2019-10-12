@@ -44,32 +44,32 @@ export default {
 @import "../../assets/scss/_vars.scss";
 
 .click-item {
-  background: #fafafa;
-  position: relative;
-  width: 100%;
-  padding: 12px;
-  line-height: 18px;
-  border-radius: 3px;
-  margin-top: -3px;
-
-  -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
+    background: #fafafa;
+    position: relative;
+    width: 100%;
+    padding: 12px;
+    line-height: 18px;
+    border-radius: 3px;
+    margin-top: -3px;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
-.click-item:hover, .is-active {
-  background: #e0e0e0;
-  cursor: pointer;
+.click-item:hover,
+.is-active {
+    background: #e0e0e0;
+    cursor: pointer;
 }
 
 body.dark {
-  .click-item {
-    background: #202024;
-  }
-
-  .click-item:hover, .is-active {
-    background: #282828;
-  }
+    .click-item {
+        background: #202024;
+    }
+    .click-item:hover,
+    .is-active {
+        background: #282828;
+    }
 }
 </style>
