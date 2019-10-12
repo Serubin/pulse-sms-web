@@ -1,14 +1,5 @@
 <template>
-    <multi-list-select 
-        id="multiselect"
-        :list="contacts"
-        option-value="phone"
-        option-text="nameNormalized"
-        :selected-items="selectedContacts"
-        :custom-text="optionText"
-        :placeholder="$t('compose.type')"
-        @select="onSelect"
-    />
+    <multi-list-select id="multiselect" :list="contacts" option-value="phone" option-text="nameNormalized" :selected-items="selectedContacts" :custom-text="optionText" :placeholder="$t('compose.type')" @select="onSelect" />
 </template>
 
 <script>
@@ -178,37 +169,37 @@ export default {
 
 <style lang="scss">
 
-    @import "../../assets/scss/_vars.scss";
+@import "../../assets/scss/_vars.scss";
 
-    body.dark {
-        .ui.selection.dropdown {
-            background: #202024;
-            color: rgba(255,255,255,.87);
-        }
-
-        .ui.selection.active.dropdown {
-            border-color: transparent;
-        }
-
-        .ui.selection.active.dropdown .menu {
-            border-color: transparent;
-        }
-
-        .ui.dropdown .menu {
-            background: #202024;
-        }
-
-        .ui.dropdown .menu .item {
-            color: rgba(255,255,255,.87);
-        }
-
-        .ui.dropdown .menu>.item {
-            border-top: 1px solid #181818;
-        }
-
-        .ui.multiple.search.dropdown>input.search {
-            color: rgba(255,255,255,.87);
-        }
+body.dark {
+    .ui.selection.dropdown {
+        background: #202024;
+        color: rgba(255,255,255,.87);
     }
+
+    .ui.selection.active.dropdown {
+        border-color: transparent;
+    }
+
+    .ui.selection.active.dropdown .menu {
+        border-color: transparent;
+    }
+
+    .ui.dropdown .menu {
+        background: #202024;
+    }
+
+    .ui.dropdown .menu .item {
+        color: rgba(255,255,255,.87);
+    }
+
+    .ui.dropdown .menu>.item {
+        border-top: 1px solid #181818;
+    }
+
+    .ui.multiple.search.dropdown>input.search {
+        color: rgba(255,255,255,.87);
+    }
+}
 
 </style>
