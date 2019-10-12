@@ -14,20 +14,19 @@
             <div v-if="showColorSettings" class="mdl-dialog">
                 <div class="mdl-dialog__content mdl-dialog-card mdl-card">
                     <h4>{{ $t('thread.settings.updatecolors') }}</h4>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('settings.primary') }}
-                        <input id="theme-default" v-model="hex.default" class="mdl-textfield__input" type="text">
-                        <label class="mdl-textfield__label" for="theme-default"></label>
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('settings.darkprimary') }}
-                        <input id="theme-dark" v-model="hex.dark" class="mdl-textfield__input" type="text">
-                        <label class="mdl-textfield__label" for="theme-dark"></label>
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('settings.accent') }}
-                        <input id="theme-accent" v-model="hex.accent" class="mdl-textfield__input" type="text">
-                        <label class="mdl-textfield__label" for="theme-accent"></label>
+                    <div class="container">
+                        <div class="mdl-textfield mdl-js-textfield horizontal">
+                            {{ $t('settings.primary') }}
+                            <sketch-picker v-model="hex.default" :disable-alpha="true" :preset-colors="presetColors" />
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield horizontal">
+                            {{ $t('settings.darkprimary') }}
+                            <sketch-picker v-model="hex.dark" :disable-alpha="true" :preset-colors="presetColors" />
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield horizontal">
+                            {{ $t('settings.accent') }}
+                            <sketch-picker v-model="hex.accent" :disable-alpha="true" :preset-colors="presetColors" />
+                        </div>
                     </div>
                     <div class="mdl-dialog__actions">
                         <button type="button" class="mdl-button close" @click="saveColors">
@@ -73,10 +72,14 @@
 </template>
 
 <script>
+import { Sketch } from 'vue-color';
 import { Api, Util, SessionCache } from '@/utils/';
 
 export default {
     name: 'ConversationSettings',
+    components: {
+        'sketch-picker': Sketch,
+    },
     props: [ 'conversationTitle', 'conversationId' ],
 
     data () {
@@ -91,7 +94,8 @@ export default {
             pin_class: "",
             mute_class: "",
             private_class: "",
-            showColorSettings: false
+            showColorSettings: false,
+            presetColors: ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#1775D2', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FDD835', '#FFC411', '#FF9800', '#FF5722', '#9E9E9E', '#607D8B', '#374248'],
         };
     },
 
@@ -143,6 +147,12 @@ export default {
 
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
+
+        document.querySelector("#sidebar").style['z-index'] = 0;
+    },
+
+    beforeDestroy () {
+        document.querySelector("#sidebar").style['z-index'] = 3;
     },
 
     methods: {
@@ -223,6 +233,16 @@ export default {
         },
 
         saveColors () {
+            if (this.hex.default.hex) {
+                this.hex.default = this.hex.default.hex;
+            }
+            if (this.hex.dark.hex) {
+                this.hex.dark = this.hex.dark.hex;
+            }
+            if (this.hex.accent.hex) {
+                this.hex.accent = this.hex.accent.hex;
+            }
+
             // Convert hex to RGB Int
             const theme_default = this.hexToRgb(this.hex.default);
             const theme_dark = this.hexToRgb(this.hex.dark);
@@ -247,6 +267,11 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
 
+    .horizontal {
+        display: inline-block;
+        position:relative;
+    }
+
     .label-item {
         padding-left: 15px;
     }
@@ -259,6 +284,7 @@ export default {
     }
 
     .item:hover, .click-item:hover {
+        width: 400px;
         background: #E0E0E0;
     }
 
@@ -276,11 +302,16 @@ export default {
     }
 
     .mdl-dialog-card {
-        width: 300px;
+        width: 770px;
         min-height: 120px;
         margin: auto;
         margin-top: 100px;
         text-align: left;
+    }
+
+    .mdl-textfield {
+        width: auto;
+        margin: 10px;
     }
 
     .mdl-dialog-button-bar {
