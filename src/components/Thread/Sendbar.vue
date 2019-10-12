@@ -15,9 +15,14 @@
             <div v-show="show_emoji" id="emoji-wrapper" @click.self="toggleEmoji">
                 <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheet-size="sheetSize" :per-line="perLine" :skins="skin" :data="emojiIndex" @select="insertEmoji" />
             </div>
+            <div v-show="autocomplete_emoji" id="emoji-autocomplete" :style="emojiAutocompleteStyle">
+                <transition-group name="flip-list" tag="div">
+                    <emoji-autocomplete-suggestion v-for="(suggestion, i) in emojiAutocompleteSuggestions" :key="suggestion.code" :emoji="suggestion" :on-selected="selectAutocompleteEmoji" :is-active="i === emojiSelectedIndex" />
+                </transition-group>
+            </div>
             <div v-mdl class="entry mdl-textfield mdl-js-textfield" :class="is_dirty">
-                <!-- eslint-disable-next-line vue/use-v-on-exact -->
-                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
+                <!-- eslint-disable vue/use-v-on-exact -->
+                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.down.exact.prevent.stop="onArrowUp" @keydown.up.exact.prevent.stop="onArrowDown" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
@@ -30,6 +35,7 @@
 
 <script>
 import Vue from 'vue';
+import EmojiAutocompleteSuggestion from './EmojiAutocompleteSuggestion.vue';
 import AutoGrow from '@/lib/textarea-autogrow.js';
 import data from 'emoji-mart-vue-fast/data/all.json';
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
@@ -40,6 +46,7 @@ export default {
     name: 'Sendbar',
     components: {
         NimblePicker,
+        EmojiAutocompleteSuggestion,
     },
     props: ['threadId', 'onSend', 'loading'],
 
@@ -52,6 +59,12 @@ export default {
                 bottom: "70px",
                 width: "18em",
             },
+            emojiAutocompleteStyle: {
+                position: "absolute",
+                left: "72px",
+                bottom: "67px",
+                width: "18em",
+            },
             perLine: 6,
             set: 'twitter',
             emojiIndex: new EmojiIndex(data),
@@ -60,6 +73,8 @@ export default {
             show_emoji: false,
             $wrapper: null,
             $sendbar: null,
+            emojiAutocompleteSuggestions: [],
+            emojiSelectedIndex: 0,
         };
     },
 
@@ -78,6 +93,9 @@ export default {
         },
         media_blob () { // creates url object from media blob
             return window.URL.createObjectURL(this.$store.state.loaded_media);
+        },
+        autocomplete_emoji () {
+            return this.emojiAutocompleteSuggestions.length > 0;
         }
     },
 
@@ -85,6 +103,18 @@ export default {
         '$route' () { // Update thread on route change
             this.message = "";
             this.removeMedia();
+        },
+
+        'message' () {
+            const cursorContextMessage = this.message.substr(0, this.$sendbar.selectionStart);
+            const lastIndexSemicolon = cursorContextMessage.lastIndexOf(":");
+            const lastIndex = cursorContextMessage.length - 1;
+            if (lastIndexSemicolon != -1 && lastIndexSemicolon > cursorContextMessage.lastIndexOf(" ") && lastIndexSemicolon != lastIndex) {
+                const emojiSearch = cursorContextMessage.substring(lastIndexSemicolon + 1, lastIndex + 1);
+                this.emojiAutocompleteSuggestions = this.emojiIndex.search(emojiSearch).map((o) => ({ emoji: o.native, code: o.short_name })).slice(0, 10);
+            } else {
+                this.emojiAutocompleteSuggestions = [];
+            }
         }
     },
 
@@ -138,6 +168,13 @@ export default {
          */
         dispatchSend(e) { // Dispatch send message when clicked
 
+            if (e instanceof KeyboardEvent && this.autocomplete_emoji) {
+                const emoji = this.emojiAutocompleteSuggestions[this.emojiSelectedIndex].emoji;
+                this.selectAutocompleteEmoji(emoji);
+
+                return;
+            }
+
             // the shift key will be used to toggle between the send and return functionality, based
             // on the users "enter to send" preference, in settings.
 
@@ -177,6 +214,7 @@ export default {
             // Clear message
             this.message = "";
         },
+
         /**
          * Removes media from store
          */
@@ -191,6 +229,7 @@ export default {
          * @param e - event object (optional)
          */
         attachMedia () {
+            this.destroyAutoComplete();
 
             // Create input to attach file
             const input = document.createElement('input');
@@ -224,6 +263,7 @@ export default {
          * @param toggle - toggle override (default: null)
          */
         toggleEmoji (toggle=null) {
+            this.destroyAutoComplete();
 
             // Update emoji wrapper margin
             this.updateEmojiMargin(true);
@@ -266,6 +306,8 @@ export default {
          * @param e emoji event
          */
         insertEmoji(e) {
+            this.destroyAutoComplete();
+
             // Get start/end of selection for insert location
             const start = this.$sendbar.selectionStart;
             const end =  this.$sendbar.selectionEnd;
@@ -279,6 +321,42 @@ export default {
             Vue.nextTick(() =>
                 this.$sendbar.setSelectionRange(start + e.native.length, start + e.native.length)
             );
+        },
+
+        selectAutocompleteEmoji(emoji) {
+            this.destroyAutoComplete();
+
+            // Get start/end of selection for insert location
+            const cursorContextMessage = this.message.substr(0, this.$sendbar.selectionStart);
+            const start = cursorContextMessage.lastIndexOf(":");
+            const end = cursorContextMessage.length;
+
+            // Overwrite selection with emoji
+            this.message = this.message.substr(0,start)
+                + emoji + this.message.substr(end, this.message.length);
+
+            // Set new location of selection to start of old selection
+            // Wait until next tick to ensure the new message gets rendered
+            Vue.nextTick(() =>
+                this.$sendbar.setSelectionRange(start + emoji.length, start + emoji.length)
+            );
+        },
+
+        onArrowDown() {
+            if (this.autocomplete_emoji && this.emojiSelectedIndex > 0) {
+                this.emojiSelectedIndex = this.emojiSelectedIndex - 1;
+            }
+        },
+
+        onArrowUp() {
+            if (this.autocomplete_emoji && this.emojiSelectedIndex < this.emojiAutocompleteSuggestions.length) {
+                this.emojiSelectedIndex = this.emojiSelectedIndex + 1;
+            }
+        },
+
+        destroyAutoComplete () {
+            this.emojiAutocompleteSuggestions = [];
+            this.emojiSelectedIndex = 0;
         }
     }
 };
@@ -288,241 +366,222 @@ export default {
 <style lang="scss" scoped>
 @import "../../assets/scss/_vars.scss";
 
+#emoji {
+    background: url("../../assets/images/ic_mood.png") no-repeat;
+    background-size: cover;
+}
+
+#attach {
+    background: url("../../assets/images/ic_attach.png") no-repeat;
+    background-size: cover;
+    margin-top: 18px;
+    width: 24px;
+    height: 24px;
+}
+
+body.dark {
     #emoji {
-        background: url("../../assets/images/ic_mood.png") no-repeat;
+        background: url("../../assets/images/ic_mood_white.png") no-repeat;
         background-size: cover;
     }
-
     #attach {
-        background: url("../../assets/images/ic_attach.png") no-repeat;
+        background: url("../../assets/images/ic_attach_white.png") no-repeat;
         background-size: cover;
+    }
+}
+
+.send-bar {
+    height: auto;
+    width: 100%;
+    margin: auto;
+    position: fixed;
+    bottom: 0%;
+    clear: both;
+    transition: ease-in-out width $anim-time;
+    .mdl-progress {
+        width: 100%;
+    }
+    .preview {
+        position: relative;
+        background: #fafafa;
+        max-height: 300px;
+        overflow: hidden;
+        border-radius: 15px;
+        margin-bottom: 10px;
+        box-shadow: -0px -0px 3px rgba(0, 0, 0, 0.15);
+        .overlay {
+            background: linear-gradient( to bottom, rgba(250, 250, 250, 0) 95%, rgba(250, 250, 250, 1) 100%);
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 10;
+            .media-clear {
+                position: absolute;
+                margin: 0.3em 1em;
+                background: rgb(33, 150, 243) none repeat scroll 0% 0%;
+                padding: 0.3em;
+                right: 1em;
+                width: 24px;
+                min-width: 24px;
+                min-height: 24px;
+                height: 24px;
+            }
+            .media-clear i {
+                width: 24px;
+                font-size: 18px;
+                line-height: 24px;
+                height: 24px;
+            }
+        }
+        img {
+            margin: 1em calc(24px + 16px + 8px) 1em;
+            width: calc(100% - 108px);
+        }
+    }
+    @media (min-width: 750px) {
+        & {
+            width: 450px;
+        }
+    }
+    @media (min-width: 800px) {
+        & {
+            width: 490px;
+        }
+    }
+    @media (min-width: 820px) {
+        & {
+            width: 505px;
+        }
+    }
+    @media (min-width: 850px) {
+        & {
+            width: 530px;
+        }
+    }
+    @media (min-width: 870px) {
+        & {
+            width: 550px;
+        }
+    }
+    @media (min-width: 890px) {
+        & {
+            width: 570px;
+        }
+    }
+    @media (min-width: 920px) {
+        & {
+            width: 600px;
+        }
+    }
+    @media (min-width: 950px) {
+        & {
+            width: 630px;
+        }
+    }
+}
+
+.mdl-textfield {
+    padding: 0px 0;
+    padding-top: 20px;
+}
+
+.mdl-textfield__input {
+    min-height: 2em;
+    transition: height ease-in-out $anim-time;
+    outline: none;
+}
+
+.mdl-textfield__label:after {
+    background-color: rgba(0, 0, 0, 0);
+    bottom: 1px;
+    height: 1px;
+}
+
+.send-bar-inner {
+    background: #fafafa;
+    height: 100%;
+    margin: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 16px 16px 0px 0px;
+    box-shadow: -0px -0px 3px rgba(0, 0, 0, 0.15);
+    .entry {
+        width: calc(100% - 124px);
+        margin-top: -4px;
+    }
+    .send {
+        float: right;
+        margin-top: 8px;
+    }
+    .attach-button {
+        float: left;
+        text-align: center;
+        margin-top: 15px;
+        min-width: 0px;
+        width: 28px;
+        height: 28px;
+        opacity: 0.56;
+        margin-right: 8px;
+    }
+    .emoji-button {
+        float: left;
+        text-align: center;
         margin-top: 18px;
+        min-width: 0px;
         width: 24px;
         height: 24px;
+        opacity: 0.56;
+        margin-right: 16px;
     }
+}
 
-    body.dark {
-      #emoji {
-          background: url("../../assets/images/ic_mood_white.png") no-repeat;
-          background-size: cover;
-      }
+#message-entry {
+    height: 24px;
+    resize: none;
+}
 
-      #attach {
-          background: url("../../assets/images/ic_attach_white.png") no-repeat;
-          background-size: cover;
-      }
+#emoji-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    .emoji-mart {
+        z-index: 15;
+        transition: ease-in-out left $anim-time;
     }
+}
 
-    .send-bar {
-        height: auto;
-        width: 100%;
-        margin: auto;
-        position: fixed;
-        bottom: 0%;
-        clear: both;
-        transition: ease-in-out width $anim-time;
-
-        .mdl-progress {
-            width: 100%;
-        }
-
-        .preview {
-            position: relative;
-            background: #fafafa;
-            max-height: 300px;
-            overflow: hidden;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            box-shadow: -0px -0px 3px rgba(0, 0, 0, .15);
-
-            .overlay {
-                background: linear-gradient(to bottom, rgba(250,250,250,0) 95%,rgba(250,250,250,1) 100%);
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                height: 100%;
-                width: 100%;
-                z-index: 10;
-
-                .media-clear {
-                    position: absolute;
-                    margin: 0.3em 1em;
-                    background: rgb(33, 150, 243) none repeat scroll 0% 0%;
-                    padding: 0.3em;
-                    right: 1em;
-                    width: 24px;
-                    min-width: 24px;
-                    min-height: 24px;
-                    height: 24px;
-                }
-
-                .media-clear i {
-                    width: 24px;
-                    font-size: 18px;
-                    line-height: 24px;
-                    height: 24px;
-                }
-            }
-
-            img {
-                margin: 1em calc(24px + 16px + 8px) 1em;
-                width: calc(100% - 108px);
-            }
-        }
-
-        @media (min-width: 750px) {
-            & {
-                width: 450px;
-            }
-        }
-        @media (min-width: 800px) {
-            & {
-                width: 490px;
-            }
-        }
-        @media (min-width: 820px) {
-            & {
-                width: 505px;
-            }
-        }
-        @media (min-width: 850px) {
-            & {
-                width: 530px;
-            }
-        }
-        @media (min-width: 870px) {
-            & {
-                width: 550px;
-            }
-        }
-        @media (min-width: 890px) {
-            & {
-                width: 570px;
-            }
-        }
-        @media (min-width: 920px) {
-            & {
-                width: 600px;
-            }
-        }
-        @media (min-width:950px) {
-            & {
-                width: 630px;
-            }
+body.dark {
+    .preview {
+        background: rgb(32, 32, 36);
+        .overlay {
+            background: linear-gradient( to bottom, rgba(32, 32, 36, 0) 95%, rgba(32, 32, 36, 1) 100%);
         }
     }
-
-    .mdl-textfield {
-        padding: 0px 0;
-        padding-top: 20px;
-    }
-
-    .mdl-textfield__input {
-        min-height: 2em;
-        transition: height ease-in-out $anim-time;
-        outline: none;
-    }
-
-    .mdl-textfield__label:after {
-        background-color: rgba(0,0,0,0);
-        bottom: 1px;
-        height: 1px;
-    }
-
     .send-bar-inner {
-        background: #fafafa;
-        height: 100%;
-        margin: auto;
-        padding-left: 16px;
-        padding-right: 16px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        border-radius: 16px 16px 0px 0px;
-        box-shadow: -0px -0px 3px rgba(0, 0, 0, .15);
+        background: #202024;
+        color: #fff;
+    }
+    .mdl-textfield__label {
+        color: #fff !important;
+    }
+}
 
-        .entry {
-            width: calc(100% - 124px);
-            margin-top: -4px;
-        }
-
-        .send {
-            float: right;
-            margin-top: 8px;
-        }
-
-        .attach-button {
-            float: left;
-            text-align: center;
-            margin-top: 15px;
-            min-width: 0px;
-            width: 28px;
-            height: 28px;
-            opacity: .56;
-            margin-right: 8px;
-        }
-
-        .emoji-button {
-            float: left;
-            text-align: center;
-            margin-top: 18px;
-            min-width: 0px;
-            width: 24px;
-            height: 24px;
-            opacity: .56;
-            margin-right: 16px;
+body.black {
+    .preview {
+        background: rgb(0, 0, 0);
+        .overlay {
+            background: linear-gradient( to bottom, rgba(0, 0, 0, 0) 95%, rgba(0, 0, 0, 1) 100%);
         }
     }
-
-    #message-entry {
-        height: 24px;
-        resize: none;
+    .send-bar-inner {
+        background: #000000;
     }
-
-    #emoji-wrapper {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 10;
-
-        .emoji-mart {
-            z-index: 15;
-            transition: ease-in-out left $anim-time;
-        }
-    }
-
-    body.dark {
-        .preview {
-            background: rgb(32,32,36);
-
-            .overlay {
-                background: linear-gradient(to bottom, rgba(32,32,36,0) 95%,rgba(32,32,36,1) 100%);
-            }
-        }
-
-        .send-bar-inner {
-            background: #202024;
-            color: #fff;
-        }
-
-        .mdl-textfield__label {
-            color: #fff !important;
-        }
-    }
-
-    body.black {
-        .preview {
-            background: rgb(0,0,0);
-
-            .overlay {
-                background: linear-gradient(to bottom, rgba(0,0,0,0) 95%,rgba(0,0,0,1) 100%);
-            }
-        }
-
-        .send-bar-inner {
-            background: #000000;
-        }
-    }
-
+}
 </style>
