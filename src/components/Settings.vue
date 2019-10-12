@@ -54,20 +54,19 @@
             <div v-if="showColorSettings" class="mdl-dialog">
                 <div class="mdl-dialog__content mdl-dialog-card mdl-card">
                     <h4>Update Theme Colors</h4>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('settings.primary') }}
-                        <input id="theme-default" v-model="theme_default" class="mdl-textfield__input" type="text">
-                        <label class="mdl-textfield__label" for="theme-default"></label>
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('settings.darkprimary') }}
-                        <input id="theme-dark" v-model="theme_dark" class="mdl-textfield__input" type="text">
-                        <label class="mdl-textfield__label" for="theme-dark"></label>
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield">
-                        {{ $t('settings.accent') }}
-                        <input id="theme-accent" v-model="theme_accent" class="mdl-textfield__input" type="text">
-                        <label class="mdl-textfield__label" for="theme-accent"></label>
+                    <div class="container">
+                        <div class="mdl-textfield mdl-js-textfield horizontal">
+                            {{ $t('settings.primary') }}
+                            <sketch-picker v-model="theme_default" :disable-alpha="true" :preset-colors="presetColors" />
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield horizontal">
+                            {{ $t('settings.darkprimary') }}
+                            <sketch-picker v-model="theme_dark" :disable-alpha="true" :preset-colors="presetColors" />
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield horizontal">
+                            {{ $t('settings.accent') }}
+                            <sketch-picker v-model="theme_accent" :disable-alpha="true" :preset-colors="presetColors" />
+                        </div>
                     </div>
                     <div class="mdl-dialog__actions">
                         <button type="button" class="mdl-button close" @click="saveColors">
@@ -158,10 +157,14 @@
 </template>
 
 <script>
+import { Sketch } from 'vue-color';
 import { Api, Util, Platform, i18n } from '@/utils/';
 
 export default {
     name: 'Settings',
+    components: {
+        'sketch-picker': Sketch,
+    },
 
     data () {
         return {
@@ -177,7 +180,8 @@ export default {
             theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : "#1665C0",
             theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : "#FF6E40",
             theme_menu: null,
-            showColorSettings: false
+            showColorSettings: false,
+            presetColors: ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#1775D2', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FDD835', '#FFC411', '#FF9800', '#FF5722', '#9E9E9E', '#607D8B', '#374248']
         };
     },
 
@@ -294,10 +298,13 @@ export default {
 
         let theme_menu_el = this.$el.querySelector("#base-theme-menu");
         this.theme_menu = theme_menu_el.MaterialMenu;
+
+        document.querySelector("#sidebar").style['z-index'] = 0;
     },
 
     beforeDestroy () {
         this.$store.state.msgbus.$off('refresh-btn', this.refreshSettings);
+        document.querySelector("#sidebar").style['z-index'] = 3;
     },
 
     methods: {
@@ -351,6 +358,15 @@ export default {
             return bool ? i18n.t('settings.yes') : i18n.t('settings.no');
         },
         saveColors () {
+            if (this.theme_default.hex) {
+                this.theme_default = this.theme_default.hex;
+            }
+            if (this.theme_dark.hex) {
+                this.theme_dark = this.theme_dark.hex;
+            }
+            if (this.theme_accent.hex) {
+                this.theme_accent = this.theme_accent.hex;
+            }
 
             // Convert hex to RGB Int
             const theme_default = this.hexToRgb(this.theme_default);
@@ -362,7 +378,7 @@ export default {
             Api.account.settings.update("global_primary_dark_color", "int", theme_dark);
             Api.account.settings.update("global_accent_color", "int", theme_accent);
 
-            // Store rgba value in store
+            // // Store rgba value in store
             this.$store.commit('theme_global_default', Util.expandColor(theme_default));
             this.$store.commit('theme_global_dark', Util.expandColor(theme_dark));
             this.$store.commit('theme_global_accent', Util.expandColor(theme_accent));
@@ -381,6 +397,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../assets/scss/_vars.scss";
+
+    .horizontal {
+        display: inline-block;
+        position:relative;
+    }
 
     .label-item {
         padding-left: 15px;
@@ -417,11 +438,16 @@ export default {
     }
 
     .mdl-dialog-card {
-        width: 300px;
+        width: 770px;
         min-height: 120px;
         margin: auto;
         margin-top: 100px;
         text-align: left;
+    }
+
+    .mdl-textfield {
+        width: auto;
+        margin: 10px;
     }
 
     .mdl-dialog-button-bar {
