@@ -1,5 +1,5 @@
 <template>
-    <multi-list-select id="multiselect" :list="contacts" option-value="phone" option-text="nameNormalized" :selected-items="selectedContacts" :custom-text="optionText" :placeholder="$t('compose.type')" @select="onSelect" />
+    <multi-list-select id="multiselect" :list="contacts" option-value="phone" option-text="nameNormalized" :selected-items="selectedContacts" :custom-text="optionText" :placeholder="$t('compose.type')" @searchchange="searchChanged" @select="onSelect" />
 </template>
 
 <script>
@@ -45,6 +45,9 @@ export default {
          * compute the display text used in the search result
          */
         optionText (contact) {
+            if (!contact.id) {
+                return contact.phone;
+            }
             let display = contact.name + ' ' + contact.phone;
             if (contact.type) {
                 switch (contact.type) {
@@ -160,9 +163,32 @@ export default {
                 }
             }
         },
+        /**
+         * Allows the user to search for a name containing an 'é' (or other accents)
+         * by typing 'e'.
+         */
         stripUnicode (input) {
             return input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         },
+        /**
+         * Allows us to tokenize any phone numbers that the user enters, that aren't 
+         * in their contact list.
+         */
+        searchChanged (input) {
+            if (input.indexOf(";") > 0 || input.indexOf(",") > 0) {
+                let split = input.split(/;|,/g); // split using ";" or ","
+                split.forEach((entry) => {
+                    if (entry.length > 0) {
+                        entry = entry.replace(/ /g, "");
+                        this.selectedContacts.push({ 'phone': entry });
+                    }
+                });
+                Vue.nextTick(() => {
+                    this.$el.querySelector('#multiselect').blur();
+                    this.onSelect(this.selectedContacts);
+                });
+            }
+        }
     },
 };
 </script>
