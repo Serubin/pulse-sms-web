@@ -83,7 +83,8 @@ export const i18n = new VueI18n({
                 delete: 'Delete Conversation',
                 archive: 'Archive Conversation',
                 unarchive: 'Move to Inbox',
-                convsettings: 'Conversation Settings'
+                convsettings: 'Conversation Settings',
+                printconversation: 'Print Conversation',
             },
             compose: {
                 norecipient: 'No Recipient',

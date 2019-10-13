@@ -421,13 +421,14 @@ export default {
             // On thread add Delete, Blacklist, & Archive/unarchive
             if (this.$route.name.indexOf('thread') > -1) {
                 items.unshift(
-                    { "name": "conversation-information", 'title': i18n.t('menus.convinfo')},
-                    { "name": "blacklist", 'title': i18n.t('menus.blacklist')},
-                    { 'name': "delete", 'title': i18n.t('menus.delete')},
+                    { "name": "conversation-information", 'title': i18n.t('menus.convinfo') },
+                    { "name": "blacklist", 'title': i18n.t('menus.blacklist') },
+                    { 'name': "delete", 'title': i18n.t('menus.delete') },
                     ( this.$route.path.indexOf("archived") == -1 ?
-                        { 'name': "archive", 'title': i18n.t('menus.archive')} :
-                        { 'name': "unarchive", 'title': i18n.t('menus.unarchive')}),
-                    { "name": "conversation-settings", 'title': i18n.t('menus.convsettings')}
+                        { 'name': "archive", 'title': i18n.t('menus.archive') } :
+                        { 'name': "unarchive", 'title': i18n.t('menus.unarchive') } ),
+                    { "name": "conversation-settings", 'title': i18n.t('menus.convsettings') },
+                    { "name": "print-conversation", "title": i18n.t('menus.printconversation') },
                 );
             } else {
                 items.unshift(
@@ -450,14 +451,41 @@ export default {
             // Dispatch button event to message bus
             this.$store.state.msgbus.$emit(name + "-btn");
 
-            if (name != "refresh")
-                return;
+            if (name == "refresh") {
+                const btn = this.$el.querySelector("#refresh-button");
+                btn.className += " rotate";
+                setTimeout(() => {
+                    btn.className = btn.className.replace(" rotate", "");
+                }, 250);
+            }
 
-            const btn = this.$el.querySelector("#refresh-button");
-            btn.className += " rotate";
-            setTimeout(() => {
-                btn.className = btn.className.replace(" rotate", "");
-            }, 250);
+            if (name == "print-conversation") {
+                const prtHtml = document.getElementById('message-list').innerHTML;
+
+                // Get all stylesheets HTML
+                let stylesHtml = '';
+                for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
+                    stylesHtml += node.outerHTML;
+                }
+
+                // Open the print window
+                const WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+
+                WinPrint.document.write(`<!DOCTYPE html>
+                <html>
+                <head>
+                    ${stylesHtml}
+                </head>
+                <body>
+                    ${prtHtml}
+                </body>
+                </html>`);
+
+                WinPrint.document.close();
+                WinPrint.focus();
+                // WinPrint.print();
+                // WinPrint.close();
+            }
         },
 
         /**
