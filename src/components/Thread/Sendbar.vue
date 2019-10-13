@@ -22,7 +22,7 @@
             </div>
             <div v-mdl class="entry mdl-textfield mdl-js-textfield" :class="is_dirty">
                 <!-- eslint-disable vue/use-v-on-exact -->
-                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.down.exact.prevent.stop="onArrowUp" @keydown.up.exact.prevent.stop="onArrowDown" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
+                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.down.exact.prevent.stop="onArrowUp" @keydown.up.exact.prevent.stop="onArrowDown" @keydown.esc.exact.prevent.stop="destroyAutoComplete" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
