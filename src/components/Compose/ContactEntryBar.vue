@@ -24,6 +24,7 @@ export default {
     mounted () {
         this.queryContacts();
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
+        this.$el.querySelector('#multiselect').click();
     },
 
     beforeDestroy () {
