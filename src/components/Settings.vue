@@ -284,6 +284,13 @@ export default {
             } else {
                 this.theme_accent = this.rgbaToHex(color);
             }
+        },
+        'showColorSettings' () {
+            if (this.showColorSettings) {
+                document.querySelector("#sidebar").style['z-index'] = 0;
+            } else {
+                document.querySelector("#sidebar").style['z-index'] = 3;
+            }
         }
     },
 
@@ -298,13 +305,10 @@ export default {
 
         let theme_menu_el = this.$el.querySelector("#base-theme-menu");
         this.theme_menu = theme_menu_el.MaterialMenu;
-
-        document.querySelector("#sidebar").style['z-index'] = 0;
     },
 
     beforeDestroy () {
         this.$store.state.msgbus.$off('refresh-btn', this.refreshSettings);
-        document.querySelector("#sidebar").style['z-index'] = 3;
     },
 
     methods: {

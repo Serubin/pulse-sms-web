@@ -136,6 +136,13 @@ export default {
                 private_notifications: this.private_notifications
             };
             Api.conversations.update(this.conversationId, request);
+        },
+        'showColorSettings' () {
+            if (this.showColorSettings) {
+                document.querySelector("#sidebar").style['z-index'] = 0;
+            } else {
+                document.querySelector("#sidebar").style['z-index'] = 3;
+            }
         }
     },
 
@@ -147,12 +154,6 @@ export default {
 
         this.$store.commit("loading", false);
         this.$store.commit('title', this.title);
-
-        document.querySelector("#sidebar").style['z-index'] = 0;
-    },
-
-    beforeDestroy () {
-        document.querySelector("#sidebar").style['z-index'] = 3;
     },
 
     methods: {
