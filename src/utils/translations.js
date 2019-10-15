@@ -87,7 +87,7 @@ export const i18n = new VueI18n({
             },
             compose: {
                 norecipient: 'No Recipient',
-                type: 'Search contacts or enter a phone number (followed by a semicolon)...',
+                type: 'Search contacts or enter phone numbers (separated by a semicolon)...',
                 cantfind: 'Can\'t find your contact?',
                 alreadyadded: '{name} has already been added',
                 downloading: 'Downloading contacts...'

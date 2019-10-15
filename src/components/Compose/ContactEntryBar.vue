@@ -17,7 +17,8 @@ export default {
     data () {
         return {
             contacts: [],
-            selectedContacts: []
+            selectedContacts: [],
+            currentlyTyped: undefined,
         };
     },
 
@@ -25,6 +26,9 @@ export default {
         this.queryContacts();
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
         this.$el.querySelector('#multiselect').click();
+        this.$el.querySelector('#multiselect').addEventListener('blur', () => {
+            this.searchChanged(this.currentlyTyped, true);
+        });
     },
 
     beforeDestroy () {
@@ -35,9 +39,15 @@ export default {
         /**
          * select an entry in the auto-complete.
          */
-        onSelect (contacts) {
+        onSelect (contacts, skipFocus = false) {
+            this.currentlyTyped = undefined;
             this.selectedContacts = contacts;
             this.onContactListChanged(contacts);
+
+            if (skipFocus) {
+                return;
+            }
+
             Vue.nextTick(() => {
                 this.$el.querySelector('#multiselect').click();
             });
@@ -175,8 +185,13 @@ export default {
          * Allows us to tokenize any phone numbers that the user enters, that aren't 
          * in their contact list.
          */
-        searchChanged (input) {
-            if (input.indexOf(";") > 0 || input.indexOf(",") > 0) {
+        searchChanged (input, forceTokenize = false) {
+            if (!input) {
+                return;
+            }
+
+            this.currentlyTyped = input;
+            if (input.indexOf(";") > 0 || input.indexOf(",") > 0 || (forceTokenize && this.currentlyTyped.length > 0)) {
                 let split = input.split(/;|,/g); // split using ";" or ","
                 split.forEach((entry) => {
                     if (entry.length > 0) {
@@ -185,8 +200,9 @@ export default {
                     }
                 });
                 Vue.nextTick(() => {
+                    this.currentlyTyped = undefined;
                     this.$el.querySelector('#multiselect').blur();
-                    this.onSelect(this.selectedContacts);
+                    this.onSelect(this.selectedContacts, forceTokenize);
                 });
             }
         }
