@@ -168,6 +168,8 @@ export default {
          */
         dispatchSend(e) { // Dispatch send message when clicked
 
+            const conversationId = this.threadId;
+
             if (e instanceof KeyboardEvent && this.autocomplete_emoji) {
                 const emoji = this.emojiAutocompleteSuggestions[this.emojiSelectedIndex].emoji;
                 this.selectAutocompleteEmoji(emoji);
@@ -209,7 +211,7 @@ export default {
                 return false;
 
             // Send message to handler
-            this.onSend(this.message);
+            this.onSend(this.message, conversationId);
 
             // Clear message
             this.message = "";

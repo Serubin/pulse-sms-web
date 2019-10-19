@@ -248,11 +248,15 @@ export default {
          * Call back for sending messages
          * @param message - string message
          */
-        sendMessage (message) {
+        sendMessage (message, conversationId) {
+            if (!conversationId) {
+                conversationId = this.conversation_id;
+            }
+
             // Send stored media if laoded
             if (this.$store.state.loaded_media) {
                 Api.messages.media.send(this.$store.state.loaded_media, (file, messageId) => {
-                    Api.messages.send("firebase -1", file.type, this.conversation_id, messageId);
+                    Api.messages.send("firebase -1", file.type, conversationId, messageId);
                 });
             }
 
@@ -261,7 +265,7 @@ export default {
                 return false;
 
             // Otherwise send any corrisponding message
-            Api.messages.send(message, "text/plain", this.conversation_id);
+            Api.messages.send(message, "text/plain", conversationId);
         },
 
         /**
