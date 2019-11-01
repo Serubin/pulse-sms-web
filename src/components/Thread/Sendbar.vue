@@ -13,7 +13,7 @@
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia">
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji">
             <div v-show="show_emoji" id="emoji-wrapper" @click.self="toggleEmoji">
-                <nimble-picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheet-size="sheetSize" :per-line="perLine" :skins="skin" :data="emojiIndex" @select="insertEmoji" />
+                <picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheet-size="sheetSize" :per-line="perLine" :skins="skin" :data="emojiIndex" @select="insertEmoji" />
             </div>
             <div v-show="autocomplete_emoji" id="emoji-autocomplete" :style="emojiAutocompleteStyle">
                 <transition-group name="flip-list" tag="div">
@@ -37,15 +37,15 @@
 import Vue from 'vue';
 import EmojiAutocompleteSuggestion from './EmojiAutocompleteSuggestion.vue';
 import AutoGrow from '@/lib/textarea-autogrow.js';
-import data from 'emoji-mart-vue-fast/data/all.json';
+import data from 'emoji-mart-vue-fast/data/messenger.json';
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
-import { NimblePicker, EmojiIndex } from 'emoji-mart-vue-fast';
+import { Picker, EmojiIndex } from 'emoji-mart-vue-fast';
 import { Api } from '@/utils';
 
 export default {
     name: 'Sendbar',
     components: {
-        NimblePicker,
+        Picker,
         EmojiAutocompleteSuggestion,
     },
     props: ['threadId', 'onSend', 'loading'],
@@ -66,7 +66,7 @@ export default {
                 width: "18em",
             },
             perLine: 6,
-            set: 'twitter',
+            set: 'messenger',
             emojiIndex: new EmojiIndex(data),
             sheetSize: 32,
             skin: 3,
