@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import store from '@/store/';
-import emojione from 'emojione';
+import joypixels from 'emoji-toolkit';
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import ImageCompressor from '@xkeshi/image-compressor';
@@ -97,7 +97,7 @@ export default class Messages {
             timestamp: timestamp,
             mime_type: mime_type,
             message_type: 2,
-            data: emojione.unicodeToImage(Util.entityEncode(data)),
+            data: joypixels.toImage(Util.entityEncode(data)),
             read: true,
             snippet: snippet
         };

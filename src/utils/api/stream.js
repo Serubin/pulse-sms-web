@@ -1,7 +1,7 @@
 import router from '@/router/';
 import ReconnectingWebsocket from 'reconnecting-websocket';
 import store from '@/store/';
-import emojione from 'emojione';
+import joypixels from 'emoji-toolkit';
 import { Api, Util, Url, Crypto, SessionCache, Platform, i18n } from '@/utils/';
 
 export default class Stream {
@@ -89,7 +89,7 @@ export default class Stream {
 
         // Parse any emojis
         if (typeof json.message.content.data != "undefined")
-            json.message.content.data = emojione.unicodeToImage(
+            json.message.content.data = joypixels.toImage(
                 json.message.content.data
             );
 

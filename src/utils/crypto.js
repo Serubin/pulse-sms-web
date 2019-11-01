@@ -3,7 +3,7 @@ import { hmacSHA1 } from '@/lib/hmacsha1.js';
 
 import Hash from 'object-hash';
 import store from '@/store';
-import emojione from 'emojione';
+import joypixels from 'emoji-toolkit';
 import { Util } from '@/utils';
 
 export default class Crypto {
@@ -37,11 +37,11 @@ export default class Crypto {
         try {
             convo.titleNoEmoji = Crypto.decrypt(convo.title);
             convo.title = convo.titleNoEmoji;
-            // convo.title = emojione.unicodeToImage(convo.titleNoEmoji);
+            // convo.title = joypixels.toImage(convo.titleNoEmoji);
 
             convo.snippetNoEmoji = Crypto.decrypt(convo.snippet).replace(/\n/g, " ");
             convo.snippetNoEmoji = convo.snippetNoEmoji.replace("<i>", "").replace("</i>", "");
-            convo.snippet = emojione.unicodeToImage(Util.entityEncode(convo.snippetNoEmoji));
+            convo.snippet = joypixels.toImage(Util.entityEncode(convo.snippetNoEmoji));
         } catch (err) {
             return null;
         }
@@ -67,7 +67,7 @@ export default class Crypto {
      * @return decrypted message
      */
     static decryptMessage (message) {
-        // Removes miliiseconds from timestamp
+        // Removes milliseconds from timestamp
         message.timestamp = message.timestamp / 1000 >> 0; // Remove ms
         message.timestamp = message.timestamp * 1000; // Add back zero timestamp
 
@@ -80,7 +80,7 @@ export default class Crypto {
             if (message.mime_type.indexOf("media") > -1) {
                 message.data = Util.entityEncode(message.dataNoEmoji);
             } else {
-                message.data = emojione.unicodeToImage(Util.entityEncode(message.dataNoEmoji));
+                message.data = joypixels.toImage(Util.entityEncode(message.dataNoEmoji));
             }
 
             message.message_from = Crypto.decrypt(message.message_from);

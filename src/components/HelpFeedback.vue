@@ -69,9 +69,6 @@
             <div class="mdl-color-text--grey-600">
                 Solomon Rubin for creating the base for this web app.
             </div>
-            <div class="mdl-color-text--grey-600">
-                EmojiOne for providing free emoji icons.
-            </div>
         </div>
     </div>
 </template>

@@ -20,7 +20,7 @@
     "@xkeshi/image-compressor": "^0.5.3",
     "core-js": "^2.6.5",
     "emoji-mart-vue-fast": "^5.4.14",
-    "emojione": "^3.1.7",
+    "emoji-toolkit": "^5.0.5",
     "firebase": "^5.10.1",
     "hotkeys-js": "^3.6.3",
     "jump.js": "^1.0.2",

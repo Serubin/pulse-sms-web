@@ -842,13 +842,13 @@ export default {
         color: black;
     }
 
-    .emojione {
+    .joypixels {
         height: 16px;
         width: 16px;
     }
 
     .message {
-        .emojione {
+        .joypixels {
             height: 24px;
             width: 24px;
         }
