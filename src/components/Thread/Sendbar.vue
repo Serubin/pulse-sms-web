@@ -37,7 +37,7 @@
 import Vue from 'vue';
 import EmojiAutocompleteSuggestion from './EmojiAutocompleteSuggestion.vue';
 import AutoGrow from '@/lib/textarea-autogrow.js';
-import data from 'emoji-mart-vue-fast/data/messenger.json';
+import data from 'emoji-mart-vue-fast/data/twitter.json';
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast';
 import { Api } from '@/utils';
@@ -66,7 +66,7 @@ export default {
                 width: "18em",
             },
             perLine: 6,
-            set: 'messenger',
+            set: 'twitter',
             emojiIndex: new EmojiIndex(data),
             sheetSize: 32,
             skin: 3,
