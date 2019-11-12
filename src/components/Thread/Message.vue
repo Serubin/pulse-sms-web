@@ -16,8 +16,8 @@
                 </a>
 
                 <!-- Video/Audio -->
-                <video v-show="video_src.length != 0 && !media_loading" controls :src="video_src"></video>
-                <audio v-show="audio_src.length != 0 && !media_loading" controls :src="audio_src"></audio>
+                <video v-if="video_src.length != 0 && !media_loading" controls :src="video_src"></video>
+                <audio v-if="audio_src.length != 0 && !media_loading" controls :src="audio_src"></audio>
             </div>
         </transition>
 
