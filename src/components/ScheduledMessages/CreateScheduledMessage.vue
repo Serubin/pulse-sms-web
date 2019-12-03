@@ -89,10 +89,18 @@ export default {
             list.forEach((item, index) => {
                 if (index == list.length - 1) {
                     this.to += item.phone;
-                    this.title += item.name;
+                    if (item.name) {
+                        this.title += item.name;
+                    } else {
+                        this.title += item.phone;
+                    }
                 } else {
                     this.to += item.phone + ", ";
-                    this.title += item.name + ", ";
+                    if (item.name) {
+                        this.title += item.name + ", ";
+                    } else {
+                        this.title += item.phone + ", ";
+                    }
                 }
             });
         },
