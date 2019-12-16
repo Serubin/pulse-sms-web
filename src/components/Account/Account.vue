@@ -21,7 +21,7 @@
                 {{ account_counts.blacklist_count }} Blacklisted Numbers
             </div>
 
-            <h4>Account Managment</h4>
+            <h4>Account Management</h4>
             <div v-mdl class="click-item" @click="routeTo('password')">
                 Update Email or Password
             </div>
