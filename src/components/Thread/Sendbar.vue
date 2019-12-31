@@ -64,6 +64,7 @@ export default {
                 left: "72px",
                 bottom: "67px",
                 width: "18em",
+                'z-index': 10,
             },
             perLine: 6,
             set: 'twitter',
