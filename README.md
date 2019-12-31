@@ -37,7 +37,7 @@ npm run build --report
 
 ## Contributing
 
-Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/messenger-web/pulls). Features can be requested using [issues](https://github.com/klinker-apps/messenger-issues/issues) on the Pulse SMS issue tracker/roadmap, rather than on the issues for this repo. I know there are some issues on this repo, right now. They will be migrated (or finished), as the app moves in to the production state.
+Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/pulse-sms-web/pulls). Features can be requested using [issues](https://github.com/klinker-apps/pulse-sms-issues/issues) on the Pulse SMS issue tracker/roadmap, rather than on the issues for this repo. I know there are some issues on this repo, right now. They will be migrated (or finished), as the app moves in to the production state.
 
 Any code, comments, and critiques are appreciated.
 

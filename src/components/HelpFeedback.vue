@@ -32,7 +32,7 @@
         </div>
 
         <h4>Information</h4>
-        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://github.com/klinker24/messenger-web/releases')">
+        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://github.com/klinker24/pulse-sms-web/releases')">
             Web App Changelog
         </div>
         <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/overview/')">
@@ -41,7 +41,7 @@
         <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/overview/')">
             Supported Platforms
         </div>
-        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://github.com/klinker-apps/messenger-issues/issues/344')">
+        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://github.com/klinker-apps/pulse-sms-issues/issues/344')">
             Web Shortcut Keys
         </div>
         <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/privacy.html')">
@@ -54,7 +54,7 @@
                 © 2019 Luke and Jake Klinker
             </div>
         </div>
-        <div class="click-item" @click="routeTo('https://github.com/klinker24/messenger-web/')">
+        <div class="click-item" @click="routeTo('https://github.com/klinker-apps/pulse-sms-web/')">
             <div class="mdl-color-text--grey-900">
                 Pulse's web app is open-source
             </div>

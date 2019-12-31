@@ -127,7 +127,7 @@ export default class MediaLoader {
                         reject(null);
 
                     // We are offloading the decryption to a web worker, because it can be extremely intensive and lock up the UI
-                    // https://github.com/klinker-apps/messenger-web/issues/28
+                    // https://github.com/klinker-apps/pulse-sms-web/issues/28
 
                     const database = this.db;
                     const getTransactionFunction = this.getTransaction;
