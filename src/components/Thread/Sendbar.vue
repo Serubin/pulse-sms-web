@@ -22,7 +22,7 @@
             </div>
             <div v-mdl class="entry mdl-textfield mdl-js-textfield" :class="is_dirty">
                 <!-- eslint-disable vue/use-v-on-exact -->
-                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.down.exact="onArrowUp($event)" @keydown.up.exact="onArrowDown($event)" @keydown.esc.exact.prevent.stop="destroyAutoComplete" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
+                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.down.exact="onArrowUp($event)" @keydown.up.exact="onArrowDown($event)" @keydown.tab.exact="onTab($event)" @keydown.esc.exact.prevent.stop="destroyAutoComplete" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
@@ -367,6 +367,16 @@ export default {
                     this.emojiSelectedIndex = this.emojiSelectedIndex + 1;
                 }
             } 
+        },
+
+        onTab(event) {
+            if (this.autocomplete_emoji) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const emoji = this.emojiAutocompleteSuggestions[this.emojiSelectedIndex].emoji;
+                this.selectAutocompleteEmoji(emoji);
+            }
         },
 
         destroyAutoComplete () {
