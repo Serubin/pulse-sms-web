@@ -110,8 +110,14 @@ export default {
             const cursorContextMessage = this.message.substr(0, this.$sendbar.selectionStart);
             const lastIndexSemicolon = cursorContextMessage.lastIndexOf(":");
             const lastIndex = cursorContextMessage.length - 1;
+
             if (lastIndexSemicolon != -1 && lastIndexSemicolon > cursorContextMessage.lastIndexOf(" ") && lastIndexSemicolon != lastIndex) {
                 const emojiSearch = cursorContextMessage.substring(lastIndexSemicolon + 1, lastIndex + 1);
+
+                const charCheckReg = /[\w\d]+/;
+                if (emojiSearch.length == 1, !charCheckReg.test(emojiSearch)) // Don't search if one char & initial character is non-alphanumeric.
+                    return;
+
                 this.emojiAutocompleteSuggestions = this.emojiIndex.search(emojiSearch).map((o) => ({ emoji: o.native, code: o.short_name })).slice(0, 10);
             } else {
                 this.emojiAutocompleteSuggestions = [];
@@ -353,9 +359,9 @@ export default {
                 if (this.emojiSelectedIndex > 0) {
                     this.emojiSelectedIndex = this.emojiSelectedIndex - 1;
                 }
-            } 
+            }
 
-            
+
         },
 
         onArrowUp(event) {
@@ -366,7 +372,7 @@ export default {
                 if (this.emojiSelectedIndex < this.emojiAutocompleteSuggestions.length) {
                     this.emojiSelectedIndex = this.emojiSelectedIndex + 1;
                 }
-            } 
+            }
         },
 
         onTab(event) {
