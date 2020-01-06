@@ -2,6 +2,7 @@
 
 ![header](artwork/header.png)
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fklinker-apps%2Fmessenger-web.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fklinker-apps%2Fmessenger-web?ref=badge_shield)
 The Pulse community is pretty great. This web app started out as a [third party, alternative client](https://github.com/Serubin/PulseClient), to the official Pulse SMS web app. It is built on [Vue.js](https://vuejs.org/). Big thanks to [Solomon Rubin](https://github.com/Serubin) for creating an awesome base.
 
 This version of the web app will be taking over as the official version, in the coming weeks/months. As an open-source client, anyone is free to contribute and help improve the Pulse experience. This web app has improved performance/load times, a cleaner architecture, and new features. It will be much easier to work with and improve, than the legacy web app.
@@ -48,3 +49,7 @@ From an end-user perspective, I am not a big fan of just filling out the setting
 However, as an open source app, I want developers to be able to customize their experince, the way they want. I have made a `/experiments` page that can hold any number of settings and preferences that other people want to add into the app and maintain. If you have a suggestion for the web app, feel free to implement it there, create a PR, then we can test it and roll it out to everyone if it will be useful for the majority of people.
 
 This `/experiments` page will never be advertised to end-users. No one should assume that the preferences there will work or request support on them. This page is simply for developers to test new ideas/concepts that they would like to see in the app. It could also be a good place to A/B test new changes.
+
+## License Information
+Licensed Under Apache License Version 2 (Current Primary License) and MIT License. See additional information in the [LICENSE file](./LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fklinker-apps%2Fmessenger-web.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fklinker-apps%2Fmessenger-web?ref=badge_large)
