@@ -184,7 +184,7 @@ export default {
                 return;
             }
 
-            // the shift key will be used to toggle between the send and return functionality, based
+            // the shift (or ctrl) key will be used to toggle between the send and return functionality, based
             // on the users "enter to send" preference, in settings.
 
             // case one: enter to send=off, no shift key -> return line
@@ -193,8 +193,8 @@ export default {
             // case four: enter to send=on, shift key -> return line
 
             if (e instanceof KeyboardEvent && (
-                (e.shiftKey && this.$store.state.enter_to_send) ||
-                  (!e.shiftKey && !this.$store.state.enter_to_send))) { // return line
+                ((e.shiftKey || e.ctrlKey) && this.$store.state.enter_to_send) ||
+                  (!(e.shiftKey || e.ctrlKey) && !this.$store.state.enter_to_send))) { // return line
 
                 // Get start/end of selection for insert location
                 const start = e.target.selectionStart;
