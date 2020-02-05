@@ -2,7 +2,7 @@
   "name": "pulse-sms-web",
   "version": "v1.1.2",
   "description": "Pulse SMS - text from your computer.",
-  "license": "Apache 2.0 & MIT",
+  "license": "(Apache-2.0 AND MIT)",
   "author": {
     "name": "Luke Klinker",
     "email": "luke@klinkerapps.com",
