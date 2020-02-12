@@ -18,13 +18,5 @@ module.exports = {
             })
         ]
     },
-    chainWebpack: config => {
-        // Worker Loader
-        config.module
-            .rule('worker')
-            .test(/\.worker\.js$/)
-            .use('worker-loader')
-            .loader('worker-loader')
-            .end();
-    }
+    //chainWebpack: config => {}
 };
