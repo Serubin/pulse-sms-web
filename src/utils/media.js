@@ -1,6 +1,6 @@
 import { Api } from '@/utils';
 import store from '@/store';
-import Worker from "worker-loader?name=decrypt.worker.js!./worker/decrypter";
+import Worker from "worker-loader?name=decrypter.worker.js!./workers/decrypter.worker.js";
 
 // IndexedDB
 const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB
@@ -146,15 +146,12 @@ export default class MediaLoader {
                         }
                     }
 
-                    const worker = new Worker;
+                    const worker = new Worker();
                     worker.addEventListener("message", handleWorkerCompletion, false);
-
                     // Decrypt blob
                     worker.postMessage({
                         "imageData": imageData,
-                        "accountId": store.state.account_id,
-                        "hash": store.state.hash,
-                        "salt": store.state.salt
+                        "key": store.state.key,
                     });
                 });
         });

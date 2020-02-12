@@ -50,6 +50,7 @@ export const state = {
     subscription_type: window.localStorage.getItem(KEYS.SUBSCRIPTION_TYPE) || 1,
 
     /* Per session */
+    key: '',
     aes: '',
     full_theme: true,
     sidebar_open: true,
@@ -99,6 +100,7 @@ export const mutations = {
     account_id: (state, account_id) => state.account_id = account_id,
     hash: (state, hash) => state.hash = hash,
     salt: (state, salt) => state.salt = salt,
+    key: (state, key) => state.key = key,
     aes: (state, aes) => state.aes = aes,
     compose_contacts: (state, compose_contacts) => state.compose_contacts = compose_contacts,
     theme_base: (state, theme_base) => state.theme_base = theme_base,
