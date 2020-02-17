@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 import store from '@/store/';
 import { Api, Url, Crypto } from '@/utils/';
 
@@ -6,7 +6,7 @@ export default class ScheduledMessages {
     static get() {
         let constructed_url = Url.get('scheduled') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
+            axios.get(constructed_url)
                 .then(response => {
                     response = response.data;
 
@@ -27,7 +27,7 @@ export default class ScheduledMessages {
 
     static delete(id) {
         let constructed_url = Url.get('remove_scheduled') + id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
+        axios.post(constructed_url);
     }
 
     static create(to, message, time, title, repeat) {
@@ -45,7 +45,7 @@ export default class ScheduledMessages {
         let constructed_url = Url.get('create_scheduled');
 
         const promise = new Promise((resolve) => {
-            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
+            axios.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then(response => { resolve(response) });
         });
 
