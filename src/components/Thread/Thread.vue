@@ -674,10 +674,13 @@ export default {
         text_color (message) {
             try {
                 let colorString;
-                if (message.message_from)
-                    colorString = this.getColor(message);
-                else // Otherwise default color
+
+                if (message.type == 1) { // Message was sent by the user, use default color
                     colorString = this.color;
+                }
+                else {
+                    colorString = this.getColor(message);
+                }
 
                 if (!colorString)
                     colorString = this.color;
