@@ -39,7 +39,7 @@ export default class Api {
     }
 
     static rejectHandler(e, callback = null) {
-        if (e.status == 401)
+        if (e.response && e.response.status == 401)
             return store.state.msgbus.$emit('logout-btn');
 
         if (callback)
