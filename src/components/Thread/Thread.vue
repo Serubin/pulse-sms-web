@@ -675,12 +675,10 @@ export default {
             try {
                 let colorString;
 
-                if (message.type == 1) { // Message was sent by the user, use default color
+                if (message.type == 1) // Message was sent by the user, use default color
                     colorString = this.color;
-                }
-                else {
+                else
                     colorString = this.getColor(message);
-                }
 
                 if (!colorString)
                     colorString = this.color;
