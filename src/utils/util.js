@@ -209,21 +209,31 @@ export default class Util {
         firebase.initializeApp(config);
     }
 
+    // Set text color to meet WCAG 2.0 Success Criterion 1.4.3
+    // https://www.w3.org/TR/2008/REC-WCAG20-20081211/#visual-audio-contrast-contrast
     static getTextColorBasedOnBackground(color) {
         let colorString = color.replace("rgba(", "").replace(")", "");
         colorString = colorString.replace("rgb(", "").replace(")", "");
 
-        // Get actual colors
+        // Get actual colors in sRGB
         const  colorArray = colorString.split(",");
-        const  red = colorArray[0];
-        const  green = colorArray[1];
-        const  blue = colorArray[2];
+        const  red = this.getSRGB(colorArray[0]);
+        const  green = this.getSRGB(colorArray[1]);
+        const  blue = this.getSRGB(colorArray[2]);
 
-        // Some magic with implicit type conversion
-        const  darkness = 1 - (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+        // Compute the relative luminance of the background color
+        // https://www.w3.org/TR/WCAG20/#relativeluminancedef
+        const  luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
 
-        // Determine color
-        return darkness >= 0.30 ? "#fff" : "#000";
+        // Determine color based on the contrast ratio 4.5:1
+        // https://www.w3.org/TR/WCAG20/#contrast-ratiodef
+        return luminance < 0.233 ? "#fff" : "#000";
+    }
+
+    static getSRGB(component) {
+        component = component / 255;
+        component = (component <= 0.03928) ? component / 12.92 : Math.pow(((component + 0.055) / 1.055), 2.4);
+        return component;
     }
 }
 
