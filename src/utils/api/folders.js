@@ -1,11 +1,11 @@
-import Vue from 'vue';
+import axios from 'axios';
 import { Api, Url, Crypto } from '@/utils/';
 
 export default class Folders {
     static get() {
         let constructed_url = Url.get('folders') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
+            axios.get(constructed_url)
                 .then(response => {
                     response = response.data;
 
@@ -26,6 +26,6 @@ export default class Folders {
 
     static delete(id) {
         let constructed_url = Url.get('remove_folder') + id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
+        axios.post(constructed_url);
     }
 }

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import axios from 'axios';
 import store from '@/store/';
 import joypixels from 'emoji-toolkit';
 import firebase from 'firebase/app';
@@ -17,7 +18,7 @@ export default class Messages {
 
         const promise = new Promise((resolve, reject) => {
             if (!SessionCache.hasMessages(conversation_id) || offset > 0) {
-                Vue.http.get(constructed_url)
+                axios.get(constructed_url)
                     .then(response => {
                         response = response.data;
 
@@ -45,7 +46,7 @@ export default class Messages {
 
     static delete(id) {
         let constructed_url = Url.get('remove_message') + id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
+        axios.post(constructed_url);
     }
 
     static send(data, mime_type, thread_id, message_id = null) {
@@ -83,11 +84,11 @@ export default class Messages {
 
         // Update on servers
         let constructed_url = Url.get('add_message');
-        Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
+        axios.post(constructed_url, request, { 'Content-Type': 'application/json' })
             .catch(response => console.log(response));
 
         constructed_url = Url.get('update_conversation') + thread_id;
-        Vue.http.post(constructed_url, conversationRequest, { 'Content-Type': 'application/json' })
+        axios.post(constructed_url, conversationRequest, { 'Content-Type': 'application/json' })
             .catch(response => console.log(response));
 
         // Submit event
@@ -109,7 +110,7 @@ export default class Messages {
         get: (image_id) => {
             const constructed_url = Url.get('media') + image_id + Url.getAccountParam();
             const promise = new Promise((resolve, reject) => {
-                Vue.http.get(constructed_url)
+                axios.get(constructed_url)
                     .then(response => resolve(response))
                     .catch(response => Api.rejectHandler(response, reject));
             });
@@ -139,7 +140,7 @@ export default class Messages {
             }
 
             store.commit('loaded_media', file);
-            Vue.nextTick(() => Util.scrollToBottom(250));
+            Vue.nextTick(() => Util.scrollToBottom(250)); // TODO this is a side effect - should be in thread, not api
         },
         send: (file, send) => {
             store.commit('media_sending', true);
@@ -163,7 +164,7 @@ export default class Messages {
 
                     // Make url
                     const constructed_url = Url.get('media') + id + Url.getAccountParam();
-                    Vue.http.get(constructed_url);
+                    axios.get(constructed_url);
 
                     // Empty loaded media
                     store.commit('loaded_media', null);

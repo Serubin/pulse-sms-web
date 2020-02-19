@@ -1,11 +1,11 @@
-import Vue from 'vue';
+import axios from 'axios';
 import { Api, Url, Crypto } from '@/utils/';
 
 export default class Drafts {
     static get() {
         let constructed_url = Url.get('drafts') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
+            axios.get(constructed_url)
                 .then(response => {
                     response = response.data;
 
@@ -26,6 +26,6 @@ export default class Drafts {
 
     static delete(conversation_id) {
         let constructed_url = Url.get('remove_draft') + conversation_id + Url.getAccountParam();
-        Vue.http.post(constructed_url);
+        axios.post(constructed_url);
     }
 }

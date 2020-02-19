@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import axios from 'axios';
 import store from '@/store/';
 import { Api, Util, Url } from '@/utils/';
 
@@ -12,7 +12,7 @@ export default class Account {
                 password
             };
 
-            Vue.http.post(constructed_url, request, { 'Content-Type': 'application/json' })
+            axios.post(constructed_url, request, { 'Content-Type': 'application/json' })
                 .then((response) => resolve(response))
                 .catch((error) => reject(error));
 
@@ -24,7 +24,7 @@ export default class Account {
     static get() {
         const constructed_url = Url.get('account_stats') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            Vue.http.get(constructed_url)
+            axios.get(constructed_url)
                 .then((response) => resolve(response))
                 .catch((error) => reject(error));
         });
@@ -36,7 +36,7 @@ export default class Account {
         get: () => {
             let constructed_url = Url.get('settings') + Url.getAccountParam();
             const promise = new Promise((resolve, reject) => {
-                Vue.http.get(constructed_url)
+                axios.get(constructed_url)
                     .then(response => {
                         response = response.data;
 
@@ -74,7 +74,7 @@ export default class Account {
                 + "&value=" + value;
 
             new Promise((resolve, reject) => {
-                Vue.http.post(constructed_url, Url.getAccountPayload(),
+                axios.post(constructed_url, Url.getAccountPayload(),
                     { 'Content-Type': 'application/json' })
                     .then(() => resolve(true))
                     .catch(response => Api.rejectHandler(response, reject));
