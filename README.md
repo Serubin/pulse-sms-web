@@ -22,7 +22,7 @@ Getting up and running is very easy. You will need `npm` installed:
 npm install
 
 // start the server at localhost:8081
-npm serve
+npm run serve
 ```
 
 The `npm serve` command will serve a local version of the app. The local version of the web app will still use the same backend endpoints as the hosted version, so no additional configuration is required.
