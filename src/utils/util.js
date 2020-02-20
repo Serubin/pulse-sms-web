@@ -223,11 +223,11 @@ export default class Util {
 
         // Compute the relative luminance of the background color
         // https://www.w3.org/TR/WCAG20/#relativeluminancedef
-        const  luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+        const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
 
         // Determine color based on the contrast ratio 4.5:1
         // https://www.w3.org/TR/WCAG20/#contrast-ratiodef
-        return luminance < 0.233 ? "#fff" : "#000";
+        return luminance < 0.35 ? "#fff" : "#000";
     }
 
     static getSRGB(component) {

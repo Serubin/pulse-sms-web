@@ -673,16 +673,7 @@ export default {
          */
         text_color (message) {
             try {
-                let colorString;
-
-                if (message.type == 1) // Message was sent by the user, use default color
-                    colorString = this.color;
-                else
-                    colorString = this.getColor(message);
-
-                if (!colorString)
-                    colorString = this.color;
-
+                const colorString = this.getColor(message);
                 return Util.getTextColorBasedOnBackground(colorString);
             } catch (err) {
                 return "#FFF";
