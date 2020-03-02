@@ -3,7 +3,7 @@
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize" @click.stop="selectConversation">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
-            <text v-if="!isSelected" :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ titleFirstLetter }} </text>
+            <text :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ titleFirstLetter }} </text>
         </svg>
 
         <!-- Conversation Item content -->
@@ -40,6 +40,10 @@ export default {
 
     computed: {
         color () {
+            if (this.isSelected) {
+                return "#2E3133";
+            }
+
             if (this.$store.state.theme_use_global)
                 return this.$store.state.theme_global_default;
 
@@ -68,6 +72,10 @@ export default {
         },
 
         titleFirstLetter () {
+            if (this.isSelected) {
+                return "✓";
+            }
+
             if (this.small) {
                 return "";
             }
