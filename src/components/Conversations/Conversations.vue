@@ -23,6 +23,7 @@
                        :show-pinned="conversation.pinned && !showConversationCategories"
                        :archive="isArchive"
                        :small="small"
+                       :is-selected="selectedConversations.indexOf(conversation) != -1"
             />
         </transition-group>
 
@@ -60,7 +61,8 @@ export default {
             unFilteredAllConversations: [],
             margin: 0,
             searchClicked: false,
-            searchQuery: ""
+            searchQuery: "",
+            selectedConversations: [],
         };
     },
 
@@ -129,6 +131,7 @@ export default {
         this.$store.state.msgbus.$on('search-btn', this.toggleSearch);
         this.$store.state.msgbus.$on('searchUpdated', this.searchUpdated);
         this.$store.state.msgbus.$on('newMargin', this.updateMargin);
+        this.$store.state.msgbus.$on('selectConversation', this.conversationSelected);
 
         this.fetchConversations();
 
@@ -152,6 +155,7 @@ export default {
         this.$store.state.msgbus.$off('refresh-btn', this.refresh);
         this.$store.state.msgbus.$off('search-btn', this.toggleSearch);
         this.$store.state.msgbus.$off('newMargin', this.updateMargin);
+        this.$store.state.msgbus.$off('selectConversation', this.conversationSelected);
     },
 
     methods: {
@@ -401,6 +405,15 @@ export default {
                 return i18n.t('conversations.thismonth');
             else
                 return i18n.t('conversations.older');
+        },
+
+        conversationSelected (conversation) {
+            const index = this.selectedConversations.indexOf(conversation);
+            if (index == -1) {
+                this.selectedConversations.push(conversation);
+            } else {
+                this.selectedConversations.splice(index, 1);
+            }
         }
     }
 };

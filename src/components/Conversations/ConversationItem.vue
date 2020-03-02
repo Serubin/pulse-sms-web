@@ -1,9 +1,9 @@
 <template>
-    <div :id="conversation_id" v-mdl class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small }" :data-timestamp="timestamp" @click="routeToThread">
+    <div :id="conversation_id" class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small }" :data-timestamp="timestamp" @click="routeToThread">
         <!-- Contact image -->
-        <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize">
+        <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize" @click.stop="selectConversation">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
-            <text :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ titleFirstLetter }} </text>
+            <text v-if="!isSelected" :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ titleFirstLetter }} </text>
         </svg>
 
         <!-- Conversation Item content -->
@@ -24,7 +24,7 @@ import { Util, TimeUtils } from '@/utils';
 
 export default {
     name: 'ConversationItem',
-    props: [ 'conversationData', 'archive', 'small', 'showPinned' ],
+    props: [ 'conversationData', 'archive', 'small', 'showPinned', 'isSelected' ],
 
     data () {
         return {
@@ -114,6 +114,13 @@ export default {
                 name: !this.archive ? 'thread' : 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
             });
         },
+
+        selectConversation () {
+            if (!this.small) {
+                this.$store.state.msgbus.$emit('selectConversation', this.conversationData);
+            }
+        },
+
         /**
          * close drawer
          * Closes drawer if closeable
@@ -131,6 +138,10 @@ export default {
 <style lang="scss" scoped>
     @import "../../assets/scss/_vars.scss";
 
+    .conversation-date {
+        color: black;
+    }
+
     body.dark .conversation-card {
         background: $bg-dark;
 
@@ -138,9 +149,16 @@ export default {
             background: $bg-darker;
         }
 
-
         &.small.mdl-card {
             background: $bg-dark;
+        }
+
+        &:hover {
+            background: $bg-darkest;
+        }
+
+        &.small.mdl-card:hover {
+            background: $bg-darker;
         }
 
         .conversation-text {
@@ -170,9 +188,16 @@ export default {
             background: $bg-black;
         }
 
-
         &.small.mdl-card {
             background: $bg-black;
+        }
+
+        &:hover {
+            background: $bg-darker;
+        }
+
+        &.small.mdl-card:hover {
+            background: $bg-darker;
         }
 
         .conversation-text {
@@ -284,6 +309,14 @@ export default {
                     font-size: 13px;
                 }
             }
+        }
+
+        &:hover {
+            background: $bg-lighter;
+        }
+
+        &.small.mdl-card:hover {
+            background: $bg-lightest;
         }
     }
 </style>
