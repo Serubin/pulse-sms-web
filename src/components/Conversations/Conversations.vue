@@ -24,6 +24,7 @@
                        :archive="isArchive"
                        :small="small"
                        :is-selected="selectedConversations.indexOf(conversation) != -1"
+                       :is-selecting="selectedConversations.length > 0"
             />
         </transition-group>
 

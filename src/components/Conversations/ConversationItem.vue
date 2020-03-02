@@ -24,7 +24,7 @@ import { Util, TimeUtils } from '@/utils';
 
 export default {
     name: 'ConversationItem',
-    props: [ 'conversationData', 'archive', 'small', 'showPinned', 'isSelected' ],
+    props: [ 'conversationData', 'archive', 'small', 'showPinned', 'isSelected', 'isSelecting' ],
 
     data () {
         return {
@@ -95,6 +95,10 @@ export default {
 
     methods: {
         routeToThread () {
+            if (this.isSelecting) {
+                this.selectConversation();
+                return;
+            }
 
             this.close_drawer();
 
