@@ -1,5 +1,5 @@
 <template>
-    <div :id="conversation_id" class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small }" :data-timestamp="timestamp" @click="routeToThread">
+    <div :id="conversation_id" class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small, selected: isSelected }" :data-timestamp="timestamp" @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize" @click.stop="selectConversation">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
@@ -122,6 +122,8 @@ export default {
         selectConversation () {
             if (!this.small) {
                 this.$store.state.msgbus.$emit('selectConversation', this.conversationData);
+            } else {
+                this.routeToThread();
             }
         },
 
@@ -155,6 +157,10 @@ export default {
 
         &.small.mdl-card {
             background: $bg-dark;
+        }
+
+        &.selected {
+            background: $bg-darkest;
         }
 
         &:hover {
@@ -196,6 +202,10 @@ export default {
             background: $bg-black;
         }
 
+        &.selected {
+            background: $bg-darker;
+        }
+        
         &:hover {
             background: $bg-darker;
         }
@@ -313,6 +323,10 @@ export default {
                     font-size: 13px;
                 }
             }
+        }
+
+        &.selected {
+            background: $bg-lighter;
         }
 
         &:hover {
