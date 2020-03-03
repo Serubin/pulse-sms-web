@@ -87,7 +87,6 @@ export default {
 
     watch: {
         '$route' (to, from) { // Update index on route change
-
             // Only update if list page
             if (to.name != from.name && to.name.indexOf('conversations-list') >= 0) {
                 this.conversations = [];
@@ -96,6 +95,7 @@ export default {
                 this.fetchConversations();
             }
 
+            this.clearSelected();
         },
 
         '$store.state.theme_conversation_categories' () {
@@ -133,6 +133,9 @@ export default {
         this.$store.state.msgbus.$on('searchUpdated', this.searchUpdated);
         this.$store.state.msgbus.$on('newMargin', this.updateMargin);
         this.$store.state.msgbus.$on('selectConversation', this.conversationSelected);
+        this.$store.state.msgbus.$on('archive-selected-btn', this.archiveSelected);
+        this.$store.state.msgbus.$on('unarchive-selected-btn', this.unarchiveSelected);
+        this.$store.state.msgbus.$on('delete-selected-btn', this.deleteSelected);
 
         this.fetchConversations();
 
@@ -157,6 +160,9 @@ export default {
         this.$store.state.msgbus.$off('search-btn', this.toggleSearch);
         this.$store.state.msgbus.$off('newMargin', this.updateMargin);
         this.$store.state.msgbus.$off('selectConversation', this.conversationSelected);
+        this.$store.state.msgbus.$off('archive-selected-btn', this.archiveSelected);
+        this.$store.state.msgbus.$off('unarchive-selected-btn', this.unarchiveSelected);
+        this.$store.state.msgbus.$off('delete-selected-btn', this.deleteSelected);
     },
 
     methods: {
@@ -417,7 +423,48 @@ export default {
             }
 
             this.$store.state.msgbus.$emit('currentlySelectedConversations', this.selectedConversations);
-        }
+        },
+
+        archiveSelected () {
+            for (const conversation of this.selectedConversations) {
+                Api.conversations.archive(conversation.device_id, true);
+            }
+
+            this.clearSelected();
+        },
+
+        unarchiveSelected () {
+            for (const conversation of this.selectedConversations) {
+                Api.conversations.archive(conversation.device_id, false);
+            }
+
+            this.$router.push('/');
+            this.clearSelected();
+        },
+
+        deleteSelected () {
+            let options = {
+                okText: this.$t('dialog.continue'),
+                cancelText: this.$t('dialog.cancel'),
+                animation: 'fade'
+            };
+
+            const apiUtils = Api;
+            const selected = this.selectedConversations;
+            this.$dialog.confirm(this.$t('conversations.deleteconfirm'), options)
+                .then(() => {
+                    for (const conversation of selected) {
+                        apiUtils.conversations.delete(conversation.device_id);
+                    }
+                }).catch(function() { });
+
+            this.clearSelected();
+        },
+
+        clearSelected () {
+            this.selectedConversations = [];
+            this.$store.state.msgbus.$emit('currentlySelectedConversations', this.selectedConversations);
+        },
     }
 };
 </script>

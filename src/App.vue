@@ -11,13 +11,13 @@
                 <span id="toolbar-title" class="mdl-layout-title">{{ $store.state.title }}</span>
                 <div id="toolbar_icons">
                     <transition-group name="list">
-                        <button v-if="show_search" id="search-button" key="search" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
+                        <button v-if="show_search" id="search-button" key="search" class="menu_icon search mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
                             <i class="material-icons">search</i>
                         </button>
-                        <button v-if="$route.path.indexOf('thread') != -1" id="add-button" key="add" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="$router.push('/compose');">
+                        <button v-if="show_compose" id="add-button" key="add" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="$router.push('/compose');">
                             <i class="material-icons material-icons-white">add</i>
                         </button>
-                        <button id="refresh-button" key="refresh" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
+                        <button v-if="!has_selected" id="refresh-button" key="refresh" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
                             <i class="material-icons">refresh</i>
                         </button>
                         <button id="more-button" key="more" class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
@@ -102,6 +102,10 @@ export default {
     },
 
     computed: {
+        has_selected () {
+            return this.selected_conversations.length > 0;
+        },
+
         icon_class () {
             return {
                 'logo': this.full_theme && !this.apply_appbar_color,
@@ -137,7 +141,7 @@ export default {
         },
 
         theme_toolbar () { // Determine toolbar color
-            if (this.selected_conversations.length > 0)
+            if (this.has_selected)
                 return "#202020";
 
             if (!this.apply_appbar_color)  // If not color toolbar
@@ -166,7 +170,7 @@ export default {
         },
 
         text_color () { // Determines toolbar text color (and menu icon color)
-            if (this.selected_conversations.length > 0)
+            if (this.has_selected)
                 return "#FFF";
 
             try {
@@ -191,7 +195,11 @@ export default {
         },
 
         show_search () {
-            return this.$route.name.indexOf('conversations-list') > -1;
+            return this.$route.name.indexOf('conversations-list') > -1 && !this.has_selected;
+        },
+
+        show_compose () {
+            return this.$route.path.indexOf('thread') != -1 && !this.has_selected;
         },
 
         apply_appbar_color () {
@@ -202,6 +210,7 @@ export default {
             }
             return this.$store.state.theme_apply_appbar_color;
         },
+
         unread_count () { // For external app access - like Franz, Rambox, or Station
             return this.$store.state.unread_count;
         }
@@ -426,9 +435,23 @@ export default {
 
             // Static items!
             const items = [ ];
-
-            // On thread add Delete, Blacklist, & Archive/unarchive
-            if (this.$route.name.indexOf('thread') > -1) {
+            
+            if (this.has_selected) {
+                if (this.$route.name.indexOf('archive') > -1) {
+                    items.unshift(
+                        { 'name': "unarchive-selected", 'title': i18n.t('menus.unarchiveselected') },
+                    );
+                } else {
+                    items.unshift(
+                        { 'name': "archive-selected", 'title': i18n.t('menus.archiveselected') },
+                    );
+                }
+                
+                items.unshift(
+                    { 'name': "delete-selected", 'title': i18n.t('menus.deleteselected') },
+                );
+            } else if (this.$route.name.indexOf('thread') > -1) {
+                // On thread add Delete, Blacklist, & Archive/unarchive
                 items.unshift(
                     { "name": "conversation-information", 'title': i18n.t('menus.convinfo')},
                     { "name": "blacklist", 'title': i18n.t('menus.blacklist')},
@@ -599,6 +622,7 @@ export default {
 
         updateSelectedConversations (conversations) {
             this.selected_conversations = conversations;
+            this.populateMenuItems();
         }
     }
 };
