@@ -87,6 +87,7 @@ export const i18n = new VueI18n({
                 deleteselected: 'Delete Conversations',
                 archiveselected: 'Archive Conversations',
                 unarchiveselected: 'Move Conversations to Inbox',
+                selectall: 'Select All Conversations',
                 convsettings: 'Conversation Settings'
             },
             compose: {

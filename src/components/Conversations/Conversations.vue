@@ -134,8 +134,6 @@ export default {
         this.$store.state.msgbus.$on('newMargin', this.updateMargin);
         this.$store.state.msgbus.$on('selectConversation', this.conversationSelected);
         this.$store.state.msgbus.$on('archive-selected-btn', this.archiveSelected);
-        this.$store.state.msgbus.$on('unarchive-selected-btn', this.unarchiveSelected);
-        this.$store.state.msgbus.$on('delete-selected-btn', this.deleteSelected);
 
         this.fetchConversations();
 
@@ -149,6 +147,11 @@ export default {
 
             // Commit them to current application colors
             this.$store.commit('colors', colors);
+
+        
+            this.$store.state.msgbus.$on('unarchive-selected-btn', this.unarchiveSelected);
+            this.$store.state.msgbus.$on('delete-selected-btn', this.deleteSelected);
+            this.$store.state.msgbus.$on('select-all-btn', this.selectAll);
         }
     },
 
@@ -161,8 +164,12 @@ export default {
         this.$store.state.msgbus.$off('newMargin', this.updateMargin);
         this.$store.state.msgbus.$off('selectConversation', this.conversationSelected);
         this.$store.state.msgbus.$off('archive-selected-btn', this.archiveSelected);
-        this.$store.state.msgbus.$off('unarchive-selected-btn', this.unarchiveSelected);
-        this.$store.state.msgbus.$off('delete-selected-btn', this.deleteSelected);
+
+        if (!this.small) {
+            this.$store.state.msgbus.$off('unarchive-selected-btn', this.unarchiveSelected);
+            this.$store.state.msgbus.$off('delete-selected-btn', this.deleteSelected);
+            this.$store.state.msgbus.$off('select-all-btn', this.selectAll);
+        }
     },
 
     methods: {
@@ -459,6 +466,11 @@ export default {
                 }).catch(function() { });
 
             this.clearSelected();
+        },
+
+        selectAll () {
+            this.selectedConversations = [...this.conversations];
+            this.$store.state.msgbus.$emit('currentlySelectedConversations', this.selectedConversations);
         },
 
         clearSelected () {

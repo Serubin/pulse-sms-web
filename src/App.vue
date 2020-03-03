@@ -8,7 +8,7 @@
                     <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class">
                 </div>
-                <span id="toolbar-title" class="mdl-layout-title">{{ $store.state.title }}</span>
+                <span id="toolbar-title" class="mdl-layout-title">{{ title }}</span>
                 <div id="toolbar_icons">
                     <transition-group name="list">
                         <button v-if="show_search" id="search-button" key="search" class="menu_icon search mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
@@ -213,6 +213,19 @@ export default {
 
         unread_count () { // For external app access - like Franz, Rambox, or Station
             return this.$store.state.unread_count;
+        },
+
+        title () {
+            if (this.has_selected) {
+                const length = this.selected_conversations.length;
+                if (length == 1) {
+                    return "Selected 1 conversation";
+                } else {
+                    return "Selected " + this.selected_conversations.length + " conversations";
+                }
+            } else {
+                return this.$store.state.title;
+            }
         }
     },
     watch: {
@@ -448,6 +461,7 @@ export default {
                 }
                 
                 items.unshift(
+                    { 'name': "select-all", 'title': i18n.t('menus.selectall') },
                     { 'name': "delete-selected", 'title': i18n.t('menus.deleteselected') },
                 );
             } else if (this.$route.name.indexOf('thread') > -1) {
