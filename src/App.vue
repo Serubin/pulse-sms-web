@@ -97,6 +97,7 @@ export default {
             toolbar_color: this.$store.state.theme_global_default,
             menu_items: [],
             hour: null,
+            selected_conversations: [],
         };
     },
 
@@ -136,6 +137,9 @@ export default {
         },
 
         theme_toolbar () { // Determine toolbar color
+            if (this.selected_conversations.length > 0)
+                return "#202020";
+
             if (!this.apply_appbar_color)  // If not color toolbar
                 return this.default_toolbar_color;
 
@@ -162,6 +166,9 @@ export default {
         },
 
         text_color () { // Determines toolbar text color (and menu icon color)
+            if (this.selected_conversations.length > 0)
+                return "#FFF";
+
             try {
                 if (!this.apply_appbar_color) {
                     if (this.theme_str.indexOf('black') >= 0) {
@@ -293,6 +300,7 @@ export default {
         this.$store.state.msgbus.$on('account-btn', this.account);
         this.$store.state.msgbus.$on('help-feedback-btn', this.helpAndFeedback);
         this.$store.state.msgbus.$on('logout-btn', this.logout);
+        this.$store.state.msgbus.$on('currentlySelectedConversations', this.updateSelectedConversations);
 
         // Request notification permissions if setting is on.
         if (this.$store.state.notifications)
@@ -311,6 +319,7 @@ export default {
         this.$store.state.msgbus.$off('account-btn', this.account);
         this.$store.state.msgbus.$off('help-feedback-btn', this.helpAndFeedback);
         this.$store.state.msgbus.$off('logout-btn', this.logout);
+        this.$store.state.msgbus.$off('currentlySelectedConversations', this.updateSelectedConversations);
 
         this.stream.close();
     },
@@ -586,6 +595,10 @@ export default {
             if (this.$store.state.larger_app_bar && !body.className.includes(LARGER_APP_BAR))
                 body.className += ` ${LARGER_APP_BAR} `;
 
+        },
+
+        updateSelectedConversations (conversations) {
+            this.selected_conversations = conversations;
         }
     }
 };

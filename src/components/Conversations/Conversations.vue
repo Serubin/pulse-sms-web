@@ -415,6 +415,8 @@ export default {
             } else {
                 this.selectedConversations.splice(index, 1);
             }
+
+            this.$store.state.msgbus.$emit('currentlySelectedConversations', this.selectedConversations);
         }
     }
 };
