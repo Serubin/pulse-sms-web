@@ -31,6 +31,7 @@ export default class Url {
         "create_scheduled":     "scheduled_messages/add/",
         "account_stats":        "accounts/count",
         "drafts":               "drafts",
+        "drafts_conversation":  "drafts/",
         "create_drafts":        "drafts/add/",
         "remove_drafts":        "drafts/remove/",
         "replace_drafts":       "drafts/replace/",
