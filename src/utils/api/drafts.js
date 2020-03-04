@@ -52,8 +52,8 @@ export default class Drafts {
     }
 
     static replace(conversation_id, draft) {
-        let request = {
-            device_conversation_id: conversation_id,
+        let constructed_url = Url.get('replace_drafts') + conversation_id + Url.getAccountParam();
+        const draftRequest = {
             drafts: [
                 {
                     device_id: Api.generateId(),
@@ -63,15 +63,13 @@ export default class Drafts {
                 } 
             ],
         };
-
-        let constructed_url = Url.get('replace_drafts') + Url.getAccountParam();
-
-        const promise = new Promise((resolve) => {
-            axios.post(constructed_url, request, { 'Content-Type': 'application/json' })
+        
+        const draftPromise = new Promise((resolve) => {
+            axios.post(constructed_url, draftRequest, { 'Content-Type': 'application/json' })
                 .then(response => { resolve(response) });
         });
 
-        return promise;
+        return draftPromise;
     }
 
     static create(conversation_id, draft) {

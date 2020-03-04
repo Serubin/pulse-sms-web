@@ -101,11 +101,6 @@ export default {
     },
 
     watch: {
-        '$route' () { // Update thread on route change
-            this.message = "";
-            this.removeMedia();
-        },
-
         'message' () {
             const cursorContextMessage = this.message.substr(0, this.$sendbar.selectionStart);
             const lastIndexSemicolon = cursorContextMessage.lastIndexOf(":");
@@ -122,6 +117,8 @@ export default {
             } else {
                 this.emojiAutocompleteSuggestions = [];
             }
+
+            this.$store.state.msgbus.$emit('message-text-updated', this.message);
         }
     },
 
@@ -134,6 +131,8 @@ export default {
         this.$sendbar = document.querySelector("#message-entry");
 
         this.$store.state.msgbus.$on('hotkey-emoji', this.toggleEmoji);
+        this.$store.state.msgbus.$on('apply-draft', this.applyDraft);
+        this.$store.state.msgbus.$on('clear-sendbar', this.clearSendbar);
 
         document.documentElement.addEventListener('paste', function(event) {
             var clipboardData, found;
@@ -163,7 +162,10 @@ export default {
 
     destroy () {
         document.documentElement.removeEventListener('paste');
+
         this.$store.state.msgbus.$off('hotkey-emoji', this.toggle);
+        this.$store.state.msgbus.$off('apply-draft', this.applyDraft);
+        this.$store.state.msgbus.$off('clear-sendbar', this.clearSendbar);
     },
 
     methods: {
@@ -388,7 +390,16 @@ export default {
         destroyAutoComplete () {
             this.emojiAutocompleteSuggestions = [];
             this.emojiSelectedIndex = 0;
-        }
+        },
+
+        applyDraft (draft) {
+            this.message = draft;
+        },
+
+        clearSendbar () {
+            this.message = "";
+            this.removeMedia();
+        },
     }
 };
 </script>

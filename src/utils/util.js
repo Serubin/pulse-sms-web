@@ -50,7 +50,6 @@ export default class Util {
             snippet = "You: " + snippet;
 
         return snippet;
-
     }
 
     static generateContact (id, name, phone_number, mute, private_notifications, color, accent, ligher, darker) {

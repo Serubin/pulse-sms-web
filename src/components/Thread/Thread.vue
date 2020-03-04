@@ -58,6 +58,9 @@ export default {
             sendbar: null,
 
             offset: 0,
+
+            messageText: "",
+            has_draft: false,
         };
     },
 
@@ -82,11 +85,21 @@ export default {
 
     watch: {
         '$route' () { // Update thread on route change
+            if (this.messageText.length > 0) {
+                this.saveDraft(this.messageText);
+            } else if (this.has_draft) {
+                this.deleteDrafts();
+            }
+
+            this.messageText = "";
+            this.has_draft = false;
+            this.$store.state.msgbus.$emit('clear-sendbar');
+
             this.conversation_id = this.threadId;
             this.read = this.isRead;
 
             this.loadThread();
-
+            this.loadDrafts();
         },
     },
 
@@ -99,6 +112,7 @@ export default {
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('deletedMessage', this.deletedMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
+        this.$store.state.msgbus.$on('message-text-updated', this.messageTextUpdated);
 
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
@@ -206,7 +220,7 @@ export default {
 
         // Load thread
         this.loadThread();
-
+        this.loadDrafts();
     },
 
     beforeDestroy () {
@@ -214,6 +228,7 @@ export default {
         this.$store.state.msgbus.$off('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$off('deletedMessage', this.deletedMessage);
         this.$store.state.msgbus.$off('refresh-btn', this.refresh);
+        this.$store.state.msgbus.$off('message-text-updated', this.messageTextUpdated);
 
         this.$store.state.msgbus.$off('archive-btn', this.archive);
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
@@ -316,6 +331,21 @@ export default {
                     }
                 );
 
+        },
+
+        loadDrafts () {
+            Api.drafts.getConversationDrafts(this.conversation_id)
+                .then(response => {
+                    if (response.length > 0) {
+                        for (const draft of response) {
+                            if (draft.mime_type == "text/plain") {
+                                this.$store.state.msgbus.$emit('apply-draft', draft.data);
+                                this.has_draft = true;
+                                break;
+                            }
+                        }
+                    }
+                });
         },
 
         /**
@@ -733,7 +763,19 @@ export default {
 
         handleShowMore() {
             this.fetchMessages(this.offset);
-        }
+        },
+
+        messageTextUpdated (newText) {
+            this.messageText = newText;
+        },
+
+        saveDraft (text) {
+            Api.drafts.replace(this.conversation_id, text);
+        },
+
+        deleteDrafts () {
+            Api.drafts.delete(this.conversation_id);
+        },
     }
 };
 </script>
