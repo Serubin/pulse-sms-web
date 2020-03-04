@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '@/store/';
 import { Api, Url, Crypto } from '@/utils/';
 
 export default class Drafts {
@@ -32,7 +31,6 @@ export default class Drafts {
 
     static replace(conversation_id, draft) {
         let request = {
-            account_id: store.state.account_id,
             device_conversation_id: conversation_id,
             drafts: [
                 {
@@ -44,7 +42,29 @@ export default class Drafts {
             ],
         };
 
-        let constructed_url = Url.get('replace_drafts');
+        let constructed_url = Url.get('replace_drafts') + Url.getAccountParam();
+
+        const promise = new Promise((resolve) => {
+            axios.post(constructed_url, request, { 'Content-Type': 'application/json' })
+                .then(response => { resolve(response) });
+        });
+
+        return promise;
+    }
+
+    static create(conversation_id, draft) {
+        let request = {
+            drafts: [
+                {
+                    device_id: Api.generateId(),
+                    device_conversation_id: conversation_id,
+                    mime_type: Crypto.encrypt("text/plain"),
+                    data: Crypto.encrypt(draft),
+                } 
+            ],
+        };
+
+        let constructed_url = Url.get('create_drafts') + Url.getAccountParam();
 
         const promise = new Promise((resolve) => {
             axios.post(constructed_url, request, { 'Content-Type': 'application/json' })
