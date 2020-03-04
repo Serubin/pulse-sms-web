@@ -11,6 +11,15 @@
                 <span id="toolbar-title" class="mdl-layout-title">{{ title }}</span>
                 <div id="toolbar_icons">
                     <transition-group name="list">
+                        <button v-if="has_selected" id="delete-button" key="delete" class="menu_icon delete mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('delete-selected')">
+                            <i class="material-icons">delete</i>
+                        </button>
+                        <button v-if="show_archive" id="archive-button" key="archive" class="menu_icon archive mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('archive-selected')">
+                            <i class="material-icons">archive</i>
+                        </button>
+                        <button v-if="show_unarchive" id="unarchive-button" key="unarchive" class="menu_icon unarchive mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('unarchive-selected')">
+                            <i class="material-icons">unarchive</i>
+                        </button>
                         <button v-if="show_search" id="search-button" key="search" class="menu_icon search mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
                             <i class="material-icons">search</i>
                         </button>
@@ -195,11 +204,19 @@ export default {
         },
 
         show_search () {
-            return this.$route.name.indexOf('conversations-list') > -1 && !this.has_selected;
+            return !this.has_selected && this.$route.name.indexOf('conversations-list') > -1;
         },
 
         show_compose () {
-            return this.$route.path.indexOf('thread') != -1 && !this.has_selected;
+            return !this.has_selected && this.$route.path.indexOf('thread') != -1 ;
+        },
+
+        show_archive () {
+            return this.has_selected && this.$route.path.indexOf('archive') == -1;
+        },
+
+        show_unarchive () {
+            return this.has_selected && this.$route.path.indexOf('archive') != -1;
         },
 
         apply_appbar_color () {
@@ -450,19 +467,8 @@ export default {
             const items = [ ];
             
             if (this.has_selected) {
-                if (this.$route.name.indexOf('archive') > -1) {
-                    items.unshift(
-                        { 'name': "unarchive-selected", 'title': i18n.t('menus.unarchiveselected') },
-                    );
-                } else {
-                    items.unshift(
-                        { 'name': "archive-selected", 'title': i18n.t('menus.archiveselected') },
-                    );
-                }
-                
                 items.unshift(
                     { 'name': "select-all", 'title': i18n.t('menus.selectall') },
-                    { 'name': "delete-selected", 'title': i18n.t('menus.deleteselected') },
                 );
             } else if (this.$route.name.indexOf('thread') > -1) {
                 // On thread add Delete, Blacklist, & Archive/unarchive
