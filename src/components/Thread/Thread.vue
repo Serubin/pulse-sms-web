@@ -785,7 +785,11 @@ export default {
         },
 
         saveDraft (text) {
-            Api.drafts.replace(this.conversation_id, text);
+            if(!this.has_draft) {
+                Api.drafts.create(this.conversation_id, text);
+            } else {
+                Api.drafts.replace(this.conversation_id, text);
+            }
         },
 
         deleteDrafts () {
