@@ -147,6 +147,22 @@ export default class SessionCache {
         SessionCache.putConversations(conversations, index);
     }
 
+    static updateConversationSnippet (conversation_id, snippet, index = 'index_public_unarchived') {
+        if (!SessionCache.hasConversations(index)) {
+            return;
+        }
+
+        let conversations = SessionCache.getConversations(index);
+        for (let i = 0; i < conversations.length; i++) {
+            if (conversations[i].device_id == conversation_id) {
+                conversations[i].snippet = snippet;
+                break;
+            }
+        }
+
+        SessionCache.putConversations(conversations, index);
+    }
+
     static cacheMessage (message) {
         if (!SessionCache.hasMessages(message.conversation_id)) {
             return;

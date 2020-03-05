@@ -112,10 +112,21 @@ export default class Stream {
         } else if (operation == "read_conversation") {
             const id = json.message.content.id;
 
-            SessionCache.readConversation('index_public_unarchived');
-            SessionCache.readConversation('index_archived');
+            SessionCache.readConversation(id, 'index_public_unarchived');
+            SessionCache.readConversation(id, 'index_archived');
 
             store.state.msgbus.$emit('conversationRead', id);
+        } else if (operation == "updated_conversation") {
+            const id = json.message.content.id;
+            const snippet = Crypto.decrypt(json.message.content.snippet);
+
+            if (snippet) {
+                SessionCache.updateConversationSnippet(id, snippet, 'index_public_unarchived');
+                SessionCache.updateConversationSnippet(id, snippet, 'index_archived');
+                SessionCache.updateConversationSnippet(id, snippet, 'index_private');
+    
+                store.state.msgbus.$emit('conversationSnippetUpdated', id, snippet);
+            }
         } else if (operation == "update_message_type") {
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;
