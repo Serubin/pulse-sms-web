@@ -6,6 +6,8 @@ import App from '@/App';
 import store from '@/store';
 import router from '@/router';
 import { i18n } from '@/utils';
+import bugsnag from '@bugsnag/js';
+import bugsnagVue from '@bugsnag/plugin-vue';
 
 import 'vuejs-dialog/dist/vuejs-dialog.min.css';
 import 'vue-search-select/dist/VueSearchSelect.css';
@@ -13,6 +15,9 @@ import '@/lib/dialog.min.css';
 import { componentHandler } from '@/lib/material.js';
 
 Vue.config.productionTip = false;
+
+const bugsnagClient = bugsnag('c9e7daf16e171be27f206895b77cee70');
+bugsnagClient.use(bugsnagVue, Vue);
 
 Vue.use(VuejsDialog);
 
