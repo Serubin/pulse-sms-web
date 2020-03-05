@@ -17,6 +17,8 @@
     "deploy": "npm run build; touch dist/CNAME; echo \"pulsesms.app\" > dist/CNAME; push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
+    "@bugsnag/js": "^6.5.2",
+    "@bugsnag/plugin-vue": "^6.5.0",
     "@xkeshi/image-compressor": "^0.5.3",
     "axios": "^0.19.2",
     "core-js": "^2.6.5",
