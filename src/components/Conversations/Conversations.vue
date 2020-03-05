@@ -364,7 +364,7 @@ export default {
             if(!conv || !conv_index)
                 return false;
 
-            conv.snippet = snippet;
+            conv.snippet = joypixels.toImage(snippet);
             conv.hash = Hash(conv);
         },
 
