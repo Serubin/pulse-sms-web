@@ -85,11 +85,8 @@ export default {
 
     watch: {
         '$route' () { // Update thread on route change
-            if (this.messageText.length > 0) {
-                this.saveDraft(this.messageText);
-            } else if (this.has_draft) {
-                this.deleteDrafts();
-            }
+
+            this.cleanupDrafts();
 
             this.messageText = "";
             this.has_draft = false;
@@ -225,6 +222,8 @@ export default {
 
     beforeDestroy () {
 
+        this.cleanupDrafts();
+
         this.$store.state.msgbus.$off('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$off('deletedMessage', this.deletedMessage);
         this.$store.state.msgbus.$off('refresh-btn', this.refresh);
@@ -333,6 +332,9 @@ export default {
 
         },
 
+        /**
+         * Fetch drafts from api and loads them into local thread memory
+         */
         loadDrafts () {
             Api.drafts.getConversationDrafts(this.conversation_id)
                 .then(response => {
@@ -346,6 +348,19 @@ export default {
                         }
                     }
                 });
+        },
+
+        /**
+         * Save or delete draft on thread change/destroy
+         * Check if text exists then save or delete draft
+         * no return - has effects
+         */
+        cleanupDrafts () {
+            if (this.messageText.trim()) {
+                this.saveDraft(this.messageText);
+            } else if (this.has_draft) {
+                this.deleteDrafts();
+            }
         },
 
         /**
