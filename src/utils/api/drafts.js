@@ -60,10 +60,10 @@ export default class Drafts {
                     device_conversation_id: conversation_id,
                     mime_type: Crypto.encrypt("text/plain"),
                     data: Crypto.encrypt(draft),
-                } 
+                }
             ],
         };
-        
+
         const draftPromise = new Promise((resolve) => {
             axios.post(constructed_url, draftRequest, { 'Content-Type': 'application/json' })
                 .then(response => { resolve(response) });
@@ -80,7 +80,7 @@ export default class Drafts {
                     device_conversation_id: conversation_id,
                     mime_type: Crypto.encrypt("text/plain"),
                     data: Crypto.encrypt(draft),
-                } 
+                }
             ],
         };
 
