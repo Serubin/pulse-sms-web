@@ -127,6 +127,7 @@ export default {
     mounted () {
         this.$store.state.msgbus.$on('newMessage', this.updateConversation);
         this.$store.state.msgbus.$on('conversationRead', this.updateRead);
+        this.$store.state.msgbus.$on('conversationSnippetUpdated', this.updateSnippet);
         this.$store.state.msgbus.$on('removedConversation', this.fetchConversations);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
         this.$store.state.msgbus.$on('search-btn', this.toggleSearch);
@@ -157,6 +158,7 @@ export default {
     beforeDestroy () {
         this.$store.state.msgbus.$off('newMessage', this.updateConversation);
         this.$store.state.msgbus.$off('conversationRead', this.updateRead);
+        this.$store.state.msgbus.$off('conversationSnippetUpdated', this.updateSnippet);
         this.$store.state.msgbus.$off('removedConversation', this.fetchConversations);
         this.$store.state.msgbus.$off('refresh-btn', this.refresh);
         this.$store.state.msgbus.$off('search-btn', this.toggleSearch);
@@ -354,6 +356,15 @@ export default {
                 this.$store.commit('decrement_unread_count');
 
             conv.read = true;
+            conv.hash = Hash(conv);
+        },
+
+        updateSnippet (id, snippet) {
+            let { conv, conv_index } = this.getConversation(id);
+            if(!conv || !conv_index)
+                return false;
+
+            conv.snippet = snippet;
             conv.hash = Hash(conv);
         },
 
