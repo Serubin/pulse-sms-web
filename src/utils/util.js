@@ -234,6 +234,10 @@ export default class Util {
         component = (component <= 0.03928) ? component / 12.92 : Math.pow(((component + 0.055) / 1.055), 2.4);
         return component;
     }
+
+    static isDevMode() {
+        return process.env.NODE_ENV === 'development';
+    }
 }
 
 Array.prototype.extend = function(array){

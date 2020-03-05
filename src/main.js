@@ -5,7 +5,7 @@ import VuejsDialog from 'vuejs-dialog';
 import App from '@/App';
 import store from '@/store';
 import router from '@/router';
-import { i18n } from '@/utils';
+import { i18n, Util } from '@/utils';
 import bugsnag from '@bugsnag/js';
 import bugsnagVue from '@bugsnag/plugin-vue';
 
@@ -16,8 +16,10 @@ import { componentHandler } from '@/lib/material.js';
 
 Vue.config.productionTip = false;
 
-const bugsnagClient = bugsnag('c9e7daf16e171be27f206895b77cee70');
-bugsnagClient.use(bugsnagVue, Vue);
+if (!Util.isDevMode()) {
+    const bugsnagClient = bugsnag('c9e7daf16e171be27f206895b77cee70');
+    bugsnagClient.use(bugsnagVue, Vue);
+}
 
 Vue.use(VuejsDialog);
 
