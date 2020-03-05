@@ -8,16 +8,25 @@
                     <!-- Logo/Drawer link -->
                     <img id="logo-image" src="./assets/images/holder.gif" width="30" height="30" class="icon" :class="icon_class">
                 </div>
-                <span id="toolbar-title" class="mdl-layout-title">{{ $store.state.title }}</span>
+                <span id="toolbar-title" class="mdl-layout-title">{{ title }}</span>
                 <div id="toolbar_icons">
                     <transition-group name="list">
-                        <button v-if="show_search" id="search-button" key="search" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
+                        <button v-if="has_selected" id="delete-button" key="delete" class="menu_icon delete mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('delete-selected')">
+                            <i class="material-icons">delete</i>
+                        </button>
+                        <button v-if="show_archive" id="archive-button" key="archive" class="menu_icon archive mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('archive-selected')">
+                            <i class="material-icons">archive</i>
+                        </button>
+                        <button v-if="show_unarchive" id="unarchive-button" key="unarchive" class="menu_icon unarchive mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('unarchive-selected')">
+                            <i class="material-icons">unarchive</i>
+                        </button>
+                        <button v-if="show_search" id="search-button" key="search" class="menu_icon search mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
                             <i class="material-icons">search</i>
                         </button>
-                        <button v-if="$route.path.indexOf('thread') != -1" id="add-button" key="add" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="$router.push('/compose');">
+                        <button v-if="show_compose" id="add-button" key="add" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="$router.push('/compose');">
                             <i class="material-icons material-icons-white">add</i>
                         </button>
-                        <button id="refresh-button" key="refresh" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
+                        <button v-if="!has_selected" id="refresh-button" key="refresh" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
                             <i class="material-icons">refresh</i>
                         </button>
                         <button id="more-button" key="more" class="menu_icon android-more-button mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect">
@@ -97,10 +106,15 @@ export default {
             toolbar_color: this.$store.state.theme_global_default,
             menu_items: [],
             hour: null,
+            selected_conversations: [],
         };
     },
 
     computed: {
+        has_selected () {
+            return this.selected_conversations.length > 0;
+        },
+
         icon_class () {
             return {
                 'logo': this.full_theme && !this.apply_appbar_color,
@@ -136,6 +150,9 @@ export default {
         },
 
         theme_toolbar () { // Determine toolbar color
+            if (this.has_selected)
+                return "#202020";
+
             if (!this.apply_appbar_color)  // If not color toolbar
                 return this.default_toolbar_color;
 
@@ -162,6 +179,9 @@ export default {
         },
 
         text_color () { // Determines toolbar text color (and menu icon color)
+            if (this.has_selected)
+                return "#FFF";
+
             try {
                 if (!this.apply_appbar_color) {
                     if (this.theme_str.indexOf('black') >= 0) {
@@ -184,7 +204,19 @@ export default {
         },
 
         show_search () {
-            return this.$route.name.indexOf('conversations-list') > -1;
+            return !this.has_selected && this.$route.name.indexOf('conversations-list') > -1;
+        },
+
+        show_compose () {
+            return !this.has_selected && this.$route.path.indexOf('thread') != -1 ;
+        },
+
+        show_archive () {
+            return this.has_selected && this.$route.path.indexOf('archive') == -1;
+        },
+
+        show_unarchive () {
+            return this.has_selected && this.$route.path.indexOf('archive') != -1;
         },
 
         apply_appbar_color () {
@@ -195,8 +227,22 @@ export default {
             }
             return this.$store.state.theme_apply_appbar_color;
         },
+
         unread_count () { // For external app access - like Franz, Rambox, or Station
             return this.$store.state.unread_count;
+        },
+
+        title () {
+            if (this.has_selected) {
+                const length = this.selected_conversations.length;
+                if (length == 1) {
+                    return "Selected 1 conversation";
+                } else {
+                    return "Selected " + this.selected_conversations.length + " conversations";
+                }
+            } else {
+                return this.$store.state.title;
+            }
         }
     },
     watch: {
@@ -293,6 +339,7 @@ export default {
         this.$store.state.msgbus.$on('account-btn', this.account);
         this.$store.state.msgbus.$on('help-feedback-btn', this.helpAndFeedback);
         this.$store.state.msgbus.$on('logout-btn', this.logout);
+        this.$store.state.msgbus.$on('currentlySelectedConversations', this.updateSelectedConversations);
 
         // Request notification permissions if setting is on.
         if (this.$store.state.notifications)
@@ -311,6 +358,7 @@ export default {
         this.$store.state.msgbus.$off('account-btn', this.account);
         this.$store.state.msgbus.$off('help-feedback-btn', this.helpAndFeedback);
         this.$store.state.msgbus.$off('logout-btn', this.logout);
+        this.$store.state.msgbus.$off('currentlySelectedConversations', this.updateSelectedConversations);
 
         this.stream.close();
     },
@@ -417,9 +465,13 @@ export default {
 
             // Static items!
             const items = [ ];
-
-            // On thread add Delete, Blacklist, & Archive/unarchive
-            if (this.$route.name.indexOf('thread') > -1) {
+            
+            if (this.has_selected) {
+                items.unshift(
+                    { 'name': "select-all", 'title': i18n.t('menus.selectall') },
+                );
+            } else if (this.$route.name.indexOf('thread') > -1) {
+                // On thread add Delete, Blacklist, & Archive/unarchive
                 items.unshift(
                     { "name": "conversation-information", 'title': i18n.t('menus.convinfo')},
                     { "name": "blacklist", 'title': i18n.t('menus.blacklist')},
@@ -586,6 +638,11 @@ export default {
             if (this.$store.state.larger_app_bar && !body.className.includes(LARGER_APP_BAR))
                 body.className += ` ${LARGER_APP_BAR} `;
 
+        },
+
+        updateSelectedConversations (conversations) {
+            this.selected_conversations = conversations;
+            this.populateMenuItems();
         }
     }
 };

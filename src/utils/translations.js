@@ -38,7 +38,8 @@ export const i18n = new VueI18n({
                 thisweek: 'This Week',
                 thismonth: 'This Month',
                 older: 'Older',
-                noconv: 'No Conversations'
+                noconv: 'No Conversations',
+                deleteconfirm: 'Are you sure you want to delete these conversations?'
             },
             passcode: {
                 enter: 'Enter Passcode',
@@ -83,6 +84,10 @@ export const i18n = new VueI18n({
                 delete: 'Delete Conversation',
                 archive: 'Archive Conversation',
                 unarchive: 'Move to Inbox',
+                deleteselected: 'Delete Conversations',
+                archiveselected: 'Archive Conversations',
+                unarchiveselected: 'Move Conversations to Inbox',
+                selectall: 'Select All Conversations',
                 convsettings: 'Conversation Settings'
             },
             compose: {
