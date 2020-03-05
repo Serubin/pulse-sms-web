@@ -120,11 +120,13 @@ export default class Stream {
             const id = json.message.content.id;
             const snippet = Crypto.decrypt(json.message.content.snippet);
 
-            SessionCache.updateConversationSnippet(id, snippet, 'index_public_unarchived');
-            SessionCache.updateConversationSnippet(id, snippet, 'index_archived');
-            SessionCache.updateConversationSnippet(id, snippet, 'index_private');
-
-            store.state.msgbus.$emit('conversationSnippetUpdated', id, snippet);
+            if (snippet) {
+                SessionCache.updateConversationSnippet(id, snippet, 'index_public_unarchived');
+                SessionCache.updateConversationSnippet(id, snippet, 'index_archived');
+                SessionCache.updateConversationSnippet(id, snippet, 'index_private');
+    
+                store.state.msgbus.$emit('conversationSnippetUpdated', id, snippet);
+            }
         } else if (operation == "update_message_type") {
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;
