@@ -275,11 +275,16 @@ export default {
             }
 
             // If message is empty, we're done
-            if (message.length <= 0)
+            if (message.length <= 0) {
                 return false;
-
+            }
             // Otherwise send any corrisponding message
             Api.messages.send(message, "text/plain", conversationId);
+
+            // Delete drafts if any exist
+            if (this.has_draft) {
+                this.deleteDrafts();
+            }
         },
 
         /**
