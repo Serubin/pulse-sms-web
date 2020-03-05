@@ -58,6 +58,9 @@ export default {
             sendbar: null,
 
             offset: 0,
+
+            messageText: "",
+            has_draft: false,
         };
     },
 
@@ -82,11 +85,18 @@ export default {
 
     watch: {
         '$route' () { // Update thread on route change
+
+            this.cleanupDrafts();
+
+            this.messageText = "";
+            this.has_draft = false;
+            this.$store.state.msgbus.$emit('clear-sendbar');
+
             this.conversation_id = this.threadId;
             this.read = this.isRead;
 
             this.loadThread();
-
+            this.loadDrafts();
         },
     },
 
@@ -99,6 +109,7 @@ export default {
         this.$store.state.msgbus.$on('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$on('deletedMessage', this.deletedMessage);
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
+        this.$store.state.msgbus.$on('message-text-updated', this.messageTextUpdated);
 
         this.$store.state.msgbus.$on('archive-btn', this.archive);
         this.$store.state.msgbus.$on('unarchive-btn', this.archive);
@@ -206,14 +217,17 @@ export default {
 
         // Load thread
         this.loadThread();
-
+        this.loadDrafts();
     },
 
     beforeDestroy () {
 
+        this.cleanupDrafts();
+
         this.$store.state.msgbus.$off('newMessage', this.addNewMessage);
         this.$store.state.msgbus.$off('deletedMessage', this.deletedMessage);
         this.$store.state.msgbus.$off('refresh-btn', this.refresh);
+        this.$store.state.msgbus.$off('message-text-updated', this.messageTextUpdated);
 
         this.$store.state.msgbus.$off('archive-btn', this.archive);
         this.$store.state.msgbus.$off('unarchive-btn', this.archive);
@@ -261,11 +275,16 @@ export default {
             }
 
             // If message is empty, we're done
-            if (message.length <= 0)
+            if (message.length <= 0) {
                 return false;
-
+            }
             // Otherwise send any corrisponding message
             Api.messages.send(message, "text/plain", conversationId);
+
+            // Delete drafts if any exist
+            if (this.has_draft) {
+                this.deleteDrafts();
+            }
         },
 
         /**
@@ -316,6 +335,37 @@ export default {
                     }
                 );
 
+        },
+
+        /**
+         * Fetch drafts from api and loads them into local thread memory
+         */
+        loadDrafts () {
+            Api.drafts.getConversationDrafts(this.conversation_id)
+                .then(response => {
+                    if (response.length > 0) {
+                        for (const draft of response) {
+                            if (draft.mime_type == "text/plain") {
+                                this.$store.state.msgbus.$emit('apply-draft', draft.data);
+                                this.has_draft = true;
+                                break;
+                            }
+                        }
+                    }
+                });
+        },
+
+        /**
+         * Save or delete draft on thread change/destroy
+         * Check if text exists then save or delete draft
+         * no return - has effects
+         */
+        cleanupDrafts () {
+            if (this.messageText.trim()) {
+                this.saveDraft(this.messageText);
+            } else if (this.has_draft) {
+                this.deleteDrafts();
+            }
         },
 
         /**
@@ -733,7 +783,23 @@ export default {
 
         handleShowMore() {
             this.fetchMessages(this.offset);
-        }
+        },
+
+        messageTextUpdated (newText) {
+            this.messageText = newText;
+        },
+
+        saveDraft (text) {
+            if(!this.has_draft) {
+                Api.drafts.create(this.conversation_id, text);
+            } else {
+                Api.drafts.replace(this.conversation_id, text);
+            }
+        },
+
+        deleteDrafts () {
+            Api.drafts.delete(this.conversation_id);
+        },
     }
 };
 </script>
