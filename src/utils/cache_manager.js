@@ -200,7 +200,6 @@ export default class SessionCache {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
                     conversations[i].timestamp = message.timestamp;
-                    conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
                     this.putConversations(this.resortConversations(conversations), 'index_public_unarchived');
                     return;
                 }
@@ -212,7 +211,6 @@ export default class SessionCache {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
                     conversations[i].timestamp = message.timestamp;
-                    conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
                     this.putConversations(this.resortConversations(conversations), 'index_archived');
                     return;
                 }
@@ -224,7 +222,6 @@ export default class SessionCache {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
                     conversations[i].timestamp = message.timestamp;
-                    conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
                     this.putConversations(this.resortConversations(conversations), 'index_private');
                     return;
                 }
