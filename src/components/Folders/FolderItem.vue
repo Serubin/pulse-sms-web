@@ -23,7 +23,7 @@ export default {
         routeToList () {
             this.$router.push({
                 name: 'conversations-list-folder', params: { index: 'folder', small: false, folderId: this.id, folderName: this.name }
-            });
+            }).catch(() => {});
         }
     }
 
