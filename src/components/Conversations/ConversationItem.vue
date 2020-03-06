@@ -1,10 +1,12 @@
 <template>
-    <div :id="conversation_id" class="conversation-card mdl-card mdl-js-button mdl-js-ripple-effect conversation-card-small shadow" :class="{ small: small, selected: isSelected }" :data-timestamp="timestamp" @click="routeToThread">
+    <div :id="conversation_id" class="conversation-card mdl-card mdl-js-button conversation-card-small shadow" :class="{ small: small, selected: isSelected }" :data-timestamp="timestamp" @click="routeToThread">
         <!-- Contact image -->
         <svg class="contact-img contact-img-small" :height="iconSize" :width="iconSize" @click.stop="selectConversation">
             <circle :cx="circleSize" :cy="circleSize" :r="circleSize" transform="translate(1,1)" shape-rendering="auto" :fill="color"></circle>
             <text :style="{ fontSize: textLocation.size + 'px' }" style="text-anchor: middle;fill: #fff;font-weight: 300;" :x="textLocation.x" :y="textLocation.y">{{ titleFirstLetter }} </text>
         </svg>
+
+        <div v-mdl class="ripple-container mdl-js-ripple-effect mdl-js-button"></div>
 
         <!-- Conversation Item content -->
         <p class="conversation-text conversation-text-small" :class="{ unread: !read }">
@@ -171,14 +173,6 @@ export default {
             background: $bg-darkest;
         }
 
-        &:hover {
-            background: $bg-darkest;
-        }
-
-        &.small.mdl-card:hover {
-            background: $bg-darker;
-        }
-
         .conversation-text {
             .conversation-title {
                 color: white;
@@ -213,14 +207,6 @@ export default {
         &.selected {
             background: $bg-darker;
         }
-        
-        &:hover {
-            background: $bg-darker;
-        }
-
-        &.small.mdl-card:hover {
-            background: $bg-darker;
-        }
 
         .conversation-text {
             .conversation-title {
@@ -243,6 +229,18 @@ export default {
     }
 
     .conversation-card {
+        .ripple-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+
+        svg {
+            position: relative;
+            z-index: 10;
+        }
+
         &.mdl-card {
             display: block;
             min-height: 80px;
@@ -335,14 +333,6 @@ export default {
 
         &.selected {
             background: $bg-lighter;
-        }
-
-        &:hover {
-            background: $bg-lighter;
-        }
-
-        &.small.mdl-card:hover {
-            background: $bg-lightest;
         }
     }
 </style>
