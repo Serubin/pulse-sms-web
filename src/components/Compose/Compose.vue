@@ -66,7 +66,7 @@ export default {
             }
 
             setTimeout(() => {
-                this.$router.push('/');
+                this.$router.push('/').catch(() => {});
             }, 1500);
         },
     }
