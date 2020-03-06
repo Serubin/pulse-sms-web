@@ -124,7 +124,7 @@ export default {
 
             this.$router.push({
                 name: !this.archive ? 'thread' : 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
-            });
+            }).catch(() => {});
         },
 
         selectConversation () {

@@ -178,7 +178,7 @@ export default {
          */
         routeTo (link) {
             this.close_drawer();
-            this.$router.push(this.links[link]);
+            this.$router.push(this.links[link]).catch(() => {});
             this.searchQuery = "";
         },
 

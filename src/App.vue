@@ -23,7 +23,7 @@
                         <button v-if="show_search" id="search-button" key="search" class="menu_icon search mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="dispatchMenuButton('search')">
                             <i class="material-icons">search</i>
                         </button>
-                        <button v-if="show_compose" id="add-button" key="add" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="$router.push('/compose');">
+                        <button v-if="show_compose" id="add-button" key="add" class="menu_icon add mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" tag="button" @click="$router.push('/compose').catch(() => {});">
                             <i class="material-icons material-icons-white">add</i>
                         </button>
                         <button v-if="!has_selected" id="refresh-button" key="refresh" class="menu_icon refresh mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" @click="dispatchMenuButton('refresh')">
@@ -424,7 +424,7 @@ export default {
             if(!this.full_theme)
                 this.$store.commit('sidebar_open', !this.sidebar_open);
             else
-                this.$router.push('/');
+                this.$router.push('/').catch(() => {});
         },
         /**
          * Calculates margin size on window resize
@@ -465,7 +465,7 @@ export default {
 
             // Static items!
             const items = [ ];
-            
+
             if (this.has_selected) {
                 items.unshift(
                     { 'name': "select-all", 'title': i18n.t('menus.selectall') },
@@ -526,15 +526,15 @@ export default {
         },
 
         settings () {
-            this.$router.push('/settings');
+            this.$router.push('/settings').catch(() => {});
         },
 
         account () {
-            this.$router.push('/account');
+            this.$router.push('/account').catch(() => {});
         },
 
         helpAndFeedback () {
-            this.$router.push('/help_feedback');
+            this.$router.push('/help_feedback').catch(() => {});
         },
 
         /**

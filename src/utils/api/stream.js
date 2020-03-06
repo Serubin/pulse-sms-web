@@ -194,7 +194,7 @@ export default class Stream {
 
             notification.onclick = () => {
                 window.focus();
-                router.push(link);
+                router.push(link).catch(() => {});
             };
         });
     }
