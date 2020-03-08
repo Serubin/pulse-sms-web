@@ -281,9 +281,9 @@ export default {
             this.$router.push('login');
         }
 
-        navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-            console.log('Registered SW with scope: ', registration.scope);
-        });
+        navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js')
+            .then((registration) => console.log('Registered SW with scope: ', registration.scope))
+            .catch((err) => console.log("Unable to register SW", err));
 
         let accountId = this.$store.state.account_id;
         let hash = this.$store.state.hash;
