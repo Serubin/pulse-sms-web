@@ -6,6 +6,7 @@ import App from '@/App';
 import store from '@/store';
 import router from '@/router';
 import { i18n, Util } from '@/utils';
+import {version} from '@/../package.json';
 import bugsnag from '@bugsnag/js';
 import bugsnagVue from '@bugsnag/plugin-vue';
 
@@ -17,7 +18,7 @@ import { componentHandler } from '@/lib/material.js';
 Vue.config.productionTip = false;
 
 if (!Util.isDevMode()) {
-    const bugsnagClient = bugsnag('c9e7daf16e171be27f206895b77cee70');
+    const bugsnagClient = bugsnag('c9e7daf16e171be27f206895b77cee70', { appVersion: version });
     bugsnagClient.use(bugsnagVue, Vue);
 }
 
