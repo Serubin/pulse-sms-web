@@ -523,36 +523,36 @@ export default {
     }
 
     #quick_find {
-      white-space: nowrap;
-      padding-top: 5px;
-      text-align: right;
+        white-space: nowrap;
+        padding-top: 5px;
+        text-align: right;
     }
 
     .quick_find {
-      width: 215px;
-      margin-top: 3px;
-      border: 0px solid white;
-      border-radius: 2px;
-      font-size: 15px;
-      background-color: white;
-      color: black;
-      background-position: 10px 10px;
-      background-repeat: no-repeat;
-      padding: 12px 16px 12px 16px;
-      -webkit-transition: width 0.4s ease-in-out;
-      transition: width 0.4s ease-in-out;
-      box-shadow: 0px 2px 2px rgba(0, 0, 0, .3);
+        width: 215px;
+        margin-top: 3px;
+        border: 0px solid white;
+        border-radius: 2px;
+        font-size: 15px;
+        background-color: white;
+        color: black;
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        padding: 12px 16px 12px 16px;
+        -webkit-transition: width 0.4s ease-in-out;
+        transition: width 0.4s ease-in-out;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, .3);
     }
 
     .quick_find:focus {
-      width: 400px;
-      outline: none !important;
+        width: 400px;
+        outline: none !important;
     }
 
     @media (max-width:450px) {
-      .quick_find:focus {
-        width: 250px;
-      }
+        .quick_find:focus {
+            width: 250px;
+        }
     }
 
     .flip-list-enter, .flip-list-leave-to	{
