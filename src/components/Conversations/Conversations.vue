@@ -510,9 +510,12 @@ export default {
     }
 
     #conversation-list {
-        width: 100%;
         margin-left: 6px;
         margin-top: 36px !important;
+
+        @media screen and (max-width: 600px) {
+            margin: 0;
+        }
 
         .spinner {
             margin-top: 100px;
