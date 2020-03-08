@@ -163,7 +163,7 @@ export default class Util {
         }
 
         const notificationsDenied = () => {
-            console.log("Denied");
+
             // If denied, set setting to false and alert
             store.commit('notifications', false);
             Util.snackbar({
