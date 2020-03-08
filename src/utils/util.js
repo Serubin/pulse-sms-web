@@ -1,7 +1,9 @@
 import jump from 'jump.js';
 import firebase from 'firebase/app';
 import 'firebase/storage';
+import Notify from 'notifyjs';
 import store from '@/store/';
+import router from '@/router/';
 
 export default class Util {
     /**
@@ -142,6 +144,37 @@ export default class Util {
         snackbar.MaterialSnackbar.showSnackbar(data);
 
         return snackbar;
+    }
+
+    /**
+     * Requests Notification Permissions
+     * Handles check and error cases
+     */
+    static requestNotifications () {
+
+        // Check if oermission needs to be granted
+        if (!Notify.needsPermission) {
+            return;
+        }
+
+        // Request notification permissions if setting is on.
+        if (store.state.notifications && Notify.isSupported()) {
+            Notify.requestPermission(() => {}, notificationsDenied);
+        }
+
+        const notificationsDenied = () => {
+
+            // If denied, set setting to false and alert
+            store.commit('notifications', false);
+            Util.snackbar({
+                message: "Noticiations have been disabled",
+                actionHandler: settingsRedirect,
+                actionText: 'Settings'
+            });
+        };
+
+        // Handle redirect to settings page
+        const settingsRedirect = () => router.push('settings').catch(() => {});
     }
 
     /**

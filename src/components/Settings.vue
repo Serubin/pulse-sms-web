@@ -237,6 +237,7 @@ export default {
     watch: {
         'show_notifications' () {
             this.$store.commit('notifications', this.show_notifications);
+            Util.requestNotifications();
         },
         'enter_to_send' () {
             this.$store.commit('enter_to_send', this.enter_to_send);
