@@ -188,16 +188,16 @@ export default class Stream {
 
             const link = "/thread/" + message.conversation_id;
 
+            const onclick = () => {
+                window.focus();
+                router.push(link).catch(() => {});
+            };
+
             const notification = new Notify(title, {
                 icon: require('@/../public/images/android-desktop.png'), // Require to resolve
                 body: snippet,
                 notifyClick: onclick
             });
-
-            const onclick = () => {
-                window.focus();
-                router.push(link).catch(() => {});
-            };
 
             notification.show();
         });
