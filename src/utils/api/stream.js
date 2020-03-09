@@ -1,9 +1,8 @@
 import ReconnectingWebsocket from 'reconnecting-websocket';
 import joypixels from 'emoji-toolkit';
-import Notify from 'notifyjs';
 import router from '@/router/';
 import store from '@/store/';
-import { Api, Util, Url, Crypto, SessionCache, Platform, i18n } from '@/utils/';
+import { Api, Util, Url, Crypto, Notifications, SessionCache, Platform, i18n } from '@/utils/';
 
 export default class Stream {
     constructor() {
@@ -166,7 +165,7 @@ export default class Stream {
      * @param message  - message object
      */
     notify(message) {
-        if (Notify.needsPermission && !store.state.notifications)
+        if (Notifications.needsPermission() && !store.state.notifications)
             return;
 
         if (message.type != 0)
@@ -188,18 +187,15 @@ export default class Stream {
 
             const link = "/thread/" + message.conversation_id;
 
-            const onclick = () => {
+            const notification = Notifications.notify(title, {
+                icon: require('@/../public/images/android-desktop.png'),
+                body: snippet
+            });
+
+            notification.onclick = () => {
                 window.focus();
                 router.push(link).catch(() => {});
             };
-
-            const notification = new Notify(title, {
-                icon: require('@/../public/images/android-desktop.png'), // Require to resolve
-                body: snippet,
-                notifyClick: onclick
-            });
-
-            notification.show();
         });
     }
 }

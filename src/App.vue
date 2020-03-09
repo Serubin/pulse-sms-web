@@ -342,7 +342,8 @@ export default {
         this.$store.state.msgbus.$on('currentlySelectedConversations', this.updateSelectedConversations);
 
         // Request notification permissions if setting is on.
-        Util.requestNotifications();
+        if (this.$store.state.notifications)
+            Util.requestNotifications();
 
         // Set toolbar color with materialColorChange animiation
         const toolbar = this.$el.querySelector("#toolbar");
