@@ -81,7 +81,7 @@ import { i18n } from '@/utils';
 import '@/lib/sjcl.js';
 import '@/lib/hmacsha1.js';
 
-import { Util, Crypto, Api, MediaLoader, SessionCache, ShortcutKeys } from '@/utils';
+import { Util, Crypto, Api, MediaLoader, Notifications, SessionCache, ShortcutKeys, Platform } from '@/utils';
 
 import Sidebar from '@/components/Sidebar.vue';
 import Snackbar from '@/components/Snackbar.vue';
@@ -342,8 +342,22 @@ export default {
         this.$store.state.msgbus.$on('currentlySelectedConversations', this.updateSelectedConversations);
 
         // Request notification permissions if setting is on.
-        if (this.$store.state.notifications)
+        // Firefox requires a short lived user request to request notifications
+        if (this.$store.state.notifications && !Platform.isFirefox()) {
             Util.requestNotifications();
+
+        } else if (Platform.isFirefox() && this.$store.state.notifications && Notifications.needsPermission()) {
+            let options = {
+                okText: this.$t('settings.yes'),
+                cancelText: this.$t('settings.no'),
+                animation: 'fade'
+            };
+            this.$dialog.confirm(`${this.$t('settings.shownotifs')}?`, options).then(() => { // User request notifications
+                Util.requestNotifications();
+            }).catch(() => { // Disable notifications
+                this.$store.commit('notifications', false);
+            });
+        }
 
         // Set toolbar color with materialColorChange animiation
         const toolbar = this.$el.querySelector("#toolbar");

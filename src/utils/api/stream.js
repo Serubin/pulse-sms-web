@@ -2,7 +2,7 @@ import ReconnectingWebsocket from 'reconnecting-websocket';
 import joypixels from 'emoji-toolkit';
 import router from '@/router/';
 import store from '@/store/';
-import { Api, Util, Url, Crypto, Notifications, SessionCache, Platform, i18n } from '@/utils/';
+import { Api, Util, Url, Crypto, Notifications, SessionCache, Platform, i18n } from '@/utils';
 
 export default class Stream {
     constructor() {

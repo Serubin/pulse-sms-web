@@ -214,7 +214,8 @@ export default class Util {
         Notifications.requestPermission().then(() => {
             // Noop
         }).catch(() => {
-            console.log("disabling");
+            const settingsRedirect = () => router.push('settings').catch(() => {});
+
             // If denied, set setting to false and alert
             store.commit('notifications', false);
             Util.snackbar({
@@ -222,8 +223,6 @@ export default class Util {
                 actionHandler: settingsRedirect,
                 actionText: 'Settings'
             });
-
-            const settingsRedirect = () => router.push('settings').catch(() => {});
         });
 
         // Handle redirect to settings page

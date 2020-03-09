@@ -17,6 +17,10 @@ export default class Platform {
         return !Platform.isChromeExtension() && !Platform.isChromeApp() && !Platform.isNativeDesktop();
     }
 
+    static isFirefox () {
+        return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    }
+
     static getPlatformIdentifier() {
         if (Platform.isChromeExtension()) {
             return 1;

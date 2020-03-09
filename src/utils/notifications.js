@@ -12,13 +12,11 @@ export default class Notifications {
 
     static requestPermission() {
         return new Promise((resolve, reject) => {
-            console.log(Notifications.needsPermission());
             if (!Notifications.needsPermission())
                 return resolve();
 
             // Return promise
             return Notifications.getNotification().requestPermission().then(perm => {
-                console.log(perm);
                 if (perm === 'granted')
                     return resolve();
                 else if (perm === 'denied')
