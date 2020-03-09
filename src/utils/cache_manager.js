@@ -73,7 +73,12 @@ export default class SessionCache {
     }
 
     static putContacts (contacts) {
-        store.commit('compose_contacts', contacts);
+        try {
+            store.commit('compose_contacts', contacts);
+        } catch (err) {
+            // Too many contacts: 
+            // https://app.bugsnag.com/pulsesms/pulse-sms-web/errors/5e656685fbc7df001873d3a4?event_id=5e656685005836c0067a0000&i=sk&m=nw
+        }
     }
 
     static hasConversations (index = 'index_public_unarchived') {
