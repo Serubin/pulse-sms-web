@@ -1,6 +1,8 @@
 import jump from 'jump.js';
 import firebase from 'firebase/app';
 import 'firebase/storage';
+import { Notifications } from '@/utils';
+import router from '@/router/';
 import store from '@/store/';
 
 export default class Util {
@@ -195,6 +197,35 @@ export default class Util {
                 i.object.removeEventListener(i.event, i.listener);
             }
         );
+    }
+
+    /**
+     * Requests Notification Permissions
+     * Handles check and error cases
+     */
+    static requestNotifications () {
+
+        // Determine if notification request is necessary
+        if (!store.state.notifications || !Notifications.needsPermission()) {
+            return;
+        }
+
+        // This promise may not ever fire because the notificatino api is bad
+        Notifications.requestPermission().then(() => {
+            // Noop
+        }).catch(() => {
+            // If denied, set setting to false and alert
+            store.commit('notifications', false);
+            Util.snackbar({
+                message: "Noticiations have been disabled",
+                actionHandler: settingsRedirect,
+                actionText: 'Settings'
+            });
+
+            const settingsRedirect = () => router.push('settings').catch(() => {});
+        });
+
+        // Handle redirect to settings page
     }
 
     static firebaseConfig () {

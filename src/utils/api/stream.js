@@ -2,7 +2,7 @@ import router from '@/router/';
 import ReconnectingWebsocket from 'reconnecting-websocket';
 import store from '@/store/';
 import joypixels from 'emoji-toolkit';
-import { Api, Util, Url, Crypto, SessionCache, Platform, i18n } from '@/utils/';
+import { Api, Util, Url, Crypto, Notifications, SessionCache, Platform, i18n } from '@/utils';
 
 export default class Stream {
     constructor() {
@@ -124,7 +124,7 @@ export default class Stream {
                 SessionCache.updateConversationSnippet(id, snippet, 'index_public_unarchived');
                 SessionCache.updateConversationSnippet(id, snippet, 'index_archived');
                 SessionCache.updateConversationSnippet(id, snippet, 'index_private');
-    
+
                 store.state.msgbus.$emit('conversationSnippetUpdated', id, snippet);
             }
         } else if (operation == "update_message_type") {
@@ -165,7 +165,7 @@ export default class Stream {
      * @param message  - message object
      */
     notify(message) {
-        if (Notification.permission != "granted" && !store.state.notifications)
+        if (Notifications.needsPermission() && !store.state.notifications)
             return;
 
         if (message.type != 0)
@@ -187,8 +187,8 @@ export default class Stream {
 
             const link = "/thread/" + message.conversation_id;
 
-            const notification = new Notification(title, {
-                icon: '/static/images/android-desktop.png',
+            const notification = Notifications.notify(title, {
+                icon: require('@/../public/images/android-desktop.png'),
                 body: snippet
             });
 
