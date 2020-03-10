@@ -179,6 +179,26 @@ export default class SessionCache {
         SessionCache.putMessages(messages, message.conversation_id);
     }
 
+    static deleteMessage (message_id) {
+        let messages = SessionCache.getAllMessages();
+        if (messages == null) {
+            return;
+        }
+
+        for (var conversation_id in messages) {
+            if (messages.hasOwnProperty(conversation_id)) {
+                for (let i = 0; i < messages[conversation_id].length; i++) {
+                    if (messages[conversation_id][i].device_id == message_id) {
+                        messages[conversation_id].splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        store.commit('session_messages', messages);
+    }
+
     static updateMessageType (message_id, new_type) {
         let messages = SessionCache.getAllMessages();
         if (messages == null) {
