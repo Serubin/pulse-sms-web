@@ -3,6 +3,7 @@ import Crypto from '@/utils/crypto.js';
 import Url from '@/utils/url.js';
 import Api from '@/utils/api_manager.js';
 import MediaLoader from '@/utils/media.js';
+import Notifications from '@/utils/notifications.js';
 import SessionCache from '@/utils/cache_manager.js';
 import ShortcutKeys from '@/utils/shortcuts.js';
 import Platform from '@/utils/platform.js';
@@ -15,6 +16,7 @@ export {
     Url,
     Api,
     MediaLoader,
+    Notifications,
     SessionCache,
     ShortcutKeys,
     Platform,

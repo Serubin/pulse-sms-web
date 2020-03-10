@@ -1,7 +1,7 @@
 import jump from 'jump.js';
 import firebase from 'firebase/app';
 import 'firebase/storage';
-import Notify from 'notifyjs';
+import { Notifications } from '@/utils';
 import store from '@/store/';
 import router from '@/router/';
 
@@ -147,37 +147,6 @@ export default class Util {
     }
 
     /**
-     * Requests Notification Permissions
-     * Handles check and error cases
-     */
-    static requestNotifications () {
-
-        // Check if oermission needs to be granted
-        if (!Notify.needsPermission) {
-            return;
-        }
-
-        // Request notification permissions if setting is on.
-        if (store.state.notifications && Notify.isSupported()) {
-            Notify.requestPermission(() => {}, notificationsDenied);
-        }
-
-        const notificationsDenied = () => {
-
-            // If denied, set setting to false and alert
-            store.commit('notifications', false);
-            Util.snackbar({
-                message: "Noticiations have been disabled",
-                actionHandler: settingsRedirect,
-                actionText: 'Settings'
-            });
-        };
-
-        // Handle redirect to settings page
-        const settingsRedirect = () => router.push('settings').catch(() => {});
-    }
-
-    /**
      * Display an image in the full screen viewer
      */
     static displayImage(mediaLoader, messageId, type) {
@@ -228,6 +197,35 @@ export default class Util {
                 i.object.removeEventListener(i.event, i.listener);
             }
         );
+    }
+
+    /**
+     * Requests Notification Permissions
+     * Handles check and error cases
+     */
+    static requestNotifications () {
+
+        // Determine if notification request is necessary
+        if (!store.state.notifications || !Notifications.needsPermission()) {
+            return;
+        }
+
+        // This promise may not ever fire because the notificatino api is bad
+        Notifications.requestPermission().then(() => {
+            // Noop
+        }).catch(() => {
+            const settingsRedirect = () => router.push('settings').catch(() => {});
+
+            // If denied, set setting to false and alert
+            store.commit('notifications', false);
+            Util.snackbar({
+                message: "Noticiations have been disabled",
+                actionHandler: settingsRedirect,
+                actionText: 'Settings'
+            });
+        });
+
+        // Handle redirect to settings page
     }
 
     static firebaseConfig () {
