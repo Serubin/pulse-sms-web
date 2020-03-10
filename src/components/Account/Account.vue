@@ -88,7 +88,7 @@ export default {
         this.fetchAccount();
 
         this.$store.commit('title', this.title);
-        this.$store.state.msgbus.$on('refresh-btn', this.fetchAccounnt);
+        this.$store.state.msgbus.$on('refresh-btn', this.fetchAccount);
     },
 
     beforeDestroy () {
