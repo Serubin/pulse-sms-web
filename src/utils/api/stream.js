@@ -108,6 +108,8 @@ export default class Stream {
         } else if (operation == "removed_message") {
             let message = json.message.content;
 
+            SessionCache.deleteMessage(message.id);
+            
             store.state.msgbus.$emit('deletedMessage', message.id);
         } else if (operation == "read_conversation") {
             const id = json.message.content.id;

@@ -531,7 +531,6 @@ export default {
             for (let i = 0; i < this.messages.length; i++) {
                 if (this.messages[i].device_id == id) {
                     this.messages.splice(i, 1);
-                    SessionCache.invalidateMessages(this.conversation_id);
                 }
             }
         },
