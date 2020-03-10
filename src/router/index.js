@@ -170,8 +170,9 @@ let router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-
-    if (to.name == 'login')
+    if (!to.name)
+        return next('/').catch(() => {});
+    else if (to.name == 'login')
         return next();
     else if (store.state.account_id == '' )
         return next({name: 'login'});
