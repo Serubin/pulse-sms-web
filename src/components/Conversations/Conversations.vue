@@ -409,7 +409,12 @@ export default {
 
             if (this.searchClicked) {
                 Vue.nextTick(() => { // Wait item to render
-                    this.$el.querySelector('#search-bar').focus();
+
+                    // This acts odd - sometimes (especially on /archive) this
+                    // will error with search-bar is null, even within Vue.nextTick
+                    // To fix this, we add a simple check before executing focus
+                    const searchBar = this.$el.querySelector('#search-bar');
+                    searchBar && searchBar.focus();
                 });
             } else {
                 this.searchQuery = "";
