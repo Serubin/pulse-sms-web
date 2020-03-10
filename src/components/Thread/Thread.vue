@@ -71,11 +71,14 @@ export default {
         },
 
         color () {
-            if (this.$store.state.theme_use_global) {
-                return this.$store.state.theme_global_default;
-            } else {
+            // If conversation_data is real and global theme is disabled
+            if (!this.$store.state.theme_use_global && this.conversation_data) {
                 return this.conversation_data.colors.default;
+            } else { // Fallback to global
+                return this.$store.state.theme_global_default;
             }
+            // This handles three things - global theme option, conversation color
+            // And the situation where conversation color is in use but undefined
         },
 
         isArchived () {
@@ -209,7 +212,7 @@ export default {
             () => setTimeout(() => { // Wait 500ms for text render and resize
 
                 // Set margin bottom
-                this.margin_bottom = this.$refs.sendbar.$el.clientHeight;
+                this.margin_bottom = this.$refs.sendbar && this.$refs.sendbar.$el.clientHeight;
 
             }, 500),
             { deep: true, immediate: true }
@@ -293,6 +296,16 @@ export default {
          */
         loadThread () {
 
+            // Check conversation_data for bad data yield. This occurs
+            // when the session cache is invalid or when a conversation doesn't
+            // exist. we handle this by checking if the appropriate variables
+            // are truthy. We can fix this by invaldiating the cache and then pushing to `/`
+            if (!this.conversation_data) {
+                SessionCache.invalidateAllConversations();
+                SessionCache.invalidateMessages(this.conversation_id + '');
+                this.$router.push("/");
+            }
+
             // Fetch messages
             this.offset = 0;
             this.messages = [];
@@ -314,15 +327,20 @@ export default {
             if (this.$store.state.loaded_media)
                 this.$store.commit('loaded_media', null);
 
+            // NOTE: `from` may be undefined due to conversation_data not yielding
+            // data. This occurs when the session cache is invalid or when a
+            // conversation doesn't exist. we handle this by checking if the
+            // appropriate variables are truthy
+
             // Get contact colors from cache
-            const from = this.conversation_data
+            const from = this.conversation_data && this.conversation_data
                 .phone_number.split(", "); // Split numbers
 
-            if (from.length == 1)  // If only one, use default color
+            if (from && from.length == 1)  // If only one, use default color
                 this.colors_from[this.conversation_data.name]  // Save color by name
                         = this.conversation_data.colors.default;
 
-            else // Otherwise, get from cache
+            else if (from) // Otherwise, get from cache
                 from.map(
                     (i) => { // For each name
                         const id = Util.createIdMatcher(i);
@@ -443,9 +461,11 @@ export default {
 
                         this.previous_title = this.$store.state.title;
 
-                        // Commit title and colors
-                        this.$store.commit('title', this.conversation_data.name);
-                        this.$store.commit('colors', this.conversation_data.colors);
+                        if (this.conversation_data) { // If valid thread
+                            // Commit title and colors
+                            this.$store.commit('title', this.conversation_data.name);
+                            this.$store.commit('colors', this.conversation_data.colors);
+                        }
                     });
                 });
         },
