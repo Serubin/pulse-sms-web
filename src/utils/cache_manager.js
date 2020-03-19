@@ -60,7 +60,8 @@ export default class SessionCache {
         }
 
         let sessionConversations = SessionCache.getAllConversations();
-        sessionConversations[index] = conversations;
+        // Deepy copy conversation to avoid weird side effects
+        sessionConversations[index] = JSON.parse(JSON.stringify(conversations));
 
         store.commit('session_conversations', sessionConversations);
     }
@@ -76,7 +77,7 @@ export default class SessionCache {
         try {
             store.commit('compose_contacts', contacts);
         } catch (err) {
-            // Too many contacts: 
+            // Too many contacts:
             // https://app.bugsnag.com/pulsesms/pulse-sms-web/errors/5e656685fbc7df001873d3a4?event_id=5e656685005836c0067a0000&i=sk&m=nw
         }
     }
@@ -136,7 +137,7 @@ export default class SessionCache {
         SessionCache.putConversations(conversations, index);
     }
 
-    static readConversation (conversation_id, index = 'index_public_unarchived') {
+    static readConversation (conversation_id, index = 'index_public_unarchived', read = true) {
         if (!SessionCache.hasConversations(index)) {
             return;
         }
@@ -144,7 +145,7 @@ export default class SessionCache {
         let conversations = SessionCache.getConversations(index);
         for (let i = 0; i < conversations.length; i++) {
             if (conversations[i].device_id == conversation_id) {
-                conversations[i].read = true;
+                conversations[i].read = read;
                 break;
             }
         }
