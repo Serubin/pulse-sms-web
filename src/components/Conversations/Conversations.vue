@@ -295,6 +295,9 @@ export default {
 
             conv.hash = Hash(conv);
 
+            if (conv.timestamp === event_obj.timestamp)
+                return;
+
             // Get start index (index after pinned items)
             let startIndex = 0;
             if (this.showConversationCategories) {

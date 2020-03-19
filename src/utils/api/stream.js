@@ -109,7 +109,7 @@ export default class Stream {
             let message = json.message.content;
 
             SessionCache.deleteMessage(message.id);
-            
+
             store.state.msgbus.$emit('deletedMessage', message.id);
         } else if (operation == "read_conversation") {
             const id = json.message.content.id;
@@ -119,16 +119,19 @@ export default class Stream {
 
             store.state.msgbus.$emit('conversationRead', id);
         } else if (operation == "updated_conversation") {
-            const id = json.message.content.id;
-            const snippet = Crypto.decrypt(json.message.content.snippet);
+            const message = Crypto.decryptConversation(json.message.content);
+            message.conversation_id = message.id; // Normalize ID
 
-            if (snippet) {
-                SessionCache.updateConversationSnippet(id, snippet, 'index_public_unarchived');
-                SessionCache.updateConversationSnippet(id, snippet, 'index_archived');
-                SessionCache.updateConversationSnippet(id, snippet, 'index_private');
-
-                store.state.msgbus.$emit('conversationSnippetUpdated', id, snippet);
+            if (message.snippet) {
+                SessionCache.updateConversationSnippet(message.id, message.snippet, 'index_public_unarchived');
+                SessionCache.updateConversationSnippet(message.id, message.snippet, 'index_archived');
+                SessionCache.updateConversationSnippet(message.id, message.snippet, 'index_private');
             }
+
+            SessionCache.readConversation(message.id, 'index_public_unarchived', message.read);
+            SessionCache.readConversation(message.id, 'index_archived', message.read);
+
+            store.state.msgbus.$emit('newMessage', message);
         } else if (operation == "update_message_type") {
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;
