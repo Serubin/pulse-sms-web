@@ -490,7 +490,7 @@ export default {
 
             // Add time stamp
             const lastMessage = this.messages[this.messages.length - 1];
-            const lastTimestamp = new Date(lastMessage.timestamp);
+            const lastTimestamp = lastMessage ? new Date(lastMessage.timestamp) : 0;
 
             lastMessage.dateLabel = this.compareTimestamps(
                 new Date(event_obj.timestamp), lastTimestamp
