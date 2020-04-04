@@ -20,6 +20,9 @@ export default class Stream {
         this.socket = new ReconnectingWebsocket(Url.get('websocket') + Url.getAccountParam());
 
         this.socket.addEventListener('open', () => {
+            // Close connection on logout
+            store.state.msgbus.$on('logout-btn', () => this.close());
+
             if (this.has_disconnected) {
                 store.state.msgbus.$emit('refresh-btn');
                 Util.snackbar(i18n.t('api.back'));
