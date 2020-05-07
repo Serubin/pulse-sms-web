@@ -1,6 +1,6 @@
 {
   "name": "pulse-sms-web",
-  "version": "v1.3.3",
+  "version": "v1.3.4",
   "description": "Pulse SMS - text from your computer.",
   "license": "(Apache-2.0 AND MIT)",
   "author": {
@@ -28,6 +28,7 @@
     "hotkeys-js": "^3.6.3",
     "jump.js": "^1.0.2",
     "linkifyjs": "^2.1.9",
+    "lodash": "^4.17.15",
     "notifyjs": "^3.0.0",
     "object-hash": "^1.3.1",
     "reconnecting-websocket": "^3.2.2",
