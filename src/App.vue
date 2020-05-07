@@ -261,12 +261,11 @@ export default {
                 Util.materialColorChange(toolbar, to);
             });
         },
-        '$store.state.title' (to) {
-            if (to.length > 0) {
-                document.title = to;
-            } else {
-                document.title = "Pulse SMS";
-            }
+        '$store.state.title' () {
+            this.updateTitle();
+        },
+        '$store.state.unread_count' () {
+            this.updateTitle();
         }
 
     },
@@ -537,6 +536,21 @@ export default {
                 return false;
 
             this.toolbar_color = color;
+        },
+
+        /**
+        * Update title from state
+        * will include unread count
+        */
+        updateTitle () {
+            const title = this.$store.state.title;
+            const unread = this.$store.state.unread_count ? `(${this.$store.state.unread_count})` : '';
+
+            if (title.length > 0) {
+                document.title = `${unread} ${title}`;
+            } else {
+                document.title = `${unread} Pulse SMS`;
+            }
         },
 
         settings () {
