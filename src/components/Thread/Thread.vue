@@ -1,5 +1,5 @@
 <template>
-    <div id="thread-wrap" @click="markAsRead">
+    <div id="thread-wrap">
         <div id="message-list" class="page-content" :style="{marginBottom: margin_bottom + 'px'}">
             <!-- Load More Button -->
             <button v-if="messages.length > 69" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" @click="handleShowMore">
@@ -22,6 +22,7 @@
 <script>
 import Vue from 'vue';
 import jump from 'jump.js';
+import debounce from 'lodash/debounce';
 
 import { Util, Api, SessionCache, TimeUtils } from '@/utils';
 
@@ -145,7 +146,10 @@ export default {
             e.stopPropagation();
             return false;
         });
+        this.listeners.extend(events);
 
+        // Mark as read when action is taken on page (just focus is not enough)
+        events = Util.addEventListeners(['keydown', 'click'], debounce(this.markAsRead, 250));
         this.listeners.extend(events);
 
         // Snackbar Clean up
