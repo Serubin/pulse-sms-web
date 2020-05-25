@@ -68,7 +68,7 @@ export default class SessionCache {
 
     static putMessages (messages, conversation_id) {
         let sessionMessages = SessionCache.getAllMessages();
-        sessionMessages[conversation_id] = messages;
+        sessionMessages[conversation_id] = JSON.parse(JSON.stringify(messages));
 
         store.commit('session_messages', sessionMessages);
     }
@@ -225,6 +225,7 @@ export default class SessionCache {
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
+                    conversations[i].read = message.read;
                     conversations[i].timestamp = message.timestamp;
                     conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
                     this.putConversations(this.resortConversations(conversations), 'index_public_unarchived');
@@ -237,6 +238,7 @@ export default class SessionCache {
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
+                    conversations[i].read = message.read;
                     conversations[i].timestamp = message.timestamp;
                     conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
                     this.putConversations(this.resortConversations(conversations), 'index_archived');
@@ -249,6 +251,7 @@ export default class SessionCache {
         if (conversations != null) {
             for (let i = 0; i < conversations.length; i++) {
                 if (conversations[i].device_id == message.conversation_id) {
+                    conversations[i].read = message.read;
                     conversations[i].timestamp = message.timestamp;
                     conversations[i].snippet = message.mime_type.indexOf("text") > -1 ? message.data : "";
                     this.putConversations(this.resortConversations(conversations), 'index_private');
