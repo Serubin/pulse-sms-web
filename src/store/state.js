@@ -93,8 +93,6 @@ export const mutations = {
     loading: (state, loading) => state.loading = loading,
     hotkey_navigation: (state, hotkey_navigation) => state.hotkey_navigation = hotkey_navigation,
     unread_count: (state, unread_count) => state.unread_count = unread_count,
-    increment_unread_count: (state) => state.unread_count++,
-    decrement_unread_count: (state) => state.unread_count--,
     full_theme: (state, full_theme) => state.full_theme = full_theme,
     sidebar_open: (state, sidebar_open) => state.sidebar_open = sidebar_open,
     account_id: (state, account_id) => state.account_id = account_id,
