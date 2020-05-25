@@ -36,22 +36,22 @@
 
 <script>
 import Vue from 'vue';
-import { i18n } from '@/utils';
 import Hash from 'object-hash';
-import { Util, Api, SessionCache, TimeUtils } from '@/utils';
+import { Util, Api, i18n, SessionCache, TimeUtils } from '@/utils';
 import ConversationItem from './ConversationItem.vue';
 import DayLabel from './DayLabel.vue';
 import Spinner from '@/components/Spinner.vue';
+import unreadCountMixin from '@/mixins/unreadCountMixin.js';
 import joypixels from 'emoji-toolkit';
 
 export default {
     name: 'Conversations',
-
     components: {
         ConversationItem,
         DayLabel,
         Spinner
     },
+    mixins: [ unreadCountMixin ],
     props: ['small', 'index', 'folderId', 'folderName'],
 
     data () {
@@ -197,8 +197,6 @@ export default {
                 this.unFilteredAllConversations = response;
             }
 
-            let unreadCount = 0;
-
             const updatedConversations = [];
 
             const cache = [];
@@ -222,10 +220,6 @@ export default {
                         });
                     }
                 }
-
-                // Update unread count
-                if (!item.read && (!this.index || this.index == "index_public_unarchived"))
-                    unreadCount++;
 
                 updatedConversations.push(item);
 
@@ -252,7 +246,7 @@ export default {
 
             // Set unread, only on unarchived public index
             if (!this.index || this.index == "index_public_unarchived")
-                this.$store.commit('unread_count', unreadCount);
+                this.updateUnreadCount();
 
             if (!this.small) {
                 this.$store.commit("loading", false);
@@ -281,10 +275,12 @@ export default {
                 return false;
             }
 
-            // Increment unread, only on unarchived public index
+            // Update unread, only on unarchived public index
+            // This check is probably not totally necessary, but it prevents
+            // unnecessarily calling updateUnreadCount
             if (conv.read != event_obj.read && !event_obj.read
                 && (!this.index || this.index == "index_public_unarchived"))
-                this.$store.commit('increment_unread_count'); // Increment unread
+                this.updateUnreadCount();
 
 
             // Generate new snippet
@@ -354,9 +350,9 @@ export default {
             if(!conv || !conv_index)
                 return false;
 
-            // Decrement unread, only on unarchived public index
+            // Update unread, only on unarchived public index
             if (!conv.read)
-                this.$store.commit('decrement_unread_count');
+                this.updateUnreadCount();
 
             conv.read = true;
             conv.hash = Hash(conv);
