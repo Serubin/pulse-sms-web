@@ -1,6 +1,35 @@
 <template>
     <div id="settings">
         <div id="account-list" v-mdl class="page-content">
+            <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showTitleDialog">
+                <!-- Conversation Title -->
+                <div class="mdl-color-text--grey-900">
+                    {{ $t('thread.settings.conversationtitle') }}
+                </div>
+                <div class="mdl-color-text--grey-600">
+                    {{ conversationTitle }}
+                </div>
+            </div>
+
+            <div v-if="showTitleSettings" class="mdl-dialog">
+                <div class="mdl-dialog__content mdl-dialog-card mdl-card">
+                    <h4>{{ $t('thread.settings.updatetitle') }}</h4>
+                    <div class="container">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input id="conversation_title" v-model="conversationTitle" class="mdl-textfield__input" autofocus>
+                        </div>
+                    </div>
+                    <div class="mdl-dialog__actions">
+                        <button type="button" class="mdl-button close" @click="saveTitle">
+                            {{ $t('dialog.save') }}
+                        </button>
+                        <button type="button" class="mdl-button close" @click="closeTitleDialog">
+                            {{ $t('dialog.close') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="click-item mdl-js-button mdl-js-ripple-effect" @click="showColorDialog">
                 <!-- Global Colors -->
                 <div class="mdl-color-text--grey-900">
@@ -73,7 +102,7 @@
 
 <script>
 import { Sketch } from 'vue-color';
-import { Api, Util, SessionCache } from '@/utils/';
+import { Api, Util, SessionCache, Crypto } from '@/utils/';
 
 export default {
     name: 'ConversationSettings',
@@ -95,6 +124,7 @@ export default {
             mute_class: "",
             private_class: "",
             showColorSettings: false,
+            showTitleSettings: false,
             presetColors: ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#1775D2', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FDD835', '#FFC411', '#FF9800', '#FF5722', '#9E9E9E', '#607D8B', '#374248'],
         };
     },
@@ -143,6 +173,13 @@ export default {
             } else {
                 document.querySelector("#sidebar").style['z-index'] = 3;
             }
+        },
+        'showTitleSettings' () {
+            if (this.showTitleSettings) {
+                document.querySelector("#sidebar").style['z-index'] = 0;
+            } else {
+                document.querySelector("#sidebar").style['z-index'] = 3;
+            }
         }
     },
 
@@ -163,6 +200,14 @@ export default {
 
         closeColorDialog () {
             this.showColorSettings = false;
+        },
+
+        showTitleDialog () {
+            this.showTitleSettings = true;
+        },
+
+        closeTitleDialog () {
+            this.showTitleSettings = false;
         },
 
         processConversation (data) {
@@ -258,6 +303,16 @@ export default {
 
             Api.conversations.update(this.conversationId, request);
             this.closeColorDialog();
+        },
+
+        saveTitle () {
+            let request = {
+                account_id: this.$store.state.account_id,
+                title: Crypto.encrypt(this.conversationTitle)
+            };
+
+            Api.conversations.update(this.conversationId, request);
+            this.closeTitleDialog();
         }
 
     }

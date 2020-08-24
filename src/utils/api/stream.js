@@ -122,19 +122,25 @@ export default class Stream {
 
             store.state.msgbus.$emit('conversationRead', id);
         } else if (operation == "updated_conversation") {
-            const message = Crypto.decryptConversation(json.message.content);
-            message.conversation_id = message.id; // Normalize ID
+            const conversation = Crypto.decryptConversation(json.message.content);
+            conversation.conversation_id = conversation.id; // Normalize ID
 
-            if (message.snippet) {
-                SessionCache.updateConversationSnippet(message.id, message.snippet, 'index_public_unarchived');
-                SessionCache.updateConversationSnippet(message.id, message.snippet, 'index_archived');
-                SessionCache.updateConversationSnippet(message.id, message.snippet, 'index_private');
+            if (conversation.snippet) {
+                SessionCache.updateConversationSnippet(conversation.id, conversation.snippet, 'index_public_unarchived');
+                SessionCache.updateConversationSnippet(conversation.id, conversation.snippet, 'index_archived');
+                SessionCache.updateConversationSnippet(conversation.id, conversation.snippet, 'index_private');
             }
 
-            SessionCache.readConversation(message.id, 'index_public_unarchived', message.read);
-            SessionCache.readConversation(message.id, 'index_archived', message.read);
+            if (conversation.title) {
+                SessionCache.updateConversationTitle(conversation.id, conversation.snippet, 'index_public_unarchived');
+                SessionCache.updateConversationTitle(conversation.id, conversation.snippet, 'index_archived');
+                SessionCache.updateConversationTitle(conversation.id, conversation.snippet, 'index_private');
+            }
 
-            store.state.msgbus.$emit('newMessage', message);
+            SessionCache.readConversation(conversation.id, 'index_public_unarchived', conversation.read);
+            SessionCache.readConversation(conversation.id, 'index_archived', conversation.read);
+
+            store.state.msgbus.$emit('newMessage', conversation);
         } else if (operation == "update_message_type") {
             const id = json.message.content.id;
             const message_type = json.message.content.message_type;

@@ -61,7 +61,9 @@ export const i18n = new VueI18n({
                     updatecolors: 'Update Theme Colors',
                     pin: 'Pin Conversation',
                     mute: 'Mute Conversation',
-                    private: 'Private Conversation'
+                    private: 'Private Conversation',
+                    conversationtitle: 'Conversation Title',
+                    updatetitle: 'Update Conversation Title'
                 },
                 delete: {
                     delete: 'Delete',
