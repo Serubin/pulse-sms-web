@@ -131,12 +131,6 @@ export default class Stream {
                 SessionCache.updateConversationSnippet(conversation.id, conversation.snippet, 'index_private');
             }
 
-            if (conversation.title) {
-                SessionCache.updateConversationTitle(conversation.id, conversation.snippet, 'index_public_unarchived');
-                SessionCache.updateConversationTitle(conversation.id, conversation.snippet, 'index_archived');
-                SessionCache.updateConversationTitle(conversation.id, conversation.snippet, 'index_private');
-            }
-
             SessionCache.readConversation(conversation.id, 'index_public_unarchived', conversation.read);
             SessionCache.readConversation(conversation.id, 'index_archived', conversation.read);
 
