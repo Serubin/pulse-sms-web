@@ -285,12 +285,14 @@ export default {
             if (message.length <= 0) {
                 return false;
             }
+
             // Otherwise send any corrisponding message
             Api.messages.send(message, "text/plain", conversationId);
             
             // this is an "experiments" setting
-            if (this.$store.state.archive_after_send) {
+            if (!this.isArchived && this.$store.state.archive_after_send) {
                 Api.conversations.archive(conversationId, true);
+                this.pageToNext();
             }
 
             // Delete drafts if any exist
@@ -388,7 +390,7 @@ export default {
          * no return - has effects
          */
         cleanupDrafts () {
-            if (this.messageText.trim()) {
+            if (this.messageText.trim() && !this.$store.state.archive_after_send) {
                 this.saveDraft(this.messageText);
             } else if (this.has_draft) {
                 this.deleteDrafts();
