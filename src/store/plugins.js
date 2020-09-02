@@ -21,6 +21,7 @@ const localStoreSync = store => {
         'theme_apply_appbar_color': KEYS.THEME.APPLY_APPBAR_COLOR,
         'notifications': KEYS.NOTIFICATIONS,
         'enter_to_send': KEYS.ENTER_TO_SEND,
+        'archive_after_send': KEYS.ARCHIVE_AFTER_SEND,
         'larger_app_bar': KEYS.LARGER_APP_BAR,
         'unread_count_in_sidebar': KEYS.UNREAD_COUNT_IN_SIDEBAR,
         'subscription_type': KEYS.SUBSCRIPTION_TYPE,

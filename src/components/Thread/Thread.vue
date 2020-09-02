@@ -287,6 +287,11 @@ export default {
             }
             // Otherwise send any corrisponding message
             Api.messages.send(message, "text/plain", conversationId);
+            
+            // this is an "experiments" setting
+            if (this.$store.state.archive_after_send) {
+                Api.conversations.archive(conversationId, true);
+            }
 
             // Delete drafts if any exist
             if (this.has_draft) {

@@ -23,6 +23,14 @@
                     </span>
                 </label>
             </div>
+            <div class="label-item">
+                <label for="archive_after_send" class="mdl-switch mdl-js-switch mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events">
+                    <input id="archive_after_send" v-model="archive_after_send" class="mdl-switch__input" type="checkbox">
+                    <span class="mdl-switch__label mdl-color-text--grey-900">
+                        {{ $t('experiments.archive_after_send') }}
+                    </span>
+                </label>
+            </div>
         </div>
     </div>
 </template>
@@ -35,6 +43,7 @@ export default {
     data () {
         return {
             title: "Experiments",
+            archive_after_send: this.$store.state.archive_after_send,
             larger_app_bar: this.$store.state.larger_app_bar,
             unread_count_in_sidebar: this.$store.state.unread_count_in_sidebar,
         };
@@ -57,6 +66,10 @@ export default {
 
         'unread_count_in_sidebar' () {
             this.$store.commit('unread_count_in_sidebar', this.unread_count_in_sidebar);
+        },
+
+        'archive_after_send' () {
+            this.$store.commit('archive_after_send', this.archive_after_send);
         }
     },
 
