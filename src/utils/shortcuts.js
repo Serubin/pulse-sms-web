@@ -41,6 +41,12 @@ export default class ShortcutKeys {
         hotkeys('esc', function(event) {
             _this.finish(event, "exiting image", () => { store.state.msgbus.$emit("hotkey-esc") });
         });
+
+        hotkeys("control+shift+w,command+shift+w,alt+shift+w,ctrl+shift+w", function(event) {
+            store.commit('hotkey_navigation', true);
+            _this.finish(event, "archive and advance", () => { store.state.msgbus.$emit("hotkey-archive-and-advance") });
+        });
+
     }
 
     finish (event, description, action) {

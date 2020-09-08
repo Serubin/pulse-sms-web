@@ -126,6 +126,7 @@ export default {
 
         this.$store.state.msgbus.$on('hotkey-page-previous', this.pageToPrevious);
         this.$store.state.msgbus.$on('hotkey-page-next', this.pageToNext);
+        this.$store.state.msgbus.$on('hotkey-archive-and-advance', this.archiveAdvance);
 
         // Fetch dom
         this.html = document.querySelector("html");
@@ -247,6 +248,7 @@ export default {
 
         this.$store.state.msgbus.$off('hotkey-page-previous', this.pageToPrevious);
         this.$store.state.msgbus.$off('hotkey-page-next', this.pageToNext);
+        this.$store.state.msgbus.$off('hotkey-archive-and-advance', this.archiveAdvance);
 
         // Restore last title
         this.$store.commit('title', this.previous_title);
@@ -711,6 +713,13 @@ export default {
             this.$router.push({
                 name: 'conversation-settings', params: { conversationTitle: this.conversation_data.name, conversationId: this.conversation_id }
             });
+        },
+
+        archiveAdvance () {
+            const conversationId = this.conversation_id;
+            Api.conversations.archive(conversationId, true);
+
+            this.pageToNext();
         },
 
         pageToNext () {
