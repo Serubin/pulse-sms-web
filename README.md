@@ -37,6 +37,16 @@ npm run build
 npm run build --report
 ```
 
+## Deploying to Production
+
+The app is hosted right here, through GitHub Pages. For anyone with push access to the repo, you can run: 
+
+```bash
+npm run deploy
+```
+
+This will build and upload the production-ready version of the app, to GitHub pages. It will be live within ~1 minute.
+
 ## Contributing
 
 Please fork this repository and contribute back using [pull requests](https://github.com/klinker-apps/pulse-sms-web/pulls). Features can be requested using [issues](https://github.com/klinker-apps/pulse-sms-issues/issues) on the Pulse SMS issue tracker/roadmap, rather than on the issues for this repo. I know there are some issues on this repo, right now. They will be migrated (or finished), as the app moves in to the production state.
