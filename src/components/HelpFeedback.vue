@@ -14,20 +14,20 @@
                 Search here, first!
             </div>
         </div>
-        <div class="click-item" @click="routeTo('https://twitter.com/klinkerapps')">
+        <div class="click-item" @click="routeTo('https://twitter.com/pulsesms')">
             <div class="mdl-color-text--grey-900">
                 Twitter
             </div>
             <div class="mdl-color-text--grey-600">
-                @KlinkerApps
+                @PulseSMS
             </div>
         </div>
-        <div class="click-item" @click="routeTo('mailto:luke@klinkerapps.com?subject=Pulse%20SMS')">
+        <div class="click-item" @click="routeTo('mailto:pulsesmsapp@gmail.com?subject=Pulse%20SMS')">
             <div class="mdl-color-text--grey-900">
                 Email
             </div>
             <div class="mdl-color-text--grey-600">
-                luke@klinkerapps.com
+                pulsesmsapp@gmail.com
             </div>
         </div>
 
