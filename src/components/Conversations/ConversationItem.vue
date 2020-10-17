@@ -9,14 +9,15 @@
         <div v-mdl class="ripple-container mdl-js-ripple-effect mdl-js-button"></div>
 
         <!-- Conversation Item content -->
-        <p class="conversation-text conversation-text-small" :class="{ unread: !read }">
-            <img v-if="showPinned" class="conversation-pinned" src="./../../assets/images/holder.gif" width="18" height="18">
-            <span class="conversation-title mdl-card__supporting-text conversation-title-small"><i v-if="!read"></i>{{ title }}</span>
-            <span v-if="!small" class="conversation-date">{{ date }}</span>
-            <br>
+        <div class="conversation-text conversation-text-small" :class="{ unread: !read }">
+            <div class="conversation-title-container">
+                <img v-if="showPinned" class="conversation-pinned" src="./../../assets/images/holder.gif" width="18" height="18">
+                <span class="conversation-title mdl-card__supporting-text conversation-title-small"><i v-if="!read"></i>{{ title }}</span>
+                <span v-if="!small" class="conversation-date">{{ date }}</span>
+            </div>
             <!-- eslint-disable vue/no-v-html -->
             <span class="conversation-snippet mdl-card__supporting-text conversation-snippet-small" v-html="snippet"><!-- Raw html insert --></span>
-        </p>
+        </div>
     </div>
 </template>
 
@@ -259,7 +260,7 @@ export default {
 
         .conversation-text {
             margin-top: 18px;
-            height: 52px;
+            height: 44px;
             margin-right: 16px;
             overflow: hidden;
 
@@ -288,6 +289,8 @@ export default {
             .conversation-snippet {
                 font-size: 14px;
                 padding: 0px 16px 24px 0px;
+                white-space: nowrap;
+                overflow: hidden;
             }
 
             .conversation-pinned {
@@ -300,6 +303,10 @@ export default {
                 float: right;
                 color: rgba(0,0,0,.54);
                 margin-left: 8px;
+            }
+
+            .conversation-title-container {
+                overflow: hidden;
             }
         }
 
