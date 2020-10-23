@@ -47,6 +47,9 @@
         <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/privacy.html')">
             Privacy Policy
         </div>
+        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/tos.html')">
+            Terms of Service
+        </div>
 
         <h4>Contributions</h4>
         <div class="item">
