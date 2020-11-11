@@ -24,7 +24,7 @@
     "core-js": "^2.6.5",
     "emoji-mart-vue-fast": "^6.1.2",
     "emoji-toolkit": "^5.0.5",
-    "firebase": ">=6.0.2-0",
+    "firebase": "^5.10.1",
     "hotkeys-js": "^3.6.3",
     "jump.js": "^1.0.2",
     "linkifyjs": "^2.1.9",
