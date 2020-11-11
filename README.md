@@ -39,13 +39,7 @@ npm run build --report
 
 ## Deploying to Production
 
-The app is hosted right here, through GitHub Pages. For anyone with push access to the repo, you can run: 
-
-```bash
-npm run deploy
-```
-
-This will build and upload the production-ready version of the app, to GitHub pages. It will be live within ~1 minute.
+It is hosted in AWS S3. In order to deploy it, run `npm run build`. It will produce a `dist` directory. Put the `dist` directory content in Maple Media AWS S3 bucket named as pulsesms.app.
 
 ## Contributing
 
