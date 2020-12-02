@@ -38,6 +38,7 @@ export default class Url {
         "devices":              "devices",
         "remove_device":        "devices/remove/",
         "templates":            "templates",
+        "create_template":      "templates/add/",
         "remove_template":      "templates/remove/",
         "auto_replies":         "auto_replies",
         "remove_auto_reply":    "auto_replies/remove/",

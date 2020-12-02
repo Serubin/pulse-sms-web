@@ -1,12 +1,21 @@
 <template>
     <div id="template-list" class="page-content">
         <!-- Spinner On load -->
-        <spinner v-if="templates.length == 0" class="spinner" />
+        <spinner v-if="templates.length == 0 && loading" class="spinner" />
+
+        <!-- If no Templates -->
+        <p v-if="templates.length == 0 && !loading" class="empty-message">
+            {{ $t('templates.none') }}
+        </p>
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
             <component :is="'TemplateItem'" v-for="template in templates" :key="template.hash" :template-data="template" />
         </transition-group>
+
+        <button v-mdl tag="button" class="create-template mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="{ background: $store.state.colors_accent }" @click="createTemplate">
+            <i class="material-icons md-light">add</i>
+        </button>
     </div>
 </template>
 
@@ -27,6 +36,7 @@ export default {
     data () {
         return {
             title: "Templates",
+            loading: true,
             templates: [],
         };
     },
@@ -69,13 +79,19 @@ export default {
             }
 
             this.templates = renderList;
+            this.loading = false;
 
             this.$store.commit("loading", false);
             this.$store.commit('title', this.title);
         },
 
         refresh () {
+            this.loading = true;
             this.fetchTemplates();
+        },
+
+        createTemplate () {
+            this.$router.push({ name: 'create-template' });
         }
     }
 };
@@ -85,12 +101,26 @@ export default {
 <style lang="scss" scoped>
     @import "../../../assets/scss/_vars.scss";
 
+    .empty-message {
+        color: rgba(0, 0, 0, 0.54);
+        margin: 6em auto;
+        width: 11.5em;
+    }
+
     #template-list {
         width: 100%;
 
         .spinner {
             margin-top: 100px;
         }
+    }
+
+    .create-template {
+        position: fixed;
+        bottom: 0%;
+        right: 0%;
+        z-index: 3;
+        margin: 24px;
     }
 
     .flip-list-enter, .flip-list-leave-to	{
@@ -103,5 +133,11 @@ export default {
 
     .flip-list-move {
         transition: transform $anim-time;
+    }
+
+    body.dark {
+        .empty-message {
+            color: rgba(255, 255, 255, 0.54);
+        }
     }
 </style>

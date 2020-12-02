@@ -15,7 +15,7 @@ import Conversations from '@/components/Conversations/';
 import Folders from '@/components/Folders/';
 import { Blacklists, CreateBlacklist } from '@/components/Blacklists/';
 import { ScheduledMessages, CreateScheduledMessage, EditScheduledMessage } from '@/components/ScheduledMessages/';
-import { Account, Drafts, Devices, Contacts, Templates, AutoReplies, AccountFolders } from '@/components/Account/';
+import { Account, Drafts, Devices, Contacts, Templates, CreateTemplate, AutoReplies, AccountFolders } from '@/components/Account/';
 
 Vue.use(VueRouter);
 
@@ -155,6 +155,11 @@ let router = new VueRouter({
             path: '/account/templates',
             name: 'templates',
             component: Templates,
+        },
+        {
+            path: '/account/templates/new',
+            name: 'create-template',
+            component: CreateTemplate
         },
         {
             path: '/account/autoreply',

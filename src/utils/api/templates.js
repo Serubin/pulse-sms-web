@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '@/store/';
 import { Api, Url, Crypto } from '@/utils/';
 
 export default class Templates {
@@ -27,5 +28,22 @@ export default class Templates {
     static delete(id) {
         let constructed_url = Url.get('remove_template') + id + Url.getAccountParam();
         axios.post(constructed_url);
+    }
+
+    static create(text) {
+        let request = {
+            account_id: store.state.account_id,
+            device_id: Api.generateId(),
+            text: Crypto.encrypt(text)
+        };
+
+        let constructed_url = Url.get('create_template');
+
+        const promise = new Promise((resolve) => {
+            axios.post(constructed_url, request, { 'Content-Type': 'application/json' })
+                .then(response => { resolve(response) });
+        });
+
+        return promise;
     }
 }
