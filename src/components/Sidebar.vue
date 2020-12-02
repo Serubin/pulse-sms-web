@@ -296,6 +296,10 @@ export default {
             &.search {
                 background: url(../assets/images/vector/search-dark.svg) 0 0 no-repeat !important;
             }
+
+            &.templates {
+                background: url(../assets/images/vector/templates-dark.svg) 0 0 no-repeat !important;
+            }
         }
     }
 
@@ -415,6 +419,11 @@ export default {
                     &.search {
                         background: url(../assets/images/vector/search.svg) 0 0 no-repeat;
                     }
+
+                    &.templates {
+                        background: url(../assets/images/vector/templates.svg) 0 0 no-repeat;
+                    }
+
                 }
             }
         }
