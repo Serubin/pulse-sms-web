@@ -46,4 +46,14 @@ export default class Templates {
 
         return promise;
     }
+
+    static update(id, text) {
+        let constructed_url = Url.get('update_template') + id + Url.getAccountParam() + "&text=" + text;
+        const promise = new Promise((resolve) => {
+            axios.post(constructed_url)
+                .then(response => { resolve(response) });
+        });
+        return promise;
+    }
+
 }

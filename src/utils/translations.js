@@ -159,7 +159,8 @@ export const i18n = new VueI18n({
             },
             templates: {
                 none: 'No Templates',
-                create: 'Create Template'
+                create: 'Create Template',
+                edit: 'Edit Template'
             }
 
         },

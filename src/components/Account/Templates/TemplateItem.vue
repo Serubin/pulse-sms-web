@@ -6,6 +6,9 @@
         <ul id="template-menu"
             class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
         >
+            <li class="mdl-menu__item" @click="editTemplate">
+                Edit
+            </li>
             <li class="mdl-menu__item" @click="deleteTemplate">
                 Delete
             </li>
@@ -39,6 +42,13 @@ export default {
     },
 
     methods: {
+        editTemplate(){
+            this.$router.push({ name: 'edit-template', params: {
+                templateId: this.id,
+                originalText: this.text
+            }
+            });
+        },
         deleteTemplate () {
             Util.snackbar("Deleted template: " + this.text);
             Api.templates.delete(this.id);
