@@ -6,7 +6,7 @@
                     {{ $t('templates.edit') }}
                 </h2>
             </div>
-            <div class="mdl-card__supporting-text">
+            <div v-show="!loading" class="mdl-card__supporting-text">
                 <form>
                     <div class="mdl-textfield mdl-js-textfield">
                         <input id="template-text" v-model="templateText" class="mdl-textfield__input" autofocus>
@@ -14,7 +14,7 @@
                     </div>
                 </form>
             </div>
-            <div class="mdl-card__actions mdl-card--border">
+            <div v-show="!loading" class="mdl-card__actions mdl-card--border">
                 <button id="create-template-text" class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="saveTemplateText">
                     {{ $t('dialog.save') }}
                 </button>
@@ -22,7 +22,6 @@
                     {{ $t('dialog.cancel') }}
                 </button>
             </div>
-
 
             <transition name="loading-fade">
                 <div v-if="loading" class="loading-center">
@@ -89,5 +88,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+    #edit-template {
+        position: relative;
+        width: 330px;
+        height: 100%;
+        margin: 5em auto;
+        .loading-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
 </style>
