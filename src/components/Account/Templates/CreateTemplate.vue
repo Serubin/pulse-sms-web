@@ -60,7 +60,6 @@ export default {
     },
 
     methods: {
-        
         createTemplateText() {
             
             if(this.templateText == '')
@@ -70,18 +69,14 @@ export default {
             
             Api.templates.create(this.templateText)
                 .then((data) => this.handleCreated(data.data));
-
         },
-
         handleCreated() {
             this.loading = false;
             this.$router.push({ name: 'templates' });
         },
-
-        cancel () {
+        cancel() {
             this.$router.push({ name: 'templates' });
         }
-
     }
 
 };
