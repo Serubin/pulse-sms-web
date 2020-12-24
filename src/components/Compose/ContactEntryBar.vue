@@ -109,7 +109,7 @@ export default {
         processContacts(response) {
             const matchers = [];
             const duplicates = [];
-            const contactsShown = [];
+            const contactsShownMatchers = [];
 
             for (let contact of response) {
                 let matcher = Util.createIdMatcher(contact.phone_number);
@@ -122,7 +122,7 @@ export default {
                 }
 
                 if (contact.name !== contact.phone_number) {
-                    this.contactsShown.push(matcher);
+                    this.contactsShownMatchers.push(matcher);
                     this.contacts.push({
                         'id': contact.id,
                         'name': contact.name,
@@ -162,7 +162,7 @@ export default {
 
                     let matcher = Util.createIdMatcher(conversation.phone_numbers);
                     // if already shown then don't show again
-                    if (contactsShown.indexOf(matcher) >= 0) {
+                    if (contactsShownMatchers.indexOf(matcher) >= 0) {
                         continue;
                     }
 
