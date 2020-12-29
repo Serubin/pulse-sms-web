@@ -194,7 +194,7 @@ export default {
                 }
             }
 
-            for(let i = 0; i < contactsToShow.length ; i++) {
+            for(let i = 0; i < contactsToShow.length; i++) {
                 let contact = contactsToShow[i];
                 this.contacts.push({
                     'id': contact.id,
