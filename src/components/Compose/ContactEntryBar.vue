@@ -108,42 +108,59 @@ export default {
         */
         processContacts(response) {
             const matchers = [];
+            const contactsToShow = [];
+            const incorrectNameContacts = [];
+            const incorrectNameContactsMatchers = [];
             const duplicates = [];
-            const contactsShownMatchers = [];
 
+            // due to some bug on Android App, contacts have not been saved correctly in database. 
+            // i.e. some contacts have phone_number also placed in name field
+            // --------------------------------------------------------------
+            // we don't want to show duplicates in contacts list. If 2 contacts are duplicate of 
+            // each other and one has correct name and other has not then we will mark contact with
+            // incorrect name as duplicate.
             for (let contact of response) {
-                let matcher = Util.createIdMatcher(contact.phone_number);
-                if (matchers.indexOf(matcher) >= 0) {
-                    // Track duplicates and mark for removal
-                    duplicates[duplicates.length] = contact.id;
-                    continue;
-                } else {
-                    matchers[matchers.length] = matcher;
-                }
-
                 if (contact.name !== contact.phone_number) {
-                    this.contactsShownMatchers.push(matcher);
-                    this.contacts.push({
-                        'id': contact.id,
-                        'name': contact.name,
-                        'nameNormalized': this.stripUnicode(contact.name),
-                        'phone': contact.phone_number,
-                        'type': contact.contact_type
-                    });
+                    let matcher = Util.createIdMatcher(contact.phone_number);
+                    if (matchers.indexOf(matcher) == -1) {
+                        matchers.push(matcher);
+                        contactsToShow.push({
+                            'id': contact.id,
+                            'name': contact.name,
+                            'nameNormalized': this.stripUnicode(contact.name),
+                            'phone': contact.phone_number,
+                            'type': contact.contact_type
+                        });
+                    } else {
+                        duplicates.push(contact.id);
+                    } 
+                } else {
+                    incorrectNameContacts.push(contact);
                 }
+            }
+
+            // marking duplicates in incorrect names contacts. It doesn't make sense to keep at all these contacts in database
+            // but for now keeping one instance for each of these contacts now.
+            for (let i = 0; i < incorrectNameContacts.length; i++) {
+                let contact = incorrectNameContacts[i];
+                let matcher = Util.createIdMatcher(contact.phone_number);
+                if (matchers.indexOf(matcher) >= 0 || incorrectNameContactsMatchers.indexOf(matcher) >= 0) {
+                    duplicates.push(contact.id);
+                } else {
+                    incorrectNameContactsMatchers.push(matcher);
+                } 
             }
 
             // Sometimes, duplicate contacts come up. Not sure why this happens,
             // so, we just delete the duplicates instead....
             if (duplicates.length > 0) {
                 let idString = "";
-                for (var i = 0; i < duplicates.length && i < 100; i++) {
+                for (let i = 0; i < duplicates.length && i < 100; i++) {
                     idString += duplicates[i];
                     if (i != duplicates.length - 1) {
                         idString += ",";
                     }
                 }
-
                 Api.contacts.delete(idString);
             }
 
@@ -162,12 +179,12 @@ export default {
 
                     let matcher = Util.createIdMatcher(conversation.phone_numbers);
                     // if already shown then don't show again
-                    if (contactsShownMatchers.indexOf(matcher) >= 0) {
+                    if (matchers.indexOf(matcher) >= 0) {
                         continue;
                     }
 
                     const id = Api.generateId();
-                    this.contacts.push({
+                    contactsToShow.push({
                         'id': id,
                         'name': conversation.title,
                         'nameNormalized': this.stripUnicode(conversation.title),
@@ -176,6 +193,18 @@ export default {
                     });
                 }
             }
+
+            for(let i = 0; i < contactsToShow.length; i++) {
+                let contact = contactsToShow[i];
+                this.contacts.push({
+                    'id': contact.id,
+                    'name': contact.name,
+                    'nameNormalized': contact.nameNormalized,
+                    'phone': contact.phone,
+                    'type': contact.type
+                });
+            }
+
         },
         /**
          * Allows the user to search for a name containing an 'é' (or other accents)
