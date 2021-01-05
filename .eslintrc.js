@@ -3,9 +3,22 @@ module.exports = {
   env: {
     node: true
   },
+  settings: {
+    'import/resolver': {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      },
+      '@':  './',
+    }
+  },
   'extends': [
     'plugin:vue/recommended',
-    'eslint:recommended'
+    'eslint:recommended',
+    'eslint-config-airbnb-base'
+  ],
+  'plugins': [
+    'standard',
+    'import',
   ],
     rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
