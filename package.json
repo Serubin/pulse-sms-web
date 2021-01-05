@@ -20,7 +20,7 @@
     "@bugsnag/js": "^6.5.2",
     "@bugsnag/plugin-vue": "^6.5.0",
     "@xkeshi/image-compressor": "^0.5.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^2.6.5",
     "emoji-mart-vue-fast": "^6.1.2",
     "emoji-toolkit": "^5.0.5",
