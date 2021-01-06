@@ -19,7 +19,6 @@
 
 <script>
 
-import store from '@/store/';
 import { Api, Util } from '@/utils';
 import { componentHandler } from '@/lib/material.js';
 
@@ -63,7 +62,7 @@ export default {
         deleteTemplate () {
             Util.snackbar("Deleted template: " + this.text);
             Api.templates.delete(this.id);
-            store.state.msgbus.$emit('refresh-btn');
+            this.$store.state.msgbus.$emit('refresh-btn');
         }
     },
 
