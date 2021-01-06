@@ -10,7 +10,7 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component :is="'TemplateItem'" v-for="template in templates" :key="template.hash" :template-data="template" :allow-edit="allowEdit" :allow-delete="allowDelete" />
+            <component :is="'TemplateItem'" v-for="template in templates" :key="template.hash" :template-data="template" :allow-edit="allowEdit" :allow-delete="allowDelete" @template-selected="selectTemplate" />
         </transition-group>
 
         <button v-show="allowAdd" v-mdl tag="button" class="create-template mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="{ background: $store.state.colors_accent }" @click="createTemplate">
@@ -56,7 +56,14 @@ export default {
         return {
             loading: true,
             templates: [],
+            selectedTemplate: null
         };
+    },
+
+    watch: {
+        'selectedTemplate' () {
+            this.$emit('selected-template-text', this.selectedTemplate.text);
+        }
     },
 
     mounted () {
@@ -111,7 +118,12 @@ export default {
 
         createTemplate () {
             this.$router.push({ name: 'create-template' });
+        },
+
+        selectTemplate (id) {
+            this.selectedTemplate = this.templates.find(template => template.device_id == id);
         }
+
     }
 };
 </script>

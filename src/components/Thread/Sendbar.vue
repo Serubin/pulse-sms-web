@@ -33,7 +33,7 @@
         </div>
         <div id="options">
             <div v-show="show_templates" class="template-options">
-                <templates :allow-edit="false" :allow-add="false" :allow-delete="false" :set-title="false" />
+                <templates :allow-edit="false" :allow-add="false" :allow-delete="false" :set-title="false" @selected-template-text="insertTemplate" />
             </div>
         </div>
     </div>
@@ -308,6 +308,12 @@ export default {
 
         },
 
+        insertTemplate (text) {
+            this.destroyAutoComplete();
+            this.message = text;
+            this.toggleTemplates();
+        },
+        
         /**
          * Updates margin of the emoji box
          * Updates margin to match edge of the message box
@@ -419,7 +425,8 @@ export default {
         clearSendbar () {
             this.message = "";
             this.removeMedia();
-        },
+        }
+
     }
 };
 </script>

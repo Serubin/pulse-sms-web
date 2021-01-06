@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :id="id" v-mdl class="click-item" @click="menu.toggle()">
+        <div :id="id" v-mdl class="click-item" @click="selectTemplateAndShowOptions">
             {{ text }}
         </div>
         <ul v-show="allowEdit || allowDelete"
@@ -66,6 +66,10 @@ export default {
             Util.snackbar("Deleted template: " + this.text);
             Api.templates.delete(this.id);
             this.$store.state.msgbus.$emit('refresh-btn');
+        },
+        selectTemplateAndShowOptions () {
+            this.menu.toggle();
+            this.$emit('template-selected', this.id);
         }
     },
 
