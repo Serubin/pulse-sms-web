@@ -33,7 +33,7 @@
         </div>
         <div id="options">
             <div v-show="show_templates" class="template-options">
-                <templates />
+                <templates :allow-edit="false" :allow-add="false" :allow-delete="false" :set-title="false" />
             </div>
         </div>
     </div>
@@ -515,8 +515,13 @@ body.dark {
     }
     #options {
         max-height: 250px;
-        background: #000000;
+        background: #fafafa;
+        box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.15);
         overflow-y: scroll;
+    }
+    #options #template-list {
+        width: auto;
+        margin: 0;
     }
     @media (min-width: 750px) {
         & {
@@ -657,6 +662,10 @@ body.dark {
     }
     .mdl-textfield__label {
         color: #fff !important;
+    }
+    .send-bar #options {
+        background: #202024;
+        color: #fff;
     }
 }
 

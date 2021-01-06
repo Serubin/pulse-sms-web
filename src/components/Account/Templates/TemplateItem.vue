@@ -3,13 +3,14 @@
         <div :id="id" v-mdl class="click-item" @click="menu.toggle()">
             {{ text }}
         </div>
-        <ul id="template-menu"
+        <ul v-show="allowEdit || allowDelete"
+            id="template-menu"
             class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
         >
-            <li class="mdl-menu__item" @click="editTemplate">
+            <li v-show="allowEdit" class="mdl-menu__item" @click="editTemplate">
                 Edit
             </li>
-            <li class="mdl-menu__item" @click="deleteTemplate">
+            <li v-show="allowDelete" class="mdl-menu__item" @click="deleteTemplate">
                 Delete
             </li>
         </ul>
@@ -24,7 +25,17 @@ import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'TemplateItem',
-    props: [ 'templateData' ],
+    props: {
+        templateData: Object,
+        allowEdit: {
+            type: Boolean,
+            default: true
+        },
+        allowDelete: {
+            type: Boolean,
+            default: true
+        } 
+    },
 
     data () {
         return {

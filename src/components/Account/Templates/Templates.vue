@@ -10,10 +10,10 @@
 
         <!-- Conversation items -->
         <transition-group name="flip-list" tag="div">
-            <component :is="'TemplateItem'" v-for="template in templates" :key="template.hash" :template-data="template" />
+            <component :is="'TemplateItem'" v-for="template in templates" :key="template.hash" :template-data="template" :allow-edit="allowEdit" :allow-delete="allowDelete" />
         </transition-group>
 
-        <button v-mdl tag="button" class="create-template mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="{ background: $store.state.colors_accent }" @click="createTemplate">
+        <button v-show="allowAdd" v-mdl tag="button" class="create-template mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" :style="{ background: $store.state.colors_accent }" @click="createTemplate">
             <i class="material-icons md-light">add</i>
         </button>
     </div>
@@ -33,9 +33,27 @@ export default {
         Spinner
     },
 
+    props: {
+        allowEdit: {
+            type: Boolean,
+            default: true
+        },
+        allowAdd: {
+            type: Boolean,
+            default: true
+        },
+        allowDelete: {
+            type: Boolean,
+            default: true
+        },
+        setTitle: {
+            type: Boolean,
+            default: true
+        }
+    },
+
     data () {
         return {
-            title: "Templates",
             loading: true,
             templates: [],
         };
@@ -43,6 +61,8 @@ export default {
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
+        if(this.setTitle)
+            this.$store.commit('title', "Templates");
 
         this.fetchTemplates();
 
@@ -82,7 +102,6 @@ export default {
             this.loading = false;
 
             this.$store.commit("loading", false);
-            this.$store.commit('title', this.title);
         },
 
         refresh () {
