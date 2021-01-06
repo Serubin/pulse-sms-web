@@ -11,6 +11,7 @@
         </div>
         <div id="sendbar" class="send-bar-inner">
             <input id="attach" class="mdl-button mdl-js-button mdl-button--icon attach-button" readonly tabindex="-1" @click.prevent="attachMedia">
+            <input id="templates" class="mdl-button mdl-js-button mdl-button--icon template-button" readonly tabindex="-1" @click="toggleTemplates">
             <input id="emoji" class="mdl-button mdl-js-button mdl-button--icon emoji-button" readonly tabindex="-1" @click="toggleEmoji">
             <div v-show="show_emoji" id="emoji-wrapper" @click.self="toggleEmoji">
                 <picker title="Pick your emoji…" :style="emojiStyle" :set="set" :sheet-size="sheetSize" :per-line="perLine" :skins="skin" :data="emojiIndex" @select="insertEmoji" />
@@ -22,13 +23,18 @@
             </div>
             <div v-mdl class="entry mdl-textfield mdl-js-textfield" :class="is_dirty">
                 <!-- eslint-disable vue/use-v-on-exact -->
-                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @keydown.down.exact="onArrowUp($event)" @keydown.up.exact="onArrowDown($event)" @keydown.tab.exact="onTab($event)" @keydown.esc.exact.prevent.stop="destroyAutoComplete" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
+                <textarea id="message-entry" v-model="message" class="mdl-textfield__input disabled" type="text" @click="toggleTemplates(false)" @keydown.down.exact="onArrowUp($event)" @keydown.up.exact="onArrowDown($event)" @keydown.tab.exact="onTab($event)" @keydown.esc.exact.prevent.stop="destroyAutoComplete" @keydown.shift.enter.stop @keydown.enter.prevent.stop="dispatchSend"></textarea>
                 <label class="mdl-textfield__label" for="message-entry">{{ $t('sendbar.type') }}</label>
             </div>
             <!-- fab with correct colors will be inserted here -->
             <button id="send-button" class="send mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect" :style="{ background: send_color }" @click="dispatchSend">
                 <i class="material-icons md-18 material-icons-white">send</i>
             </button>
+        </div>
+        <div id="options">
+            <div v-show="show_templates" class="template-options">
+                <templates />
+            </div>
         </div>
     </div>
 </template>
@@ -41,12 +47,14 @@ import data from 'emoji-mart-vue-fast/data/twitter.json';
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast';
 import { Api } from '@/utils';
+import Templates from '@/components/Account/Templates/Templates.vue';
 
 export default {
     name: 'Sendbar',
     components: {
         Picker,
         EmojiAutocompleteSuggestion,
+        Templates
     },
     props: ['threadId', 'onSend', 'loading'],
 
@@ -72,6 +80,7 @@ export default {
             sheetSize: 32,
             skin: 3,
             show_emoji: false,
+            show_templates: false,
             $wrapper: null,
             $sendbar: null,
             emojiAutocompleteSuggestions: [],
@@ -241,6 +250,7 @@ export default {
          */
         attachMedia () {
             this.destroyAutoComplete();
+            this.toggleTemplates(false);
 
             // Create input to attach file
             const input = document.createElement('input');
@@ -275,7 +285,7 @@ export default {
          */
         toggleEmoji (toggle=null) {
             this.destroyAutoComplete();
-
+            this.toggleTemplates(false);
             // Update emoji wrapper margin
             this.updateEmojiMargin(true);
 
@@ -285,6 +295,16 @@ export default {
 
             // Otherwise set to provided toggle
             return this.show_emoji = toggle;
+
+        },
+
+        toggleTemplates (toggle=null) {
+            this.destroyAutoComplete();
+
+            if(typeof toggle != "boolean")
+                return this.show_templates = !this.show_templates;
+            
+            return this.show_templates = toggle;
 
         },
 
@@ -421,6 +441,13 @@ export default {
     height: 24px;
 }
 
+#templates {
+    background: url('../../assets/images/vector/templates.svg') no-repeat;
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+}
+
 body.dark {
     #emoji {
         background: url("../../assets/images/ic_mood_white.png") no-repeat;
@@ -428,6 +455,10 @@ body.dark {
     }
     #attach {
         background: url("../../assets/images/ic_attach_white.png") no-repeat;
+        background-size: cover;
+    }
+    #templates {
+        background: url('../../assets/images/vector/templates-dark.svg') no-repeat;
         background-size: cover;
     }
 }
@@ -481,6 +512,11 @@ body.dark {
             margin: 1em calc(24px + 16px + 8px) 1em;
             width: calc(100% - 108px);
         }
+    }
+    #options {
+        max-height: 250px;
+        background: #000000;
+        overflow-y: scroll;
     }
     @media (min-width: 750px) {
         & {
@@ -552,7 +588,8 @@ body.dark {
     border-radius: 16px 16px 0px 0px;
     box-shadow: -0px -0px 3px rgba(0, 0, 0, 0.15);
     .entry {
-        width: calc(100% - 124px);
+        // width: calc(100% - 124px);
+        width: calc(100% - 165px);
         margin-top: -4px;
     }
     .send {
@@ -567,7 +604,7 @@ body.dark {
         width: 28px;
         height: 28px;
         opacity: 0.56;
-        margin-right: 8px;
+        margin-right: 4px;
     }
     .emoji-button {
         float: left;
@@ -578,6 +615,14 @@ body.dark {
         height: 24px;
         opacity: 0.56;
         margin-right: 16px;
+    }
+    .template-button {
+        float: left;
+        text-align: center;
+        margin-top: 18px;
+        min-width: 0px;
+        opacity: 0.56;
+        margin-right: 8px;
     }
 }
 
