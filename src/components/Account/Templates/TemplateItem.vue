@@ -25,7 +25,10 @@ import { componentHandler } from '@/lib/material.js';
 export default {
     name: 'TemplateItem',
     props: {
-        templateData: Object,
+        templateData: {
+            type: Object,
+            required: true
+        },
         allowEdit: {
             type: Boolean,
             default: true
