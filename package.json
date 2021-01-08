@@ -32,14 +32,14 @@
     "notifyjs": "^3.0.0",
     "object-hash": "^2.1.1",
     "reconnecting-websocket": "^4.4.0",
-    "vue": "^2.6.10",
+    "vue": "^2.6.12",
     "vue-color": "^2.7.0",
     "vue-flatpickr-component": "^9.0.3",
     "vue-i18n": "^8.11.1",
-    "vue-router": "^3.1.3",
+    "vue-router": "^3.4.9",
     "vue-search-select": "^2.9.3",
     "vuejs-dialog": "^1.4.0",
-    "vuex": "^2.3.1"
+    "vuex": "^3.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

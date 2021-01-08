@@ -11643,7 +11643,7 @@ vue-resize@^0.4.5:
   resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
   integrity sha512-bhP7MlgJQ8TIkZJXAfDf78uJO+mEI3CaLABLjv0WNzr4CcGRGPIAItyWYnP6LsPA4Oq0WE+suidNs6dgpO4RHg==
 
-vue-router@^3.1.3:
+vue-router@^3.4.9:
   version "3.4.9"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.4.9.tgz#c016f42030ae2932f14e4748b39a1d9a0e250e66"
   integrity sha512-CGAKWN44RqXW06oC+u4mPgHLQQi2t6vLD/JbGRDAXm0YpMv0bgpKuU5bBd7AvMgfTz9kXVRIWKHqRwGEb8xFkA==
@@ -11683,7 +11683,7 @@ vue-virtual-scroller@^1.0.0-rc.2:
     vue-observe-visibility "^0.4.4"
     vue-resize "^0.4.5"
 
-vue@^2.6.10:
+vue@^2.6.12:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
@@ -11693,10 +11693,10 @@ vuejs-dialog@^1.4.0:
   resolved "https://registry.yarnpkg.com/vuejs-dialog/-/vuejs-dialog-1.4.2.tgz#33ef5a7669291c1bb09f2e958c4a438e54cdd293"
   integrity sha512-6kRse144WXDFBMKdeuqE43rHy0ZJ81uLOFh62r2d80ICKavQYHIvr+GlTFmoR23190lC4f2w+ZJ8cS4ljkCDMw==
 
-vuex@^2.3.1:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.5.0.tgz#20f0265ade6c9a5ac6724a405d3ffdb4726c9741"
-  integrity sha512-5oJPOJySBgSgSzoeO+gZB/BbN/XsapgIF6tz34UwJqnGZMQurzIO3B4KIBf862gfc9ya+oduY5sSkq+5/oOilQ==
+vuex@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.6.0.tgz#95efa56a58f7607c135b053350833a09e01aa813"
+  integrity sha512-W74OO2vCJPs9/YjNjW8lLbj+jzT24waTo2KShI8jLvJW8OaIkgb3wuAMA7D+ZiUxDOx3ubwSZTaJBip9G8a3aQ==
 
 w3c-hr-time@^1.0.1:
   version "1.0.2"
