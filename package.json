@@ -17,8 +17,8 @@
     "deploy": "npm run build; touch dist/CNAME; echo \"pulsesms.app\" > dist/CNAME; push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
-    "@bugsnag/js": "^6.5.2",
-    "@bugsnag/plugin-vue": "^6.5.0",
+    "@bugsnag/js": "^7.5.4",
+    "@bugsnag/plugin-vue": "^7.5.4",
     "@xkeshi/image-compressor": "^0.5.3",
     "axios": "^0.21.1",
     "emoji-mart-vue-fast": "^7.0.7",
