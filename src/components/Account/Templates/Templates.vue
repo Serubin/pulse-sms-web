@@ -72,20 +72,10 @@ export default {
             this.$store.commit('title', "Templates");
 
         this.fetchTemplates();
-
-        // Construct colors object from saved global theme
-        const colors = {
-            'default': this.$store.state.theme_global_default,
-            'dark': this.$store.state.theme_global_dark,
-            'accent': this.$store.state.theme_global_accent,
-        };
-
-        // Commit them to current application colors
-        this.$store.commit('colors', colors);
     },
 
     beforeDestroy () {
-        this.$store.state.msgbus.$off('refresh-btn', this.refresh);
+        this.$store.state.msgbus.$off('refresh-btn');
     },
 
     methods: {

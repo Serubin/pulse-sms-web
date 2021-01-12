@@ -35,7 +35,7 @@
 
 <script>
 
-import { Api } from '@/utils/';
+import { Api, SessionCache } from '@/utils/';
 import Spinner from '@/components/Spinner.vue';
 
 export default {
@@ -49,14 +49,12 @@ export default {
     data() {
         return {
             templateText: '',
-            title: '',
             loading: false,
         };
     },
 
     mounted() {
         this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
     },
 
     methods: {
@@ -72,6 +70,7 @@ export default {
         },
         handleCreated() {
             this.loading = false;
+            SessionCache.invalidateTemplates();
             this.$router.push({ name: 'templates' });
         },
         cancel() {
