@@ -13,6 +13,7 @@ export const KEYS  = {
     LARGER_APP_BAR: 'larger_app_bar',
     UNREAD_COUNT_IN_SIDEBAR: 'unread_count_in_sidebar',
     SUBSCRIPTION_TYPE: 'subscription_type',
+    TEMPLATES: 'templates',
     THEME: {
         BASE: 'theme_base',
         GLOBAL_DEFAULT: 'theme_global_default',
@@ -50,6 +51,7 @@ export const state = {
     larger_app_bar: JSON.parse( window.localStorage.getItem(KEYS.LARGER_APP_BAR) || "false" ),
     unread_count_in_sidebar: JSON.parse( window.localStorage.getItem(KEYS.UNREAD_COUNT_IN_SIDEBAR) || "false" ),
     subscription_type: window.localStorage.getItem(KEYS.SUBSCRIPTION_TYPE) || 1,
+    templates: JSON.parse( window.localStorage.getItem(KEYS.TEMPLATES) || '[]' ),
 
     /* Per session */
     key: '',
