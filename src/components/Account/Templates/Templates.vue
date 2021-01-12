@@ -21,7 +21,7 @@
 
 <script>
 import Hash from 'object-hash';
-import { Api } from '@/utils';
+import { Api, SessionCache } from '@/utils';
 import TemplateItem from './TemplateItem.vue';
 import Spinner from '@/components/Spinner.vue';
 
@@ -113,6 +113,7 @@ export default {
 
         refresh () {
             this.loading = true;
+            SessionCache.invalidateTemplates();
             this.fetchTemplates();
         },
 
