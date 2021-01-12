@@ -112,6 +112,7 @@ export default {
         },
 
         refresh () {
+            this.templates = [];
             this.loading = true;
             SessionCache.invalidateTemplates();
             this.fetchTemplates();

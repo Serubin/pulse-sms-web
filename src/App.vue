@@ -591,7 +591,7 @@ export default {
 
             Util.snackbar("You've been logged out");
 
-            this.$router.push('login');
+            this.$router.push({ name: 'login' });
         },
 
         /**
