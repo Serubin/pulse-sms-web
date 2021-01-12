@@ -110,7 +110,7 @@ export default class SessionCache {
     }
 
     static hasTemplates() {
-        return SessionCache.getTemplates().length > 0;
+        return (SessionCache.getTemplates()||{}).length > 0;
     }
 
     static invalidateConversations (index = 'index_public_unarchived') {
