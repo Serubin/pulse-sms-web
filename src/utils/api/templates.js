@@ -1,24 +1,27 @@
 import axios from 'axios';
 import { Api, Url, Crypto } from '@/utils/';
+import SessionCache from '../cache_manager';
 
 export default class Templates {
     static get() {
         let constructed_url = Url.get('templates') + Url.getAccountParam();
         const promise = new Promise((resolve, reject) => {
-            axios.get(constructed_url)
-                .then(response => {
-                    response = response.data;
-
-                    // Decrypt template items
-                    for (let i = 0; i < response.length; i++) {
-                        const template = Crypto.decryptTemplate(response[i]);
-                        if (template != null)
-                            response[i] = template;
-                    }
-
-                    resolve(response);
-                })
-                .catch(response => Api.rejectHandler(response, reject));
+            if(!SessionCache.hasTemplates()) {
+                axios.get(constructed_url)
+                    .then(response => {
+                        response = response.data;
+                        for (let i = 0; i < response.length; i++) {
+                            const template = Crypto.decryptTemplate(response[i]);
+                            if (template != null)
+                                response[i] = template;
+                        }
+                        SessionCache.putTemplates(response);
+                        resolve(response);
+                    })
+                    .catch(response => Api.rejectHandler(response, reject));
+            } else {
+                resolve(SessionCache.getTemplates());
+            }
         });
 
         return promise;

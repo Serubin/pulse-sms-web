@@ -53,6 +53,10 @@ export default class SessionCache {
         return store.state.compose_contacts;
     }
 
+    static getTemplates () {
+        return store.state.templates;
+    }    
+
     static putConversations (conversations, index = 'index_public_unarchived') {
         if (index == "index_public_unread") {
             // We want to just always read these from the backend, when the user goes to this section of the app.
@@ -82,6 +86,10 @@ export default class SessionCache {
         }
     }
 
+    static putTemplates (templates) {
+        store.commit('templates', templates);
+    }
+
     static hasConversations (index = 'index_public_unarchived') {
         return SessionCache.getConversations(index) != null;
     }
@@ -101,12 +109,20 @@ export default class SessionCache {
         return SessionCache.getContacts().length > 0;
     }
 
+    static hasTemplates() {
+        return SessionCache.getTemplates().length > 0;
+    }
+
     static invalidateConversations (index = 'index_public_unarchived') {
         SessionCache.putConversations(null, index);
     }
 
     static invalidateMessages (conversation_id) {
         SessionCache.putMessages(null, conversation_id);
+    }
+
+    static invalidateTemplates() {
+        SessionCache.putTemplates(null);
     }
 
     static invalidateAllConversations() {

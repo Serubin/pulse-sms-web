@@ -582,6 +582,7 @@ export default {
 
             SessionCache.invalidateAllConversations();
             SessionCache.invalidateAllMessages();
+            SessionCache.invalidateTemplates();
 
             // Clear local storage (browser)
             window.localStorage.clear();
