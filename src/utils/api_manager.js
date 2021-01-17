@@ -17,7 +17,7 @@ import {
 
 export default class Api {
 
-    static stream = Stream
+    static Stream = Stream
 
     static account = Account
     static autoReplies = AutoReply
