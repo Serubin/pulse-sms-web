@@ -16,7 +16,6 @@ import {
 } from '@/utils/api/';
 
 export default class Api {
-
     static Stream = Stream
 
     static account = Account
@@ -31,18 +30,20 @@ export default class Api {
     static scheduledMessages = ScheduledMessages
     static templates = Templates
 
-    static generateId() {
-        let min = 1;
-        let max = 922337203685477;
+    static generateId () {
+        const min = 1;
+        const max = 922337203685477;
 
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    static rejectHandler(e, callback = null) {
-        if (e.response && e.response.status == 401)
+    static rejectHandler (e, callback = null) {
+        if (e.response && e.response.status === 401) {
             return store.state.msgbus.$emit('logout-btn');
+        }
 
-        if (callback)
+        if (callback) {
             return callback(e);
+        }
     }
 }
