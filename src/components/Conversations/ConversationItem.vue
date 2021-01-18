@@ -27,7 +27,7 @@ import { Util, TimeUtils } from '@/utils';
 
 export default {
     name: 'ConversationItem',
-    props: [ 'conversationData', 'archive', 'small', 'showPinned', 'isSelected', 'isSelecting' ],
+    props: ['conversationData', 'archive', 'small', 'showPinned', 'isSelected', 'isSelecting'],
 
     data () {
         return {
@@ -44,60 +44,64 @@ export default {
     computed: {
         color () {
             if (this.isSelected) {
-                return "#2E3133";
+                return '#2E3133';
             }
 
-            if (this.$store.state.theme_use_global)
+            if (this.$store.state.theme_use_global) {
                 return this.$store.state.theme_global_default;
+            }
 
             return this.conversationData.color;
         },
 
         iconSize () {
-            if (this.small)
+            if (this.small) {
                 return 24;
-            else
+            } else {
                 return 48;
+            }
         },
 
         circleSize () {
-            if (this.small)
+            if (this.small) {
                 return 12;
-            else
+            } else {
                 return 24;
+            }
         },
 
         textLocation () {
-            if (this.small)
-                return { x: 12, y: 17.5, size: 16};
-            else
-                return { x: 25, y: 35, size: 30};
+            if (this.small) {
+                return { x: 12, y: 17.5, size: 16 };
+            } else {
+                return { x: 25, y: 35, size: 30 };
+            }
         },
 
         titleFirstLetter () {
             if (this.isSelected) {
-                return "✓";
+                return '✓';
             }
 
             if (this.small) {
-                return "";
+                return '';
             }
 
             try {
-                let letter = this.title.split('')[0].toUpperCase();
+                const letter = this.title.split('')[0].toUpperCase();
                 if (!letter.match(/[A-Z]/i)) {
-                    return "";
+                    return '';
                 } else {
                     return letter;
                 }
             } catch (e) { // Edge case for message with no title ??
-                return "";
+                return '';
             }
         },
 
         date () {
             if (this.$store.state.theme_conversation_categories) {
-                return "";
+                return '';
             } else {
                 return TimeUtils.formatConversationTimestamp(this.conversationData.timestamp, Date.now());
             }
@@ -113,7 +117,7 @@ export default {
 
             this.close_drawer();
 
-            let contact_data = Util.generateContact(
+            const contactData = Util.generateContact(
                 this.conversation_id,
                 this.title,
                 this.mute,
@@ -123,7 +127,7 @@ export default {
                 Util.expandColor(this.conversationData.color_light),
                 Util.expandColor(this.conversationData.color_dark)
             );
-            this.$store.commit('contacts', contact_data);
+            this.$store.commit('contacts', contactData);
 
             this.$router.push({
                 name: !this.archive ? 'thread' : 'thread-archived', params: { threadId: this.conversation_id, isRead: this.read }
@@ -142,12 +146,13 @@ export default {
          * close drawer
          * Closes drawer if closeable
          */
-        close_drawer() {
-            if(!this.$store.state.full_theme)
+        close_drawer () {
+            if (!this.$store.state.full_theme) {
                 this.$store.commit('sidebar_open', false);
+            }
         }
 
-    },
+    }
 };
 </script>
 
