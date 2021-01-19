@@ -11,7 +11,7 @@
             </div>
 
             <div class="lightbox-overlay" @click="close()">
-                <img class="full-image" :src="image_data" alt="Image">
+                <img class="full-image" :src="imageData" alt="Image">
             </div>
         </div>
     </transition>
@@ -26,8 +26,8 @@ export default {
 
     data () {
         return {
-            image_data: "",
-            display: false,
+            imageData: '',
+            display: false
         };
     },
 
@@ -46,11 +46,11 @@ export default {
     methods: {
         close () {
             this.display = false;
-            this.image_data = "";
+            this.imageData = '';
         },
 
         download () {
-            var link = document.createElement("a");
+            var link = document.createElement('a');
             link.download = `pulse-image-${new Date().getTime()}.jpg`;
             link.href = document.querySelector('.full-image').src;
             document.body.appendChild(link);
@@ -63,14 +63,14 @@ export default {
 
         },
 
-        showImage (event_obj) {
+        showImage (eventObj) {
             const MediaLoader = store.state.media_loader;
-            MediaLoader.getMedia(event_obj.messageId, event_obj.type)
+            MediaLoader.getMedia(eventObj.messageId, eventObj.type)
                 .then((blob) => {
                     this.display = true;
 
-                    const data_prefix = "data:" + this.mime + ";base64,";
-                    this.image_data = data_prefix + blob;
+                    const dataPrefix = 'data:' + this.mime + ';base64,';
+                    this.imageData = dataPrefix + blob;
                 });
         }
     }
@@ -127,13 +127,5 @@ export default {
         color: white;
         z-index: 1001;
     }
-
-    // .fade-enter-active, .fade-leave-active {
-    //   transition: opacity .3s;
-    // }
-
-    // .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    //   opacity: 0;
-    // }
 
 </style>
