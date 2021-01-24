@@ -63,12 +63,12 @@ export default {
             title: 'Help and Feedback',
             loading: false,
             urls: {
-                help: 'https://messenger.klinkerapps.com/help',
-                overview: 'https://messenger.klinkerapps.com/overview/',
+                help: 'https://home.pulsesms.app/help/',
+                overview: 'https://home.pulsesms.app/overview/',
                 twitter: 'https://twitter.com/pulsesms',
                 email: 'mailto:pulsesmsapp@gmail.com?subject=Pulse%20SMS',
-                privacy: 'https://messenger.klinkerapps.com/privacy.html',
-                tos: 'https://messenger.klinkerapps.com/tos.html'
+                privacy: 'https://home.pulsesms.app/privacy.html',
+                tos: 'https://home.pulsesms.app/tos.html'
             }
         };
     },
