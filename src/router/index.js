@@ -9,6 +9,7 @@ import Experiments from '@/components/Experiments.vue';
 import ConversationSettings from '@/components/Thread/Settings.vue';
 import Passcode from '@/components/Passcode.vue';
 import HelpFeedback from '@/components/HelpFeedback.vue';
+import License from '@/components/License.vue';
 import Thread from '@/components/Thread/';
 import Compose from '@/components/Compose/';
 import Conversations from '@/components/Conversations/';
@@ -130,6 +131,11 @@ let router = new VueRouter({
             path: '/help_feedback',
             name: 'help-feedback',
             component: HelpFeedback,
+        },
+        {
+            path: '/license',
+            name: 'license',
+            component: License,
         },
         {
             path: '/account',
