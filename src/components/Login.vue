@@ -22,10 +22,10 @@
                 </div>
             </form>
 
-            <a href="https://messenger.klinkerapps.com/forgot_password.html" target="_blank">{{ $t('login.forgotpassword') }}</a>
+            <a href="https://home.pulsesms.app/forgot_password.html" target="_blank">{{ $t('login.forgotpassword') }}</a>
             <br>
             <!-- eslint-disable vue/no-v-html -->
-            <a href="https://messenger.klinkerapps.com/overview/platform-ios.html" target="_blank" v-html="$t('login.iphone')"></a>
+            <a href="https://home.pulsesms.app/overview/platform-ios.html" target="_blank" v-html="$t('login.iphone')"></a>
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <button id="login" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="doLogin">
