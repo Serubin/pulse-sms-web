@@ -44,7 +44,7 @@ export default class Url {
     }
 
     static getBaseUrl () {
-        return "api.messenger.klinkerapps.com/";
+        return "api.pulsesms.app/";
     }
 
     static getApiVersion () {

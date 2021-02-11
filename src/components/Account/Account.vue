@@ -107,9 +107,9 @@ export default {
 
         routeTo (route) {
             if (route == 'password') {
-                window.open('https://messenger.klinkerapps.com/forgot_password.html','_blank');
+                window.open('https://home.pulsesms.app/forgot_password.html','_blank');
             } else if (route == 'statistics') {
-                window.open('https://messenger.klinkerapps.com/account_statistics.html','_blank');
+                window.open('https://home.pulsesms.app/account_statistics.html','_blank');
             } else {
                 this.$router.push({ name: route });
             }
