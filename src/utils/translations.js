@@ -9,7 +9,7 @@ export const i18n = new VueI18n({
     messages: {
         en: {
             login: {
-                first: 'First, <a href="https://messenger.klinkerapps.com/overview/signup.html" target="_blank">sign up</a> for an account from the <b>Text from any device</b> option in the navigation drawer of the phone app.',
+                first: 'First, <a href="https://home.pulsesms.app/overview/signup.html" target="_blank">sign up</a> for an account from the <b>Text from any device</b> option in the navigation drawer of the phone app.',
                 error: 'Email or Password incorrect',
                 email: 'Email Address',
                 password: 'Password',
@@ -166,7 +166,7 @@ export const i18n = new VueI18n({
         },
         fr: {
             login: {
-                first: 'D\'abord, <a href="https://messenger.klinkerapps.com/overview/signup.html" target="_blank">enregistrez-vous</a> avec le bouton <b>SMS depuis d\'autres appareils</b> dans le menu de navigation de l\'application mobile.',
+                first: 'D\'abord, <a href="https://home.pulsesms.app/overview/signup.html" target="_blank">enregistrez-vous</a> avec le bouton <b>SMS depuis d\'autres appareils</b> dans le menu de navigation de l\'application mobile.',
                 error: 'Email ou Mot de passe incorrect',
                 email: 'Adresse email',
                 password: 'Mot de passe',
@@ -264,7 +264,7 @@ export const i18n = new VueI18n({
         },
         sv: {
             login: {
-                first: '<a href="https://messenger.klinkerapps.com/overview/signup.html" target="_blank">Skapa</a> först ett konto genom att klicka på <b>Skriv från valfri enhet</b> i menyn i telefonens app.',
+                first: '<a href="https://home.pulsesms.app/overview/signup.html" target="_blank">Skapa</a> först ett konto genom att klicka på <b>Skriv från valfri enhet</b> i menyn i telefonens app.',
                 error: 'Fel e-post eller lösenord',
                 email: 'Epostadress',
                 password: 'Lösenord',

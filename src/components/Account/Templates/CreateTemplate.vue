@@ -23,7 +23,6 @@
                 </button>
             </div>
 
-
             <transition name="loading-fade">
                 <div v-if="loading" class="loading-center">
                     <spinner />
@@ -35,7 +34,7 @@
 
 <script>
 
-import { Api } from '@/utils/';
+import { Api, SessionCache } from '@/utils/';
 import Spinner from '@/components/Spinner.vue';
 
 export default {
@@ -45,36 +44,35 @@ export default {
     components: {
         Spinner
     },
-    
-    data() {
+
+    data () {
         return {
             templateText: '',
-            title: '',
-            loading: false,
+            loading: false
         };
     },
 
-    mounted() {
-        this.$store.commit("loading", false);
-        this.$store.commit('title', this.title);
+    mounted () {
+        this.$store.commit('loading', false);
     },
 
     methods: {
-        createTemplateText() {
-            
-            if(this.templateText == '')
+        createTemplateText () {
+            if (this.templateText === '') {
                 return;
-            
+            }
+
             this.loading = true;
-            
+
             Api.templates.create(this.templateText)
                 .then((data) => this.handleCreated(data.data));
         },
-        handleCreated() {
+        handleCreated () {
             this.loading = false;
+            SessionCache.invalidateTemplates();
             this.$router.push({ name: 'templates' });
         },
-        cancel() {
+        cancel () {
             this.$router.push({ name: 'templates' });
         }
     }

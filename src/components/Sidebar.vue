@@ -95,26 +95,27 @@ export default {
     data () {
         return {
             links: {
-                'conversations': { name: 'conversations-list'},
-                'unread': { name: 'conversations-list-unread'},
-                'archive': { name: 'conversations-list-archived'},
-                'blacklists': { name: 'blacklists'},
-                'private': { name: 'conversations-list-private' },
-                'folders': { name: 'folders' },
-                'scheduled': { name: 'scheduled-messages' },
-                'templates': { name: 'templates' }
+                conversations: { name: 'conversations-list' },
+                unread: { name: 'conversations-list-unread' },
+                archive: { name: 'conversations-list-archived' },
+                blacklists: { name: 'blacklists' },
+                private: { name: 'conversations-list-private' },
+                folders: { name: 'folders' },
+                scheduled: { name: 'scheduled-messages' },
+                templates: { name: 'templates' }
             },
             listeners: [],
-            searchQuery: ""
+            searchQuery: ''
         };
     },
 
     computed: {
         marginLeft () { // Handles margins
-            if(this.open)
-                return "margin-left: 0px;";
-            else
-                return "margin-left: -269px;";
+            if (this.open) {
+                return 'margin-left: 0px;';
+            } else {
+                return 'margin-left: -269px;';
+            }
         },
         open () { // Sidebar_open state
             return this.$store.state.sidebar_open;
@@ -123,8 +124,8 @@ export default {
             return this.$store.state.full_theme;
         },
         showConversations () {
-            return this.$route.name != 'conversations-list'
-                && this.$store.state.account_id != '';
+            return this.$route.name !== 'conversations-list' &&
+                this.$store.state.account_id !== '';
         },
         display_unread () {
             return this.$store.state.unread_count_in_sidebar;
@@ -136,22 +137,22 @@ export default {
 
     watch: {
 
-        "searchQuery" (to) {
+        'searchQuery' (to) {
             this.$store.state.msgbus.$emit('searchUpdated', to);
         }
 
     },
 
     mounted () {
-        let sidebar = this.$el.querySelector("#sidebar");
-        let events = Util.addEventListeners(['mousewheel', 'DOMMouseScroll'], (e) => {
-            var scrollTop = sidebar.scrollTop,
-                scrollHeight = sidebar.scrollHeight,
-                height = sidebar.offsetHeight,
-                delta = e.wheelDelta,
-                up = delta > 0;
+        const sidebar = this.$el.querySelector('#sidebar');
+        const events = Util.addEventListeners(['mousewheel', 'DOMMouseScroll'], (e) => {
+            const scrollTop = sidebar.scrollTop;
+            const scrollHeight = sidebar.scrollHeight;
+            const height = sidebar.offsetHeight;
+            const delta = e.wheelDelta;
+            const up = delta > 0;
 
-            var prevent = function() {
+            const prevent = function () {
                 e.stopPropagation();
                 e.preventDefault();
                 e.returnValue = false;
@@ -186,54 +187,62 @@ export default {
         routeTo (link) {
             this.close_drawer();
             this.$router.push(this.links[link]).catch(() => {});
-            this.searchQuery = "";
+            this.searchQuery = '';
         },
 
         /**
          * close drawer
          * Closes drawer if closeable
          */
-        close_drawer() {
-            if(!this.full_theme)
+        close_drawer () {
+            if (!this.full_theme) {
                 this.$store.commit('sidebar_open', false);
+            }
         },
 
         /**
          * is active
          * Determines if a link is active based on route
          */
-        is_active(route) {
-            if (route == 'conversations' &&
-                (this.$route.name == 'conversations-list' || this.$route.name == 'thread'))
+        is_active (route) {
+            if (route === 'conversations' &&
+                (this.$route.name === 'conversations-list' || this.$route.name === 'thread')) {
                 return true;
+            }
 
-            if (route == 'unread' &&
-                (this.$route.name == 'conversations-list-unread'))
+            if (route === 'unread' &&
+                (this.$route.name === 'conversations-list-unread')) {
                 return true;
+            }
 
-            if (route == 'private' &&
-                (this.$route.name == 'passcode' || this.$route.name == 'conversations-list-private'))
+            if (route === 'private' &&
+                (this.$route.name === 'passcode' || this.$route.name === 'conversations-list-private')) {
                 return true;
+            }
 
-            if (route == 'archive' &&
-                (this.$route.name == 'conversations-list-archived' || this.$route.name == 'thread-archived'))
+            if (route === 'archive' &&
+                (this.$route.name === 'conversations-list-archived' || this.$route.name === 'thread-archived')) {
                 return true;
+            }
 
-            if (route == 'folders' &&
-                (this.$route.name == 'folders' || this.$route.name == 'conversations-list-folder'))
+            if (route === 'folders' &&
+                (this.$route.name === 'folders' || this.$route.name === 'conversations-list-folder')) {
                 return true;
+            }
 
-            if (route == 'scheduled' &&
-                (this.$route.name == 'scheduled-messages' || this.$route.name == 'create-scheduled-message' || this.$route.name == 'edit-scheduled-message'))
+            if (route === 'scheduled' &&
+                (this.$route.name === 'scheduled-messages' || this.$route.name === 'create-scheduled-message' || this.$route.name === 'edit-scheduled-message')) {
                 return true;
+            }
 
-            if (route == 'blacklists' &&
-                (this.$route.name == 'blacklists' || this.$route.name == 'create-blacklist'))
+            if (route === 'blacklists' &&
+                (this.$route.name === 'blacklists' || this.$route.name === 'create-blacklist')) {
                 return true;
             
-            if (route == 'templates' && 
-                (this.$route.name == 'templates' || this.$route.name == 'create-template'))
+            if (route === 'templates' && 
+                (this.$route.name === 'templates' || this.$route.name === 'create-template'))
                 return true; 
+            }
 
             return false;
         }
@@ -360,7 +369,6 @@ export default {
                 white-space: nowrap;
                 overflow: hidden;
                 padding: 2px;
-
 
                 .link-card {
                     display: block;
