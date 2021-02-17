@@ -34,56 +34,57 @@
 
 <script>
 
-import { Api } from '@/utils/';
+import { Api, SessionCache } from '@/utils/';
 import Spinner from '@/components/Spinner.vue';
 
 export default {
-        
+
     name: 'EditTemplate',
 
     components: {
         Spinner
     },
-        
+
     props: ['templateId', 'originalText'],
-        
-    data() {
+
+    data () {
         return {
             loading: false,
             templateText: this.originalText
         };
     },
 
-    mounted() {
-        this.$store.commit("loading", false);
-        this.$store.commit('title', "");
+    mounted () {
+        this.$store.commit('loading', false);
+        this.$store.commit('title', '');
     },
 
     methods: {
-            
-        saveTemplateText() {
-                
-            if(this.templateText == '')
-                return; 
-                
+
+        saveTemplateText () {
+
+            if (this.templateText === '') {
+                return;
+            }
+
             this.loading = true;
 
             Api.templates.update(this.templateId, this.templateText)
                 .then((data) => this.handleData(data));
-            
         },
-            
-        cancel() {
+
+        cancel () {
             this.$router.push({ name: 'templates' });
         },
 
-        handleData() {
+        handleData () {
             this.loading = false;
+            SessionCache.invalidateTemplates();
             this.$router.push({ name: 'templates' });
         }
 
     }
-    
+
 };
 </script>
 

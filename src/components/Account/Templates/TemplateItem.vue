@@ -43,27 +43,30 @@ export default {
         return {
             id: this.templateData.device_id,
             text: this.templateData.text,
-            menu: null,
+            menu: null
         };
     },
 
     mounted () {
-        let menu_el = this.$el.querySelector("#template-menu");
+        // eslint-disable-next-line camelcase
+        const menu_el = this.$el.querySelector('#template-menu');
         componentHandler.upgradeElement(menu_el);
 
         this.menu = menu_el.MaterialMenu;
     },
 
     methods: {
-        editTemplate(){
-            this.$router.push({ name: 'edit-template', params: {
-                templateId: this.id,
-                originalText: this.text
-            }
+        editTemplate () {
+            this.$router.push({
+                name: 'edit-template',
+                params: {
+                    templateId: this.id,
+                    originalText: this.text
+                }
             });
         },
         deleteTemplate () {
-            Util.snackbar("Deleted template: " + this.text);
+            Util.snackbar('Deleted template: ' + this.text);
             Api.templates.delete(this.id);
             this.$store.state.msgbus.$emit('refresh-btn');
         },

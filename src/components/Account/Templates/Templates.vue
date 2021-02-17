@@ -68,9 +68,9 @@ export default {
 
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
-        if(this.setTitle)
-            this.$store.commit('title', "Templates");
-
+        if (this.setTitle) {
+            this.$store.commit('title', 'Templates');
+        }
         this.fetchTemplates();
     },
 
@@ -88,7 +88,7 @@ export default {
         processTemplates (response) {
             const renderList = [];
 
-            for(let i = 0; i < response.length; i++) {
+            for (let i = 0; i < response.length; i++) {
                 const item = response[i];
                 item.hash = Hash(item);
 
@@ -98,7 +98,7 @@ export default {
             this.templates = renderList;
             this.loading = false;
 
-            this.$store.commit("loading", false);
+            this.$store.commit('loading', false);
         },
 
         refresh () {
@@ -146,7 +146,7 @@ export default {
         margin: 24px;
     }
 
-    .flip-list-enter, .flip-list-leave-to	{
+    .flip-list-enter, .flip-list-leave-to {
         opacity: 0;
     }
 
