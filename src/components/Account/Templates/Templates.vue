@@ -60,12 +60,6 @@ export default {
         };
     },
 
-    watch: {
-        'selectedTemplate' () {
-            this.$emit('selected-template-text', this.selectedTemplate.text);
-        }
-    },
-
     mounted () {
         this.$store.state.msgbus.$on('refresh-btn', this.refresh);
         if (this.setTitle) {
@@ -113,7 +107,8 @@ export default {
         },
 
         selectTemplate (id) {
-            this.selectedTemplate = this.templates.find(template => template.device_id == id);
+            this.selectedTemplate = this.templates.find(template => template.device_id === id);
+            this.$emit('selected-template-text', this.selectedTemplate.text);
         }
 
     }
