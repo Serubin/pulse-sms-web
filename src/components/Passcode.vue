@@ -33,14 +33,14 @@ export default {
 
     data () {
         return {
-            title: "",
-            passcode: "",
+            title: '',
+            passcode: '',
             stored_passcode: null
         };
     },
 
     mounted () {
-        this.$store.commit("loading", false);
+        this.$store.commit('loading', false);
         this.$store.commit('title', this.title);
 
         Api.account.settings.get().then(response => {
@@ -50,17 +50,17 @@ export default {
 
     methods: {
         continueClicked () {
-            if (this.passcode != this.stored_passcode) {
-                Util.snackbar("Incorrect passcode.");
+            if (this.passcode !== this.stored_passcode) {
+                Util.snackbar('Incorrect passcode.');
                 return;
             }
 
             this.$store.commit('last_passcode_entry', Date.now());
-            this.$router.push({ name: 'conversations-list-private'});
+            this.$router.push({ name: 'conversations-list-private' });
         },
 
         cancelClicked () {
-            this.$router.push({ name: 'conversations-list'});
+            this.$router.push({ name: 'conversations-list' });
         }
     }
 };

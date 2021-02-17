@@ -42,26 +42,26 @@ export default {
 
     data () {
         return {
-            title: "Experiments",
+            title: 'Experiments',
             archive_after_send: this.$store.state.archive_after_send,
             larger_app_bar: this.$store.state.larger_app_bar,
-            unread_count_in_sidebar: this.$store.state.unread_count_in_sidebar,
+            unread_count_in_sidebar: this.$store.state.unread_count_in_sidebar
         };
     },
     watch: {
         'larger_app_bar' () {
             const body = document.querySelector('body'); // Select body
-            const LARGER_APP_BAR = "larger_app_bar";
+            const LARGER_APP_BAR = 'larger_app_bar';
 
             this.$store.commit('larger_app_bar', this.larger_app_bar);
 
             // Add class
-            if (this.larger_app_bar && !body.className.includes(LARGER_APP_BAR))
+            if (this.larger_app_bar && !body.className.includes(LARGER_APP_BAR)) {
                 body.className += ` ${LARGER_APP_BAR} `;
             // Remove class
-            else if (!this.larger_app_bar && body.className.includes(LARGER_APP_BAR))
-                body.className = body.className.replace(` ${LARGER_APP_BAR} `, "");
-
+            } else if (!this.larger_app_bar && body.className.includes(LARGER_APP_BAR)) {
+                body.className = body.className.replace(` ${LARGER_APP_BAR} `, '');
+            }
         },
 
         'unread_count_in_sidebar' () {
@@ -85,7 +85,7 @@ export default {
     methods: {
         refreshExperiments () {
 
-        },
+        }
     }
 };
 </script>

@@ -57,15 +57,15 @@
                     <div class="container">
                         <div class="mdl-textfield mdl-js-textfield horizontal">
                             {{ $t('settings.primary') }}
-                            <sketch-picker v-model="theme_default" :disable-alpha="true" :preset-colors="presetColors" />
+                            <sketch-picker v-model="themeDefault" :disable-alpha="true" :preset-colors="presetColors" />
                         </div>
                         <div class="mdl-textfield mdl-js-textfield horizontal">
                             {{ $t('settings.darkprimary') }}
-                            <sketch-picker v-model="theme_dark" :disable-alpha="true" :preset-colors="presetColors" />
+                            <sketch-picker v-model="themeDark" :disable-alpha="true" :preset-colors="presetColors" />
                         </div>
                         <div class="mdl-textfield mdl-js-textfield horizontal">
                             {{ $t('settings.accent') }}
-                            <sketch-picker v-model="theme_accent" :disable-alpha="true" :preset-colors="presetColors" />
+                            <sketch-picker v-model="themeAccent" :disable-alpha="true" :preset-colors="presetColors" />
                         </div>
                     </div>
                     <div class="mdl-dialog__actions">
@@ -163,12 +163,12 @@ import { Api, Util, Platform, i18n } from '@/utils/';
 export default {
     name: 'Settings',
     components: {
-        'sketch-picker': Sketch,
+        'sketch-picker': Sketch
     },
 
     data () {
         return {
-            title: "Settings",
+            title: 'Settings',
             global_theme: this.$store.state.theme_use_global,
             theme_appbar: this.$store.state.theme_apply_appbar_color,
             theme_message_timestamp: this.$store.state.theme_message_timestamp,
@@ -176,9 +176,9 @@ export default {
             show_notifications: this.$store.state.notifications,
             enter_to_send: this.$store.state.enter_to_send,
             theme: this.$store.state.theme_base,
-            theme_default: this.rgbaToHex(this.$store.state.theme_global_default).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_default) : "#1775D2",
-            theme_dark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : "#1665C0",
-            theme_accent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : "#FF6E40",
+            themeDefault: this.rgbaToHex(this.$store.state.theme_global_default).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_default) : '#1775D2',
+            themeDark: this.rgbaToHex(this.$store.state.theme_global_dark).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_dark) : '#1665C0',
+            themeAccent: this.rgbaToHex(this.$store.state.theme_global_accent).length > 1 ? this.rgbaToHex(this.$store.state.theme_global_accent) : '#FF6E40',
             theme_menu: null,
             showColorSettings: false,
             presetColors: ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#1775D2', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FDD835', '#FFC411', '#FF9800', '#FF5722', '#9E9E9E', '#607D8B', '#374248']
@@ -188,12 +188,12 @@ export default {
     computed: {
         base_theme () {
             let base = this.$store.state.theme_base;
-            base = base.split("_");
-            base.forEach( (b, i) => {
+            base = base.split('_');
+            base.forEach((b, i) => {
                 base[i] = b.charAt(0).toUpperCase() + b.slice(1);
             });
 
-            return base.join(" / ");
+            return base.join(' / ');
         },
 
         global_colors () {
@@ -202,17 +202,17 @@ export default {
             const accent = this.$store.state.theme_global_accent;
 
             if (!defaul && !dark && !accent) {
-                return "#1775D2, #1665C0, #FF6E40";
+                return '#1775D2, #1665C0, #FF6E40';
             } else {
                 const defaultHex = this.rgbaToHex(defaul);
                 const darkHex = this.rgbaToHex(dark);
                 const accentHex = this.rgbaToHex(accent);
 
-                const defaultString = defaultHex.length > 1 ? defaultHex : "#1775D2";
-                const darkString = darkHex.length > 1 ? darkHex : "#1665C0";
-                const accentString = accentHex.length > 1 ? accentHex : "#FF6E40";
+                const defaultString = defaultHex.length > 1 ? defaultHex : '#1775D2';
+                const darkString = darkHex.length > 1 ? darkHex : '#1665C0';
+                const accentString = accentHex.length > 1 ? accentHex : '#FF6E40';
 
-                return defaultString + ", " + darkString + ", " + accentString;
+                return defaultString + ', ' + darkString + ', ' + accentString;
             }
         },
 
@@ -244,68 +244,68 @@ export default {
         },
         'global_theme' () {
             this.$store.commit('theme_use_global', this.global_theme);
-            Api.account.settings.update("apply_theme_globally", "boolean", this.global_theme);
+            Api.account.settings.update('apply_theme_globally', 'boolean', this.global_theme);
         },
         'theme_appbar' () {
             this.$store.commit('theme_apply_appbar_color', this.theme_appbar);
-            Api.account.settings.update("apply_primary_color_toolbar", "boolean", this.theme_appbar);
+            Api.account.settings.update('apply_primary_color_toolbar', 'boolean', this.theme_appbar);
         },
         'theme_conversation_categories' () {
             this.$store.commit('theme_conversation_categories', this.theme_conversation_categories);
-            Api.account.settings.update("conversation_categories", "boolean", this.theme_conversation_categories);
+            Api.account.settings.update('conversation_categories', 'boolean', this.theme_conversation_categories);
         },
         'theme_message_timestamp' () {
             this.$store.commit('theme_message_timestamp', this.theme_message_timestamp);
-            Api.account.settings.update("message_timestamp", "boolean", this.theme_message_timestamp);
+            Api.account.settings.update('message_timestamp', 'boolean', this.theme_message_timestamp);
         },
         'theme' () {
-            this.$store.commit('theme_base', this.theme),
-            Api.account.settings.update("base_theme", "string", this.theme);
+            this.$store.commit('theme_base', this.theme);
+            Api.account.settings.update('base_theme', 'string', this.theme);
         },
         '$store.state.theme_global_default' () {
             const color = this.$store.state.theme_global_default;
             if (!color) {
-                this.theme_default = "#1775D2";
+                this.themeDefault = '#1775D2';
             } else {
-                this.theme_default = this.rgbaToHex(color);
+                this.themeDefault = this.rgbaToHex(color);
             }
         },
         '$store.state.theme_global_dark' () {
             const color = this.$store.state.theme_global_dark;
             if (!color) {
-                this.theme_dark = "#1665C0";
+                this.themeDark = '#1665C0';
             } else {
-                this.theme_dark = this.rgbaToHex(color);
+                this.themeDark = this.rgbaToHex(color);
             }
         },
         '$store.state.theme_global_accent' () {
             const color = this.$store.state.theme_global_accent;
             if (!color) {
-                this.theme_accent = "#FF6E40";
+                this.themeAccent = '#FF6E40';
             } else {
-                this.theme_accent = this.rgbaToHex(color);
+                this.themeAccent = this.rgbaToHex(color);
             }
         },
         'showColorSettings' () {
             if (this.showColorSettings) {
-                document.querySelector("#sidebar").style['z-index'] = 0;
+                document.querySelector('#sidebar').style['z-index'] = 0;
             } else {
-                document.querySelector("#sidebar").style['z-index'] = 3;
+                document.querySelector('#sidebar').style['z-index'] = 3;
             }
         }
     },
 
     mounted () {
         Api.account.settings.get()
-            .then( () => {
-                this.$store.commit("loading", false);
+            .then(() => {
+                this.$store.commit('loading', false);
             });
 
         this.$store.commit('title', this.title);
         this.$store.state.msgbus.$on('refresh-btn', this.refreshSettings);
 
-        let theme_menu_el = this.$el.querySelector("#base-theme-menu");
-        this.theme_menu = theme_menu_el.MaterialMenu;
+        const themeMenuEl = this.$el.querySelector('#base-theme-menu');
+        this.theme_menu = themeMenuEl.MaterialMenu;
     },
 
     beforeDestroy () {
@@ -315,7 +315,7 @@ export default {
     methods: {
         refreshSettings () {
             Api.account.settings.get();
-            Util.snackbar("Settings Refreshed");
+            Util.snackbar('Settings Refreshed');
         },
 
         showColorDialog () {
@@ -333,26 +333,26 @@ export default {
          * @return #0x0y0z
          */
         rgbaToHex (rgba) {
-            let color_comps = rgba.match(/[0-9]+/g);
-            let str_16;
-            let hex = [];
+            const colorComps = rgba.match(/[0-9]+/g);
+            let str16;
+            const hex = [];
 
-            for( let c of color_comps) {
+            for (const c of colorComps) {
                 // Parse to b16
-                str_16 = parseInt(c).toString(16);
+                str16 = parseInt(c).toString(16);
                 // Normalize
-                str_16 = str_16.length == 1 ? "0" + str_16 : str_16;
+                str16 = str16.length === 1 ? '0' + str16 : str16;
 
-                hex.push(str_16);
+                hex.push(str16);
             }
 
-            return "#" + hex.slice(0, (hex.length - 1)).join("");
+            return '#' + hex.slice(0, (hex.length - 1)).join('');
         },
-        hexToRgb(hex) {
-            let r = parseInt(hex.slice(1, 3), 16),
-                g = parseInt(hex.slice(3, 5), 16),
-                b = parseInt(hex.slice(5, 7), 16),
-                a = 255 & 0xFF;
+        hexToRgb (hex) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            const a = 255 & 0xFF;
 
             return (r << 16) + (g << 8) + (b << 0) + (a << 24);
         },
@@ -363,34 +363,34 @@ export default {
             return bool ? i18n.t('settings.yes') : i18n.t('settings.no');
         },
         saveColors () {
-            if (this.theme_default.hex) {
-                this.theme_default = this.theme_default.hex;
+            if (this.themeDefault.hex) {
+                this.themeDefault = this.themeDefault.hex;
             }
-            if (this.theme_dark.hex) {
-                this.theme_dark = this.theme_dark.hex;
+            if (this.themeDark.hex) {
+                this.themeDark = this.themeDark.hex;
             }
-            if (this.theme_accent.hex) {
-                this.theme_accent = this.theme_accent.hex;
+            if (this.themeAccent.hex) {
+                this.themeAccent = this.themeAccent.hex;
             }
 
             // Convert hex to RGB Int
-            const theme_default = this.hexToRgb(this.theme_default);
-            const theme_dark = this.hexToRgb(this.theme_dark);
-            const theme_accent = this.hexToRgb(this.theme_accent);
+            const themeDefault = this.hexToRgb(this.themeDefault);
+            const themeDark = this.hexToRgb(this.themeDark);
+            const themeAccent = this.hexToRgb(this.themeAccent);
 
             // Update value on remote server
-            Api.account.settings.update("global_primary_color", "int", theme_default);
-            Api.account.settings.update("global_primary_dark_color", "int", theme_dark);
-            Api.account.settings.update("global_accent_color", "int", theme_accent);
+            Api.account.settings.update('global_primary_color', 'int', themeDefault);
+            Api.account.settings.update('global_primary_dark_color', 'int', themeDark);
+            Api.account.settings.update('global_accent_color', 'int', themeAccent);
 
             // // Store rgba value in store
-            this.$store.commit('theme_global_default', Util.expandColor(theme_default));
-            this.$store.commit('theme_global_dark', Util.expandColor(theme_dark));
-            this.$store.commit('theme_global_accent', Util.expandColor(theme_accent));
+            this.$store.commit('theme_global_default', Util.expandColor(themeDefault));
+            this.$store.commit('theme_global_dark', Util.expandColor(themeDark));
+            this.$store.commit('theme_global_accent', Util.expandColor(themeAccent));
 
-            this.$store.commit('colors_default', Util.expandColor(theme_default));
-            this.$store.commit('colors_dark', Util.expandColor(theme_dark));
-            this.$store.commit('colors_accent', Util.expandColor(theme_accent));
+            this.$store.commit('colors_default', Util.expandColor(themeDefault));
+            this.$store.commit('colors_dark', Util.expandColor(themeDark));
+            this.$store.commit('colors_accent', Util.expandColor(themeAccent));
 
             this.closeColorDialog();
         }

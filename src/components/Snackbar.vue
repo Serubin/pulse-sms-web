@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: 'Snackbar',
+    name: 'Snackbar'
     // JS for this is found in utils/Util
 };
 </script>
@@ -15,7 +15,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
     @import "../assets/scss/_vars.scss";
-
 
     .mdl-snackbar { /* Inbox style snackbar */
         display: block !important;

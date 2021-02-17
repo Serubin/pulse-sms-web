@@ -76,12 +76,10 @@
 <script>
 
 import Vue from 'vue';
-import { i18n } from '@/utils';
+import { i18n, Util, Crypto, Api, MediaLoader, Notifications, SessionCache, ShortcutKeys, Platform } from '@/utils';
 
 import '@/lib/sjcl.js';
 import '@/lib/hmacsha1.js';
-
-import { Util, Crypto, Api, MediaLoader, Notifications, SessionCache, ShortcutKeys, Platform } from '@/utils';
 
 import Sidebar from '@/components/Sidebar.vue';
 import Snackbar from '@/components/Snackbar.vue';
@@ -106,7 +104,7 @@ export default {
             toolbar_color: this.$store.state.theme_global_default,
             menu_items: [],
             hour: null,
-            selected_conversations: [],
+            selected_conversations: []
         };
     },
 
@@ -117,10 +115,10 @@ export default {
 
         icon_class () {
             return {
-                'logo': this.full_theme && !this.apply_appbar_color,
-                'logo_dark': this.full_theme && this.apply_appbar_color,
-                'menu_toggle': !this.full_theme && !this.apply_appbar_color,
-                'menu_toggle_dark': !this.full_theme && this.apply_appbar_color,
+                logo: this.full_theme && !this.apply_appbar_color,
+                logo_dark: this.full_theme && this.apply_appbar_color,
+                menu_toggle: !this.full_theme && !this.apply_appbar_color,
+                menu_toggle_dark: !this.full_theme && this.apply_appbar_color
             };
         },
 
@@ -136,28 +134,33 @@ export default {
             const theme = this.$store.state.theme_base;
 
             // If day/night, return dark/light
-            if (theme == "day_night")
-                return this.is_night ? "dark" : "";
+            if (theme === 'day_night') {
+                return this.is_night ? 'dark' : '';
+            }
 
-            if (theme == "black")
+            if (theme === 'black') {
                 return 'dark black';
+            }
 
             return theme; // Otherwise return stored theme
         },
 
         is_night () { // If "night" (between 20 and 7)
-            return this.hour < 7 || this.hour >= 20 ? true : false;
+            return this.hour < 7 || this.hour >= 20;
         },
 
         theme_toolbar () { // Determine toolbar color
-            if (this.has_selected)
-                return "#202020";
+            if (this.has_selected) {
+                return '#202020';
+            }
 
-            if (!this.apply_appbar_color)  // If not color toolbar
+            if (!this.apply_appbar_color) { // If not color toolbar
                 return this.default_toolbar_color;
+            }
 
-            if (this.$store.state.theme_use_global) // If use global
+            if (this.$store.state.theme_use_global) { // If use global
                 return this.$store.state.theme_global_default;
+            }
 
             return this.toolbar_color;
         },
@@ -165,41 +168,42 @@ export default {
         default_toolbar_color () { // Determine default colors
             if (!this.apply_appbar_color) {
                 if (this.theme_str.indexOf('black') >= 0) {
-                    return "#000000";
+                    return '#000000';
                 } else if (this.theme_str.indexOf('dark') >= 0) {
-                    return "#202024";
+                    return '#202024';
                 } else {
-                    return "#FFFFFF";
+                    return '#FFFFFF';
                 }
             } else if (this.$store.state.theme_global_default) {
                 return this.$store.state.theme_global_default;
             } else {
-                return "#1775D2";
+                return '#1775D2';
             }
         },
 
         text_color () { // Determines toolbar text color (and menu icon color)
-            if (this.has_selected)
-                return "#FFF";
+            if (this.has_selected) {
+                return '#FFF';
+            }
 
             try {
                 if (!this.apply_appbar_color) {
                     if (this.theme_str.indexOf('black') >= 0) {
-                        return "#FFF";
+                        return '#FFF';
                     } else if (this.theme_str.indexOf('dark') >= 0) {
-                        return "#FFF";
+                        return '#FFF';
                     } else {
-                        return "#000";
+                        return '#000';
                     }
                 }
 
-                if (this.toolbar_color.indexOf("rgb(") > -1 || this.toolbar_color.indexOf("rgba(") > -1) {
+                if (this.toolbar_color.indexOf('rgb(') > -1 || this.toolbar_color.indexOf('rgba(') > -1) {
                     return Util.getTextColorBasedOnBackground(this.toolbar_color);
                 } else {
-                    return "#FFF";
+                    return '#FFF';
                 }
             } catch (err) {
-                return "#FFF";
+                return '#FFF';
             }
         },
 
@@ -208,19 +212,19 @@ export default {
         },
 
         show_compose () {
-            return !this.has_selected && this.$route.path.indexOf('thread') != -1 ;
+            return !this.has_selected && this.$route.path.indexOf('thread') !== -1;
         },
 
         show_archive () {
-            return this.has_selected && this.$route.path.indexOf('archive') == -1;
+            return this.has_selected && this.$route.path.indexOf('archive') === -1;
         },
 
         show_unarchive () {
-            return this.has_selected && this.$route.path.indexOf('archive') != -1;
+            return this.has_selected && this.$route.path.indexOf('archive') !== -1;
         },
 
         apply_appbar_color () {
-            if (this.toolbar_color == 'rgba(255,255,255,1)') {
+            if (this.toolbar_color === 'rgba(255,255,255,1)') {
                 // They have manually set the color to white, for the app bar.
                 // If we didn't do this, then they wouldn't be able to see the settings, refresh, search, etc.
                 return false;
@@ -235,10 +239,10 @@ export default {
         title () {
             if (this.has_selected) {
                 const length = this.selected_conversations.length;
-                if (length == 1) {
-                    return "Selected 1 conversation";
+                if (length === 1) {
+                    return 'Selected 1 conversation';
                 } else {
-                    return "Selected " + this.selected_conversations.length + " conversations";
+                    return 'Selected ' + this.selected_conversations.length + ' conversations';
                 }
             } else {
                 return this.$store.state.title;
@@ -257,7 +261,7 @@ export default {
         },
         'theme_toolbar' (to) { // Handle toolbar color change
             Vue.nextTick(() => {
-                const toolbar = this.$el.querySelector("#toolbar");
+                const toolbar = this.$el.querySelector('#toolbar');
                 Util.materialColorChange(toolbar, to);
             });
         },
@@ -271,31 +275,31 @@ export default {
     },
 
     beforeCreate () {
-        this.$store.commit('title', "Pulse SMS");
+        this.$store.commit('title', 'Pulse SMS');
 
         // If logged in (account_id) then setup crypto
-        if(this.$store.state.account_id != '') {
+        if (this.$store.state.account_id !== '') {
             Crypto.setupAes();
-        } else if (this.$route.name != 'login') {
+        } else if (this.$route.name !== 'login') {
             this.$router.push('login');
         }
 
         navigator.serviceWorker && navigator.serviceWorker.register('/service-worker.js')
             .then((registration) => console.log('Registered SW with scope: ', registration.scope))
-            .catch((err) => console.log("Unable to register SW", err));
+            .catch((err) => console.log('Unable to register SW', err));
 
-        let accountId = this.$store.state.account_id;
-        let hash = this.$store.state.hash;
-        let salt = this.$store.state.salt;
+        const accountId = this.$store.state.account_id;
+        const hash = this.$store.state.hash;
+        const salt = this.$store.state.salt;
 
-        addEventListener('message', function(e) {
-            if (e.origin.startsWith("chrome-extension://")) {
-                if (e.data == "requesting account id") {
-                    e.source.postMessage("account id: " + accountId, e.origin);
-                } else if (e.data == "requesting hash") {
-                    e.source.postMessage("hash: " + hash, e.origin);
-                } else if (e.data == "requesting salt") {
-                    e.source.postMessage("salt: " + salt, e.origin);
+        addEventListener('message', function (e) {
+            if (e.origin.startsWith('chrome-extension://')) {
+                if (e.data === 'requesting account id') {
+                    e.source.postMessage('account id: ' + accountId, e.origin);
+                } else if (e.data === 'requesting hash') {
+                    e.source.postMessage('hash: ' + hash, e.origin);
+                } else if (e.data === 'requesting salt') {
+                    e.source.postMessage('salt: ' + salt, e.origin);
                 }
             }
         });
@@ -304,7 +308,7 @@ export default {
     mounted () { // Add window event listener
         this.applyExperiments(); // Apply experiments...
         this.calculateHour(); // Calculate the next hour (for day/night theme)
-        this.updateBodyClass(this.theme_str, ""); // Enables global theme
+        this.updateBodyClass(this.theme_str, ''); // Enables global theme
 
         // Handle resizing for left margin size
         window.addEventListener('resize', this.handleResize);
@@ -315,16 +319,16 @@ export default {
 
         // Construct colors object from saved global theme
         const colors = {
-            'default': this.$store.state.theme_global_default,
-            'dark': this.$store.state.theme_global_dark,
-            'accent': this.$store.state.theme_global_accent,
+            default: this.$store.state.theme_global_default,
+            dark: this.$store.state.theme_global_dark,
+            accent: this.$store.state.theme_global_accent
         };
 
         // Commit them to current application colors
         this.$store.commit('colors', colors);
 
         // If logged in start app
-        if (this.$store.state.account_id != '') {
+        if (this.$store.state.account_id !== '') {
             this.applicationStart();
         } else { // Otherwise, add listener for start-app event
             // This allows for another part of the app to setup parts of the app
@@ -344,9 +348,8 @@ export default {
         // Firefox requires a short lived user request to request notifications
         if (this.$store.state.notifications && !Platform.isFirefox()) {
             Util.requestNotifications();
-
         } else if (Platform.isFirefox() && this.$store.state.notifications && Notifications.needsPermission()) {
-            let options = {
+            const options = {
                 okText: this.$t('settings.yes'),
                 cancelText: this.$t('settings.no'),
                 animation: 'fade'
@@ -359,7 +362,7 @@ export default {
         }
 
         // Set toolbar color with materialColorChange animiation
-        const toolbar = this.$el.querySelector("#toolbar");
+        const toolbar = this.$el.querySelector('#toolbar');
         Util.materialColorChange(toolbar, this.theme_toolbar);
     },
 
@@ -386,7 +389,7 @@ export default {
          */
         applicationStart () {
             // Setup the API (Open websocket)
-            this.stream = new Api.stream();
+            this.stream = new Api.Stream();
 
             // Start listening for shortcut keys
             this.shortcuts = new ShortcutKeys();
@@ -407,25 +410,26 @@ export default {
 
             // Interval check to maintain socket
             setInterval(() => {
-                const last_ping = this.$store.state.last_ping;
+                const lastPing = this.$store.state.last_ping;
 
                 // Ignore if ping is sitll none (usually just starting up)
-                if (last_ping == null)
+                if (lastPing == null) {
                     return;
+                }
 
                 // If last ping is within 15 seconds, ignore
-                if (last_ping > (Date.now() / 1000 >> 0) - 15)
+                if (lastPing > (Date.now() / 1000 >> 0) - 15) {
                     return;
+                }
 
                 // Else, open new API and force refresh
                 this.stream.close();
-                this.stream = new Api.stream();
+                this.stream = new Api.Stream();
                 this.stream.has_diconnected = true; // Initialize new api with has disconnected
 
                 this.calculateHour();
 
                 // TODO slack like reconnection process
-
             }, 15 * 1000);
         },
 
@@ -434,10 +438,11 @@ export default {
          * Toggles sidebar open/close or redirects to '/' based on current theme
          */
         toggleSidebar () {
-            if(!this.full_theme)
+            if (!this.full_theme) {
                 this.$store.commit('sidebar_open', !this.sidebar_open);
-            else
+            } else {
                 this.$router.push('/').catch(() => {});
+            }
         },
         /**
          * Calculates margin size on window resize
@@ -475,35 +480,34 @@ export default {
          * maintain UI reactivity.
          */
         populateMenuItems () {
-
             // Static items!
-            const items = [ ];
+            const items = [];
 
             if (this.has_selected) {
                 items.unshift(
-                    { 'name': "select-all", 'title': i18n.t('menus.selectall') },
+                    { name: 'select-all', title: i18n.t('menus.selectall') }
                 );
             } else if (this.$route.name.indexOf('thread') > -1) {
                 // On thread add Delete, Blacklist, & Archive/unarchive
                 items.unshift(
-                    { "name": "conversation-information", 'title': i18n.t('menus.convinfo')},
-                    { "name": "blacklist", 'title': i18n.t('menus.blacklist')},
-                    { 'name': "delete", 'title': i18n.t('menus.delete')},
-                    ( this.$route.path.indexOf("archived") == -1 ?
-                        { 'name': "archive", 'title': i18n.t('menus.archive')} :
-                        { 'name': "unarchive", 'title': i18n.t('menus.unarchive')}),
-                    { "name": "conversation-settings", 'title': i18n.t('menus.convsettings')}
+                    { name: 'conversation-information', title: i18n.t('menus.convinfo') },
+                    { name: 'blacklist', title: i18n.t('menus.blacklist') },
+                    { name: 'delete', title: i18n.t('menus.delete') },
+                    (this.$route.path.indexOf('archived') === -1
+                        ? { name: 'archive', title: i18n.t('menus.archive') }
+                        : { name: 'unarchive', title: i18n.t('menus.unarchive') }),
+                    { name: 'conversation-settings', title: i18n.t('menus.convsettings') }
                 );
             } else {
                 items.unshift(
-                    { 'name': "account", 'title': i18n.t('menus.account') },
-                    { 'name': "help-feedback", 'title': i18n.t('menus.help') },
-                    { 'name': "settings", 'title': i18n.t('menus.settings')},
-                    { 'name': "logout", 'title': i18n.t('menus.logout')}
+                    { name: 'account', title: i18n.t('menus.account') },
+                    { name: 'help-feedback', title: i18n.t('menus.help') },
+                    { name: 'settings', title: i18n.t('menus.settings') },
+                    { name: 'logout', title: i18n.t('menus.logout') }
                 );
             }
 
-            return this.menu_items = items;
+            this.menu_items = items;
         },
 
         /**
@@ -513,15 +517,16 @@ export default {
          */
         dispatchMenuButton (name) {
             // Dispatch button event to message bus
-            this.$store.state.msgbus.$emit(name + "-btn");
+            this.$store.state.msgbus.$emit(name + '-btn');
 
-            if (name != "refresh")
+            if (name !== 'refresh') {
                 return;
+            }
 
-            const btn = this.$el.querySelector("#refresh-button");
-            btn.className += " rotate";
+            const btn = this.$el.querySelector('#refresh-button');
+            btn.className += ' rotate';
             setTimeout(() => {
-                btn.className = btn.className.replace(" rotate", "");
+                btn.className = btn.className.replace(' rotate', '');
             }, 250);
         },
 
@@ -532,8 +537,9 @@ export default {
          */
         updateTheme (color) {
             // Ignore if toolbar theme is false
-            if (!this.$store.state.theme_apply_appbar_color)
+            if (!this.$store.state.theme_apply_appbar_color) {
                 return false;
+            }
 
             this.toolbar_color = color;
         },
@@ -571,13 +577,12 @@ export default {
          * and closes websocket
          */
         logout () {
-
             // Remove sensative data
-            this.$store.commit('account_id', "");
-            this.$store.commit('hash', "");
-            this.$store.commit('salt', "");
-            this.$store.commit('key', "");
-            this.$store.commit('aes', "");
+            this.$store.commit('account_id', '');
+            this.$store.commit('hash', '');
+            this.$store.commit('salt', '');
+            this.$store.commit('key', '');
+            this.$store.commit('aes', '');
             this.$store.commit('clearContacts', {});
 
             SessionCache.invalidateAllConversations();
@@ -603,15 +608,14 @@ export default {
         updateBodyClass (to, from) {
             const body = this.$el.parentElement; // select body
             // Add and remove classes
-            const classes = body.className.replace(from, "");
-            body.className = classes + " " + to;
+            const classes = body.className.replace(from, '');
+            body.className = classes + ' ' + to;
         },
 
         /**
          * Sets current hour, ever hour on the hour.
          */
         calculateHour () {
-
             // Determines ms to the next hour
             const nextHour = (60 - new Date().getMinutes()) * 60 * 1000;
             this.hour = new Date().getHours(); // Get current hour
@@ -627,12 +631,12 @@ export default {
          * Also starts recipient processing
          * @param data, contact request result
          */
-        processContacts(response) {
-            const contacts_cache = [];
+        processContacts (response) {
+            const contactsCache = [];
 
-            for (let contact of response) {
+            for (const contact of response) {
                 // Generate contact and add to cache list
-                let contact_data = Util.generateContact(
+                const contactData = Util.generateContact(
                     Util.createIdMatcher(contact.phone_number),
                     contact.name,
                     contact.phone_number,
@@ -644,10 +648,10 @@ export default {
                     null // lighter
                 );
 
-                contacts_cache.push(contact_data);
+                contactsCache.push(contactData);
             }
 
-            this.$store.commit('contacts', contacts_cache);
+            this.$store.commit('contacts', contactsCache);
         },
 
         /**
@@ -663,10 +667,10 @@ export default {
          */
         applyExperiments () {
             const body = this.$el.parentElement; // Select body (apparently)
-            const LARGER_APP_BAR = "larger_app_bar";
-            if (this.$store.state.larger_app_bar && !body.className.includes(LARGER_APP_BAR))
+            const LARGER_APP_BAR = 'larger_app_bar';
+            if (this.$store.state.larger_app_bar && !body.className.includes(LARGER_APP_BAR)) {
                 body.className += ` ${LARGER_APP_BAR} `;
-
+            }
         },
 
         updateSelectedConversations (conversations) {
@@ -809,7 +813,6 @@ export default {
         }
     }
 
-
     #toolbar_icons {
         border: 0;
         float: right;
@@ -888,7 +891,6 @@ export default {
     .shadow {
         box-shadow: 0px 2px 2px 0 rgba(0, 0, 0, 0.25);
     }
-
 
     #refresh-button.rotate {
         transition: transform .3s ease-in;

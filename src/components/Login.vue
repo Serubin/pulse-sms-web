@@ -22,17 +22,16 @@
                 </div>
             </form>
 
-            <a href="https://messenger.klinkerapps.com/forgot_password.html" target="_blank">{{ $t('login.forgotpassword') }}</a>
+            <a href="https://home.pulsesms.app/forgot_password.html" target="_blank">{{ $t('login.forgotpassword') }}</a>
             <br>
             <!-- eslint-disable vue/no-v-html -->
-            <a href="https://messenger.klinkerapps.com/overview/platform-ios.html" target="_blank" v-html="$t('login.iphone')"></a>
+            <a href="https://home.pulsesms.app/overview/platform-ios.html" target="_blank" v-html="$t('login.iphone')"></a>
         </div>
         <div class="mdl-card__actions mdl-card--border">
             <button id="login" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="doLogin">
                 {{ $t('login.login') }}
             </button>
         </div>
-
 
         <transition name="loading-fade">
             <div v-if="loading" class="loading-center">
@@ -49,7 +48,6 @@ import Spinner from '@/components/Spinner.vue';
 import { sjcl } from '@/lib/sjcl.js';
 import { hmacSHA1 } from '@/lib/hmacsha1.js';
 
-
 export default {
     name: 'Login',
 
@@ -59,27 +57,28 @@ export default {
 
     data () {
         return {
-            title: "",
+            title: '',
             username: '',
             password: '',
             loading: false,
-            error: false,
+            error: false
         };
     },
 
     mounted () {
-        if (this.$store.state.account_id != '')
-            return this.$router.push({ name: 'conversations-list'});
+        if (this.$store.state.account_id !== '') {
+            return this.$router.push({ name: 'conversations-list' });
+        }
 
-        this.$store.commit("loading", false);
+        this.$store.commit('loading', false);
         this.$store.commit('title', this.title);
     },
 
     methods: {
-        doLogin() {
-
-            if (this.username == '' || this.password == '')
+        doLogin () {
+            if (this.username === '' || this.password === '') {
                 return;
+            }
 
             this.error = false;
             this.loading = true;
@@ -93,12 +92,12 @@ export default {
             this.error = false;
 
             // Create hash
-            let derived_key = sjcl.misc.pbkdf2(this.password, data.salt2, 10000, 256, hmacSHA1);
-            let base64_hash = sjcl.codec.base64.fromBits(derived_key);
+            const derivedKey = sjcl.misc.pbkdf2(this.password, data.salt2, 10000, 256, hmacSHA1);
+            const base64Hash = sjcl.codec.base64.fromBits(derivedKey);
 
             // Save data
             this.$store.commit('account_id', data.account_id);
-            this.$store.commit('hash', base64_hash);
+            this.$store.commit('hash', base64Hash);
             this.$store.commit('salt', data.salt1);
 
             Crypto.setupAes(); // Setup aes for session
@@ -108,11 +107,11 @@ export default {
             // Start app
             this.$store.state.msgbus.$emit('start-app');
 
-            this.$router.push({ name: 'conversations-list'});
+            this.$router.push({ name: 'conversations-list' });
         },
 
-        handleError() {
-            this.password = "";
+        handleError () {
+            this.password = '';
             this.error = true;
             this.loading = false;
         }
