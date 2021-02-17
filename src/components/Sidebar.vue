@@ -238,10 +238,11 @@ export default {
             if (route === 'blacklists' &&
                 (this.$route.name === 'blacklists' || this.$route.name === 'create-blacklist')) {
                 return true;
-            
-            if (route === 'templates' && 
-                (this.$route.name === 'templates' || this.$route.name === 'create-template'))
-                return true; 
+            }
+
+            if (route === 'templates' &&
+                (this.$route.name === 'templates' || this.$route.name === 'create-template')) {
+                return true;
             }
 
             return false;
