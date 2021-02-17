@@ -587,6 +587,7 @@ export default {
 
             SessionCache.invalidateAllConversations();
             SessionCache.invalidateAllMessages();
+            SessionCache.invalidateTemplates();
 
             // Clear local storage (browser)
             window.localStorage.clear();
@@ -595,7 +596,7 @@ export default {
 
             Util.snackbar("You've been logged out");
 
-            this.$router.push('login');
+            this.$router.push({ name: 'login' });
         },
 
         /**

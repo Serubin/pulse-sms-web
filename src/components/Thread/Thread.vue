@@ -223,6 +223,14 @@ export default {
             { deep: true, immediate: true }
         );
 
+        this.$watch(
+            '$refs.sendbar.show_templates',
+            () => Vue.nextTick(() => {
+                this.margin_bottom = this.$refs.sendbar && this.$refs.sendbar.$el.clientHeight;
+            }),
+            { immediate: true }
+        );
+
         // Load thread
         this.loadThread();
         this.loadDrafts();

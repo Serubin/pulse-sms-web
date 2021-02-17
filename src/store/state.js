@@ -13,6 +13,7 @@ export const KEYS  = {
     LARGER_APP_BAR: 'larger_app_bar',
     UNREAD_COUNT_IN_SIDEBAR: 'unread_count_in_sidebar',
     SUBSCRIPTION_TYPE: 'subscription_type',
+    TEMPLATES: 'templates',
     THEME: {
         BASE: 'theme_base',
         GLOBAL_DEFAULT: 'theme_global_default',
@@ -35,6 +36,7 @@ export const state = {
     contacts: JSON.parse( window.localStorage.getItem(KEYS.CONTACTS) || '{}' ),
     compose_contacts: JSON.parse( window.localStorage.getItem(KEYS.COMPOSE_CONTACTS) || '{}' ),
     conversations: JSON.parse( window.localStorage.getItem(KEYS.CONVERSATIONS) || '{}' ),
+    templates: JSON.parse( window.localStorage.getItem(KEYS.TEMPLATES) || '{}' ),
 
     theme_base: JSON.parse( window.localStorage.getItem(KEYS.THEME.BASE) || "\"light\"" ),
     theme_global_default: JSON.parse( window.localStorage.getItem(KEYS.THEME.GLOBAL_DEFAULT) || "\"#1775D2\"" ),
@@ -103,6 +105,7 @@ export const mutations = {
     key: (state, key) => state.key = key,
     aes: (state, aes) => state.aes = aes,
     compose_contacts: (state, compose_contacts) => state.compose_contacts = compose_contacts,
+    templates: (state, templates) => state.templates = templates,
     theme_base: (state, theme_base) => state.theme_base = theme_base,
     theme_global_default: (state, theme_global_default) => state.theme_global_default = theme_global_default,
     theme_global_dark: (state, theme_global_dark) => state.theme_global_dark = theme_global_dark,

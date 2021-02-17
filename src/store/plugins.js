@@ -25,6 +25,7 @@ const localStoreSync = store => {
         'larger_app_bar': KEYS.LARGER_APP_BAR,
         'unread_count_in_sidebar': KEYS.UNREAD_COUNT_IN_SIDEBAR,
         'subscription_type': KEYS.SUBSCRIPTION_TYPE,
+        'templates': KEYS.TEMPLATES
     };
 
     // called after every mutation.

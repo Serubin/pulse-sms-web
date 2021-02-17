@@ -51,7 +51,8 @@ export const i18n = new VueI18n({
                 save: 'Save',
                 close: 'Close',
                 create: 'Create',
-                delete: 'Delete'
+                delete: 'Delete',
+                typeHere: 'Type here...'
             },
             sendbar: {
                 type: 'Type message...'
@@ -155,7 +156,13 @@ export const i18n = new VueI18n({
                 archive_after_send: 'Archive Conversation After Sending Any Message',
                 larger_app_bar: 'Display Larger App Bar',
                 unread_count_in_sidebar: 'Display Unread Messages Count in Sidebar',
+            },
+            templates: {
+                none: 'No Templates',
+                create: 'Create Template',
+                edit: 'Edit Template'
             }
+
         },
         fr: {
             login: {
