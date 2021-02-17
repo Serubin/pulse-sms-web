@@ -31,6 +31,7 @@
                 <i class="material-icons md-18 material-icons-white">send</i>
             </button>
         </div>
+        <!-- we may add more options in future -->
         <div id="options">
             <div v-show="show_templates" class="template-options">
                 <templates :allow-edit="false" :allow-add="false" :allow-delete="false" :set-title="false" @selected-template-text="insertTemplate" />
