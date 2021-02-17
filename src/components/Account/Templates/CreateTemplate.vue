@@ -48,7 +48,7 @@ export default {
     data () {
         return {
             templateText: '',
-            loading: false,
+            loading: false
         };
     },
 
