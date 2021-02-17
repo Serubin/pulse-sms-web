@@ -298,14 +298,16 @@ export default {
 
         },
 
-        toggleTemplates (toggle=null) {
+        toggleTemplates (toggle) {
             this.destroyAutoComplete();
 
-            if(typeof toggle != "boolean")
-                return this.show_templates = !this.show_templates;
-            
-            return this.show_templates = toggle;
+            if (typeof toggle !== 'boolean') {
+                this.show_templates = !this.show_templates;
+            } else {
+                this.show_templates = toggle;
+            }
 
+            return this.show_templates;
         },
 
         insertTemplate (text) {
