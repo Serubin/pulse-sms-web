@@ -225,8 +225,8 @@ export default {
 
         this.$watch(
             '$refs.sendbar.show_templates',
-            () => Vue.nextTick( () => { 
-                this.margin_bottom = this.$refs.sendbar && this.$refs.sendbar.$el.clientHeight ;
+            () => Vue.nextTick(() => {
+                this.margin_bottom = this.$refs.sendbar && this.$refs.sendbar.$el.clientHeight;
             }),
             { immediate: true }
         );
