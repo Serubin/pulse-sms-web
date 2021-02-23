@@ -63,12 +63,17 @@
                         </div>
                     </li>
                 </ul>
-                <!-- If route is not conversation list -->
 
+                <!-- If route is not conversation list -->
                 <transition name="slide-left">
-                    <conversations v-if="showConversations" small="true" />
+                    <conversations v-if="showConversations" small="true"/>
                 </transition>
                 <!-- End if -->
+            </div>
+
+            <div v-if="!showConversations" class="mdl-color-text--grey-500" id="attribution">
+                <a href="/license" @click.stop.prevent="routeTo('license')">license</a>
+                <a href="https://github.com/serubin/pulse-sms-web">github</a>
             </div>
         </div> <!-- End sidebar-internal -->
 
@@ -102,6 +107,7 @@ export default {
                 private: { name: 'conversations-list-private' },
                 folders: { name: 'folders' },
                 scheduled: { name: 'scheduled-messages' },
+                license: { name: 'license'},
                 templates: { name: 'templates' }
             },
             listeners: [],
@@ -436,7 +442,21 @@ export default {
                 }
             }
         }
+
+        #attribution {
+            position: fixed;
+            margin: 0 12px;
+            bottom: 1em;
+            z-index: 5;
+            a {
+                margin: 0 5px;
+                color: inherit;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        }
     }
+
     /* Click catcher - Overlay */
     #sidebar-overlay {
         opacity: 0.2;

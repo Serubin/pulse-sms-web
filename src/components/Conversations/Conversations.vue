@@ -516,6 +516,9 @@ export default {
         margin-left: 6px;
         margin-top: 36px !important;
 
+        position: relative;
+        z-index: 10;
+
         @media screen and (max-width: 600px) {
             margin: 0;
         }

@@ -9,6 +9,7 @@ import Experiments from '@/components/Experiments.vue';
 import ConversationSettings from '@/components/Thread/Settings.vue';
 import Passcode from '@/components/Passcode.vue';
 import HelpFeedback from '@/components/HelpFeedback.vue';
+import License from '@/components/License.vue';
 import Thread from '@/components/Thread/';
 import Compose from '@/components/Compose/';
 import Conversations from '@/components/Conversations/';
@@ -19,70 +20,70 @@ import { Account, Drafts, Devices, Contacts, Templates, CreateTemplate, EditTemp
 
 Vue.use(VueRouter);
 
-let router = new VueRouter({
-    mode: "history",
+const router = new VueRouter({
+    mode: 'history',
     routes: [
         {
             path: '/',
             name: 'conversations-list',
             component: Conversations,
-            props: { 'index': 'index_public_unarchived', 'small': false },
+            props: { index: 'index_public_unarchived', small: false }
         },
         {
             path: '/archived',
             name: 'conversations-list-archived',
             component: Conversations,
-            props: { 'index': 'index_archived', 'small': false },
+            props: { index: 'index_archived', small: false }
         },
         {
             path: '/unread',
             name: 'conversations-list-unread',
             component: Conversations,
-            props: { 'index': 'index_public_unread', 'small': false },
+            props: { index: 'index_public_unread', small: false }
         },
         {
             path: '/private',
             name: 'conversations-list-private',
             component: Conversations,
-            props: { 'index': 'index_private', 'small': false },
+            props: { index: 'index_private', small: false }
         },
         {
             path: '/folder/:folderId',
             name: 'conversations-list-folder',
             component: Conversations,
-            props: true,
+            props: true
         },
         {
             path: '/thread/:threadId',
             name: 'thread',
             component: Thread,
-            props: true,
+            props: true
         },
         {
             path: '/thread/:threadId/archived',
             name: 'thread-archived',
             component: Thread,
-            props: true,
+            props: true
         },
         {
             path: '/compose',
             name: 'Compose',
-            component: Compose,
+            component: Compose
         },
         {
             path: '/login',
             name: 'login',
-            component: Login,
+            component: Login
         },
         {
             path: '/settings',
             name: 'settings',
-            component: Settings,
+            component: Settings
         },
         {
             path: '/experiments',
             name: 'experiments',
-            component: Experiments,
+            component: Experiments
         },
         {
             path: '/thread/:conversationId/settings',
@@ -93,22 +94,22 @@ let router = new VueRouter({
         {
             path: '/folders',
             name: 'folders',
-            component: Folders,
+            component: Folders
         },
         {
             path: '/blacklists',
             name: 'blacklists',
-            component: Blacklists,
+            component: Blacklists
         },
         {
             path: '/blacklists/new',
             name: 'create-blacklist',
-            component: CreateBlacklist,
+            component: CreateBlacklist
         },
         {
             path: '/passcode',
             name: 'passcode',
-            component: Passcode,
+            component: Passcode
         },
         {
             path: '/scheduled',
@@ -129,32 +130,37 @@ let router = new VueRouter({
         {
             path: '/help_feedback',
             name: 'help-feedback',
-            component: HelpFeedback,
+            component: HelpFeedback
+        },
+        {
+            path: '/license',
+            name: 'license',
+            component: License
         },
         {
             path: '/account',
             name: 'account',
-            component: Account,
+            component: Account
         },
         {
             path: '/account/devices',
             name: 'devices',
-            component: Devices,
+            component: Devices
         },
         {
             path: '/account/drafts',
             name: 'drafts',
-            component: Drafts,
+            component: Drafts
         },
         {
             path: '/account/contacts',
             name: 'contacts',
-            component: Contacts,
+            component: Contacts
         },
         {
             path: '/account/templates',
             name: 'templates',
-            component: Templates,
+            component: Templates
         },
         {
             path: '/account/templates/new',
@@ -170,25 +176,26 @@ let router = new VueRouter({
         {
             path: '/account/autoreply',
             name: 'auto-replies',
-            component: AutoReplies,
+            component: AutoReplies
         },
         {
             path: '/account/folders',
             name: 'account-folders',
-            component: AccountFolders,
-        },
-    ],
+            component: AccountFolders
+        }
+    ]
 });
 
 router.beforeEach((to, from, next) => {
-    if (!to.name)
+    if (!to.name) {
         return next('/').catch(() => {});
-    else if (to.name == 'login')
+    } else if (to.name === 'login') {
         return next();
-    else if (store.state.account_id == '' )
-        return next({name: 'login'});
-    else
+    } else if (store.state.account_id === '') {
+        return next({ name: 'login' });
+    } else {
         next();
+    }
 });
 
 // This script is a work around for github pages deployments.
@@ -196,7 +203,8 @@ router.beforeEach((to, from, next) => {
 var redirect = sessionStorage.redirect;
 delete sessionStorage.redirect;
 
-if (redirect && redirect != location.href)
+if (redirect && redirect !== location.href) {
     router.replace(redirect.split(location.host)[1]);
+}
 
 export default router;
