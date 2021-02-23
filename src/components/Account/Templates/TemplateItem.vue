@@ -1,12 +1,16 @@
 <template>
     <div>
-        <div :id="id" v-mdl class="click-item" @click="menu.toggle()">
+        <div :id="id" v-mdl class="click-item" @click="selectTemplateAndShowOptions">
             {{ text }}
         </div>
-        <ul id="template-menu"
+        <ul v-show="allowEdit || allowDelete"
+            id="template-menu"
             class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--unaligned" :data-mdl-for="id"
         >
-            <li class="mdl-menu__item" @click="deleteTemplate">
+            <li v-show="allowEdit" class="mdl-menu__item" @click="editTemplate">
+                Edit
+            </li>
+            <li v-show="allowDelete" class="mdl-menu__item" @click="deleteTemplate">
                 Delete
             </li>
         </ul>
@@ -15,34 +19,60 @@
 
 <script>
 
-import store from '@/store/';
 import { Api, Util } from '@/utils';
 import { componentHandler } from '@/lib/material.js';
 
 export default {
     name: 'TemplateItem',
-    props: [ 'templateData' ],
+    props: {
+        templateData: {
+            type: Object,
+            required: true
+        },
+        allowEdit: {
+            type: Boolean,
+            default: true
+        },
+        allowDelete: {
+            type: Boolean,
+            default: true
+        } 
+    },
 
     data () {
         return {
             id: this.templateData.device_id,
             text: this.templateData.text,
-            menu: null,
+            menu: null
         };
     },
 
     mounted () {
-        let menu_el = this.$el.querySelector("#template-menu");
+        // eslint-disable-next-line camelcase
+        const menu_el = this.$el.querySelector('#template-menu');
         componentHandler.upgradeElement(menu_el);
 
         this.menu = menu_el.MaterialMenu;
     },
 
     methods: {
+        editTemplate () {
+            this.$router.push({
+                name: 'edit-template',
+                params: {
+                    templateId: this.id,
+                    originalText: this.text
+                }
+            });
+        },
         deleteTemplate () {
-            Util.snackbar("Deleted template: " + this.text);
+            Util.snackbar('Deleted template: ' + this.text);
             Api.templates.delete(this.id);
-            store.state.msgbus.$emit('refresh-btn');
+            this.$store.state.msgbus.$emit('refresh-btn');
+        },
+        selectTemplateAndShowOptions () {
+            this.menu.toggle();
+            this.$emit('template-selected', this.id);
         }
     },
 

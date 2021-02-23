@@ -6,7 +6,7 @@
                 I have created a very extensive FAQ section for the app.<br>As a one-man crew, I get a significant amount of emails, and they cut heavily into my development time. Before sending an email, do a quick search to free up time for both of us. You will probably find your answer, very easily.<br><br>If you don't find what you are looking for, feel free to reach out and I will be more than happy to get back to you as quickly as I am able.
             </div>
         </div>
-        <div class="click-item" @click="routeTo('https://messenger.klinkerapps.com/help')">
+        <div class="click-item" @click="routeTo('https://home.pulsesms.app/help/')">
             <div class="mdl-color-text--grey-900">
                 Help Page
             </div>
@@ -22,12 +22,12 @@
                 @PulseSMS
             </div>
         </div>
-        <div class="click-item" @click="routeTo('mailto:pulsesmsapp@gmail.com?subject=Pulse%20SMS')">
+        <div class="click-item" @click="routeTo('mailto:support@pulsesms.app?subject=Pulse%20SMS')">
             <div class="mdl-color-text--grey-900">
                 Email
             </div>
             <div class="mdl-color-text--grey-600">
-                pulsesmsapp@gmail.com
+                support@pulsesms.app
             </div>
         </div>
 
@@ -35,19 +35,19 @@
         <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://github.com/klinker24/pulse-sms-web/releases')">
             Web App Changelog
         </div>
-        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/overview/')">
+        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://home.pulsesms.app/overview/')">
             Pulse's Features
         </div>
-        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/overview/')">
+        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://home.pulsesms.app/overview/')">
             Supported Platforms
         </div>
         <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://github.com/klinker-apps/pulse-sms-issues/issues/344')">
             Web Shortcut Keys
         </div>
-        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/privacy.html')">
+        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://home.pulsesms.app/privacy.html')">
             Privacy Policy
         </div>
-        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://messenger.klinkerapps.com/tos.html')">
+        <div class="click-item mdl-color-text--grey-900" @click="routeTo('https://home.pulsesms.app/tos.html')">
             Terms of Service
         </div>
 
