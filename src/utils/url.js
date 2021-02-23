@@ -38,13 +38,15 @@ export default class Url {
         "devices":              "devices",
         "remove_device":        "devices/remove/",
         "templates":            "templates",
+        "create_template":      "templates/add/",
+        "update_template":      "templates/update/",
         "remove_template":      "templates/remove/",
         "auto_replies":         "auto_replies",
         "remove_auto_reply":    "auto_replies/remove/",
     }
 
     static getBaseUrl () {
-        return "api.messenger.klinkerapps.com/";
+        return "api.pulsesms.app/";
     }
 
     static getApiVersion () {

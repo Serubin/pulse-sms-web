@@ -1,7 +1,7 @@
 <template>
     <div id="conversation-list" class="page-content">
         <!-- Spinner On load -->
-        <spinner v-if="conversations.length == 0 && loading" class="spinner" />
+        <spinner v-if="conversations.length === 0 && loading" class="spinner" />
 
         <div v-if="showSearch" id="quick_find">
             <div>
@@ -10,7 +10,7 @@
         </div>
 
         <!-- If no Messages -->
-        <p v-if="conversations.length == 0 && !loading" class="empty-message">
+        <p v-if="conversations.length === 0 && !loading" class="empty-message">
             {{ $t('conversations.noconv') }}
         </p>
 
@@ -23,7 +23,7 @@
                        :show-pinned="conversation.pinned && !showConversationCategories"
                        :archive="isArchive"
                        :small="small"
-                       :is-selected="selectedConversations.indexOf(conversation) != -1"
+                       :is-selected="selectedConversations.indexOf(conversation) !== -1"
                        :is-selecting="selectedConversations.length > 0"
             />
         </transition-group>
@@ -51,29 +51,29 @@ export default {
         DayLabel,
         Spinner
     },
-    mixins: [ unreadCountMixin ],
+    mixins: [unreadCountMixin],
     props: ['small', 'index', 'folderId', 'folderName'],
 
     data () {
         return {
-            title: "",
+            title: '',
             loading: true,
             conversations: [],
             unFilteredAllConversations: [],
             margin: 0,
             searchClicked: false,
-            searchQuery: "",
-            selectedConversations: [],
+            searchQuery: '',
+            selectedConversations: []
         };
     },
 
     computed: {
         isArchive () {
-            return this.index == "index_archived";
+            return this.index === 'index_archived';
         },
 
         composeStyle () {
-            return "background: " + this.$store.state.colors_accent + ";";
+            return 'background: ' + this.$store.state.colors_accent + ';';
         },
 
         showSearch () {
@@ -88,7 +88,7 @@ export default {
     watch: {
         '$route' (to, from) { // Update index on route change
             // Only update if list page
-            if (to.name != from.name && to.name.indexOf('conversations-list') >= 0) {
+            if (to.name !== from.name && to.name.indexOf('conversations-list') >= 0) {
                 this.conversations = [];
                 this.unFilteredAllConversations = [];
 
@@ -102,14 +102,14 @@ export default {
             this.processConversations(this.unFilteredAllConversations, true);
         },
 
-        "searchQuery" (to) {
+        'searchQuery' (to) {
             to = to.toLowerCase();
-            let filteredConversations = [];
+            const filteredConversations = [];
 
-            for (let i in this.unFilteredAllConversations) {
-                let conversation = this.unFilteredAllConversations[i];
+            for (const i in this.unFilteredAllConversations) {
+                const conversation = this.unFilteredAllConversations[i];
 
-                if (typeof conversation == "function") {
+                if (typeof conversation === 'function') {
                     continue;
                 }
 
@@ -140,9 +140,9 @@ export default {
         if (!this.small) {
             // Construct colors object from saved global theme
             const colors = {
-                'default': this.$store.state.theme_global_default,
-                'dark': this.$store.state.theme_global_dark,
-                'accent': this.$store.state.theme_global_accent,
+                default: this.$store.state.theme_global_default,
+                dark: this.$store.state.theme_global_dark,
+                accent: this.$store.state.theme_global_accent
             };
 
             // Commit them to current application colors
@@ -176,11 +176,11 @@ export default {
     methods: {
 
         fetchConversations () {
-            if (this.index == "index_private") {
-                let lastPasscodeEntry = this.$store.state.last_passcode_entry;
+            if (this.index === 'index_private') {
+                const lastPasscodeEntry = this.$store.state.last_passcode_entry;
 
                 // no recent passcode entry
-                if (lastPasscodeEntry == null || lastPasscodeEntry < (Date.now() - (15 * 1000))) {
+                if (lastPasscodeEntry === null || lastPasscodeEntry < (Date.now() - (15 * 1000))) {
                     this.$router.push('/passcode');
                     return;
                 }
@@ -202,15 +202,15 @@ export default {
             const cache = [];
             const titles = [];
 
-            for(let i in response) {
+            for (const i in response) {
                 const item = response[i];
-                if (typeof item == "function") {
+                if (typeof item === 'function') {
                     continue;
                 }
 
                 const title = this.calculateTitle(item);
 
-                if (titles.indexOf(title) == -1) {
+                if (titles.indexOf(title) === -1) {
                     titles.push(title);
 
                     if (this.showConversationCategories) {
@@ -237,7 +237,6 @@ export default {
                         Util.expandColor(item.color_dark)
                     )
                 );
-
             }
 
             this.loading = false;
@@ -245,27 +244,26 @@ export default {
             this.conversations = updatedConversations;
 
             // Set unread, only on unarchived public index
-            if (!this.index || this.index == "index_public_unarchived")
+            if (!this.index || this.index === 'index_public_unarchived') {
                 this.updateUnreadCount();
-
-            if (!this.small) {
-                this.$store.commit("loading", false);
-                this.$store.commit('title', this.index == 'folder' ? this.folderName : this.title);
             }
 
+            if (!this.small) {
+                this.$store.commit('loading', false);
+                this.$store.commit('title', this.index === 'folder' ? this.folderName : this.title);
+            }
         },
 
-        updateConversation (event_obj) {
-
+        updateConversation (eventObj) {
             if (this.searchClicked) {
                 this.processConversations(this.unFilteredAllConversations);
                 this.searchClicked = false;
             }
 
             // Find conversation
-            let { conv, conv_index } = this.getConversation(event_obj.conversation_id);
+            let { conv, convIndex } = this.getConversation(eventObj.conversation_id);
 
-            if (!conv || !conv_index) {
+            if (!conv || !convIndex) {
                 // if the conversation doesn't exist, we have a problem, or it is a new conversation.
                 // invalidate the refresh the list from the API.
                 // It is better to fix the actual problem and update the messages correctly though, without the refresh.
@@ -278,30 +276,30 @@ export default {
             // Update unread, only on unarchived public index
             // This check is probably not totally necessary, but it prevents
             // unnecessarily calling updateUnreadCount
-            if (conv.read != event_obj.read && !event_obj.read
-                && (!this.index || this.index == "index_public_unarchived"))
+            if (conv.read !== eventObj.read && !eventObj.read &&
+                (!this.index || this.index === 'index_public_unarchived')) {
                 this.updateUnreadCount();
-
+            }
 
             // Generate new snippet
-            let new_snippet = joypixels.toImage(Util.generateSnippet(event_obj));
+            const newSnippet = joypixels.toImage(Util.generateSnippet(eventObj));
 
-            conv.snippet = new_snippet;
-            conv.read = event_obj.read;
+            conv.snippet = newSnippet;
+            conv.read = eventObj.read;
 
             conv.hash = Hash(conv);
 
-            if (conv.timestamp === event_obj.timestamp)
+            if (conv.timestamp === eventObj.timestamp) {
                 return;
+            }
 
             // Get start index (index after pinned items)
             let startIndex = 0;
             if (this.showConversationCategories) {
-                if (this.conversations[0].label == "Pinned" && !conv.pinned) { // If there are any pinned items
-                    this.conversations.some( (conv, i) => {
-                        if (typeof conv.label != "undefined" // Loop until we find a label
-                            && conv.label != "Pinned") { // That is not "pinned"
-
+                if (this.conversations[0].label === 'Pinned' && !conv.pinned) { // If there are any pinned items
+                    this.conversations.some((conv, i) => {
+                        if (typeof conv.label !== 'undefined' && // Loop until we find a label
+                            conv.label !== 'Pinned') { // That is not "pinned"
                             startIndex = i; // Save index and return
                             return true;
                         }
@@ -309,7 +307,7 @@ export default {
                 }
             } else {
                 if (this.conversations[0].pinned && !conv.pinned) { // If there are any pinned items
-                    this.conversations.some( (conv, i) => {
+                    this.conversations.some((conv, i) => {
                         if (!conv.pinned) { // That is not "pinned"
                             startIndex = i; // Save index and return
                             return true;
@@ -319,17 +317,17 @@ export default {
             }
 
             // Move conversation if required
-            let showCategoryOffset = (this.showConversationCategories ? 1 : 0);
-            if (conv_index != startIndex + showCategoryOffset) {
-                conv = this.conversations.splice(conv_index, 1)[0];
+            const showCategoryOffset = (this.showConversationCategories ? 1 : 0);
+            if (convIndex !== startIndex + showCategoryOffset) {
+                conv = this.conversations.splice(convIndex, 1)[0];
 
                 // If top label is not "Today"
                 // This isn't elegant, but it works
-                if (this.conversations[startIndex].label != "Today"
-                    && this.conversations[startIndex].label != "Pinned"
-                    && this.showConversationCategories) {
-                    const title = "Today"; // Define title
-                    const label = {        // And Define Label
+                if (this.conversations[startIndex].label !== 'Today' &&
+                    this.conversations[startIndex].label !== 'Pinned' &&
+                    this.showConversationCategories) {
+                    const title = 'Today'; // Define title
+                    const label = { // And Define Label
                         label: title,
                         hash: Hash(title)
                     };
@@ -342,44 +340,48 @@ export default {
                 }
             }
 
-            this.conversations = this.conversations;
+            // eslint-disable-next-line no-self-assign
+            this.conversations = this.conversations; // Why??
         },
 
         updateRead (id) {
-            let { conv, conv_index } = this.getConversation(id);
-            if(!conv || !conv_index)
+            const { conv, convIndex } = this.getConversation(id);
+            if (!conv || !convIndex) {
                 return false;
+            }
 
             // Update unread, only on unarchived public index
-            if (!conv.read)
+            if (!conv.read) {
                 this.updateUnreadCount();
+            }
 
             conv.read = true;
             conv.hash = Hash(conv);
         },
 
         updateSnippet (id, snippet) {
-            let { conv, conv_index } = this.getConversation(id);
-            if(!conv || !conv_index)
+            const { conv, convIndex } = this.getConversation(id);
+            if (!conv || !convIndex) {
                 return false;
+            }
 
             conv.snippet = joypixels.toImage(snippet);
             conv.hash = Hash(conv);
         },
 
-        getConversation(id) {
-
-            let conv_index = null;
+        getConversation (id) {
+            let convIndex = null;
             let conv = null;
 
-            for(conv_index in this.conversations) {
-                conv = this.conversations[conv_index];
+            for (convIndex in this.conversations) {
+                conv = this.conversations[convIndex];
 
-                if(id == conv.device_id)
-                    return  { conv, conv_index };
+                if (id === conv.device_id) {
+                    return { conv, convIndex };
+                }
             }
 
-            return  { conv: null, conv_index: -1 };
+            return { conv: null, convIndex: -1 };
         },
 
         /**
@@ -387,9 +389,6 @@ export default {
          * Force refresh messages - fetches from server
          */
         refresh () {
-            //if (!this.small) // Don't clear list if using sidebar list
-            //this.conversations = [];
-
             this.loading = true;
             SessionCache.invalidateAllConversations();
             this.fetchConversations();
@@ -408,7 +407,6 @@ export default {
 
             if (this.searchClicked) {
                 Vue.nextTick(() => { // Wait item to render
-
                     // This acts odd - sometimes (especially on /archive) this
                     // will error with search-bar is null, even within Vue.nextTick
                     // To fix this, we add a simple check before executing focus
@@ -416,28 +414,29 @@ export default {
                     searchBar && searchBar.focus();
                 });
             } else {
-                this.searchQuery = "";
+                this.searchQuery = '';
             }
         },
 
         calculateTitle (conversation) {
-            if (conversation.pinned)
+            if (conversation.pinned) {
                 return i18n.t('conversations.pinned');
-            else if (TimeUtils.isToday(conversation.timestamp))
+            } else if (TimeUtils.isToday(conversation.timestamp)) {
                 return i18n.t('conversations.today');
-            else if (TimeUtils.isYesterday(conversation.timestamp))
+            } else if (TimeUtils.isYesterday(conversation.timestamp)) {
                 return i18n.t('conversations.yesterday');
-            else if (TimeUtils.isLastWeek(conversation.timestamp))
+            } else if (TimeUtils.isLastWeek(conversation.timestamp)) {
                 return i18n.t('conversations.thisweek');
-            else if (TimeUtils.isLastMonth(conversation.timestamp))
+            } else if (TimeUtils.isLastMonth(conversation.timestamp)) {
                 return i18n.t('conversations.thismonth');
-            else
+            } else {
                 return i18n.t('conversations.older');
+            }
         },
 
         conversationSelected (conversation) {
             const index = this.selectedConversations.indexOf(conversation);
-            if (index == -1) {
+            if (index === -1) {
                 this.selectedConversations.push(conversation);
             } else {
                 this.selectedConversations.splice(index, 1);
@@ -464,7 +463,7 @@ export default {
         },
 
         deleteSelected () {
-            let options = {
+            const options = {
                 okText: this.$t('dialog.continue'),
                 cancelText: this.$t('dialog.cancel'),
                 animation: 'fade'
@@ -477,7 +476,7 @@ export default {
                     for (const conversation of selected) {
                         apiUtils.conversations.delete(conversation.device_id);
                     }
-                }).catch(function() { });
+                }).catch(() => { });
 
             this.clearSelected();
         },
@@ -490,7 +489,7 @@ export default {
         clearSelected () {
             this.selectedConversations = [];
             this.$store.state.msgbus.$emit('currentlySelectedConversations', this.selectedConversations);
-        },
+        }
     }
 };
 </script>
@@ -562,7 +561,7 @@ export default {
         }
     }
 
-    .flip-list-enter, .flip-list-leave-to	{
+    .flip-list-enter, .flip-list-leave-to {
         opacity: 0;
     }
 

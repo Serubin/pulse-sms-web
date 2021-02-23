@@ -27,7 +27,7 @@
                 Email
             </div>
             <div class="mdl-color-text--grey-600">
-                pulsesmsapp@gmail.com
+                support@pulsesms.app
             </div>
         </div>
 

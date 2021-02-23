@@ -44,6 +44,12 @@
                             {{ $t('sidebar.scheduled') }}
                         </div>
                     </li>
+                    <li id="templates-link" @click="routeTo('templates')">
+                        <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('templates') }">
+                            <img src="../assets/images/holder.gif" width="24" height="24" class="icon templates">
+                            Templates
+                        </div>
+                    </li>
                     <li id="blacklist-link" @click="routeTo('blacklists')">
                         <div class="link-card mdl-card mdl-js-button mdl-js-ripple-effect" :class="{ active: is_active('blacklists') }">
                             <img src="../assets/images/holder.gif" width="24" height="24" class="icon blacklist">
@@ -102,6 +108,7 @@ export default {
                 folders: { name: 'folders' },
                 scheduled: { name: 'scheduled-messages' },
                 license: { name: 'license'},
+                templates: { name: 'templates' }
             },
             listeners: [],
             searchQuery: ''
@@ -239,6 +246,11 @@ export default {
                 return true;
             }
 
+            if (route === 'templates' &&
+                (this.$route.name === 'templates' || this.$route.name === 'create-template')) {
+                return true;
+            }
+
             return false;
         }
     }
@@ -299,6 +311,10 @@ export default {
 
             &.search {
                 background: url(../assets/images/vector/search-dark.svg) 0 0 no-repeat !important;
+            }
+
+            &.templates {
+                background: url(../assets/images/vector/templates-dark.svg) 0 0 no-repeat !important;
             }
         }
     }
@@ -418,6 +434,11 @@ export default {
                     &.search {
                         background: url(../assets/images/vector/search.svg) 0 0 no-repeat;
                     }
+
+                    &.templates {
+                        background: url(../assets/images/vector/templates.svg) 0 0 no-repeat;
+                    }
+
                 }
             }
         }
