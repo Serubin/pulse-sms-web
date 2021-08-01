@@ -13,6 +13,9 @@ Before you will be able to use this, you should create a Pulse account from the 
 * Visit the hosted version of this web app, by opening https://pulsesms.app
 * Build and run the web app locally, or deploy it to your own hosting location, using the build steps below.
 
+## Project Update
+Due to the sale of PulseSMS to MapleMedia, the open source versions of PulseSMS have either been removed and closed sourced or are no longer the upstream as is the case with this repo. Please direct any questions to MapleMedia or their PulseSMS twitter https://twitter.com/pulsesms
+
 ## Build Setup
 
 Getting up and running is very easy. You will need `npm` installed:
