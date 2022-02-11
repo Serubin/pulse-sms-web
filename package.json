@@ -58,7 +58,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "grpc": "^1.23.3",
     "lint-staged": "^8.1.5",
-    "node-sass": "^5.0.0",
+    "node-sass": "^7.0.0",
     "push-dir": "^0.4.1",
     "sass-loader": "^10.1.0",
     "sw-precache-webpack-plugin": "^0.11.5",
